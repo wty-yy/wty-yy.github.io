@@ -199,7 +199,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.9k 字
+      4k 字
     </span>
   
 
@@ -209,7 +209,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      60
+      62
        分钟
     </span>
   
@@ -344,152 +344,7 @@ G(f(x)),&amp; f(x) &lt; c;\\
         点击显/隐代码
     </div>
     <div class='spoiler-content'>
-        <p>#include &lt;bits/stdc++.h&gt;<br />
-#define db double<br />
-#define ll long long<br />
-#define int ll<br />
-#define vi vector<int><br />
-#define vii vector<vi ><br />
-#define vd vector<db><br />
-#define vdd vector<vd ><br />
-#define pii pair&lt;int, int&gt;<br />
-#define pdd pair&lt;db, db&gt;<br />
-#define vpd vector<pdd ><br />
-#define vipd vector<vpd ><br />
-#define vp vector<pii ><br />
-#define vip vector<vp ><br />
-#define mkp make_pair<br />
-#define pb push_back<br />
-#define Case(x) cout &lt;&lt; “Case #” &lt;&lt; x &lt;&lt; &quot;: &quot;<br />
-using namespace std;<br />
-const int INF = 0x3f3f3f3f;<br />
-const int N = 500; // Size of Population<br />
-const int T = 500; // Number of iterations<br />
-int L; // Length of binary (Number of Cities)<br />
-const double R = 0.4; // Rate of recombination<br />
-const double M = 0.01; // Rate of mutation<br />
-vpd city;<br />
-double dis(pdd &amp;x, pdd &amp;y) { // Calculation Distance<br />
-return sqrt((x.first - y.first) * (x.first - y.first) + (x.second - y.second) * (x.second - y.second));<br />
-}<br />
-double f(vi &amp;x) { // Calculation Route Distance<br />
-double ret = 0;<br />
-for (int i = 0; i &lt; L; i++) {<br />
-ret += dis(city[x[i]], city[x[(i+1)%L]]);<br />
-}<br />
-return ret;<br />
-}<br />
-double F(vi &amp;x) { // Adaptation value (non-negative)<br />
-return 1/f(x);<br />
-}<br />
-double getrand() { return 1.0 * rand() / RAND_MAX; } // get a random num in [0,1]<br />
-pii randrange() { // get a random range [l,r] subset of [0,L)<br />
-int l = rand() % L, r = rand() % L;<br />
-while (l == r) l = rand() % L, r = rand() % L;<br />
-if (l &gt; r) return mkp(r, l);<br />
-return mkp(l, r);<br />
-}<br />
-vi Swap(vi &amp;i1, vi &amp;i2, pii seg) { // Swap i2 to i1, return i1’<br />
-int l = seg.first, r = seg.second;<br />
-vi ret = i1, mp(L, -1);<br />
-for (int i = l; i &lt;= r; i++) mp[i1[i]] = i2[i];<br />
-for (int i = 0; i &lt; L; i++) {<br />
-if (i &gt;= l &amp;&amp; i &lt;= r) continue;<br />
-int t = i2[i];<br />
-while (mp[t] != -1) t = mp[t];<br />
-ret[i] = t;<br />
-}<br />
-return ret;<br />
-}<br />
-pair&lt;db, vi&gt; GA(int Num) {<br />
-vi perm(L); // A Permutation uses for random<br />
-for (int i = 0; i &lt; L; i++) perm[i] = i;<br />
-vii p(N); // Population<br />
-for (int i = 0; i &lt; N; i++) { // initialization<br />
-random_shuffle(perm.begin(), perm.end());<br />
-p[i] = perm;<br />
-}<br />
-for (int _i = 0; _i &lt; T; _i++) { // Genetic Algorithm<br />
-double sum = 0; // Sum of Adaptation<br />
-vector<db> a(N); // Adaptation &amp; Probability for individual<br />
-for (int i = 0; i &lt; N; i++) {<br />
-a[i] = F(p[i]);<br />
-sum += a[i];<br />
-}<br />
-for (int i = 0; i &lt; N; i++) {<br />
-a[i] /= sum;<br />
-a[i] += i ? a[i-1] : 0;<br />
-}<br />
-vii nt; // next generation<br />
-for (int i = 0; i &lt; N; i++) { // choose<br />
-double r = getrand();<br />
-nt.pb(p[lower_bound(a.begin(), a.end(), r) - a.begin()]);<br />
-}<br />
-// Recombination<br />
-vi part(N); // partner<br />
-for (int i = 0; i &lt; N; i++) part[i] = i;<br />
-random_shuffle(part.begin(), part.end());<br />
-for (int i = 0; i &lt; N; i += 2) {<br />
-if (getrand() &lt;= R) { // start<br />
-pii seg = randrange(); // fixed segment<br />
-vi i1 = Swap(nt[part[i]], nt[part[i+1]], seg);<br />
-vi i2 = Swap(nt[part[i+1]], nt[part[i]], seg);<br />
-nt[part[i]] = i1, nt[part[i+1]] = i2;<br />
-}<br />
-}<br />
-// Mutation<br />
-for (int i = 0; i &lt; N; i++) {<br />
-if (getrand() &lt;= M) {<br />
-pii seg = randrange(); // reverse segment<br />
-reverse(nt[i].begin() + seg.first, nt[i].begin() + seg.second + 1);<br />
-}<br />
-}<br />
-p = nt; // goto next generation<br />
-}<br />
-double mx = 0;<br />
-vi best;<br />
-for (int i = 0; i &lt; N; i++) {<br />
-if (F(p[i]) &gt; mx) {<br />
-mx = F(p[i]);<br />
-best = p[i];<br />
-}<br />
-}<br />
-return mkp(mx, best);<br />
-}<br />
-void init() { // Initialization<br />
-freopen(“<a target="_blank" rel="noopener" href="http://30points.in">30points.in</a>”, “r”, stdin);<br />
-cin &gt;&gt; L;<br />
-city = vpd(L);<br />
-for (int i = 0; i &lt; L; i++) {<br />
-int id;<br />
-cin &gt;&gt; id &gt;&gt; city[i].first &gt;&gt; city[i].second;<br />
-}<br />
-}<br />
-signed main(){<br />
-ios::sync_with_stdio(0);<br />
-cin.tie(0);<br />
-srand(time(NULL));<br />
-init();<br />
-int TOT = 6000;<br />
-pair&lt;db, vi&gt; best = {0, vi(1)};<br />
-for (int _i = 1; _i &lt;= TOT; _i++) {<br />
-pair&lt;db, vi&gt; t = GA(_i);<br />
-if (t.first &gt; best.first) best = t;<br />
-}<br />
-cout &lt;&lt; &quot;dis = &quot; &lt;&lt; f(best.second) &lt;&lt; ‘\n’;<br />
-for (int i = 0; i &lt;= L; i++) {<br />
-vi id = best.second;<br />
-cout &lt;&lt; city[id[i%L]].first &lt;&lt; ’ ';<br />
-}<br />
-cout &lt;&lt; ‘\n’;<br />
-for (int i = 0; i &lt;= L; i++) {<br />
-vi id = best.second;<br />
-cout &lt;&lt; city[id[i%L]].second &lt;&lt; ’ ';<br />
-}<br />
-cout &lt;&lt; ‘\n’;<br />
-return 0;<br />
-}</p>
-
+        <figure class="highlight c++"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> db double</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> ll long long</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> int ll</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> vi vector<span class="hljs-meta-string">&lt;int&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> vii vector<span class="hljs-meta-string">&lt;vi &gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> vd vector<span class="hljs-meta-string">&lt;db&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> vdd vector<span class="hljs-meta-string">&lt;vd &gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> pii pair<span class="hljs-meta-string">&lt;int, int&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> pdd pair<span class="hljs-meta-string">&lt;db, db&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> vpd vector<span class="hljs-meta-string">&lt;pdd &gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> vipd vector<span class="hljs-meta-string">&lt;vpd &gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> vp vector<span class="hljs-meta-string">&lt;pii &gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> vip vector<span class="hljs-meta-string">&lt;vp &gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> mkp make_pair</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> pb push_back</span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> Case(x) cout &lt;&lt; <span class="hljs-meta-string">&quot;Case #&quot;</span> &lt;&lt; x &lt;&lt; <span class="hljs-meta-string">&quot;: &quot;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> INF = <span class="hljs-number">0x3f3f3f3f</span>;<br><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> N = <span class="hljs-number">500</span>; <span class="hljs-comment">// Size of Population</span><br><span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> T = <span class="hljs-number">500</span>; <span class="hljs-comment">// Number of iterations</span><br><span class="hljs-keyword">int</span> L; <span class="hljs-comment">// Length of binary (Number of Cities)</span><br><span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> R = <span class="hljs-number">0.4</span>; <span class="hljs-comment">// Rate of recombination</span><br><span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> M = <span class="hljs-number">0.01</span>; <span class="hljs-comment">// Rate of mutation</span><br>vpd city;<br><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">dis</span><span class="hljs-params">(pdd &amp;x, pdd &amp;y)</span> </span>&#123; <span class="hljs-comment">// Calculation Distance</span><br>	<span class="hljs-keyword">return</span> <span class="hljs-built_in">sqrt</span>((x.first - y.first) * (x.first - y.first) + (x.second - y.second) * (x.second - y.second));<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">f</span><span class="hljs-params">(vi &amp;x)</span> </span>&#123; <span class="hljs-comment">// Calculation Route Distance</span><br>	<span class="hljs-keyword">double</span> ret = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; L; i++) &#123;<br>		ret += <span class="hljs-built_in">dis</span>(city[x[i]], city[x[(i+<span class="hljs-number">1</span>)%L]]);<br>	&#125;<br>	<span class="hljs-keyword">return</span> ret;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">F</span><span class="hljs-params">(vi &amp;x)</span> </span>&#123; <span class="hljs-comment">// Adaptation value (non-negative)</span><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">1</span>/<span class="hljs-built_in">f</span>(x);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">double</span> <span class="hljs-title">getrand</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-keyword">return</span> <span class="hljs-number">1.0</span> * <span class="hljs-built_in">rand</span>() / RAND_MAX; &#125; <span class="hljs-comment">// get a random num in [0,1]</span><br><span class="hljs-function">pii <span class="hljs-title">randrange</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// get a random range [l,r] subset of [0,L)</span><br>	<span class="hljs-keyword">int</span> l = <span class="hljs-built_in">rand</span>() % L, r = <span class="hljs-built_in">rand</span>() % L;<br>	<span class="hljs-keyword">while</span> (l == r) l = <span class="hljs-built_in">rand</span>() % L, r = <span class="hljs-built_in">rand</span>() % L;<br>	<span class="hljs-keyword">if</span> (l &gt; r) <span class="hljs-keyword">return</span> <span class="hljs-built_in">mkp</span>(r, l);<br>	<span class="hljs-keyword">return</span> <span class="hljs-built_in">mkp</span>(l, r);<br>&#125;<br><span class="hljs-function">vi <span class="hljs-title">Swap</span><span class="hljs-params">(vi &amp;i1, vi &amp;i2, pii seg)</span> </span>&#123; <span class="hljs-comment">// Swap i2 to i1, return i1&#x27;</span><br>	<span class="hljs-keyword">int</span> l = seg.first, r = seg.second;<br>	vi ret = i1, <span class="hljs-built_in">mp</span>(L, <span class="hljs-number">-1</span>);<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = l; i &lt;= r; i++) mp[i1[i]] = i2[i];<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; L; i++) &#123;<br>		<span class="hljs-keyword">if</span> (i &gt;= l &amp;&amp; i &lt;= r) <span class="hljs-keyword">continue</span>;<br>		<span class="hljs-keyword">int</span> t = i2[i];<br>		<span class="hljs-keyword">while</span> (mp[t] != <span class="hljs-number">-1</span>) t = mp[t];<br>		ret[i] = t;<br>	&#125;<br>	<span class="hljs-keyword">return</span> ret;<br>&#125;<br><span class="hljs-function">pair&lt;db, vi&gt; <span class="hljs-title">GA</span><span class="hljs-params">(<span class="hljs-keyword">int</span> Num)</span> </span>&#123;<br>	<span class="hljs-function">vi <span class="hljs-title">perm</span><span class="hljs-params">(L)</span></span>; <span class="hljs-comment">// A Permutation uses for random</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; L; i++) perm[i] = i;<br>	<span class="hljs-function">vii <span class="hljs-title">p</span><span class="hljs-params">(N)</span></span>; <span class="hljs-comment">// Population</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) &#123; <span class="hljs-comment">// initialization</span><br>		<span class="hljs-built_in">random_shuffle</span>(perm.<span class="hljs-built_in">begin</span>(), perm.<span class="hljs-built_in">end</span>());<br>		p[i] = perm;<br>	&#125;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> _i = <span class="hljs-number">0</span>; _i &lt; T; _i++) &#123; <span class="hljs-comment">// Genetic Algorithm</span><br>		<span class="hljs-keyword">double</span> sum = <span class="hljs-number">0</span>; <span class="hljs-comment">// Sum of Adaptation</span><br>		<span class="hljs-function">vector&lt;db&gt; <span class="hljs-title">a</span><span class="hljs-params">(N)</span></span>; <span class="hljs-comment">// Adaptation &amp; Probability for individual</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) &#123;<br>			a[i] = <span class="hljs-built_in">F</span>(p[i]);<br>			sum += a[i];<br>		&#125;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) &#123;<br>			a[i] /= sum;<br>			a[i] += i ? a[i<span class="hljs-number">-1</span>] : <span class="hljs-number">0</span>;<br>		&#125;<br>		vii nt; <span class="hljs-comment">// next generation</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) &#123; <span class="hljs-comment">// choose</span><br>			<span class="hljs-keyword">double</span> r = <span class="hljs-built_in">getrand</span>();<br>			nt.<span class="hljs-built_in">pb</span>(p[<span class="hljs-built_in">lower_bound</span>(a.<span class="hljs-built_in">begin</span>(), a.<span class="hljs-built_in">end</span>(), r) - a.<span class="hljs-built_in">begin</span>()]);<br>		&#125;<br>		<span class="hljs-comment">// Recombination</span><br>		<span class="hljs-function">vi <span class="hljs-title">part</span><span class="hljs-params">(N)</span></span>; <span class="hljs-comment">// partner</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) part[i] = i;<br>		<span class="hljs-built_in">random_shuffle</span>(part.<span class="hljs-built_in">begin</span>(), part.<span class="hljs-built_in">end</span>());<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i += <span class="hljs-number">2</span>) &#123;<br>			<span class="hljs-keyword">if</span> (<span class="hljs-built_in">getrand</span>() &lt;= R) &#123; <span class="hljs-comment">// start</span><br>				pii seg = <span class="hljs-built_in">randrange</span>(); <span class="hljs-comment">// fixed segment</span><br>				vi i1 = <span class="hljs-built_in">Swap</span>(nt[part[i]], nt[part[i+<span class="hljs-number">1</span>]], seg);<br>				vi i2 = <span class="hljs-built_in">Swap</span>(nt[part[i+<span class="hljs-number">1</span>]], nt[part[i]], seg);<br>				nt[part[i]] = i1, nt[part[i+<span class="hljs-number">1</span>]] = i2;<br>			&#125;<br>		&#125;<br>		<span class="hljs-comment">// Mutation</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) &#123;<br>			<span class="hljs-keyword">if</span> (<span class="hljs-built_in">getrand</span>() &lt;= M) &#123;<br>				pii seg = <span class="hljs-built_in">randrange</span>(); <span class="hljs-comment">// reverse segment</span><br>				<span class="hljs-built_in">reverse</span>(nt[i].<span class="hljs-built_in">begin</span>() + seg.first, nt[i].<span class="hljs-built_in">begin</span>() + seg.second + <span class="hljs-number">1</span>);<br>			&#125;<br>		&#125;<br>		p = nt; <span class="hljs-comment">// goto next generation</span><br>	&#125;<br>	<span class="hljs-keyword">double</span> mx = <span class="hljs-number">0</span>;<br>	vi best;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) &#123;<br>		<span class="hljs-keyword">if</span> (<span class="hljs-built_in">F</span>(p[i]) &gt; mx) &#123;<br>			mx = <span class="hljs-built_in">F</span>(p[i]);<br>			best = p[i];<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-built_in">mkp</span>(mx, best);<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// Initialization</span><br>	<span class="hljs-built_in">freopen</span>(<span class="hljs-string">&quot;30points.in&quot;</span>, <span class="hljs-string">&quot;r&quot;</span>, stdin);<br>	cin &gt;&gt; L;<br>	city = <span class="hljs-built_in">vpd</span>(L);<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; L; i++) &#123;<br>		<span class="hljs-keyword">int</span> id;<br>		cin &gt;&gt; id &gt;&gt; city[i].first &gt;&gt; city[i].second;<br>	&#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">signed</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	ios::<span class="hljs-built_in">sync_with_stdio</span>(<span class="hljs-number">0</span>);<br>	cin.<span class="hljs-built_in">tie</span>(<span class="hljs-number">0</span>);<br>	<span class="hljs-built_in">srand</span>(<span class="hljs-built_in">time</span>(<span class="hljs-literal">NULL</span>));<br>	<span class="hljs-built_in">init</span>();<br>	<span class="hljs-keyword">int</span> TOT = <span class="hljs-number">6000</span>;<br>	pair&lt;db, vi&gt; best = &#123;<span class="hljs-number">0</span>, <span class="hljs-built_in">vi</span>(<span class="hljs-number">1</span>)&#125;;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> _i = <span class="hljs-number">1</span>; _i &lt;= TOT; _i++) &#123; <br>		pair&lt;db, vi&gt; t = <span class="hljs-built_in">GA</span>(_i);<br>		<span class="hljs-keyword">if</span> (t.first &gt; best.first) best = t;<br>	&#125;<br>	cout &lt;&lt; <span class="hljs-string">&quot;dis = &quot;</span> &lt;&lt; <span class="hljs-built_in">f</span>(best.second) &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;= L; i++) &#123;<br>		vi id = best.second;<br>		cout &lt;&lt; city[id[i%L]].first &lt;&lt; <span class="hljs-string">&#x27; &#x27;</span>;<br>	&#125;<br>	cout &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;= L; i++) &#123;<br>		vi id = best.second;<br>		cout &lt;&lt; city[id[i%L]].second &lt;&lt; <span class="hljs-string">&#x27; &#x27;</span>;<br>	&#125;<br>	cout &lt;&lt; <span class="hljs-string">&#x27;\n&#x27;</span>;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></div></td></tr></table></figure>
     </div>
 </div>
 <p>30个点的数据</p>
@@ -498,38 +353,7 @@ return 0;<br />
         点击显/隐数据
     </div>
     <div class='spoiler-content'>
-        <p>30<br />
-1 18 54<br />
-2 87 76<br />
-3 74 78<br />
-4 71 71<br />
-5 25 38<br />
-6 58 35<br />
-7 4 50<br />
-8 13 40<br />
-9 18 40<br />
-10 24 42<br />
-11 71 44<br />
-12 64 60<br />
-13 68 58<br />
-14 83 69<br />
-15 58 69<br />
-16 54 62<br />
-17 51 67<br />
-18 37 84<br />
-19 41 94<br />
-20 2 99<br />
-21 7 64<br />
-22 22 60<br />
-23 25 62<br />
-24 62 32<br />
-25 87 7<br />
-26 91 38<br />
-27 83 46<br />
-28 41 26<br />
-29 45 21<br />
-30 44 35</p>
-
+        <figure class="highlight basic"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs basic"><span class="hljs-number">30</span><br><span class="hljs-symbol">1 </span><span class="hljs-number">18</span> <span class="hljs-number">54</span><br><span class="hljs-symbol">2 </span><span class="hljs-number">87</span> <span class="hljs-number">76</span><br><span class="hljs-symbol">3 </span><span class="hljs-number">74</span> <span class="hljs-number">78</span><br><span class="hljs-symbol">4 </span><span class="hljs-number">71</span> <span class="hljs-number">71</span><br><span class="hljs-symbol">5 </span><span class="hljs-number">25</span> <span class="hljs-number">38</span><br><span class="hljs-symbol">6 </span><span class="hljs-number">58</span> <span class="hljs-number">35</span><br><span class="hljs-symbol">7 </span><span class="hljs-number">4</span> <span class="hljs-number">50</span><br><span class="hljs-symbol">8 </span><span class="hljs-number">13</span> <span class="hljs-number">40</span><br><span class="hljs-symbol">9 </span><span class="hljs-number">18</span> <span class="hljs-number">40</span><br><span class="hljs-symbol">10 </span><span class="hljs-number">24</span> <span class="hljs-number">42</span><br><span class="hljs-symbol">11 </span><span class="hljs-number">71</span> <span class="hljs-number">44</span><br><span class="hljs-symbol">12 </span><span class="hljs-number">64</span> <span class="hljs-number">60</span><br><span class="hljs-symbol">13 </span><span class="hljs-number">68</span> <span class="hljs-number">58</span><br><span class="hljs-symbol">14 </span><span class="hljs-number">83</span> <span class="hljs-number">69</span><br><span class="hljs-symbol">15 </span><span class="hljs-number">58</span> <span class="hljs-number">69</span><br><span class="hljs-symbol">16 </span><span class="hljs-number">54</span> <span class="hljs-number">62</span><br><span class="hljs-symbol">17 </span><span class="hljs-number">51</span> <span class="hljs-number">67</span><br><span class="hljs-symbol">18 </span><span class="hljs-number">37</span> <span class="hljs-number">84</span><br><span class="hljs-symbol">19 </span><span class="hljs-number">41</span> <span class="hljs-number">94</span><br><span class="hljs-symbol">20 </span><span class="hljs-number">2</span> <span class="hljs-number">99</span><br><span class="hljs-symbol">21 </span><span class="hljs-number">7</span> <span class="hljs-number">64</span><br><span class="hljs-symbol">22 </span><span class="hljs-number">22</span> <span class="hljs-number">60</span><br><span class="hljs-symbol">23 </span><span class="hljs-number">25</span> <span class="hljs-number">62</span><br><span class="hljs-symbol">24 </span><span class="hljs-number">62</span> <span class="hljs-number">32</span><br><span class="hljs-symbol">25 </span><span class="hljs-number">87</span> <span class="hljs-number">7</span><br><span class="hljs-symbol">26 </span><span class="hljs-number">91</span> <span class="hljs-number">38</span><br><span class="hljs-symbol">27 </span><span class="hljs-number">83</span> <span class="hljs-number">46</span><br><span class="hljs-symbol">28 </span><span class="hljs-number">41</span> <span class="hljs-number">26</span><br><span class="hljs-symbol">29 </span><span class="hljs-number">45</span> <span class="hljs-number">21</span><br><span class="hljs-symbol">30 </span><span class="hljs-number">44</span> <span class="hljs-number">35</span><br></code></pre></div></td></tr></table></figure>
     </div>
 </div>
 <p>最佳计算效果图：<img src="https://s4.ax1x.com/2022/01/27/7XWzad.png" srcset="/img/loading.gif" lazyload alt="计算结果" /></p>
