@@ -1,75 +1,98 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;dark&#34;>
+<html lang="zh-CN" data-default-color-scheme=dark>
 
 
 
 <head>
-  <meta name="baidu-site-verification" content="code-pm5ok3TpVV" />
-  <meta name="google-site-verification" content="LCzcyBtJ6IPbW8lLUza0MZjpBf_3dBk5L-xukUYZ9JU" />
-  <meta name="sogou_site_verification" content="2ZqXuXXvLj"/>
-  <meta name="bytedance-verification-code" content="9Ez63obQMRDivJCOFA+w" />
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
   <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="">
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
+    <meta name="description" content="对2022年一月初进行的xjtu的美赛选拔赛进行一点总结（学到了一些MATLAB技巧，比赛经验），比赛时间为1月13日6点~1月17日9点，一共给出了两道题  A题：要求预测长江江豚在迁地保护下20年后的种群数量和假设没有迁地保护下江豚是否会出现功能性灭绝。   B题：研究人才流动模型，判断当前西安人才现状的健康状况，研究一个人才引进政策体系，提出建议。  A题为预测拟合类题目，B题为评价标准类题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对长江江豚迁地保护种群数量的预测 基于Leslie和Logistic模型">
+<meta property="og:url" content="https://wty-yy.github.io/posts/58946/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="对2022年一月初进行的xjtu的美赛选拔赛进行一点总结（学到了一些MATLAB技巧，比赛经验），比赛时间为1月13日6点~1月17日9点，一共给出了两道题  A题：要求预测长江江豚在迁地保护下20年后的种群数量和假设没有迁地保护下江豚是否会出现功能性灭绝。   B题：研究人才流动模型，判断当前西安人才现状的健康状况，研究一个人才引进政策体系，提出建议。  A题为预测拟合类题目，B题为评价标准类题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/17/7UUfmD.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/17/7UU4TH.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/17/7UUIkd.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/17/7Uycp4.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/17/7UcFPO.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/17/7UUb1P.png">
+<meta property="og:image" content="https://s4.ax1x.com/2022/01/17/7UUotA.png">
+<meta property="article:published_time" content="2022-01-16T13:48:32.000Z">
+<meta property="article:modified_time" content="2022-01-26T16:00:45.000Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s4.ax1x.com/2022/01/17/7UUfmD.png">
+  
+  
+  
   <title>对长江江豚迁地保护种群数量的预测 基于Leslie和Logistic模型 - wty&#39;s blog</title>
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
-  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  
-    
-    
-      
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
-    
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
 
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
 
 
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
 <link  rel="stylesheet" href="/css/main.css" />
 
-<!-- 自定义样式保持在最底部 -->
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
 
   
-<link rel="stylesheet" href="/css/diy/gundongtiao.css">
-<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
-<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
+
+  
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
 
@@ -78,11 +101,17 @@
 
 
 <body>
-  <header style="height: 70vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/">&nbsp;<strong>Home</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -171,7 +200,7 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" target="_self" role="button"
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 文档
@@ -216,13 +245,15 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
-                class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
+          
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self">&nbsp;<i
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
                 class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
@@ -231,60 +262,69 @@
   </div>
 </nav>
 
-    <div class="banner" id="banner" parallax=true
-         style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="对长江江豚迁地保护种群数量的预测 基于Leslie和Logistic模型">
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-01-16 21:48" pubdate>
-        2022年1月16日 晚上
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      6.9k 字
-    </span>
   
 
-  
-    
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      98
-       分钟
-    </span>
-  
-
-  
-  
-</div>
-
-            
-          </div>
-
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="对长江江豚迁地保护种群数量的预测 基于Leslie和Logistic模型"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-01-16 21:48" pubdate>
+          2022年1月16日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          17k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          142 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
+
+      
     </div>
+  </div>
+</div>
+
+</div>
+
   </header>
 
   <main>
@@ -293,15 +333,20 @@
 
 <div class="container-fluid nopadding-x">
   <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
     <div class="col-lg-8 nopadding-x-md">
       <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
+        <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">对长江江豚迁地保护种群数量的预测 基于Leslie和Logistic模型</h1>
             
             <div class="markdown-body">
+              
               <p>对2022年一月初进行的xjtu的美赛选拔赛进行一点总结（学到了一些MATLAB技巧，比赛经验），比赛时间为1月13日6点~1月17日9点，一共给出了两道题</p>
 <blockquote>
 <p>A题：要求预测长江江豚在迁地保护下20年后的种群数量和假设没有迁地保护下江豚是否会出现功能性灭绝。</p>
@@ -447,7 +492,7 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
         点击显/隐代码
     </div>
     <div class='spoiler-content'>
-        <figure class="highlight matlab"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs matlab"><span class="hljs-comment">% 由91年对21年估计生存率参数 </span><br><span class="hljs-comment">% 考虑到的江豚的最大年龄均不超过20岁 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span> </span><br>    format short g; <br>    <span class="hljs-comment">% 以下所指的n维向量均为n*1的列向量 </span><br>    <span class="hljs-comment">% 以下所述的i岁，均指代年龄属于[i-1,i)岁中的江豚，江豚年龄范围设置为[0,20) </span><br>    <span class="hljs-comment">% 由于MATLAB从数字1开始，所以只能这样表示0~1岁 </span><br>    <span class="hljs-keyword">global</span> n; <span class="hljs-comment">% 考虑到的江豚的最大年龄 </span><br>    n = <span class="hljs-number">20</span>; <br>    <span class="hljs-comment">% s1为雄性生存率随时间的关系，s2为雌性的生存率随时间的关系 </span><br>    s1 = [<span class="hljs-number">1</span> <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.99</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>) <span class="hljs-number">0.7</span> <span class="hljs-number">0.3</span> <span class="hljs-number">0</span>]&#x27;; <br>    s2 = [<span class="hljs-number">1</span> <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.99</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.88</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>) <span class="hljs-number">0.7</span> <span class="hljs-number">0.3</span> <span class="hljs-number">0</span>]&#x27;; <br>    <span class="hljs-comment">% 绘制生存率条形图 </span><br><span class="hljs-comment">    %&#123; </span><br><span class="hljs-comment">    tiledlayout(1, 2); </span><br><span class="hljs-comment">    ax1 = nexttile; </span><br><span class="hljs-comment">    bar(ax1, s1); </span><br><span class="hljs-comment">    ax2 = nexttile; </span><br><span class="hljs-comment">    bar(ax2, s2); </span><br><span class="hljs-comment">    %&#125; </span><br>    <span class="hljs-comment">% 假设5只江豚的性别比例，雄性2只，雌性3只 </span><br>    x1 = [<span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">1</span> <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, <span class="hljs-number">15</span>)]&#x27;; <br>    x2 = [<span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">2</span> <span class="hljs-number">1</span> <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, <span class="hljs-number">15</span>)]&#x27;; <br>    <span class="hljs-comment">% 调用Leslie函数进行1991到2021年的预测 </span><br>    Leslie(x1, x2, s1, s2, <span class="hljs-number">31</span>); <br><span class="hljs-keyword">end</span> <br><span class="hljs-comment">% 初始时的雄性江豚分年龄数量(n维向量)，x1为雄性，x2为雌性 </span><br><span class="hljs-comment">% 各个年龄段[0,20)的在一年中存活率(n维向量)，s1为雄性，s2为雌性，预测年数为Years年 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Leslie</span><span class="hljs-params">(x1, x2, s1, s2, Years)</span> </span><br>    <span class="hljs-keyword">global</span> n; <br>    <span class="hljs-comment">% 育龄区间 [i1,i2] 4岁到16岁 </span><br>    i1 = <span class="hljs-number">5</span>; <br>    i2 = <span class="hljs-number">17</span>; <br>    ic = <span class="hljs-number">7</span>; <br>    <span class="hljs-comment">% 生育模式：i岁女性生育数在育龄女性中的比例，用h表示(1*n的行向量) </span><br>    <span class="hljs-comment">% 使用Gamma分布生成生育模式 </span><br>    t = ic - i1 + <span class="hljs-number">2</span>; <br>    a = t/<span class="hljs-number">2</span>; <br>    b = <span class="hljs-number">2</span>; <br>    h = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, i1<span class="hljs-number">-1</span>) gampdf(<span class="hljs-number">1</span>:(i2-i1+<span class="hljs-number">1</span>), a, b) <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n - i2)]; <br>    h = h / sum(h); <br>    <span class="hljs-comment">% 绘制生育模式条形图 </span><br><span class="hljs-comment">    %&#123; </span><br><span class="hljs-comment">    bar(h); </span><br><span class="hljs-comment">    xlabel(&#x27;Age&#x27;, &#x27;FontName&#x27;, &#x27;Times New Roman&#x27;, &#x27;FontSize&#x27;, 11); </span><br><span class="hljs-comment">    ylabel(&#x27;Fertility Pattern&#x27;, &#x27;FontName&#x27;, &#x27;Times New Roman&#x27;, &#x27;FontSize&#x27;, 11); </span><br><span class="hljs-comment">    set(gca, &#x27;xtick&#x27;, 0:1:20); </span><br><span class="hljs-comment">    %&#125; </span><br>    <span class="hljs-comment">% 数据导出 </span><br>    <span class="hljs-comment">% writematrix(h&#x27;, &#x27;Leslie.xlsx&#x27;, &#x27;Range&#x27;, &#x27;D1&#x27;); </span><br>    <span class="hljs-comment">% 生育模式矩阵 </span><br>    H = [h; <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, n)]; <br>    <span class="hljs-comment">% 总和生育率 beta （每个雌性个体一生的平均生育率） </span><br>    <span class="hljs-built_in">beta</span> = (i2 - i1 + <span class="hljs-number">1</span>) / <span class="hljs-number">3</span>; <span class="hljs-comment">% 假设为周期性生殖，每隔3年生一次 </span><br>    <span class="hljs-comment">% 存活率矩阵，S1为雄性，S2为雌性 </span><br>    S1 = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n); [<span class="hljs-built_in">diag</span>(s1(<span class="hljs-number">2</span>:n, <span class="hljs-number">1</span>)) <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>)]]; <br>    S2 = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n); [<span class="hljs-built_in">diag</span>(s2(<span class="hljs-number">2</span>:n, <span class="hljs-number">1</span>)) <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>)]]; <br>    <span class="hljs-comment">% 种群总数 </span><br>    tot = <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, Years); <br>    tot(<span class="hljs-number">1</span>) = sum(x1) + sum(x2); <br>    <span class="hljs-comment">% 开始递推 </span><br>    <span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : Years <br>        x1 = S1 * x1 + <span class="hljs-number">1</span>/<span class="hljs-number">2</span> * s1(<span class="hljs-number">1</span>) * <span class="hljs-built_in">beta</span> * H * x2; <br>        x2 = S2 * x2 + <span class="hljs-number">1</span>/<span class="hljs-number">2</span> * s2(<span class="hljs-number">1</span>) * <span class="hljs-built_in">beta</span> * H * x2; <br>        tot(k) = sum(x1) + sum(x2); <br>        <span class="hljs-comment">% 提取出2021年江豚年龄分布，用于代码part2的初始参数 </span><br><span class="hljs-comment">        %&#123; </span><br><span class="hljs-comment">        if k == 31 </span><br><span class="hljs-comment">            output1 = x1&#x27; </span><br><span class="hljs-comment">            output2 = x2&#x27; </span><br><span class="hljs-comment">            save(&#x27;out.txt&#x27;, &#x27;o*&#x27;, &#x27;-ascii&#x27;); </span><br><span class="hljs-comment">            writematrix([x1 x2], &#x27;2021.xlsx&#x27;); </span><br><span class="hljs-comment">        end </span><br><span class="hljs-comment">        %&#125; </span><br>    <span class="hljs-keyword">end</span> <br>    x = <span class="hljs-number">1991</span> + [<span class="hljs-number">0</span>:Years<span class="hljs-number">-1</span>]; <br>    <span class="hljs-built_in">plot</span>(x, tot, <span class="hljs-string">&#x27;-&#x27;</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    DrawDate(); <br>    <span class="hljs-comment">% 导出数据 </span><br>    <span class="hljs-comment">% writematrix([x&#x27;, tot&#x27;], &#x27;Leslie.xlsx&#x27;); </span><br><span class="hljs-keyword">end</span> <br><span class="hljs-comment">% 绘制观测数据 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DrawDate</span><span class="hljs-params">()</span> </span><br>    <span class="hljs-keyword">global</span> out; <br>    x = [<span class="hljs-number">1991</span> <span class="hljs-number">2015</span> <span class="hljs-number">2017</span> <span class="hljs-number">2021</span>]; <br>    y = [<span class="hljs-number">5</span> <span class="hljs-number">60</span> <span class="hljs-number">80</span> <span class="hljs-number">101</span>]; <br>    <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;*&#x27;</span>); <br>    <span class="hljs-comment">% 导出数据 </span><br>    <span class="hljs-comment">% writematrix([x&#x27;, y&#x27;], &#x27;Leslie.xlsx&#x27;, &#x27;Range&#x27;, &#x27;C1&#x27;); </span><br>    xlabel(<span class="hljs-string">&#x27;Year&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Total Number of Populations(Unit: Head)&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    axis([<span class="hljs-number">1991</span> <span class="hljs-number">2021</span> <span class="hljs-number">5</span> <span class="hljs-number">105</span>]); <br><span class="hljs-keyword">end</span><br></code></pre></div></td></tr></table></figure>
+        <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">% 由91年对21年估计生存率参数 </span><br><span class="hljs-comment">% 考虑到的江豚的最大年龄均不超过20岁 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span> </span><br>    format short g; <br>    <span class="hljs-comment">% 以下所指的n维向量均为n*1的列向量 </span><br>    <span class="hljs-comment">% 以下所述的i岁，均指代年龄属于[i-1,i)岁中的江豚，江豚年龄范围设置为[0,20) </span><br>    <span class="hljs-comment">% 由于MATLAB从数字1开始，所以只能这样表示0~1岁 </span><br>    <span class="hljs-keyword">global</span> n; <span class="hljs-comment">% 考虑到的江豚的最大年龄 </span><br>    n = <span class="hljs-number">20</span>; <br>    <span class="hljs-comment">% s1为雄性生存率随时间的关系，s2为雌性的生存率随时间的关系 </span><br>    s1 = [<span class="hljs-number">1</span> <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.99</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>) <span class="hljs-number">0.7</span> <span class="hljs-number">0.3</span> <span class="hljs-number">0</span>]&#x27;; <br>    s2 = [<span class="hljs-number">1</span> <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.99</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.88</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>) <span class="hljs-number">0.7</span> <span class="hljs-number">0.3</span> <span class="hljs-number">0</span>]&#x27;; <br>    <span class="hljs-comment">% 绘制生存率条形图 </span><br><span class="hljs-comment">    %&#123; </span><br><span class="hljs-comment">    tiledlayout(1, 2); </span><br><span class="hljs-comment">    ax1 = nexttile; </span><br><span class="hljs-comment">    bar(ax1, s1); </span><br><span class="hljs-comment">    ax2 = nexttile; </span><br><span class="hljs-comment">    bar(ax2, s2); </span><br><span class="hljs-comment">    %&#125; </span><br>    <span class="hljs-comment">% 假设5只江豚的性别比例，雄性2只，雌性3只 </span><br>    x1 = [<span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">1</span> <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, <span class="hljs-number">15</span>)]&#x27;; <br>    x2 = [<span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">2</span> <span class="hljs-number">1</span> <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, <span class="hljs-number">15</span>)]&#x27;; <br>    <span class="hljs-comment">% 调用Leslie函数进行1991到2021年的预测 </span><br>    Leslie(x1, x2, s1, s2, <span class="hljs-number">31</span>); <br><span class="hljs-keyword">end</span> <br><span class="hljs-comment">% 初始时的雄性江豚分年龄数量(n维向量)，x1为雄性，x2为雌性 </span><br><span class="hljs-comment">% 各个年龄段[0,20)的在一年中存活率(n维向量)，s1为雄性，s2为雌性，预测年数为Years年 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Leslie</span><span class="hljs-params">(x1, x2, s1, s2, Years)</span> </span><br>    <span class="hljs-keyword">global</span> n; <br>    <span class="hljs-comment">% 育龄区间 [i1,i2] 4岁到16岁 </span><br>    i1 = <span class="hljs-number">5</span>; <br>    i2 = <span class="hljs-number">17</span>; <br>    ic = <span class="hljs-number">7</span>; <br>    <span class="hljs-comment">% 生育模式：i岁女性生育数在育龄女性中的比例，用h表示(1*n的行向量) </span><br>    <span class="hljs-comment">% 使用Gamma分布生成生育模式 </span><br>    t = ic - i1 + <span class="hljs-number">2</span>; <br>    a = t/<span class="hljs-number">2</span>; <br>    b = <span class="hljs-number">2</span>; <br>    h = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, i1<span class="hljs-number">-1</span>) gampdf(<span class="hljs-number">1</span>:(i2-i1+<span class="hljs-number">1</span>), a, b) <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n - i2)]; <br>    h = h / sum(h); <br>    <span class="hljs-comment">% 绘制生育模式条形图 </span><br><span class="hljs-comment">    %&#123; </span><br><span class="hljs-comment">    bar(h); </span><br><span class="hljs-comment">    xlabel(&#x27;Age&#x27;, &#x27;FontName&#x27;, &#x27;Times New Roman&#x27;, &#x27;FontSize&#x27;, 11); </span><br><span class="hljs-comment">    ylabel(&#x27;Fertility Pattern&#x27;, &#x27;FontName&#x27;, &#x27;Times New Roman&#x27;, &#x27;FontSize&#x27;, 11); </span><br><span class="hljs-comment">    set(gca, &#x27;xtick&#x27;, 0:1:20); </span><br><span class="hljs-comment">    %&#125; </span><br>    <span class="hljs-comment">% 数据导出 </span><br>    <span class="hljs-comment">% writematrix(h&#x27;, &#x27;Leslie.xlsx&#x27;, &#x27;Range&#x27;, &#x27;D1&#x27;); </span><br>    <span class="hljs-comment">% 生育模式矩阵 </span><br>    H = [h; <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, n)]; <br>    <span class="hljs-comment">% 总和生育率 beta （每个雌性个体一生的平均生育率） </span><br>    <span class="hljs-built_in">beta</span> = (i2 - i1 + <span class="hljs-number">1</span>) / <span class="hljs-number">3</span>; <span class="hljs-comment">% 假设为周期性生殖，每隔3年生一次 </span><br>    <span class="hljs-comment">% 存活率矩阵，S1为雄性，S2为雌性 </span><br>    S1 = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n); [<span class="hljs-built_in">diag</span>(s1(<span class="hljs-number">2</span>:n, <span class="hljs-number">1</span>)) <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>)]]; <br>    S2 = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n); [<span class="hljs-built_in">diag</span>(s2(<span class="hljs-number">2</span>:n, <span class="hljs-number">1</span>)) <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>)]]; <br>    <span class="hljs-comment">% 种群总数 </span><br>    tot = <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, Years); <br>    tot(<span class="hljs-number">1</span>) = sum(x1) + sum(x2); <br>    <span class="hljs-comment">% 开始递推 </span><br>    <span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : Years <br>        x1 = S1 * x1 + <span class="hljs-number">1</span>/<span class="hljs-number">2</span> * s1(<span class="hljs-number">1</span>) * <span class="hljs-built_in">beta</span> * H * x2; <br>        x2 = S2 * x2 + <span class="hljs-number">1</span>/<span class="hljs-number">2</span> * s2(<span class="hljs-number">1</span>) * <span class="hljs-built_in">beta</span> * H * x2; <br>        tot(k) = sum(x1) + sum(x2); <br>        <span class="hljs-comment">% 提取出2021年江豚年龄分布，用于代码part2的初始参数 </span><br><span class="hljs-comment">        %&#123; </span><br><span class="hljs-comment">        if k == 31 </span><br><span class="hljs-comment">            output1 = x1&#x27; </span><br><span class="hljs-comment">            output2 = x2&#x27; </span><br><span class="hljs-comment">            save(&#x27;out.txt&#x27;, &#x27;o*&#x27;, &#x27;-ascii&#x27;); </span><br><span class="hljs-comment">            writematrix([x1 x2], &#x27;2021.xlsx&#x27;); </span><br><span class="hljs-comment">        end </span><br><span class="hljs-comment">        %&#125; </span><br>    <span class="hljs-keyword">end</span> <br>    x = <span class="hljs-number">1991</span> + [<span class="hljs-number">0</span>:Years<span class="hljs-number">-1</span>]; <br>    <span class="hljs-built_in">plot</span>(x, tot, <span class="hljs-string">&#x27;-&#x27;</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    DrawDate(); <br>    <span class="hljs-comment">% 导出数据 </span><br>    <span class="hljs-comment">% writematrix([x&#x27;, tot&#x27;], &#x27;Leslie.xlsx&#x27;); </span><br><span class="hljs-keyword">end</span> <br><span class="hljs-comment">% 绘制观测数据 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">DrawDate</span><span class="hljs-params">()</span> </span><br>    <span class="hljs-keyword">global</span> out; <br>    x = [<span class="hljs-number">1991</span> <span class="hljs-number">2015</span> <span class="hljs-number">2017</span> <span class="hljs-number">2021</span>]; <br>    y = [<span class="hljs-number">5</span> <span class="hljs-number">60</span> <span class="hljs-number">80</span> <span class="hljs-number">101</span>]; <br>    <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;*&#x27;</span>); <br>    <span class="hljs-comment">% 导出数据 </span><br>    <span class="hljs-comment">% writematrix([x&#x27;, y&#x27;], &#x27;Leslie.xlsx&#x27;, &#x27;Range&#x27;, &#x27;C1&#x27;); </span><br>    xlabel(<span class="hljs-string">&#x27;Year&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Total Number of Populations(Unit: Head)&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    axis([<span class="hljs-number">1991</span> <span class="hljs-number">2021</span> <span class="hljs-number">5</span> <span class="hljs-number">105</span>]); <br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
     </div>
 </div>
 <p>接下来利用1991年预测得到的2021年的年龄分布先进行单位化，在根据性别比例等比例缩放至总数为150只（因为所有保护区的总数为150只，而上述预测只是对天鹅洲一地所进行的），再使用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mi>e</mi><mi>s</mi><mi>l</mi><mi>i</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">Leslie</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">L</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">i</span><span class="mord mathdefault">e</span></span></span></span> 模型对20年后种群总数量进行预测。</p>
@@ -457,7 +502,7 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
         点击显/隐代码
     </div>
     <div class='spoiler-content'>
-        <figure class="highlight matlab"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs matlab"><span class="hljs-comment">% 2021年变化雄雌比对2042年预测 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span> </span><br>    format short g; <br>    <span class="hljs-keyword">global</span> n; <br>    n = <span class="hljs-number">20</span>; <br>    s1 = [<span class="hljs-number">1</span> <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.99</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>) <span class="hljs-number">0.7</span> <span class="hljs-number">0.3</span> <span class="hljs-number">0</span>]&#x27;; <br>    s2 = [<span class="hljs-number">1</span> <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.99</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.88</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>) <span class="hljs-number">0.7</span> <span class="hljs-number">0.3</span> <span class="hljs-number">0</span>]&#x27;; <br>    <span class="hljs-comment">% 通过1991年预测出的2021年数据，将总个体数目等比例放大到150只，再等比例修改雄雌比例，进而对2041年进行预测 </span><br>    x1 = [<span class="hljs-number">6.9607761e+00</span>   <span class="hljs-number">6.3417223e+00</span>   <span class="hljs-number">5.7640680e+00</span>   <span class="hljs-number">5.2331215e+00</span>   <span class="hljs-number">4.7603080e+00</span>   <span class="hljs-number">4.3499696e+00</span>   <span class="hljs-number">3.9894351e+00</span>   <span class="hljs-number">3.6526676e+00</span>   <span class="hljs-number">2.6816939e+00</span>   <span class="hljs-number">1.9513385e+00</span>   <span class="hljs-number">1.4179936e+00</span>   <span class="hljs-number">1.0431283e+00</span>   <span class="hljs-number">7.8205754e-01</span>   <span class="hljs-number">5.9151737e-01</span>   <span class="hljs-number">3.8581006e-01</span>   <span class="hljs-number">2.4277269e-01</span>   <span class="hljs-number">1.4821516e-01</span>   <span class="hljs-number">9.1458084e-02</span>   <span class="hljs-number">2.5760444e-02</span>   <span class="hljs-number">0.0000000e+00</span>]&#x27;; <br>    x2 = [<span class="hljs-number">6.9607761e+00</span>   <span class="hljs-number">6.3417223e+00</span>   <span class="hljs-number">5.7640680e+00</span>   <span class="hljs-number">5.2331215e+00</span>   <span class="hljs-number">4.7603080e+00</span>   <span class="hljs-number">4.3499696e+00</span>   <span class="hljs-number">3.9894351e+00</span>   <span class="hljs-number">3.6526676e+00</span>   <span class="hljs-number">2.9498632e+00</span>   <span class="hljs-number">2.3611196e+00</span>   <span class="hljs-number">1.8873495e+00</span>   <span class="hljs-number">1.5272442e+00</span>   <span class="hljs-number">1.2595115e+00</span>   <span class="hljs-number">1.0479091e+00</span>   <span class="hljs-number">7.8112692e-01</span>   <span class="hljs-number">5.6174581e-01</span>   <span class="hljs-number">3.9194451e-01</span>   <span class="hljs-number">2.4185443e-01</span>   <span class="hljs-number">6.8121672e-02</span>   <span class="hljs-number">0.0000000e+00</span>]&#x27;; <br>    <span class="hljs-comment">% 单位化 </span><br>    e1 = x1 / sum(x1); <br>    e2 = x2 / sum(x2); <br>    <span class="hljs-comment">% 绘制单位化后的雌雄分布比例条形图 </span><br>    tiledlayout(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <br>    ax1 = nexttile; <br>    bar(ax1, e1); <br>    <span class="hljs-comment">%ylabel(&#x27;比例&#x27;); </span><br>    xlabel(<span class="hljs-string">&#x27;Age&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Ratio&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    title(<span class="hljs-string">&#x27;Male&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ax2 = nexttile; <br>    bar(ax2, e2); <br>    xlabel(<span class="hljs-string">&#x27;Age&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Ratio&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    title(<span class="hljs-string">&#x27;Female&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>	<span class="hljs-built_in">figure</span>;<br>    <span class="hljs-comment">% 雄雌比0.7到1.3计算 </span><br>    <span class="hljs-keyword">for</span> k = <span class="hljs-number">1</span>:<span class="hljs-number">7</span> <br>        alpha = <span class="hljs-number">0.7</span> + <span class="hljs-number">0.1</span> * (k<span class="hljs-number">-1</span>); <br>        <span class="hljs-comment">% 计算对应于alpha雌雄个体数目 </span><br>        x1 = e1 * <span class="hljs-number">150</span> * alpha / (alpha + <span class="hljs-number">1</span>); <br>        x2 = e2 * <span class="hljs-number">150</span> / (alpha + <span class="hljs-number">1</span>); <br>        Leslie(k, x1, x2, s1, s2, <span class="hljs-number">21</span>); <span class="hljs-comment">%2021年到2041年 </span><br>    <span class="hljs-keyword">end</span> <br>    <span class="hljs-comment">% 用元胞数组Tot保存每一种性别比例下每一年的总种群数量 </span><br>    <span class="hljs-keyword">global</span> Tot; <br>    x = [<span class="hljs-number">2021</span>:<span class="hljs-number">2041</span>]&#x27;; <br>    <span class="hljs-comment">% 从21年到41年每一年的预测值，用于第二问 </span><br><span class="hljs-comment">    %&#123; </span><br><span class="hljs-comment">    output = Tot&#123;1, 1&#125;; </span><br><span class="hljs-comment">    save(&#x27;out.txt&#x27;, &#x27;output&#x27;, &#x27;-ascii&#x27;); </span><br><span class="hljs-comment">    output = [x output&#x27;]; </span><br><span class="hljs-comment">    writematrix(output, &#x27;从21年到41年每一年的预测值.xlsx&#x27;); </span><br><span class="hljs-comment">    %&#125; </span><br>    <span class="hljs-comment">% k为不同的alpha个数 </span><br>    <span class="hljs-keyword">for</span> k = <span class="hljs-number">1</span>:<span class="hljs-number">7</span> <br>        <span class="hljs-built_in">plot</span>(x, Tot&#123;k&#125;, <span class="hljs-string">&#x27;*-&#x27;</span>); <br>        <span class="hljs-built_in">hold</span> on; <br>        <span class="hljs-comment">%Sum(k, 1) = Tot&#123;k&#125;(21); </span><br>    <span class="hljs-keyword">end</span> <br>    <span class="hljs-comment">% 对不同预测值做图 </span><br>    legends = string(<span class="hljs-number">0.7</span>:<span class="hljs-number">0.1</span>:<span class="hljs-number">1.3</span>); <br>    <span class="hljs-built_in">legend</span>(legends); <br>    axis([<span class="hljs-number">2021</span> <span class="hljs-number">2041</span> <span class="hljs-number">150</span> <span class="hljs-number">900</span>]); <br>    xlabel(<span class="hljs-string">&#x27;Year&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Total Number of Populations(Unit:Head)&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br><span class="hljs-keyword">end</span> <br><br><span class="hljs-comment">% Leslie和代码part1相同部分不再解释 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Leslie</span><span class="hljs-params">(Id, x1, x2, s1, s2, Years)</span> </span><br>    <span class="hljs-keyword">global</span> n; <br>    i1 = <span class="hljs-number">5</span>; <br>    i2 = <span class="hljs-number">17</span>; <br>    ic = <span class="hljs-number">7</span>; <br>    t = ic - i1 + <span class="hljs-number">2</span>; <br>    a = t/<span class="hljs-number">2</span>; <br>    b = <span class="hljs-number">2</span>; <br>    h = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, i1<span class="hljs-number">-1</span>) gampdf(<span class="hljs-number">1</span>:(i2-i1+<span class="hljs-number">1</span>), a, b) <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n - i2)]; <br>    h = h / sum(h); <br>    H = [h; <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, n)]; <br>    <span class="hljs-built_in">beta</span> = (i2 - i1 + <span class="hljs-number">1</span>) / <span class="hljs-number">3</span>; <br>    S1 = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n); [<span class="hljs-built_in">diag</span>(s1(<span class="hljs-number">2</span>:n, <span class="hljs-number">1</span>)) <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>)]]; <br>    S2 = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n); [<span class="hljs-built_in">diag</span>(s2(<span class="hljs-number">2</span>:n, <span class="hljs-number">1</span>)) <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>)]]; <br>    tot = <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, Years); <br>    tot(<span class="hljs-number">1</span>) = sum(x1) + sum(x2); <br>    <span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : Years <br>        b = <span class="hljs-built_in">beta</span>; <br>        x1 = S1 * x1 + <span class="hljs-number">1</span>/<span class="hljs-number">2</span> * s1(<span class="hljs-number">1</span>) * b * H * x2; <br>        x2 = S2 * x2 + <span class="hljs-number">1</span>/<span class="hljs-number">2</span> * s2(<span class="hljs-number">1</span>) * b * H * x2; <br>        tot(k) = sum(x1) + sum(x2); <br>    <span class="hljs-keyword">end</span> <br>    <span class="hljs-keyword">global</span> Tot; <br>    Tot&#123;<span class="hljs-number">1</span>, Id&#125; = tot; <br><span class="hljs-keyword">end</span><br></code></pre></div></td></tr></table></figure>
+        <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">% 2021年变化雄雌比对2042年预测 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span> </span><br>    format short g; <br>    <span class="hljs-keyword">global</span> n; <br>    n = <span class="hljs-number">20</span>; <br>    s1 = [<span class="hljs-number">1</span> <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.99</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.7</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>) <span class="hljs-number">0.7</span> <span class="hljs-number">0.3</span> <span class="hljs-number">0</span>]&#x27;; <br>    s2 = [<span class="hljs-number">1</span> <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.99</span>, <span class="hljs-number">1</span>, <span class="hljs-number">7</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.88</span>, <span class="hljs-number">1</span>, <span class="hljs-number">6</span>) <span class="hljs-built_in">repmat</span>(<span class="hljs-number">0.8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>) <span class="hljs-number">0.7</span> <span class="hljs-number">0.3</span> <span class="hljs-number">0</span>]&#x27;; <br>    <span class="hljs-comment">% 通过1991年预测出的2021年数据，将总个体数目等比例放大到150只，再等比例修改雄雌比例，进而对2041年进行预测 </span><br>    x1 = [<span class="hljs-number">6.9607761e+00</span>   <span class="hljs-number">6.3417223e+00</span>   <span class="hljs-number">5.7640680e+00</span>   <span class="hljs-number">5.2331215e+00</span>   <span class="hljs-number">4.7603080e+00</span>   <span class="hljs-number">4.3499696e+00</span>   <span class="hljs-number">3.9894351e+00</span>   <span class="hljs-number">3.6526676e+00</span>   <span class="hljs-number">2.6816939e+00</span>   <span class="hljs-number">1.9513385e+00</span>   <span class="hljs-number">1.4179936e+00</span>   <span class="hljs-number">1.0431283e+00</span>   <span class="hljs-number">7.8205754e-01</span>   <span class="hljs-number">5.9151737e-01</span>   <span class="hljs-number">3.8581006e-01</span>   <span class="hljs-number">2.4277269e-01</span>   <span class="hljs-number">1.4821516e-01</span>   <span class="hljs-number">9.1458084e-02</span>   <span class="hljs-number">2.5760444e-02</span>   <span class="hljs-number">0.0000000e+00</span>]&#x27;; <br>    x2 = [<span class="hljs-number">6.9607761e+00</span>   <span class="hljs-number">6.3417223e+00</span>   <span class="hljs-number">5.7640680e+00</span>   <span class="hljs-number">5.2331215e+00</span>   <span class="hljs-number">4.7603080e+00</span>   <span class="hljs-number">4.3499696e+00</span>   <span class="hljs-number">3.9894351e+00</span>   <span class="hljs-number">3.6526676e+00</span>   <span class="hljs-number">2.9498632e+00</span>   <span class="hljs-number">2.3611196e+00</span>   <span class="hljs-number">1.8873495e+00</span>   <span class="hljs-number">1.5272442e+00</span>   <span class="hljs-number">1.2595115e+00</span>   <span class="hljs-number">1.0479091e+00</span>   <span class="hljs-number">7.8112692e-01</span>   <span class="hljs-number">5.6174581e-01</span>   <span class="hljs-number">3.9194451e-01</span>   <span class="hljs-number">2.4185443e-01</span>   <span class="hljs-number">6.8121672e-02</span>   <span class="hljs-number">0.0000000e+00</span>]&#x27;; <br>    <span class="hljs-comment">% 单位化 </span><br>    e1 = x1 / sum(x1); <br>    e2 = x2 / sum(x2); <br>    <span class="hljs-comment">% 绘制单位化后的雌雄分布比例条形图 </span><br>    tiledlayout(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <br>    ax1 = nexttile; <br>    bar(ax1, e1); <br>    <span class="hljs-comment">%ylabel(&#x27;比例&#x27;); </span><br>    xlabel(<span class="hljs-string">&#x27;Age&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Ratio&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    title(<span class="hljs-string">&#x27;Male&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ax2 = nexttile; <br>    bar(ax2, e2); <br>    xlabel(<span class="hljs-string">&#x27;Age&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Ratio&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    title(<span class="hljs-string">&#x27;Female&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>	<span class="hljs-built_in">figure</span>;<br>    <span class="hljs-comment">% 雄雌比0.7到1.3计算 </span><br>    <span class="hljs-keyword">for</span> k = <span class="hljs-number">1</span>:<span class="hljs-number">7</span> <br>        alpha = <span class="hljs-number">0.7</span> + <span class="hljs-number">0.1</span> * (k<span class="hljs-number">-1</span>); <br>        <span class="hljs-comment">% 计算对应于alpha雌雄个体数目 </span><br>        x1 = e1 * <span class="hljs-number">150</span> * alpha / (alpha + <span class="hljs-number">1</span>); <br>        x2 = e2 * <span class="hljs-number">150</span> / (alpha + <span class="hljs-number">1</span>); <br>        Leslie(k, x1, x2, s1, s2, <span class="hljs-number">21</span>); <span class="hljs-comment">%2021年到2041年 </span><br>    <span class="hljs-keyword">end</span> <br>    <span class="hljs-comment">% 用元胞数组Tot保存每一种性别比例下每一年的总种群数量 </span><br>    <span class="hljs-keyword">global</span> Tot; <br>    x = [<span class="hljs-number">2021</span>:<span class="hljs-number">2041</span>]&#x27;; <br>    <span class="hljs-comment">% 从21年到41年每一年的预测值，用于第二问 </span><br><span class="hljs-comment">    %&#123; </span><br><span class="hljs-comment">    output = Tot&#123;1, 1&#125;; </span><br><span class="hljs-comment">    save(&#x27;out.txt&#x27;, &#x27;output&#x27;, &#x27;-ascii&#x27;); </span><br><span class="hljs-comment">    output = [x output&#x27;]; </span><br><span class="hljs-comment">    writematrix(output, &#x27;从21年到41年每一年的预测值.xlsx&#x27;); </span><br><span class="hljs-comment">    %&#125; </span><br>    <span class="hljs-comment">% k为不同的alpha个数 </span><br>    <span class="hljs-keyword">for</span> k = <span class="hljs-number">1</span>:<span class="hljs-number">7</span> <br>        <span class="hljs-built_in">plot</span>(x, Tot&#123;k&#125;, <span class="hljs-string">&#x27;*-&#x27;</span>); <br>        <span class="hljs-built_in">hold</span> on; <br>        <span class="hljs-comment">%Sum(k, 1) = Tot&#123;k&#125;(21); </span><br>    <span class="hljs-keyword">end</span> <br>    <span class="hljs-comment">% 对不同预测值做图 </span><br>    legends = string(<span class="hljs-number">0.7</span>:<span class="hljs-number">0.1</span>:<span class="hljs-number">1.3</span>); <br>    <span class="hljs-built_in">legend</span>(legends); <br>    axis([<span class="hljs-number">2021</span> <span class="hljs-number">2041</span> <span class="hljs-number">150</span> <span class="hljs-number">900</span>]); <br>    xlabel(<span class="hljs-string">&#x27;Year&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Total Number of Populations(Unit:Head)&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br><span class="hljs-keyword">end</span> <br><br><span class="hljs-comment">% Leslie和代码part1相同部分不再解释 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Leslie</span><span class="hljs-params">(Id, x1, x2, s1, s2, Years)</span> </span><br>    <span class="hljs-keyword">global</span> n; <br>    i1 = <span class="hljs-number">5</span>; <br>    i2 = <span class="hljs-number">17</span>; <br>    ic = <span class="hljs-number">7</span>; <br>    t = ic - i1 + <span class="hljs-number">2</span>; <br>    a = t/<span class="hljs-number">2</span>; <br>    b = <span class="hljs-number">2</span>; <br>    h = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, i1<span class="hljs-number">-1</span>) gampdf(<span class="hljs-number">1</span>:(i2-i1+<span class="hljs-number">1</span>), a, b) <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n - i2)]; <br>    h = h / sum(h); <br>    H = [h; <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, n)]; <br>    <span class="hljs-built_in">beta</span> = (i2 - i1 + <span class="hljs-number">1</span>) / <span class="hljs-number">3</span>; <br>    S1 = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n); [<span class="hljs-built_in">diag</span>(s1(<span class="hljs-number">2</span>:n, <span class="hljs-number">1</span>)) <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>)]]; <br>    S2 = [<span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, n); [<span class="hljs-built_in">diag</span>(s2(<span class="hljs-number">2</span>:n, <span class="hljs-number">1</span>)) <span class="hljs-built_in">zeros</span>(n<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>)]]; <br>    tot = <span class="hljs-built_in">zeros</span>(<span class="hljs-number">1</span>, Years); <br>    tot(<span class="hljs-number">1</span>) = sum(x1) + sum(x2); <br>    <span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : Years <br>        b = <span class="hljs-built_in">beta</span>; <br>        x1 = S1 * x1 + <span class="hljs-number">1</span>/<span class="hljs-number">2</span> * s1(<span class="hljs-number">1</span>) * b * H * x2; <br>        x2 = S2 * x2 + <span class="hljs-number">1</span>/<span class="hljs-number">2</span> * s2(<span class="hljs-number">1</span>) * b * H * x2; <br>        tot(k) = sum(x1) + sum(x2); <br>    <span class="hljs-keyword">end</span> <br>    <span class="hljs-keyword">global</span> Tot; <br>    Tot&#123;<span class="hljs-number">1</span>, Id&#125; = tot; <br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
     </div>
 </div>
 <p>预测效果如下图</p>
@@ -479,14 +524,14 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
         点击显/隐代码
     </div>
     <div class='spoiler-content'>
-        <figure class="highlight matlab"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs matlab"><span class="hljs-comment">% 观测数据散点图</span><br>x1 = [<span class="hljs-number">1988</span> <span class="hljs-number">1991</span> <span class="hljs-number">1993</span> <span class="hljs-number">1994</span> <span class="hljs-number">1997</span> <span class="hljs-number">2000</span> <span class="hljs-number">2006</span> <span class="hljs-number">2011</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span> <span class="hljs-number">2019</span>];<br>y = [<span class="hljs-number">2700</span> <span class="hljs-number">2700</span> <span class="hljs-number">2700</span> <span class="hljs-number">2500</span> <span class="hljs-number">2000</span> <span class="hljs-number">2000</span> <span class="hljs-number">1800</span> <span class="hljs-number">1000</span> <span class="hljs-number">1045</span> <span class="hljs-number">1012</span> <span class="hljs-number">1040</span>];<br><span class="hljs-built_in">plot</span>(x1, y, <span class="hljs-string">&#x27;*-&#x27;</span>);<br><span class="hljs-built_in">hold</span> on;<br>s = <span class="hljs-string">&quot;种群数量&quot;</span>;<br>x2 = [<span class="hljs-number">2006</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span>];<br>y = [<span class="hljs-number">1225</span> <span class="hljs-number">505</span> <span class="hljs-number">445</span>];<br><span class="hljs-built_in">plot</span>(x2, y, <span class="hljs-string">&#x27;*-&#x27;</span>);<br><span class="hljs-built_in">hold</span> on;<br>s = [s <span class="hljs-string">&quot;长江干流&quot;</span>];<br>x3 = [<span class="hljs-number">1997</span> <span class="hljs-number">2000</span> <span class="hljs-number">2006</span> <span class="hljs-number">2007</span> <span class="hljs-number">2009</span> <span class="hljs-number">2010</span> <span class="hljs-number">2012</span> <span class="hljs-number">2016</span> <span class="hljs-number">2017</span>];<br>y = [<span class="hljs-number">250</span> <span class="hljs-number">388</span> <span class="hljs-number">450</span> <span class="hljs-number">180</span> <span class="hljs-number">145</span> <span class="hljs-number">114</span> <span class="hljs-number">90</span> <span class="hljs-number">100</span> <span class="hljs-number">110</span>];<br><span class="hljs-built_in">plot</span>(x3, y, <span class="hljs-string">&#x27;*-&#x27;</span>);<br><span class="hljs-built_in">hold</span> on;<br>s = [s <span class="hljs-string">&quot;洞庭湖&quot;</span>];<br>x4 = [<span class="hljs-number">1998</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span>];<br>y = [<span class="hljs-number">300</span> <span class="hljs-number">450</span> <span class="hljs-number">457</span>];<br><span class="hljs-built_in">plot</span>(x4, y, <span class="hljs-string">&#x27;*-&#x27;</span>);<br><span class="hljs-built_in">hold</span> on;<br>s = [s <span class="hljs-string">&quot;鄱阳湖&quot;</span>];<br><span class="hljs-built_in">legend</span>(s, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">15</span>);<br></code></pre></div></td></tr></table></figure>
+        <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">% 观测数据散点图</span><br>x1 = [<span class="hljs-number">1988</span> <span class="hljs-number">1991</span> <span class="hljs-number">1993</span> <span class="hljs-number">1994</span> <span class="hljs-number">1997</span> <span class="hljs-number">2000</span> <span class="hljs-number">2006</span> <span class="hljs-number">2011</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span> <span class="hljs-number">2019</span>];<br>y = [<span class="hljs-number">2700</span> <span class="hljs-number">2700</span> <span class="hljs-number">2700</span> <span class="hljs-number">2500</span> <span class="hljs-number">2000</span> <span class="hljs-number">2000</span> <span class="hljs-number">1800</span> <span class="hljs-number">1000</span> <span class="hljs-number">1045</span> <span class="hljs-number">1012</span> <span class="hljs-number">1040</span>];<br><span class="hljs-built_in">plot</span>(x1, y, <span class="hljs-string">&#x27;*-&#x27;</span>);<br><span class="hljs-built_in">hold</span> on;<br>s = <span class="hljs-string">&quot;种群数量&quot;</span>;<br>x2 = [<span class="hljs-number">2006</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span>];<br>y = [<span class="hljs-number">1225</span> <span class="hljs-number">505</span> <span class="hljs-number">445</span>];<br><span class="hljs-built_in">plot</span>(x2, y, <span class="hljs-string">&#x27;*-&#x27;</span>);<br><span class="hljs-built_in">hold</span> on;<br>s = [s <span class="hljs-string">&quot;长江干流&quot;</span>];<br>x3 = [<span class="hljs-number">1997</span> <span class="hljs-number">2000</span> <span class="hljs-number">2006</span> <span class="hljs-number">2007</span> <span class="hljs-number">2009</span> <span class="hljs-number">2010</span> <span class="hljs-number">2012</span> <span class="hljs-number">2016</span> <span class="hljs-number">2017</span>];<br>y = [<span class="hljs-number">250</span> <span class="hljs-number">388</span> <span class="hljs-number">450</span> <span class="hljs-number">180</span> <span class="hljs-number">145</span> <span class="hljs-number">114</span> <span class="hljs-number">90</span> <span class="hljs-number">100</span> <span class="hljs-number">110</span>];<br><span class="hljs-built_in">plot</span>(x3, y, <span class="hljs-string">&#x27;*-&#x27;</span>);<br><span class="hljs-built_in">hold</span> on;<br>s = [s <span class="hljs-string">&quot;洞庭湖&quot;</span>];<br>x4 = [<span class="hljs-number">1998</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span>];<br>y = [<span class="hljs-number">300</span> <span class="hljs-number">450</span> <span class="hljs-number">457</span>];<br><span class="hljs-built_in">plot</span>(x4, y, <span class="hljs-string">&#x27;*-&#x27;</span>);<br><span class="hljs-built_in">hold</span> on;<br>s = [s <span class="hljs-string">&quot;鄱阳湖&quot;</span>];<br><span class="hljs-built_in">legend</span>(s, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">15</span>);<br></code></pre></td></tr></table></figure>
     </div>
 </div>
 <p>最后选择对 <strong>种群数量</strong> 进行 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>L</mi><mi>o</mi><mi>g</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>i</mi><mi>c</mi></mrow><annotation encoding="application/x-tex">Logistic</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">L</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">i</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mord mathdefault">i</span><span class="mord mathdefault">c</span></span></span></span> 预测，由于可用参数太少了，所以只能加入一些假想的点</p>
 <p><img src="https://s4.ax1x.com/2022/01/17/7UcFPO.png" srcset="/img/loading.gif" lazyload alt="假想点设置" /></p>
 <p>然后使用Auto2Fit进行拟合（Auto2Fit软件很不好下，这里给出一个网盘下载连接 <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1lFvhm4VQEQEIfrZTC32o4A?pwd=1234">提取码：1234</a>）</p>
 <p>Auto2Fit 的代码很简短易懂，只需要把变量写出来，可变参数直接写在式子中，点击上面运行键即可进行拟合（拟合代码如下）：</p>
-<figure class="highlight matlab"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs matlab">Variable x, y;<br>Function y=a/(b+<span class="hljs-built_in">exp</span>(a*x+c))+d;<br>Data;<br>         <span class="hljs-number">0</span>    <span class="hljs-number">2.7000</span><br>    <span class="hljs-number">4.0000</span>    <span class="hljs-number">2.6000</span><br>    <span class="hljs-number">6.0000</span>    <span class="hljs-number">2.4000</span><br>    <span class="hljs-number">7.0000</span>    <span class="hljs-number">2.2000</span><br>    <span class="hljs-number">9.0000</span>    <span class="hljs-number">2.0000</span><br>   <span class="hljs-number">10.0000</span>    <span class="hljs-number">1.8000</span><br>   <span class="hljs-number">13.0000</span>    <span class="hljs-number">1.4000</span><br>   <span class="hljs-number">17.0000</span>    <span class="hljs-number">1.2000</span><br>   <span class="hljs-number">21.0000</span>    <span class="hljs-number">1.0450</span><br>   <span class="hljs-number">26.0000</span>    <span class="hljs-number">1.0120</span><br></code></pre></div></td></tr></table></figure>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs matlab">Variable x, y;<br>Function y=a/(b+<span class="hljs-built_in">exp</span>(a*x+c))+d;<br>Data;<br>         <span class="hljs-number">0</span>    <span class="hljs-number">2.7000</span><br>    <span class="hljs-number">4.0000</span>    <span class="hljs-number">2.6000</span><br>    <span class="hljs-number">6.0000</span>    <span class="hljs-number">2.4000</span><br>    <span class="hljs-number">7.0000</span>    <span class="hljs-number">2.2000</span><br>    <span class="hljs-number">9.0000</span>    <span class="hljs-number">2.0000</span><br>   <span class="hljs-number">10.0000</span>    <span class="hljs-number">1.8000</span><br>   <span class="hljs-number">13.0000</span>    <span class="hljs-number">1.4000</span><br>   <span class="hljs-number">17.0000</span>    <span class="hljs-number">1.2000</span><br>   <span class="hljs-number">21.0000</span>    <span class="hljs-number">1.0450</span><br>   <span class="hljs-number">26.0000</span>    <span class="hljs-number">1.0120</span><br></code></pre></td></tr></table></figure>
 <p><img src="https://s4.ax1x.com/2022/01/17/7UUb1P.png" srcset="/img/loading.gif" lazyload alt="两种函数拟合效果的比较" /></p>
 <p>拟合图像代码：</p>
 <div class='spoiler collapsed'>
@@ -494,7 +539,7 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
         点击显/隐代码
     </div>
     <div class='spoiler-content'>
-        <figure class="highlight matlab"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs matlab"><span class="hljs-comment">% 用logistic函数进行拟合 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span> </span><br>    <span class="hljs-comment">% 观测数据 </span><br>    y = [<span class="hljs-number">2700</span> <span class="hljs-number">2600</span> <span class="hljs-number">2400</span> <span class="hljs-number">2200</span> <span class="hljs-number">2000</span> <span class="hljs-number">1800</span> <span class="hljs-number">1800</span> <span class="hljs-number">1400</span> <span class="hljs-number">1200</span> <span class="hljs-number">1045</span> <span class="hljs-number">1012</span>]&#x27;; <br>    x = [<span class="hljs-number">1991</span> <span class="hljs-number">1995</span> <span class="hljs-number">1997</span> <span class="hljs-number">1998</span> <span class="hljs-number">2000</span> <span class="hljs-number">2001</span> <span class="hljs-number">2004</span> <span class="hljs-number">2006</span> <span class="hljs-number">2008</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span>]&#x27;; <br>    <span class="hljs-comment">% 对种群总数缩放1000倍，为了有更好的拟合效果 </span><br>    y = y / <span class="hljs-number">1000</span>; <br>    <span class="hljs-comment">% 将年份对1991年做差 </span><br>    x = x - <span class="hljs-number">1991</span>; <br>    <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;*&#x27;</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% 定义logistic拟合函数f，包含4个参数a,b,c,d，变量x </span><br>    f = @(a, b, c, d, x) a./(b+<span class="hljs-built_in">exp</span>(a.*x+c))+d; <br>    x = <span class="hljs-number">0</span>:<span class="hljs-number">50</span>; <br>    <span class="hljs-comment">% 通过Auto2Fit求解拟合参数 </span><br>    y = f(<span class="hljs-number">0.34765</span>, <span class="hljs-number">0.1972</span>, <span class="hljs-number">-4.8873</span>, <span class="hljs-number">1.028273819</span>, x); <br>    <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;-&#x27;</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    axis([<span class="hljs-number">0</span> <span class="hljs-number">50</span> <span class="hljs-number">0.5</span> <span class="hljs-number">3</span>]); <br>    <span class="hljs-comment">% 这种没有限制种群总数下限的拟合（效果一般） </span><br>    y = f(<span class="hljs-number">0.064</span>, <span class="hljs-number">0.009329</span>, <span class="hljs-number">-4.332468</span>, <span class="hljs-number">0</span>, x); <br>    p = <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;-&#x27;</span>); <br>    p.Color = <span class="hljs-string">&#x27;#EDB120&#x27;</span>; <br>    xlabel(<span class="hljs-string">&#x27;t&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br><span class="hljs-keyword">end</span><br></code></pre></div></td></tr></table></figure>
+        <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">% 用logistic函数进行拟合 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span> </span><br>    <span class="hljs-comment">% 观测数据 </span><br>    y = [<span class="hljs-number">2700</span> <span class="hljs-number">2600</span> <span class="hljs-number">2400</span> <span class="hljs-number">2200</span> <span class="hljs-number">2000</span> <span class="hljs-number">1800</span> <span class="hljs-number">1800</span> <span class="hljs-number">1400</span> <span class="hljs-number">1200</span> <span class="hljs-number">1045</span> <span class="hljs-number">1012</span>]&#x27;; <br>    x = [<span class="hljs-number">1991</span> <span class="hljs-number">1995</span> <span class="hljs-number">1997</span> <span class="hljs-number">1998</span> <span class="hljs-number">2000</span> <span class="hljs-number">2001</span> <span class="hljs-number">2004</span> <span class="hljs-number">2006</span> <span class="hljs-number">2008</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span>]&#x27;; <br>    <span class="hljs-comment">% 对种群总数缩放1000倍，为了有更好的拟合效果 </span><br>    y = y / <span class="hljs-number">1000</span>; <br>    <span class="hljs-comment">% 将年份对1991年做差 </span><br>    x = x - <span class="hljs-number">1991</span>; <br>    <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;*&#x27;</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% 定义logistic拟合函数f，包含4个参数a,b,c,d，变量x </span><br>    f = @(a, b, c, d, x) a./(b+<span class="hljs-built_in">exp</span>(a.*x+c))+d; <br>    x = <span class="hljs-number">0</span>:<span class="hljs-number">50</span>; <br>    <span class="hljs-comment">% 通过Auto2Fit求解拟合参数 </span><br>    y = f(<span class="hljs-number">0.34765</span>, <span class="hljs-number">0.1972</span>, <span class="hljs-number">-4.8873</span>, <span class="hljs-number">1.028273819</span>, x); <br>    <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;-&#x27;</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    axis([<span class="hljs-number">0</span> <span class="hljs-number">50</span> <span class="hljs-number">0.5</span> <span class="hljs-number">3</span>]); <br>    <span class="hljs-comment">% 这种没有限制种群总数下限的拟合（效果一般） </span><br>    y = f(<span class="hljs-number">0.064</span>, <span class="hljs-number">0.009329</span>, <span class="hljs-number">-4.332468</span>, <span class="hljs-number">0</span>, x); <br>    p = <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;-&#x27;</span>); <br>    p.Color = <span class="hljs-string">&#x27;#EDB120&#x27;</span>; <br>    xlabel(<span class="hljs-string">&#x27;t&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;x&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
     </div>
 </div>
 <p>由于2021年前迁地保护的江豚数量在总种群数目中占比较小，可以忽略，所以上述模拟的可以认为是总江豚数目的变换，由于21年后保护区的江豚总数在总种群数目中占比逐渐增大，直接通过减法，即可预测到没有迁地保护下江豚数目的变化。</p>
@@ -505,40 +550,93 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
         点击显/隐代码
     </div>
     <div class='spoiler-content'>
-        <figure class="highlight matlab"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs matlab"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span> </span><br>    <span class="hljs-comment">% x均为种群数量，t为年份 </span><br>    t = [<span class="hljs-number">1991</span> <span class="hljs-number">1995</span> <span class="hljs-number">1997</span> <span class="hljs-number">1998</span> <span class="hljs-number">2000</span> <span class="hljs-number">2001</span> <span class="hljs-number">2004</span> <span class="hljs-number">2006</span> <span class="hljs-number">2008</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span>]&#x27;; <br>    <span class="hljs-comment">% x0为原始观测数据 </span><br>    x0 = [<span class="hljs-number">2700</span> <span class="hljs-number">2600</span> <span class="hljs-number">2400</span> <span class="hljs-number">2200</span> <span class="hljs-number">2000</span> <span class="hljs-number">1800</span> <span class="hljs-number">1800</span> <span class="hljs-number">1400</span> <span class="hljs-number">1200</span> <span class="hljs-number">1045</span> <span class="hljs-number">1012</span>]&#x27;; <br>    <span class="hljs-built_in">plot</span>(t, x0, <span class="hljs-string">&#x27;*&#x27;</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% x1为第一问中21年到41年的预测数据 </span><br>    <span class="hljs-comment">% 由于前30年数据迁徙保护在总种群数目中占比较小，可用线性增长代替 </span><br>    x1 = [<span class="hljs-number">5</span>:<span class="hljs-number">4.8387</span>:<span class="hljs-number">150</span> <span class="hljs-number">1.5000000e+02</span>   <span class="hljs-number">1.6302948e+02</span>   <span class="hljs-number">1.7713275e+02</span>   <span class="hljs-number">1.9243870e+02</span>   <span class="hljs-number">2.0909418e+02</span>   <span class="hljs-number">2.2723304e+02</span>   <span class="hljs-number">2.4696784e+02</span>   <span class="hljs-number">2.6840726e+02</span>   <span class="hljs-number">2.9168075e+02</span>   <span class="hljs-number">3.1695127e+02</span>   <span class="hljs-number">3.4441046e+02</span>   <span class="hljs-number">3.7426423e+02</span>   <span class="hljs-number">4.0672256e+02</span>   <span class="hljs-number">4.4200119e+02</span>   <span class="hljs-number">4.8033226e+02</span>   <span class="hljs-number">5.2197542e+02</span>   <span class="hljs-number">5.6722229e+02</span>   <span class="hljs-number">6.1639384e+02</span>   <span class="hljs-number">6.6983573e+02</span>   <span class="hljs-number">7.2791722e+02</span>   <span class="hljs-number">7.9103528e+02</span>]; <br>    t = <span class="hljs-number">1991</span>:<span class="hljs-number">2041</span>; <br>    <span class="hljs-built_in">plot</span>(t, x1, <span class="hljs-string">&#x27;-&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1.5</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% x2为第二问前置程序中拟合的总种群数目的结果 </span><br>    x2 = f(t<span class="hljs-number">-1991</span>) * <span class="hljs-number">1000</span>; <br>    <span class="hljs-built_in">plot</span>(t, x2, <span class="hljs-string">&#x27;-&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1.5</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% x3为总种群数目减去迁移保护的种群数目 </span><br>    x3 = x2 - x1; <br>    <span class="hljs-built_in">plot</span>(t, x3, <span class="hljs-string">&#x27;-&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1.5</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% x4为功能性灭绝阈值 </span><br>    x4 = <span class="hljs-built_in">repmat</span>(<span class="hljs-number">500</span>, <span class="hljs-number">1</span>, <span class="hljs-number">51</span>); <br>    <span class="hljs-built_in">plot</span>(t, x4, <span class="hljs-string">&#x27;r--&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1</span>); <br>    legends = [<span class="hljs-string">&quot;Total number of observations&quot;</span> <span class="hljs-string">&quot;Number of migration protection&quot;</span> <span class="hljs-string">&quot;Predicted total number&quot;</span> <span class="hljs-string">&quot;Number under natural conditions&quot;</span> <span class="hljs-string">&quot;Functional extinction threshold&quot;</span>]; <br>    <span class="hljs-built_in">legend</span>(legends, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    xlabel(<span class="hljs-string">&#x27;Year&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Yangtze Finless Porpoise Population(Unit: Head)&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    axis([<span class="hljs-number">1991</span> <span class="hljs-number">2041</span> <span class="hljs-number">0</span> <span class="hljs-number">3000</span>]); <br>    <span class="hljs-comment">% 制表 </span><br>    <span class="hljs-comment">% writematrix([t&#x27; x1&#x27; x2&#x27; x3&#x27;], &#x27;data.xlsx&#x27;); </span><br><span class="hljs-keyword">end</span> <br><span class="hljs-comment">% 由代码part1确定的拟合函数 </span><br><span class="hljs-comment">% x为相对1991年的差值，f(x)*1000为预测的种群总数 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ret</span> = <span class="hljs-title">f</span><span class="hljs-params">(x)</span> </span><br>    a = <span class="hljs-number">0.34765</span>; <br>    b = <span class="hljs-number">0.1972</span>; <br>    c = <span class="hljs-number">-4.8873</span>; <br>    d = <span class="hljs-number">1.028273819</span>; <br>    ret = a./(b+<span class="hljs-built_in">exp</span>(a.*x+c))+d; <br><span class="hljs-keyword">end</span><br></code></pre></div></td></tr></table></figure>
+        <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">main</span> </span><br>    <span class="hljs-comment">% x均为种群数量，t为年份 </span><br>    t = [<span class="hljs-number">1991</span> <span class="hljs-number">1995</span> <span class="hljs-number">1997</span> <span class="hljs-number">1998</span> <span class="hljs-number">2000</span> <span class="hljs-number">2001</span> <span class="hljs-number">2004</span> <span class="hljs-number">2006</span> <span class="hljs-number">2008</span> <span class="hljs-number">2012</span> <span class="hljs-number">2017</span>]&#x27;; <br>    <span class="hljs-comment">% x0为原始观测数据 </span><br>    x0 = [<span class="hljs-number">2700</span> <span class="hljs-number">2600</span> <span class="hljs-number">2400</span> <span class="hljs-number">2200</span> <span class="hljs-number">2000</span> <span class="hljs-number">1800</span> <span class="hljs-number">1800</span> <span class="hljs-number">1400</span> <span class="hljs-number">1200</span> <span class="hljs-number">1045</span> <span class="hljs-number">1012</span>]&#x27;; <br>    <span class="hljs-built_in">plot</span>(t, x0, <span class="hljs-string">&#x27;*&#x27;</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% x1为第一问中21年到41年的预测数据 </span><br>    <span class="hljs-comment">% 由于前30年数据迁徙保护在总种群数目中占比较小，可用线性增长代替 </span><br>    x1 = [<span class="hljs-number">5</span>:<span class="hljs-number">4.8387</span>:<span class="hljs-number">150</span> <span class="hljs-number">1.5000000e+02</span>   <span class="hljs-number">1.6302948e+02</span>   <span class="hljs-number">1.7713275e+02</span>   <span class="hljs-number">1.9243870e+02</span>   <span class="hljs-number">2.0909418e+02</span>   <span class="hljs-number">2.2723304e+02</span>   <span class="hljs-number">2.4696784e+02</span>   <span class="hljs-number">2.6840726e+02</span>   <span class="hljs-number">2.9168075e+02</span>   <span class="hljs-number">3.1695127e+02</span>   <span class="hljs-number">3.4441046e+02</span>   <span class="hljs-number">3.7426423e+02</span>   <span class="hljs-number">4.0672256e+02</span>   <span class="hljs-number">4.4200119e+02</span>   <span class="hljs-number">4.8033226e+02</span>   <span class="hljs-number">5.2197542e+02</span>   <span class="hljs-number">5.6722229e+02</span>   <span class="hljs-number">6.1639384e+02</span>   <span class="hljs-number">6.6983573e+02</span>   <span class="hljs-number">7.2791722e+02</span>   <span class="hljs-number">7.9103528e+02</span>]; <br>    t = <span class="hljs-number">1991</span>:<span class="hljs-number">2041</span>; <br>    <span class="hljs-built_in">plot</span>(t, x1, <span class="hljs-string">&#x27;-&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1.5</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% x2为第二问前置程序中拟合的总种群数目的结果 </span><br>    x2 = f(t<span class="hljs-number">-1991</span>) * <span class="hljs-number">1000</span>; <br>    <span class="hljs-built_in">plot</span>(t, x2, <span class="hljs-string">&#x27;-&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1.5</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% x3为总种群数目减去迁移保护的种群数目 </span><br>    x3 = x2 - x1; <br>    <span class="hljs-built_in">plot</span>(t, x3, <span class="hljs-string">&#x27;-&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1.5</span>); <br>    <span class="hljs-built_in">hold</span> on <br>    <span class="hljs-comment">% x4为功能性灭绝阈值 </span><br>    x4 = <span class="hljs-built_in">repmat</span>(<span class="hljs-number">500</span>, <span class="hljs-number">1</span>, <span class="hljs-number">51</span>); <br>    <span class="hljs-built_in">plot</span>(t, x4, <span class="hljs-string">&#x27;r--&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1</span>); <br>    legends = [<span class="hljs-string">&quot;Total number of observations&quot;</span> <span class="hljs-string">&quot;Number of migration protection&quot;</span> <span class="hljs-string">&quot;Predicted total number&quot;</span> <span class="hljs-string">&quot;Number under natural conditions&quot;</span> <span class="hljs-string">&quot;Functional extinction threshold&quot;</span>]; <br>    <span class="hljs-built_in">legend</span>(legends, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    xlabel(<span class="hljs-string">&#x27;Year&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    ylabel(<span class="hljs-string">&#x27;Yangtze Finless Porpoise Population(Unit: Head)&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br>    axis([<span class="hljs-number">1991</span> <span class="hljs-number">2041</span> <span class="hljs-number">0</span> <span class="hljs-number">3000</span>]); <br>    <span class="hljs-comment">% 制表 </span><br>    <span class="hljs-comment">% writematrix([t&#x27; x1&#x27; x2&#x27; x3&#x27;], &#x27;data.xlsx&#x27;); </span><br><span class="hljs-keyword">end</span> <br><span class="hljs-comment">% 由代码part1确定的拟合函数 </span><br><span class="hljs-comment">% x为相对1991年的差值，f(x)*1000为预测的种群总数 </span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ret</span> = <span class="hljs-title">f</span><span class="hljs-params">(x)</span> </span><br>    a = <span class="hljs-number">0.34765</span>; <br>    b = <span class="hljs-number">0.1972</span>; <br>    c = <span class="hljs-number">-4.8873</span>; <br>    d = <span class="hljs-number">1.028273819</span>; <br>    ret = a./(b+<span class="hljs-built_in">exp</span>(a.*x+c))+d; <br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
     </div>
 </div>
 <p>至此完成了全部拟合过程，其实也没很复杂，只是第一次操作，对MATLAB函数运用不是很灵活，下面记录些常用的函数</p>
-<figure class="highlight matlab"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs matlab"><span class="hljs-comment">% 在同一个figure中绘制多个子图</span><br>tiledlayout(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <br>ax1 = nexttile; <br>bar(ax1, s1); <br>ax2 = nexttile; <br>bar(ax2, s2); <br><br><span class="hljs-comment">% 离散Gamma函数</span><br>gampdf(x, a, b);<br><br><span class="hljs-comment">% 将矩阵导出为Excel表格，文件名的后缀要用.xlsx或.xls</span><br><span class="hljs-comment">% writematrix(矩阵名称, &#x27;文件名.xlsx&#x27;, &#x27;Range&#x27;, &#x27;矩阵输入的左上角对应Excel中的单元格,横轴为A-Z,纵轴为1,2,3...&#x27;);</span><br>writematrix(m, <span class="hljs-string">&#x27;Leslie.xlsx&#x27;</span>, <span class="hljs-string">&#x27;Range&#x27;</span>, <span class="hljs-string">&#x27;D1&#x27;</span>);<br><br><span class="hljs-comment">% 对x,y轴加标签，标题也是可以的，设置字体，字体大小</span><br>xlabel(<span class="hljs-string">&#x27;Year&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>);<br>ylabel(<span class="hljs-string">&#x27;Total Number of Populations(Unit: Head)&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br><br><span class="hljs-comment">% x,y轴范围限制，[x左端点 x右端点 y左端点 y右端点]</span><br>axis([<span class="hljs-number">1991</span> <span class="hljs-number">2021</span> <span class="hljs-number">5</span> <span class="hljs-number">105</span>]);<br><br><span class="hljs-comment">% 同一个图像中有多个曲线，对不同曲线进行标注，方法是创建一个字符向量，从左到右，分别代表绘制曲线的顺序</span><br>legends = string(<span class="hljs-number">0.7</span>:<span class="hljs-number">0.1</span>:<span class="hljs-number">1.3</span>);<br><span class="hljs-built_in">legend</span>(legends);<br><br><span class="hljs-comment">% 设置曲线颜色</span><br>p = <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;-&#x27;</span>); <br>p.Color = <span class="hljs-string">&#x27;#EDB120&#x27;</span>; <span class="hljs-comment">% 好像还可以用RGB设置</span><br><br><span class="hljs-comment">% 设置曲线宽度，参数&#x27;linewidth&#x27;</span><br><span class="hljs-built_in">plot</span>(t, x3, <span class="hljs-string">&#x27;-&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1.5</span>); <br></code></pre></div></td></tr></table></figure>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">% 在同一个figure中绘制多个子图</span><br>tiledlayout(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <br>ax1 = nexttile; <br>bar(ax1, s1); <br>ax2 = nexttile; <br>bar(ax2, s2); <br><br><span class="hljs-comment">% 离散Gamma函数</span><br>gampdf(x, a, b);<br><br><span class="hljs-comment">% 将矩阵导出为Excel表格，文件名的后缀要用.xlsx或.xls</span><br><span class="hljs-comment">% writematrix(矩阵名称, &#x27;文件名.xlsx&#x27;, &#x27;Range&#x27;, &#x27;矩阵输入的左上角对应Excel中的单元格,横轴为A-Z,纵轴为1,2,3...&#x27;);</span><br>writematrix(m, <span class="hljs-string">&#x27;Leslie.xlsx&#x27;</span>, <span class="hljs-string">&#x27;Range&#x27;</span>, <span class="hljs-string">&#x27;D1&#x27;</span>);<br><br><span class="hljs-comment">% 对x,y轴加标签，标题也是可以的，设置字体，字体大小</span><br>xlabel(<span class="hljs-string">&#x27;Year&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>);<br>ylabel(<span class="hljs-string">&#x27;Total Number of Populations(Unit: Head)&#x27;</span>, <span class="hljs-string">&#x27;FontName&#x27;</span>, <span class="hljs-string">&#x27;Times New Roman&#x27;</span>, <span class="hljs-string">&#x27;FontSize&#x27;</span>, <span class="hljs-number">11</span>); <br><br><span class="hljs-comment">% x,y轴范围限制，[x左端点 x右端点 y左端点 y右端点]</span><br>axis([<span class="hljs-number">1991</span> <span class="hljs-number">2021</span> <span class="hljs-number">5</span> <span class="hljs-number">105</span>]);<br><br><span class="hljs-comment">% 同一个图像中有多个曲线，对不同曲线进行标注，方法是创建一个字符向量，从左到右，分别代表绘制曲线的顺序</span><br>legends = string(<span class="hljs-number">0.7</span>:<span class="hljs-number">0.1</span>:<span class="hljs-number">1.3</span>);<br><span class="hljs-built_in">legend</span>(legends);<br><br><span class="hljs-comment">% 设置曲线颜色</span><br>p = <span class="hljs-built_in">plot</span>(x, y, <span class="hljs-string">&#x27;-&#x27;</span>); <br>p.Color = <span class="hljs-string">&#x27;#EDB120&#x27;</span>; <span class="hljs-comment">% 好像还可以用RGB设置</span><br><br><span class="hljs-comment">% 设置曲线宽度，参数&#x27;linewidth&#x27;</span><br><span class="hljs-built_in">plot</span>(t, x3, <span class="hljs-string">&#x27;-&#x27;</span>, <span class="hljs-string">&#x27;linewidth&#x27;</span>, <span class="hljs-number">1.5</span>); <br></code></pre></td></tr></table></figure>
 <p>最后要感谢队友们的共同努力😆，共同完成整篇论文（英文论文语法使用，排版和格式做的是真的好）（不然上面整的都是摆设~(&gt;_&lt;。)＼）。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
             </div>
-            <hr>
+            <hr/>
             <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/">数学建模</a>
-                    
-                  </div>
-                
-                
-              </div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1/" class="category-chain-item">数学建模</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
               
-                <p class="note note-warning">
-                  
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                  
-                </p>
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>对长江江豚迁地保护种群数量的预测 基于Leslie和Logistic模型</div>
+      <div>https://wty-yy.github.io/posts/58946/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年1月16日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
               
-              
-                <div class="post-prevnext">
+                <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/posts/25104/">
+                      <a href="/posts/25104/" title="遗传算法的基本原理及代码">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">遗传算法的基本原理及代码</span>
                         <span class="visible-mobile">上一篇</span>
@@ -548,7 +646,7 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
                   <article class="post-next col-6">
                     
                     
-                      <a href="/posts/5758/">
+                      <a href="/posts/5758/" title="离散傅里叶变换 离散傅里叶逆变换">
                         <span class="hidden-mobile">离散傅里叶变换 离散傅里叶逆变换</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -560,55 +658,92 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
             </div>
 
             
-              <!-- Comments -->
-              <article class="comments" id="comments" lazyload>
-                
-                  
-                
-                
+  <article id="comments" lazyload>
+    
   <div id="valine"></div>
   <script type="text/javascript">
     Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
         var options = Object.assign(
-          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","placeholder":"说点什么","path":"window.location.pathname","avatar":"retro","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false,"requiredFields":[]},
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
           {
             el: "#valine",
             path: window.location.pathname
           }
         )
         new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
       });
     });
   </script>
   <noscript>Please enable JavaScript to view the comments</noscript>
 
 
-              </article>
-            
+  </article>
+
+
           </article>
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
-      </div>
-    
+
+
+  </aside>
+
+
+    </div>
   </div>
 </div>
 
-<!-- Custom -->
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
 
 
     
 
     
-      <a id="scroll-top-button" href="#" role="button">
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
         <i class="iconfont icon-arrowup" aria-hidden="true"></i>
       </a>
     
@@ -627,35 +762,37 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
+
     
 
     
   </main>
 
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! 
-  </div>
+  <footer>
+    <div class="footer-inner">
   
-
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! 
+    </div>
   
-
   
-</footer>
-
-
-  <!-- SCRIPTS -->
   
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -666,54 +803,23 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
   </script>
 
 
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-<!-- Plugins -->
 
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
-
-
-
-  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
-
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
       
-      typing(title)
+        typing(text);
       
     })(window, document);
   </script>
@@ -722,30 +828,164 @@ s^l(1)&amp;0&amp;\cdots&amp;0&amp;0\\
 
 
 
-  
 
   
-    <!-- KaTeX -->
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.10/dist/katex.min.css" />
+    <script  src="/js/img-lazyload.js" ></script>
   
-
-
-
-
-
-
 
 
 
 
   
-<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
 
 
 
-<!-- 主题的启动项 保持在最底部 -->
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
 <script  src="/js/boot.js" ></script>
 
 
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 </body>
 </html>

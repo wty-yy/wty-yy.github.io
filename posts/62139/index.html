@@ -1,75 +1,99 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=&#34;dark&#34;>
+<html lang="zh-CN" data-default-color-scheme=dark>
 
 
 
 <head>
-  <meta name="baidu-site-verification" content="code-pm5ok3TpVV" />
-  <meta name="google-site-verification" content="LCzcyBtJ6IPbW8lLUza0MZjpBf_3dBk5L-xukUYZ9JU" />
-  <meta name="sogou_site_verification" content="2ZqXuXXvLj"/>
-  <meta name="bytedance-verification-code" content="9Ez63obQMRDivJCOFA+w" />
   <meta charset="UTF-8">
   <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
   <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
   <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="">
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
+    <meta name="description" content="感知器（英语：Perceptron）是Frank Rosenblatt在1957年就职于康奈尔航空实验室（Cornell Aeronautical Laboratory）时所发明的一种人工神经网络。它可以被视为一种最简单形式的前馈神经网络，是一种二元线性分类器。（From：Wiki-感知器） 感知器可以理解为神经网络中的一个“神经细胞”，在这里我们研究是最简单的神经网络问题，只有一个感知器的情况，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Perceptron Learning Algorithm 感知器算法 - 神经网络基础">
+<meta property="og:url" content="https://wty-yy.github.io/posts/62139/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="感知器（英语：Perceptron）是Frank Rosenblatt在1957年就职于康奈尔航空实验室（Cornell Aeronautical Laboratory）时所发明的一种人工神经网络。它可以被视为一种最简单形式的前馈神经网络，是一种二元线性分类器。（From：Wiki-感知器） 感知器可以理解为神经网络中的一个“神经细胞”，在这里我们研究是最简单的神经网络问题，只有一个感知器的情况，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/03/q7OS2t.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/03/q7OpxP.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/03/q7Lz8I.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/03/qH8QCF.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/03/qH81gJ.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/03/qH8l34.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/04/04/qHT3kR.jpg">
+<meta property="article:published_time" content="2022-04-03T11:50:48.000Z">
+<meta property="article:modified_time" content="2022-04-04T01:56:13.770Z">
+<meta property="article:author" content="wty">
+<meta property="article:tag" content="神经网络">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/04/03/q7OS2t.jpg">
+  
+  
+  
   <title>Perceptron Learning Algorithm 感知器算法 - 神经网络基础 - wty&#39;s blog</title>
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
-  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
 
-  
-    
-    
-      
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.7.2/styles/github-gist.min.css" />
-    
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
-  
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
 
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
 
 
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
 <link  rel="stylesheet" href="/css/main.css" />
 
-<!-- 自定义样式保持在最底部 -->
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
 
   
-<link rel="stylesheet" href="/css/diy/gundongtiao.css">
-<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
-<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.8.11","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}},"search_path":"/local-search.xml"};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.0","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
+
+  
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css">
 
@@ -78,11 +102,17 @@
 
 
 <body>
-  <header style="height: 70vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand"
-       href="/">&nbsp;<strong>Home</strong>&nbsp;</a>
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -171,7 +201,7 @@
           
           
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" target="_self" role="button"
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="iconfont icon-books"></i>
                 文档
@@ -216,13 +246,15 @@
         
         
           <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
-                class="iconfont icon-search"></i>&nbsp;</a>
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
           </li>
+          
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self">&nbsp;<i
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
                 class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
@@ -231,60 +263,69 @@
   </div>
 </nav>
 
-    <div class="banner" id="banner" parallax=true
-         style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Perceptron Learning Algorithm 感知器算法 - 神经网络基础">
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-04-03 19:50" pubdate>
-        2022年4月3日 晚上
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      3.6k 字
-    </span>
   
 
-  
-    
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      49
-       分钟
-    </span>
-  
-
-  
-  
-</div>
-
-            
-          </div>
-
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Perceptron Learning Algorithm 感知器算法 - 神经网络基础"></span>
           
         </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-03 19:50" pubdate>
+          2022年4月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          72 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
       </div>
+
+      
     </div>
+  </div>
+</div>
+
+</div>
+
   </header>
 
   <main>
@@ -293,15 +334,20 @@
 
 <div class="container-fluid nopadding-x">
   <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
     <div class="col-lg-8 nopadding-x-md">
       <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
+        <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
             <h1 style="display: none">Perceptron Learning Algorithm 感知器算法 - 神经网络基础</h1>
             
             <div class="markdown-body">
+              
               <p><strong>感知器</strong>（英语：Perceptron）是Frank Rosenblatt在1957年就职于康奈尔航空实验室（Cornell Aeronautical Laboratory）时所发明的一种人工神经网络。它可以被视为一种最简单形式的前馈神经网络，是一种<strong>二元线性分类器</strong>。（From：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-cn/%E6%84%9F%E7%9F%A5%E5%99%A8">Wiki-感知器</a>）</p>
 <p><strong>感知器</strong>可以理解为神经网络中的一个“神经细胞”，在这里我们研究是最简单的神经网络问题，只有一个感知器的情况，而神经网络中则是由大量的感知器分层组合而成，问题更加复杂。我们先理解感知器学习原理以后，在回过头看它和神经网络的关系。</p>
 <h2 id="问题引入"><a class="markdownIt-Anchor" href="#问题引入"></a> 问题引入</h2>
@@ -399,8 +445,8 @@ s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></sp
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.801892em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.02778em;">w</span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.02778em;">w</span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.59444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33528199999999997em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord boldsymbol mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></span></span></p>
 <h2 id="代码实现"><a class="markdownIt-Anchor" href="#代码实现"></a> 代码实现</h2>
 <p>使用 Jupyter Notebook 完成，源代码<a href="/file/Perceptron.ipynb" download='Perceptron.ipynb'>下载</a>，可以直接使用VsCode查看。或者在Github上查看，<a target="_blank" rel="noopener" href="https://github.com/wty-yy/Deep-Learning/blob/master/Perceptron%20%E6%84%9F%E7%9F%A5%E5%99%A8%E7%AE%97%E6%B3%95/%E6%84%9F%E7%9F%A5%E5%99%A8%E7%AE%97%E6%B3%95.ipynb">Github传送门</a></p>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> numpy.random <span class="hljs-keyword">as</span> nr<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br>plt.rcParams[<span class="hljs-string">&#x27;figure.figsize&#x27;</span>] = (<span class="hljs-number">12</span>, <span class="hljs-number">12</span>) <span class="hljs-comment">#固定图像大小</span><br>plt.rcParams[<span class="hljs-string">&#x27;font.sans-serif&#x27;</span>]=[<span class="hljs-string">&#x27;SimHei&#x27;</span>] <span class="hljs-comment">#用来正常显示中文标签</span><br>plt.rcParams[<span class="hljs-string">&#x27;axes.unicode_minus&#x27;</span>]=<span class="hljs-literal">False</span> <span class="hljs-comment">#用来正常显示负号</span><br></code></pre></div></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-comment"># 生成随机点</span><br>N = <span class="hljs-number">100</span><br>xn = nr.rand(N, <span class="hljs-number">2</span>) <span class="hljs-comment"># 第一列为横轴，第二列为纵轴</span><br>x = np.linspace(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>) <span class="hljs-comment"># 选取[0,10]上的线性分布</span><br><br><span class="hljs-comment"># 选取一线性函数</span><br><span class="hljs-comment"># a, b = nr.rand(), nr.rand()</span><br>a, b = <span class="hljs-number">0.8</span>, <span class="hljs-number">0.2</span><br>f = <span class="hljs-keyword">lambda</span> x : a*x + b<br><br><span class="hljs-comment">#fig = plt.figure() # 创建图层</span><br><span class="hljs-comment">#figa = plt.gca() # get current axes 获取当前的坐标轴，处理坐标轴相关信息</span><br><br>plt.plot(x, f(x), <span class="hljs-string">&#x27;tab:red&#x27;</span>)<br>dn = np.zeros([N, <span class="hljs-number">1</span>]) <span class="hljs-comment"># 点在分割线上方为1，反之为-1</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">print_base</span>(<span class="hljs-params">xn, dn</span>):</span><br>    plt.plot(xn[:,<span class="hljs-number">0</span>], xn[:,<span class="hljs-number">1</span>],  <span class="hljs-string">&#x27;o&#x27;</span>, color=<span class="hljs-string">&#x27;tab:blue&#x27;</span>) <span class="hljs-comment"># 蓝色，圆点</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N):<br>        <span class="hljs-keyword">if</span> (f(xn[i, <span class="hljs-number">0</span>]) &gt; xn[i, <span class="hljs-number">1</span>]): <span class="hljs-comment"># 分割线下方</span><br>            dn[i] = <span class="hljs-number">1</span><br>            plt.plot(xn[i, <span class="hljs-number">0</span>], xn[i, <span class="hljs-number">1</span>], <span class="hljs-string">&#x27;o&#x27;</span>, color=<span class="hljs-string">&#x27;tab:green&#x27;</span>)<br>        <span class="hljs-keyword">else</span>:<br>            dn[i] = -<span class="hljs-number">1</span> <span class="hljs-comment"># 分割线上方</span><br><br><br>print_base(xn, dn)<br>plt.legend([<span class="hljs-string">&#x27;上方&#x27;</span>, <span class="hljs-string">&#x27;分割线&#x27;</span>, <span class="hljs-string">&#x27;下方&#x27;</span>])<br>plt.title(<span class="hljs-string">&#x27;根据分割线选择点&#x27;</span>)<br>plt.show()<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> numpy.random <span class="hljs-keyword">as</span> nr<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br>plt.rcParams[<span class="hljs-string">&#x27;figure.figsize&#x27;</span>] = (<span class="hljs-number">12</span>, <span class="hljs-number">12</span>) <span class="hljs-comment">#固定图像大小</span><br>plt.rcParams[<span class="hljs-string">&#x27;font.sans-serif&#x27;</span>]=[<span class="hljs-string">&#x27;SimHei&#x27;</span>] <span class="hljs-comment">#用来正常显示中文标签</span><br>plt.rcParams[<span class="hljs-string">&#x27;axes.unicode_minus&#x27;</span>]=<span class="hljs-literal">False</span> <span class="hljs-comment">#用来正常显示负号</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 生成随机点</span><br>N = <span class="hljs-number">100</span><br>xn = nr.rand(N, <span class="hljs-number">2</span>) <span class="hljs-comment"># 第一列为横轴，第二列为纵轴</span><br>x = np.linspace(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>) <span class="hljs-comment"># 选取[0,10]上的线性分布</span><br><br><span class="hljs-comment"># 选取一线性函数</span><br><span class="hljs-comment"># a, b = nr.rand(), nr.rand()</span><br>a, b = <span class="hljs-number">0.8</span>, <span class="hljs-number">0.2</span><br>f = <span class="hljs-keyword">lambda</span> x : a*x + b<br><br><span class="hljs-comment">#fig = plt.figure() # 创建图层</span><br><span class="hljs-comment">#figa = plt.gca() # get current axes 获取当前的坐标轴，处理坐标轴相关信息</span><br><br>plt.plot(x, f(x), <span class="hljs-string">&#x27;tab:red&#x27;</span>)<br>dn = np.zeros([N, <span class="hljs-number">1</span>]) <span class="hljs-comment"># 点在分割线上方为1，反之为-1</span><br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">print_base</span>(<span class="hljs-params">xn, dn</span>):</span><br>    plt.plot(xn[:,<span class="hljs-number">0</span>], xn[:,<span class="hljs-number">1</span>],  <span class="hljs-string">&#x27;o&#x27;</span>, color=<span class="hljs-string">&#x27;tab:blue&#x27;</span>) <span class="hljs-comment"># 蓝色，圆点</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N):<br>        <span class="hljs-keyword">if</span> (f(xn[i, <span class="hljs-number">0</span>]) &gt; xn[i, <span class="hljs-number">1</span>]): <span class="hljs-comment"># 分割线下方</span><br>            dn[i] = <span class="hljs-number">1</span><br>            plt.plot(xn[i, <span class="hljs-number">0</span>], xn[i, <span class="hljs-number">1</span>], <span class="hljs-string">&#x27;o&#x27;</span>, color=<span class="hljs-string">&#x27;tab:green&#x27;</span>)<br>        <span class="hljs-keyword">else</span>:<br>            dn[i] = -<span class="hljs-number">1</span> <span class="hljs-comment"># 分割线上方</span><br><br><br>print_base(xn, dn)<br>plt.legend([<span class="hljs-string">&#x27;上方&#x27;</span>, <span class="hljs-string">&#x27;分割线&#x27;</span>, <span class="hljs-string">&#x27;下方&#x27;</span>])<br>plt.title(<span class="hljs-string">&#x27;根据分割线选择点&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
 <p>​<br />
 <img src="https://s1.ax1x.com/2022/04/03/qH8QCF.png" srcset="/img/loading.gif" lazyload alt="初始分割线" /><br />
 ​</p>
@@ -412,11 +458,11 @@ s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></sp
 <p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi mathvariant="bold">w</mi><mo mathvariant="normal">′</mo></msup><mo>=</mo><mi mathvariant="bold">w</mi><mo>−</mo><mi>η</mi><mi>d</mi><mo>⋅</mo><mi mathvariant="bold">x</mi></mrow><annotation encoding="application/x-tex">\mathbf{w}&#x27;=\mathbf{w}-\eta d\cdot\mathbf{x}
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.801892em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbf" style="margin-right:0.01597em;">w</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.801892em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord mathbf" style="margin-right:0.01597em;">w</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="mord mathdefault">d</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">x</span></span></span></span></span></span></p>
 <p>其中<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>η</mi></mrow><annotation encoding="application/x-tex">\eta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span></span></span></span>为学习系数，即每次更新的权重，下面代码中直接取值为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>η</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\eta=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，通过代码运行可以看出迭代效果</p>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">print_per</span>(<span class="hljs-params">xn, dn, w</span>):</span> <span class="hljs-comment"># 打印图像</span><br>    <span class="hljs-keyword">if</span> (w[<span class="hljs-number">2</span>] == <span class="hljs-number">0</span>):<br>        <span class="hljs-keyword">return</span><br>    y = <span class="hljs-keyword">lambda</span> x: -w[<span class="hljs-number">0</span>]/w[<span class="hljs-number">2</span>] - w[<span class="hljs-number">1</span>]/w[<span class="hljs-number">2</span>]*x<br>    x = np.linspace(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)<br>    plt.plot(x, y(x), <span class="hljs-string">&#x27;tab:blue&#x27;</span>)<br>    print_base(xn, dn)<br>    <br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">perceptron</span>(<span class="hljs-params">xn, dn, max_iter=<span class="hljs-number">10000</span>, w=np.zeros(<span class="hljs-params"><span class="hljs-number">3</span></span>)</span>):</span><br>    <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">    二维分类问题</span><br><span class="hljs-string">    Input:</span><br><span class="hljs-string">        xn: 数据点，Nx2矩阵</span><br><span class="hljs-string">        dn: 分类标准，Nx1矩阵</span><br><span class="hljs-string">        max_iter: 最大迭代次数</span><br><span class="hljs-string">        w: 初始化参数矩阵</span><br><span class="hljs-string">    Output:</span><br><span class="hljs-string">        w: 迭代结果，最优分类曲线</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    f = <span class="hljs-keyword">lambda</span> x: np.sign(w[<span class="hljs-number">0</span>] + w[<span class="hljs-number">1</span>] * x[<span class="hljs-number">0</span>] + w[<span class="hljs-number">2</span>] * x[<span class="hljs-number">1</span>]) <span class="hljs-comment">#当前点x在f的上方则返回正数</span><br>    now = <span class="hljs-number">1</span><br>    plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">60</span>))<br>    chk = [<span class="hljs-number">10</span>, <span class="hljs-number">100</span>, <span class="hljs-number">500</span>, <span class="hljs-number">1000</span>, <span class="hljs-number">5000</span>, <span class="hljs-number">9999</span>] <span class="hljs-comment">#打印迭代过程中的图像</span><br>    <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(max_iter):<br>        i = nr.randint(N) <span class="hljs-comment">#随机取出一个点</span><br>        <span class="hljs-keyword">if</span> (_ <span class="hljs-keyword">in</span> chk):<br>            plt.subplot(<span class="hljs-number">6</span>, <span class="hljs-number">1</span>, now)<br>            plt.title(<span class="hljs-string">&#x27;当前迭代次数&#x27;</span>+<span class="hljs-built_in">str</span>(_))<br>            now += <span class="hljs-number">1</span><br>            print_per(xn, dn, w)<br>        <span class="hljs-keyword">if</span> (dn[i] != f(xn[i,:])): <span class="hljs-comment"># 如果分类错误，则进行修正曲线</span><br>            w[<span class="hljs-number">0</span>] += dn[i]<br>            w[<span class="hljs-number">1</span>] += dn[i] * xn[i,<span class="hljs-number">0</span>]<br>            w[<span class="hljs-number">2</span>] += dn[i] * xn[i,<span class="hljs-number">1</span>]<br>    plt.show()<br>    <span class="hljs-keyword">return</span> w<br><br>w = perceptron(xn, dn)<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">print_per</span>(<span class="hljs-params">xn, dn, w</span>):</span> <span class="hljs-comment"># 打印图像</span><br>    <span class="hljs-keyword">if</span> (w[<span class="hljs-number">2</span>] == <span class="hljs-number">0</span>):<br>        <span class="hljs-keyword">return</span><br>    y = <span class="hljs-keyword">lambda</span> x: -w[<span class="hljs-number">0</span>]/w[<span class="hljs-number">2</span>] - w[<span class="hljs-number">1</span>]/w[<span class="hljs-number">2</span>]*x<br>    x = np.linspace(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)<br>    plt.plot(x, y(x), <span class="hljs-string">&#x27;tab:blue&#x27;</span>)<br>    print_base(xn, dn)<br>    <br><br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">perceptron</span>(<span class="hljs-params">xn, dn, max_iter=<span class="hljs-number">10000</span>, w=np.zeros(<span class="hljs-params"><span class="hljs-number">3</span></span>)</span>):</span><br>    <span class="hljs-string">&#x27;&#x27;&#x27;</span><br><span class="hljs-string">    二维分类问题</span><br><span class="hljs-string">    Input:</span><br><span class="hljs-string">        xn: 数据点，Nx2矩阵</span><br><span class="hljs-string">        dn: 分类标准，Nx1矩阵</span><br><span class="hljs-string">        max_iter: 最大迭代次数</span><br><span class="hljs-string">        w: 初始化参数矩阵</span><br><span class="hljs-string">    Output:</span><br><span class="hljs-string">        w: 迭代结果，最优分类曲线</span><br><span class="hljs-string">    &#x27;&#x27;&#x27;</span><br>    f = <span class="hljs-keyword">lambda</span> x: np.sign(w[<span class="hljs-number">0</span>] + w[<span class="hljs-number">1</span>] * x[<span class="hljs-number">0</span>] + w[<span class="hljs-number">2</span>] * x[<span class="hljs-number">1</span>]) <span class="hljs-comment">#当前点x在f的上方则返回正数</span><br>    now = <span class="hljs-number">1</span><br>    plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">60</span>))<br>    chk = [<span class="hljs-number">10</span>, <span class="hljs-number">100</span>, <span class="hljs-number">500</span>, <span class="hljs-number">1000</span>, <span class="hljs-number">5000</span>, <span class="hljs-number">9999</span>] <span class="hljs-comment">#打印迭代过程中的图像</span><br>    <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(max_iter):<br>        i = nr.randint(N) <span class="hljs-comment">#随机取出一个点</span><br>        <span class="hljs-keyword">if</span> (_ <span class="hljs-keyword">in</span> chk):<br>            plt.subplot(<span class="hljs-number">6</span>, <span class="hljs-number">1</span>, now)<br>            plt.title(<span class="hljs-string">&#x27;当前迭代次数&#x27;</span>+<span class="hljs-built_in">str</span>(_))<br>            now += <span class="hljs-number">1</span><br>            print_per(xn, dn, w)<br>        <span class="hljs-keyword">if</span> (dn[i] != f(xn[i,:])): <span class="hljs-comment"># 如果分类错误，则进行修正曲线</span><br>            w[<span class="hljs-number">0</span>] += dn[i]<br>            w[<span class="hljs-number">1</span>] += dn[i] * xn[i,<span class="hljs-number">0</span>]<br>            w[<span class="hljs-number">2</span>] += dn[i] * xn[i,<span class="hljs-number">1</span>]<br>    plt.show()<br>    <span class="hljs-keyword">return</span> w<br><br>w = perceptron(xn, dn)<br></code></pre></td></tr></table></figure>
 <p>​<br />
 <img src="https://s1.ax1x.com/2022/04/03/qH81gJ.png" srcset="/img/loading.gif" lazyload alt="迭代过程" /><br />
 ​</p>
-<figure class="highlight python"><table><tr><td class="gutter hljs"><div class="hljs code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></div></td><td class="code"><div class="hljs code-wrapper"><pre><code class="hljs python">plt.figure();<br><br>print_base(xn, dn)<br>y = <span class="hljs-keyword">lambda</span> x: -w[<span class="hljs-number">0</span>]/w[<span class="hljs-number">2</span>] - w[<span class="hljs-number">1</span>]/w[<span class="hljs-number">2</span>]*x<br>plt.plot(x,y(x),<span class="hljs-string">&#x27;b--&#x27;</span>,label=<span class="hljs-string">&#x27;感知器求出的解&#x27;</span>)<br>plt.plot(x,f(x),<span class="hljs-string">&#x27;r&#x27;</span>,label=<span class="hljs-string">&#x27;原始分割线&#x27;</span>)<br>plt.legend()<br><br>plt.title(<span class="hljs-string">&#x27;比较原始分割线和求出的解&#x27;</span>)<br>plt.show()<br></code></pre></div></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">plt.figure();<br><br>print_base(xn, dn)<br>y = <span class="hljs-keyword">lambda</span> x: -w[<span class="hljs-number">0</span>]/w[<span class="hljs-number">2</span>] - w[<span class="hljs-number">1</span>]/w[<span class="hljs-number">2</span>]*x<br>plt.plot(x,y(x),<span class="hljs-string">&#x27;b--&#x27;</span>,label=<span class="hljs-string">&#x27;感知器求出的解&#x27;</span>)<br>plt.plot(x,f(x),<span class="hljs-string">&#x27;r&#x27;</span>,label=<span class="hljs-string">&#x27;原始分割线&#x27;</span>)<br>plt.legend()<br><br>plt.title(<span class="hljs-string">&#x27;比较原始分割线和求出的解&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
 <p>​<br />
 <img src="https://s1.ax1x.com/2022/04/03/qH8l34.png" srcset="/img/loading.gif" lazyload alt="比较最终解和初始分割线" /><br />
 ​</p>
@@ -445,44 +491,103 @@ s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></sp
 </li>
 </ol>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+              
             </div>
-            <hr>
+            <hr/>
             <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">神经网络</a>
-                    
-                  </div>
-                
-              </div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">深度学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">#神经网络</a>
+      
+    </div>
+  
+</div>
+
+
               
-                <p class="note note-warning">
-                  
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                  
-                </p>
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Perceptron Learning Algorithm 感知器算法 - 神经网络基础</div>
+      <div>https://wty-yy.github.io/posts/62139/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月3日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
               
-              
-                <div class="post-prevnext">
+                <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/posts/34253/" title="Pandas数据处理实例">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Pandas数据处理实例</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/posts/51787/">
+                      <a href="/posts/51787/" title="数值分析中一些算法的MATLAB代码">
                         <span class="hidden-mobile">数值分析中一些算法的MATLAB代码</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -494,55 +599,92 @@ s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></sp
             </div>
 
             
-              <!-- Comments -->
-              <article class="comments" id="comments" lazyload>
-                
-                  
-                
-                
+  <article id="comments" lazyload>
+    
   <div id="valine"></div>
   <script type="text/javascript">
     Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
         var options = Object.assign(
-          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","placeholder":"说点什么","path":"window.location.pathname","avatar":"retro","meta":["nick","mail","link"],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false,"requiredFields":[]},
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
           {
             el: "#valine",
             path: window.location.pathname
           }
         )
         new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
       });
     });
   </script>
   <noscript>Please enable JavaScript to view the comments</noscript>
 
 
-              </article>
-            
+  </article>
+
+
           </article>
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
   <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
-      </div>
-    
+
+
+  </aside>
+
+
+    </div>
   </div>
 </div>
 
-<!-- Custom -->
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
 
 
     
 
     
-      <a id="scroll-top-button" href="#" role="button">
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
         <i class="iconfont icon-arrowup" aria-hidden="true"></i>
       </a>
     
@@ -561,35 +703,37 @@ s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></sp
       <div class="modal-body mx-3">
         <div class="md-form mb-5">
           <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
         </div>
         <div class="list-group" id="local-search-result"></div>
       </div>
     </div>
   </div>
 </div>
+
     
 
     
   </main>
 
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! 
-  </div>
+  <footer>
+    <div class="footer-inner">
   
-
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! 
+    </div>
   
-
   
-</footer>
-
-
-  <!-- SCRIPTS -->
   
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
 
   <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
@@ -600,54 +744,23 @@ s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></sp
   </script>
 
 
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" ></script>
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
 <script  src="/js/events.js" ></script>
 <script  src="/js/plugins.js" ></script>
 
-<!-- Plugins -->
 
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.3/dist/tocbot.min.js" ></script>
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.1/anchor.min.js" ></script>
-
-
-
-  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
-
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js" ></script>
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
   <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
       
-      typing(title)
+        typing(text);
       
     })(window, document);
   </script>
@@ -656,30 +769,164 @@ s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></sp
 
 
 
-  
 
   
-    <!-- KaTeX -->
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.10/dist/katex.min.css" />
+    <script  src="/js/img-lazyload.js" ></script>
   
-
-
-
-
-
-
 
 
 
 
   
-<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
 
 
 
-<!-- 主题的启动项 保持在最底部 -->
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
 <script  src="/js/boot.js" ></script>
 
 
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 </body>
 </html>

@@ -1,7 +1,7 @@
 /* global Fluid */
 
 /**
- * Modify by https://blog.skk.moe/post/hello-darkmode-my-old-friend/
+ * Modified from https://blog.skk.moe/post/hello-darkmode-my-old-friend/
  */
 (function(window, document) {
   var rootElement = document.documentElement;
@@ -9,8 +9,8 @@
   var colorSchemaMediaQueryKey = '--color-mode';
   var userColorSchemaAttributeName = 'data-user-color-scheme';
   var defaultColorSchemaAttributeName = 'data-default-color-scheme';
-  var colorToggleButtonName = 'color-toggle-btn';
-  var colorToggleIconName = 'color-toggle-icon';
+  var colorToggleButtonSelector = '#color-toggle-btn';
+  var colorToggleIconSelector = '#color-toggle-icon';
 
   function setLS(k, v) {
     try {
@@ -101,6 +101,9 @@
     // 根据当前模式设置图标
     setButtonIcon(current);
 
+    // 设置代码高亮
+    setHighlightCSS(current);
+
     // 设置其他应用
     setApplications(current);
   }
@@ -109,6 +112,10 @@
     dark : 'light',
     light: 'dark'
   };
+
+  function getIconClass(scheme) {
+    return 'icon-' + scheme;
+  }
 
   function toggleCustomColorSchema() {
     var currentSetting = getLS(colorSchemaStorageKey);
@@ -119,7 +126,7 @@
     } else if (currentSetting === null) {
       // 当 localStorage 中没有相关值，或者 localStorage 抛了 Error
       // 先按照按钮的状态进行切换
-      var iconElement = document.getElementById(colorToggleIconName);
+      var iconElement = document.querySelector(colorToggleIconSelector);
       if (iconElement) {
         currentSetting = iconElement.getAttribute('data');
       }
@@ -139,11 +146,11 @@
   function setButtonIcon(schema) {
     if (validColorSchemaKeys[schema]) {
       // 切换图标
-      var icon = 'icon-dark';
+      var icon = getIconClass('dark');
       if (schema) {
-        icon = 'icon-' + invertColorSchemaObj[schema];
+        icon = getIconClass(schema);
       }
-      var iconElement = document.getElementById(colorToggleIconName);
+      var iconElement = document.querySelector(colorToggleIconSelector);
       if (iconElement) {
         iconElement.setAttribute(
           'class',
@@ -155,8 +162,8 @@
         );
       } else {
         // 如果图标不存在则说明图标还没加载出来，等到页面全部加载再尝试切换
-        Fluid.utils.waitElementLoaded(colorToggleIconName, function() {
-          var iconElement = document.getElementById(colorToggleIconName);
+        Fluid.utils.waitElementLoaded(colorToggleIconSelector, function() {
+          var iconElement = document.querySelector(colorToggleIconSelector);
           if (iconElement) {
             iconElement.setAttribute(
               'class',
@@ -172,6 +179,39 @@
     }
   }
 
+  function setHighlightCSS(schema) {
+    // 启用对应的代码高亮的样式
+    var lightCss = document.getElementById('highlight-css');
+    var darkCss = document.getElementById('highlight-css-dark');
+    if (schema === 'dark') {
+      if (darkCss) {
+        darkCss.removeAttribute('disabled');
+      }
+      if (lightCss) {
+        lightCss.setAttribute('disabled', '');
+      }
+    } else {
+      if (lightCss) {
+        lightCss.removeAttribute('disabled');
+      }
+      if (darkCss) {
+        darkCss.setAttribute('disabled', '');
+      }
+    }
+
+    setTimeout(function() {
+      // 设置代码块组件样式
+      document.querySelectorAll('.markdown-body pre').forEach((pre) => {
+        var cls = Fluid.utils.getBackgroundLightness(pre) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+        var widget = pre.querySelector('.code-widget-light, .code-widget-dark');
+        if (widget) {
+          widget.classList.remove('code-widget-light', 'code-widget-dark');
+          widget.classList.add(cls);
+        }
+      });
+    }, 200);
+  }
+
   function setApplications(schema) {
     // 设置 remark42 评论主题
     if (window.REMARK42) {
@@ -184,7 +224,7 @@
     }
 
     // 设置 utterances 评论主题
-    var utterances = document.querySelector('iframe');
+    var utterances = document.querySelector('.utterances-frame');
     if (utterances) {
       var theme = window.UtterancesThemeLight;
       if (schema === 'dark') {
@@ -201,14 +241,26 @@
   // 当页面加载时，将显示模式设置为 localStorage 中自定义的值（如果有的话）
   applyCustomColorSchemaSettings();
 
-  Fluid.utils.waitElementLoaded(colorToggleButtonName, function() {
+  Fluid.utils.waitElementLoaded(colorToggleIconSelector, function() {
     applyCustomColorSchemaSettings();
-    var button = document.getElementById(colorToggleButtonName);
+    var button = document.querySelector(colorToggleButtonSelector);
     if (button) {
       // 当用户点击切换按钮时，获得新的显示模式、写入 localStorage、并在页面上生效
-      button.addEventListener('click', () => {
+      button.addEventListener('click', function() {
         applyCustomColorSchemaSettings(toggleCustomColorSchema());
       });
+      var icon = document.querySelector(colorToggleIconSelector);
+      if (icon) {
+        // 光标悬停在按钮上时，切换图标
+        button.addEventListener('mouseenter', function() {
+          var current = icon.getAttribute('data');
+          icon.classList.replace(getIconClass(invertColorSchemaObj[current]), getIconClass(current));
+        });
+        button.addEventListener('mouseleave', function() {
+          var current = icon.getAttribute('data');
+          icon.classList.replace(getIconClass(current), getIconClass(invertColorSchemaObj[current]));
+        });
+      }
     }
   });
 })(window, document);
