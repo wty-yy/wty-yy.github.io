@@ -1,0 +1,1084 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="该问题是在使用GradientTape训练MNIST数据集时发现的，尝试使用了三种方式进行训练：直接GradientTape训练，调用fit函数训练，重写fit函数后训练. 发现重写GradientTape训练的正确率尽然有96%，而后两者的正确率90%都不到，这引起了我很大的好奇心，于是通过查阅大量文档和阅读TF源代码一步一步排除问题，最终找到问题原因.  训练集使用最简单的MNIST，重写f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow - 使用GradientTape和重写fit训练结果不同的原因">
+<meta property="og:url" content="https://wty-yy.github.io/posts/4237/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="该问题是在使用GradientTape训练MNIST数据集时发现的，尝试使用了三种方式进行训练：直接GradientTape训练，调用fit函数训练，重写fit函数后训练. 发现重写GradientTape训练的正确率尽然有96%，而后两者的正确率90%都不到，这引起了我很大的好奇心，于是通过查阅大量文档和阅读TF源代码一步一步排除问题，最终找到问题原因.  训练集使用最简单的MNIST，重写f">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/24/zGBYE6.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/24/zGBtUK.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/24/zGBN4O.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/24/zGBGHx.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/24/zGB6VP.png">
+<meta property="article:published_time" content="2022-11-23T04:52:47.000Z">
+<meta property="article:modified_time" content="2023-04-02T15:49:43.149Z">
+<meta property="article:author" content="wty">
+<meta property="article:tag" content="MNIST">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/11/24/zGBYE6.png">
+  
+  
+  
+  <title>TensorFlow - 使用GradientTape和重写fit训练结果不同的原因 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/">
+                    
+                    <span>算法模板</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="TensorFlow - 使用GradientTape和重写fit训练结果不同的原因"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-23 12:52" pubdate>
+          2022年11月23日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          12k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          103 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">TensorFlow - 使用GradientTape和重写fit训练结果不同的原因</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>该问题是在使用GradientTape训练MNIST数据集时发现的，尝试使用了三种方式进行训练：直接GradientTape训练，调用fit函数训练，重写fit函数后训练. 发现重写GradientTape训练的正确率尽然有96%，而后两者的正确率90%都不到，这引起了我很大的好奇心，于是通过查阅大量文档和阅读TF源代码一步一步排除问题，最终找到问题原因.</p>
+</blockquote>
+<p>训练集使用最简单的MNIST，重写fit函数部分参考：<a target="_blank" rel="noopener" href="https://github.com/Keyird/DeepLearning-TensorFlow2/blob/master/1.%20%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/FirstNet.py">Keyird - 1. 手写数字识别</a></p>
+<h1 id="三种基础模型训练方法"><a class="markdownIt-Anchor" href="#三种基础模型训练方法"></a> 三种基础模型训练方法</h1>
+<p>batch大小统一为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>32</mn></mrow><annotation encoding="application/x-tex">32</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">2</span></span></span></span>，epoch个数为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn></mrow><annotation encoding="application/x-tex">10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span></span></span></span>，优化器均采用 <code>keras.optimizers.SGD(lr=0.01)</code>（学习率为0.01），损失函数使用均方误差损失，网络结构如下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">dense_network <span class="token operator">=</span> Sequential<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    layers<span class="token punctuation">.</span>Flatten<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+dense_network<span class="token punctuation">.</span>build<span class="token punctuation">(</span>input_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token operator">*</span><span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="gradienttape训练方法"><a class="markdownIt-Anchor" href="#gradienttape训练方法"></a> GradientTape训练方法</h2>
+<p>首先参考Keyird使用GradientTape训练的方法：</p>
+<p>这里尽可能使用 <code>tf</code> 类中的函数，因为其函数大多都有优化，本次学到的新功能有：</p>
+<ol>
+<li>
+<p>使用 <code>tf.constant</code> 或 <code>tf.convert_to_tensor</code> 将数据转化为 <code>tf.tensor</code> 数据类型，这种类型类似于 <code>np.ndarray</code>，所以在某种程度上可以起到替代作用.</p>
+</li>
+<li>
+<p><code>dense_network.build(input_shape=(None, 28*28))</code>，设置输入特征为28*28，而不是像以往将 <code>input_shape</code> 写到 <code>Sequential</code> 网络的第一层中.</p>
+</li>
+<li>
+<p>验证集也可以按照batch进行分割，每次判断一整个batch的正确率即可，而且batch越大，预处理速度越快，所以可以尝试将整个验证集放到一个batch中，减少了数据读入花费的时间：<code>test_ds = test_ds.batch(len(test_ds))</code>.</p>
+</li>
+<li>
+<p>使用TF自带的记录器更容易判断结果的准确率：<a target="_blank" rel="noopener" href="https://tensorflow.google.cn/api_docs/python/tf/keras/metrics/Accuracy?hl=en"><code>tf.metrics.Accuracy()</code></a> 是最简的一种准确率测量器，可以用于比对对应标签是否相同. <strong>好用但是一定要用对，两种写法上正确率问题就出在这里，下文会详细介绍记录器的使用方法</strong>.</p>
+</li>
+</ol>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        完整GradientTape代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># coding: utf-8</span>
+<span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+<span class="token keyword">from</span> tensorflow<span class="token punctuation">.</span>keras <span class="token keyword">import</span> layers<span class="token punctuation">,</span> optimizers<span class="token punctuation">,</span> datasets<span class="token punctuation">,</span> Sequential<span class="token punctuation">,</span> metrics  <span class="token comment"># 导入子库</span>
+<span class="token keyword">from</span> tqdm <span class="token keyword">import</span> tqdm
+
+<span class="token comment"># 数据集读入</span>
+<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>x_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span> <span class="token operator">=</span> datasets<span class="token punctuation">.</span>mnist<span class="token punctuation">.</span>load_data<span class="token punctuation">(</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>x<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>float32<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255.</span>  <span class="token comment"># 转化为tensor，图像特征缩放为0~1</span>
+y <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>y<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>int32<span class="token punctuation">)</span>  <span class="token comment"># 转化为tensor，标签</span>
+x_val <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>x_val<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>float32<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255.</span>  <span class="token comment"># 转化为tensor，图像特征缩放为0~1</span>
+y_val <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>y_val<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>int32<span class="token punctuation">)</span>  <span class="token comment"># 转化为tensor，标签</span>
+
+train_ds <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>from_tensor_slices<span class="token punctuation">(</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 构建数据对象</span>
+test_ds <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>from_tensor_slices<span class="token punctuation">(</span><span class="token punctuation">(</span>x_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 构建数据对象</span>
+test_ds <span class="token operator">=</span> test_ds<span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>test_ds<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 将验证集打包为一个batch，预测速度大大增加</span>
+train_ds <span class="token operator">=</span> train_ds<span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">.</span>repeat<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>  <span class="token comment"># 打乱数据集，设置训练batch为32，重复10遍</span>
+batch_N <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>train_ds<span class="token punctuation">)</span>
+
+<span class="token comment"># 2. 网络搭建</span>
+dense_network <span class="token operator">=</span> Sequential<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    layers<span class="token punctuation">.</span>Flatten<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+dense_network<span class="token punctuation">.</span>build<span class="token punctuation">(</span>input_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token operator">*</span><span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置输入特征为28*28</span>
+
+<span class="token comment"># 3.模型训练</span>
+optimizer <span class="token operator">=</span> optimizers<span class="token punctuation">.</span>SGD<span class="token punctuation">(</span>lr<span class="token operator">=</span><span class="token number">0.01</span><span class="token punctuation">)</span>  <span class="token comment"># 使用随机梯度下降法，学习率=0.01</span>
+acc_meter <span class="token operator">=</span> metrics<span class="token punctuation">.</span>Accuracy<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 准确率测量器，累计记录器</span>
+<span class="token keyword">for</span> step<span class="token punctuation">,</span> <span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span> <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>train_ds<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 输入一个batch数据进行训练</span>
+    <span class="token keyword">with</span> tf<span class="token punctuation">.</span>GradientTape<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> tape<span class="token punctuation">:</span>  <span class="token comment"># 构建梯度记录环境</span>
+        out <span class="token operator">=</span> dense_network<span class="token punctuation">(</span>x<span class="token punctuation">)</span>  <span class="token comment"># 输出 [b,10]</span>
+        y_onehot <span class="token operator">=</span> tf<span class="token punctuation">.</span>one_hot<span class="token punctuation">(</span>y<span class="token punctuation">,</span> depth<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>  <span class="token comment"># one-hot编码</span>
+        loss <span class="token operator">=</span> tf<span class="token punctuation">.</span>reduce_sum<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>square<span class="token punctuation">(</span>out <span class="token operator">-</span> y_onehot<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">32.</span>  <span class="token comment"># 均方损失函数</span>
+    grads <span class="token operator">=</span> tape<span class="token punctuation">.</span>gradient<span class="token punctuation">(</span>loss<span class="token punctuation">,</span> dense_network<span class="token punctuation">.</span>trainable_variables<span class="token punctuation">)</span>  <span class="token comment"># 求loss关于网络中所有可训练参数的梯度</span>
+    optimizer<span class="token punctuation">.</span>apply_gradients<span class="token punctuation">(</span><span class="token builtin">zip</span><span class="token punctuation">(</span>grads<span class="token punctuation">,</span> dense_network<span class="token punctuation">.</span>trainable_variables<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 更新网络参数</span>
+    acc_meter<span class="token punctuation">.</span>update_state<span class="token punctuation">(</span>y_true<span class="token operator">=</span>y<span class="token punctuation">,</span> y_pred<span class="token operator">=</span>tf<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>out<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 比较预测值与标签，更新准确率</span>
+    <span class="token keyword">if</span> step <span class="token operator">%</span> <span class="token number">200</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>  <span class="token comment"># 每200个step输出一次结果</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>f"<span class="token punctuation">&#123;</span><span class="token string">'step='</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>step<span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">'/'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>batch_N<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token operator">&lt;</span><span class="token number">20</span><span class="token punctuation">&#125;</span> loss<span class="token operator">=</span><span class="token punctuation">&#123;</span>loss<span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token punctuation">.</span>4f<span class="token punctuation">&#125;</span>\
+                 Accuracy<span class="token operator">=</span><span class="token punctuation">&#123;</span>acc_meter<span class="token punctuation">.</span>result<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token punctuation">.</span>4f<span class="token punctuation">&#125;</span>"<span class="token punctuation">)</span>
+        acc_meter<span class="token punctuation">.</span>reset_states<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 准确率清空</span>
+
+<span class="token comment"># 4.验证集预测</span>
+pred_meter <span class="token operator">=</span> metrics<span class="token punctuation">.</span>Accuracy<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 准确率测量器</span>
+<span class="token keyword">for</span> x<span class="token punctuation">,</span> y <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span>test_ds<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    out <span class="token operator">=</span> dense_network<span class="token punctuation">(</span>x<span class="token punctuation">)</span>  <span class="token comment"># 输出 [b,10]</span>
+    pred <span class="token operator">=</span> tf<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>out<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 预测结果[b,]</span>
+    pred_meter<span class="token punctuation">(</span>y<span class="token punctuation">,</span> pred<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'验证集准确率'</span><span class="token punctuation">,</span> pred_meter<span class="token punctuation">.</span>result<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>这种写法训练集上的正确率为 96.86%，验证集上的正确率为 96.61%. （选用更小的学习率可以进一步提高到98%）</p>
+<h2 id="直接调用fit函数"><a class="markdownIt-Anchor" href="#直接调用fit函数"></a> 直接调用fit函数</h2>
+<p>该部分代码主要在数据的标签上做了些调整：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">y <span class="token operator">=</span> tf<span class="token punctuation">.</span>one_hot<span class="token punctuation">(</span>y<span class="token punctuation">,</span> depth<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>  <span class="token comment"># 转化为one-hot编码</span>
+y_evl <span class="token operator">=</span> tf<span class="token punctuation">.</span>one_hot<span class="token punctuation">(</span>y_evl<span class="token punctuation">,</span> depth<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>  <span class="token comment"># 转化为one-hot编码</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>其余部分为超参数配置，直接训练即可，详细请见代码</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        直接调用fit代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># coding: utf-8</span>
+<span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+<span class="token keyword">import</span> tensorflow<span class="token punctuation">.</span>keras <span class="token keyword">as</span> keras
+<span class="token keyword">from</span> tensorflow<span class="token punctuation">.</span>keras <span class="token keyword">import</span> layers<span class="token punctuation">,</span> optimizers<span class="token punctuation">,</span> datasets<span class="token punctuation">,</span> Sequential<span class="token punctuation">,</span> metrics  <span class="token comment"># 导入子库</span>
+
+<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>x_evl<span class="token punctuation">,</span> y_evl<span class="token punctuation">)</span> <span class="token operator">=</span> datasets<span class="token punctuation">.</span>mnist<span class="token punctuation">.</span>load_data<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 训练集</span>
+x <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>x<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>float32<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255.</span>  <span class="token comment"># 转化为tensor，图像特征缩放为0~1</span>
+y <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>y<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>int32<span class="token punctuation">)</span>  <span class="token comment"># 转化为tensor，标签</span>
+y <span class="token operator">=</span> tf<span class="token punctuation">.</span>one_hot<span class="token punctuation">(</span>y<span class="token punctuation">,</span> depth<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>  <span class="token comment"># 转化为one-hot编码</span>
+train_ds <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>from_tensor_slices<span class="token punctuation">(</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 构建数据对象</span>
+train_ds <span class="token operator">=</span> train_ds<span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span>  <span class="token comment"># 打乱数据集，设置训练batch为32</span>
+
+<span class="token comment"># 验证集</span>
+x_evl <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>x_evl<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>float32<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255.</span>  <span class="token comment"># 转化为tensor，图像特征缩放为0~1</span>
+y_evl <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>y_evl<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>int32<span class="token punctuation">)</span>  <span class="token comment"># 转化为tensor，标签</span>
+y_evl <span class="token operator">=</span> tf<span class="token punctuation">.</span>one_hot<span class="token punctuation">(</span>y_evl<span class="token punctuation">,</span> depth<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>  <span class="token comment"># 转化为one-hot编码</span>
+evl_ds <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>from_tensor_slices<span class="token punctuation">(</span><span class="token punctuation">(</span>x_evl<span class="token punctuation">,</span> y_evl<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span>  <span class="token comment"># 构建数据对象</span>
+
+<span class="token comment"># 构建网络框架</span>
+dense_network <span class="token operator">=</span> Sequential<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    layers<span class="token punctuation">.</span>Reshape<span class="token punctuation">(</span>target_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">28</span><span class="token operator">*</span><span class="token number">28</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">,</span> input_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+dense_network<span class="token punctuation">.</span>build<span class="token punctuation">(</span>input_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token operator">*</span><span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置输入特征为28*28</span>
+
+<span class="token comment"># 设定超参数进行训练</span>
+optimizer <span class="token operator">=</span> optimizers<span class="token punctuation">.</span>SGD<span class="token punctuation">(</span>lr<span class="token operator">=</span><span class="token number">0.01</span><span class="token punctuation">)</span>  <span class="token comment"># 使用随机梯度下降法，学习率=0.01</span>
+dense_network<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span>optimizer<span class="token operator">=</span>optimizer<span class="token punctuation">,</span> loss<span class="token operator">=</span><span class="token string">'MSE'</span><span class="token punctuation">,</span> metrics<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'accuracy'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+dense_network<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> epochs<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span> validation_data<span class="token operator">=</span>evl_ds<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>dense_network<span class="token punctuation">.</span>evaluate<span class="token punctuation">(</span>evl_ds<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 直接调用评估函数</span>
+
+<span class="token comment"># 手写验证集预测</span>
+meter <span class="token operator">=</span> metrics<span class="token punctuation">.</span>Accuracy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> x<span class="token punctuation">,</span> y <span class="token keyword">in</span> evl_ds<span class="token punctuation">:</span>
+    out <span class="token operator">=</span> dense_network<span class="token punctuation">(</span>x<span class="token punctuation">)</span>  <span class="token comment"># 输出 [b,10]</span>
+    pred <span class="token operator">=</span> tf<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>out<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+    y <span class="token operator">=</span> tf<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>y<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+    meter<span class="token punctuation">.</span>update_state<span class="token punctuation">(</span>y<span class="token punctuation">,</span> pred<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'验证集准确率'</span><span class="token punctuation">,</span> meter<span class="token punctuation">.</span>result<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>运行代码发现训练集正确率为 92%，验证集正确率为93%.</p>
+<h3 id="发现问题"><a class="markdownIt-Anchor" href="#发现问题"></a> 发现问题</h3>
+<p>直接调用fit函数代码看上去很简单，但是出现了非常大的问题，那就是训练出来的准确率和loss函数值完全不同！！！而且准确率远低于直接使用GradientTape的写法，loss函数值也不相同. <strong>直接使用fit的loss函数值基本在0.01的数量级，而GradientTape的loss函数值在0.1左右</strong>.</p>
+<p>而且，最后手写验证集预测的正确率和直接调用评估函数的正确率相同，说明准确率的计算没有问题.</p>
+<p>所以第一个问题：是否是TF自带损失函数MSE出了问题.</p>
+<hr />
+<h3 id="解决问题"><a class="markdownIt-Anchor" href="#解决问题"></a> 解决问题</h3>
+<p>我们直接考虑什么是MSE的工作原理，进行尝试可得下面两个相等及官方文档可知 ：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">a <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>losses<span class="token punctuation">.</span>MSE<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token punctuation">[</span><span class="token number">0.5</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+b <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">0.5</span><span class="token operator">**</span><span class="token number">2</span><span class="token operator">+</span><span class="token number">1</span><span class="token operator">**</span><span class="token number">2</span><span class="token operator">+</span><span class="token number">2</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">3</span>
+loss <span class="token operator">=</span> mean<span class="token punctuation">(</span>square<span class="token punctuation">(</span>y_true <span class="token operator">-</span> y_pred<span class="token punctuation">)</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 官方文档</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>那也就是假设两个向量 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">y</mi><mo separator="true">,</mo><mover accent="true"><mi mathvariant="bold-italic">y</mi><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\boldsymbol{y},\hat{\boldsymbol{y}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.90232em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.70788em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span></span></span><span style="top:-3.01344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span> 的维数均为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span>，则 （<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><mo>⋅</mo><mi mathvariant="normal">∣</mi><msub><mi mathvariant="normal">∣</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">||\cdot||_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord">∣</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>表示欧氏距离）</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>M</mi><mi>S</mi><mi>E</mi><mo stretchy="false">(</mo><mi mathvariant="bold-italic">y</mi><mo separator="true">,</mo><mover accent="true"><mi mathvariant="bold-italic">y</mi><mo>^</mo></mover><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><mi mathvariant="bold-italic">y</mi><mo>−</mo><mover accent="true"><mi mathvariant="bold-italic">y</mi><mo>^</mo></mover><mi mathvariant="normal">∣</mi><msubsup><mi mathvariant="normal">∣</mi><mn>2</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">MSE(\boldsymbol{y},\hat{\boldsymbol{y}}) = \frac{1}{N}||\boldsymbol{y}-\hat{\boldsymbol{y}}||_2^2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.70788em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span></span></span><span style="top:-3.01344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.00744em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord">∣</span><span class="mord">∣</span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.70788em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span></span></span><span style="top:-3.01344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span></span></p>
+<p>由于损失函数只会作用在输出向量的最后一维上，也就是输出向量维数为 <code>[b,10]</code>（<code>b</code> 表示batch_size），那么 <code>MSE</code> 返回值就是 <code>[b,]</code> 的向量，而不是标量. 但是我们需要的最终损失是一个标量，即这个损失的期望，也就是<strong>期望风险</strong>，如下定义</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="script">R</mi><mo stretchy="false">(</mo><mi mathvariant="bold-italic">y</mi><mo separator="true">,</mo><mover accent="true"><mi mathvariant="bold-italic">y</mi><mo>^</mo></mover><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mi>b</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>b</mi></munderover><mo stretchy="false">(</mo><msub><mi mathvariant="bold-italic">y</mi><mi>i</mi></msub><mo>−</mo><msub><mover accent="true"><mi mathvariant="bold-italic">y</mi><mo>^</mo></mover><mi>i</mi></msub><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo>=</mo><mfrac><mn>1</mn><mi>b</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>b</mi></munderover><mi>M</mi><mi>S</mi><mi>E</mi><mo stretchy="false">(</mo><mi mathvariant="bold-italic">y</mi><mo separator="true">,</mo><mover accent="true"><mi mathvariant="bold-italic">y</mi><mo>^</mo></mover><mo stretchy="false">)</mo><mo>×</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">\mathcal{R}(\boldsymbol{y}, \hat{\boldsymbol{y}}) = \frac{1}{b}\sum_{i=1}^b(\boldsymbol{y}_i-\hat{\boldsymbol{y}}_i)^2 = \frac{1}{b}\sum_{i=1}^bMSE(\boldsymbol{y},\hat{\boldsymbol{y}})\times 10
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathcal">R</span></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.70788em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span></span></span><span style="top:-3.01344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.1137820000000005em;vertical-align:-1.277669em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">b</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8361130000000003em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.21752399999999997em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.70788em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span></span></span><span style="top:-3.01344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.21752399999999997em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.1137820000000005em;vertical-align:-1.277669em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">b</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8361130000000003em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.70788em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">y</span></span></span></span></span><span style="top:-3.01344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span></span></span></span></span></p>
+<p>这里乘以 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn></mrow><annotation encoding="application/x-tex">10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span></span></span></span> 的原因是 <code>MSE</code> 错误计算了均值，除以了10，所以需要返回一个10.</p>
+<p>我们对上述猜测进行验证，在GradientTape的第35行进行修改</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">loss1 <span class="token operator">=</span> tf<span class="token punctuation">.</span>reduce_sum<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>square<span class="token punctuation">(</span>out <span class="token operator">-</span> y_onehot<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">32.</span>  <span class="token comment"># 均方损失函数</span>
+loss2 <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>losses<span class="token punctuation">.</span>MSE<span class="token punctuation">(</span>y_true<span class="token operator">=</span>y_onehot<span class="token punctuation">,</span> y_pred<span class="token operator">=</span>out<span class="token punctuation">)</span>  <span class="token comment"># 或者直接使用keras的MSE</span>
+loss2 <span class="token operator">=</span> tf<span class="token punctuation">.</span>reduce_sum<span class="token punctuation">(</span>loss2<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">32.</span> <span class="token operator">*</span> <span class="token number">10.</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>loss1<span class="token punctuation">,</span> loss2<span class="token punctuation">)</span>  <span class="token comment"># 结果一致</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>这里错误的原因是：最后的输出层是一个10维向量，而MSE接受的输出应该是一个1维的数值，这样才能保证计算结果的正确性. 但显然预测一个数字效率是非常低的（标签的均值太大，网络训练速度非常慢），应该转化为one-hot编码进行预测，而MSE对one-hot编码值只会计算最后一维，所以直接在fit函数中使用MSE是有问题的，其计算的损失函数值会比真实的MSE计算出的结果小10倍</p>
+<p>有两个简单的方法应对：</p>
+<ol>
+<li>
+<p>由于损失函数值小10倍，也就是梯度每次更新小10倍，所以只需要将学习率增大10倍即可，修改 <code>optimizer = optimizers.SGD(lr=0.1)</code> 再次训练可得到正确率为 96% 解决问题.</p>
+</li>
+<li>
+<p>重写loss函数，同样可得到正确的 96% 正确率.（推荐使用该方法）</p>
+</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">my_MSE</span><span class="token punctuation">(</span>y_true<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> y_pred<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 重写训练函数</span>
+    <span class="token keyword">return</span> tf<span class="token punctuation">.</span>reduce_sum<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>square<span class="token punctuation">(</span>y_true <span class="token operator">-</span> y_pred<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">32.</span>
+
+dense_network<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span>optimizer<span class="token operator">=</span>optimizer<span class="token punctuation">,</span> loss<span class="token operator">=</span>my_MSE<span class="token punctuation">,</span> metrics<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'accuracy'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 避免使用'MSE'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>为了弄清楚fit函数的原理，我们发现loss函数输出的结果是一个向量，于是fit函数应该是做了均值处理，写为GradientTape形式如下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">loss <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>losses<span class="token punctuation">.</span>MSE<span class="token punctuation">(</span>y_true<span class="token operator">=</span>y_onehot<span class="token punctuation">,</span> y_pred<span class="token operator">=</span>out<span class="token punctuation">)</span>  <span class="token comment"># 仅修改第一个代码的35行</span>
+loss <span class="token operator">=</span> tf<span class="token punctuation">.</span>reduce_mean<span class="token punctuation">(</span>loss<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>得到的正确率为 93% 与直接调用fit的正确率相同</p>
+<hr />
+<h3 id="源代码分析"><a class="markdownIt-Anchor" href="#源代码分析"></a> 源代码分析</h3>
+<p>阅读fit函数中计算loss的<a target="_blank" rel="noopener" href="https://github.com/keras-team/keras/blob/v2.11.0/keras/engine/training.py#L1024">源代码</a>，发现在训练部分使用train_step进行训练，其中computer_loss函数用于计算loss，默认调用complied_loss返回Model.compile时定义的loss，然后complied_loss又是由LossesContainer类封装，这个封装类中第<a target="_blank" rel="noopener" href="https://github.com/keras-team/keras/blob/e6784e4302c7b8cd116b74a784f4b78d60e83c26/keras/engine/compile_utils.py#L113">113行</a>说明计算出的loss向量后均会使用<code>keras.metrics.Mean</code>进行均值处理，同样说明上述猜测正确.</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 直接调用fit计算loss的调用关系</span>
+Model<span class="token punctuation">.</span>fit <span class="token operator">-</span><span class="token operator">></span> train_step <span class="token operator">-</span><span class="token operator">></span> compute_loss <span class="token operator">-</span><span class="token operator">></span> compiled_loss <span class="token operator">-</span><span class="token operator">></span> compile_utils<span class="token punctuation">.</span>LossContainer<span class="token punctuation">(</span>loss均值处理<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token comment"># 所以我们想要重写loss函数可以直接重载model.compute_loss函数即可</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="重写fit函数"><a class="markdownIt-Anchor" href="#重写fit函数"></a> 重写fit函数</h2>
+<p>该方法的好处在于我们可以利用fit自带的许多callback功能，例如：tensorboard功能，用于可视化训练结果、网络框架，可以便捷的展示你的模型.</p>
+<p>重写fit函数参考 <a target="_blank" rel="noopener" href="https://tensorflow.google.cn/guide/keras/customizing_what_happens_in_fit">TF指南 - 自定义Model.fit 内容</a>，我们只需重写 <code>train_step</code> 和 <code>test_step</code> 函数，分别对应训练 <code>Model.fit</code> 和评估 <code>Model.evaluate</code> 函数. 在 <code>train_step</code> 中完成 <code>GradientTape</code> 过程即可，并返回loss函数和准确率的测量即可.</p>
+<p>初始化部分沿用第一种 <code>GradientTape</code> 未将标签转化为one-hot编码形式</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        重写fit函数训练代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># coding: utf-8</span>
+<span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+<span class="token keyword">import</span> tensorflow<span class="token punctuation">.</span>keras <span class="token keyword">as</span> keras
+<span class="token keyword">from</span> tensorflow<span class="token punctuation">.</span>keras <span class="token keyword">import</span> layers<span class="token punctuation">,</span> optimizers<span class="token punctuation">,</span> datasets<span class="token punctuation">,</span> Sequential<span class="token punctuation">,</span> metrics  <span class="token comment"># 导入子库</span>
+<span class="token keyword">from</span> tqdm <span class="token keyword">import</span> tqdm
+
+<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>x_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span> <span class="token operator">=</span> datasets<span class="token punctuation">.</span>mnist<span class="token punctuation">.</span>load_data<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment"># 训练集</span>
+x <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>x<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>float32<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255.</span>  <span class="token comment"># 转化为tensor，图像特征缩放为0~1</span>
+y <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>y<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>int32<span class="token punctuation">)</span>  <span class="token comment"># 转化为tensor，标签</span>
+train_ds <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>from_tensor_slices<span class="token punctuation">(</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 构建数据对象</span>
+train_ds <span class="token operator">=</span> train_ds<span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span>  <span class="token comment"># 打乱数据集，设置训练batch为32，重复10遍</span>
+
+<span class="token comment"># 验证集</span>
+x_evl <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>x_val<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>float32<span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">255.</span>  <span class="token comment"># 转化为tensor，图像特征缩放为0~1</span>
+y_evl <span class="token operator">=</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span>y_val<span class="token punctuation">,</span> dtype<span class="token operator">=</span>tf<span class="token punctuation">.</span>int32<span class="token punctuation">)</span>  <span class="token comment"># 转化为tensor，标签</span>
+evl_ds <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>from_tensor_slices<span class="token punctuation">(</span><span class="token punctuation">(</span>x_evl<span class="token punctuation">,</span> y_evl<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span>  <span class="token comment"># 构建数据对象</span>
+
+optimizer <span class="token operator">=</span> optimizers<span class="token punctuation">.</span>SGD<span class="token punctuation">(</span>lr<span class="token operator">=</span><span class="token number">0.01</span><span class="token punctuation">)</span>  <span class="token comment"># 使用随机梯度下降法，学习率=0.01</span>
+<span class="token keyword">def</span> <span class="token function">my_loss</span><span class="token punctuation">(</span>y_true<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> y_pred<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 自定义损失函数</span>
+    <span class="token keyword">return</span> tf<span class="token punctuation">.</span>reduce_sum<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>square<span class="token punctuation">(</span>y_true <span class="token operator">-</span> y_pred<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">32.</span>
+
+<span class="token keyword">class</span> <span class="token class-name">my_Sequential</span><span class="token punctuation">(</span>keras<span class="token punctuation">.</span>Sequential<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> layers<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'mySeq'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span>layers<span class="token operator">=</span>layers<span class="token punctuation">,</span> name<span class="token operator">=</span>name<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">train_step</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        x<span class="token punctuation">,</span> y <span class="token operator">=</span> data
+        <span class="token keyword">with</span> tf<span class="token punctuation">.</span>GradientTape<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> tape<span class="token punctuation">:</span>
+            out <span class="token operator">=</span> self<span class="token punctuation">(</span>x<span class="token punctuation">,</span> training<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+            y_onehot <span class="token operator">=</span> tf<span class="token punctuation">.</span>one_hot<span class="token punctuation">(</span>y<span class="token punctuation">,</span> depth<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>
+            loss <span class="token operator">=</span> self<span class="token punctuation">.</span>compiled_loss<span class="token punctuation">(</span>y_onehot<span class="token punctuation">,</span> out<span class="token punctuation">)</span>  <span class="token comment"># 使用Model.compile()中的损失函数</span>
+        grads <span class="token operator">=</span> tape<span class="token punctuation">.</span>gradient<span class="token punctuation">(</span>loss<span class="token punctuation">,</span> self<span class="token punctuation">.</span>trainable_variables<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>optimizer<span class="token punctuation">.</span>apply_gradients<span class="token punctuation">(</span><span class="token builtin">zip</span><span class="token punctuation">(</span>grads<span class="token punctuation">,</span> self<span class="token punctuation">.</span>trainable_variables<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 更新梯度</span>
+        self<span class="token punctuation">.</span>compiled_metrics<span class="token punctuation">.</span>update_state<span class="token punctuation">(</span>y<span class="token punctuation">,</span> out<span class="token punctuation">)</span>  <span class="token comment"># 使用Model.metrics()中的测量器，更新正确率</span>
+        <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>m<span class="token punctuation">.</span>name<span class="token punctuation">:</span> m<span class="token punctuation">.</span>result<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">for</span> m <span class="token keyword">in</span> self<span class="token punctuation">.</span>metrics<span class="token punctuation">&#125;</span>  <span class="token comment"># 将返回的测量值用map打包</span>
+
+    <span class="token keyword">def</span> <span class="token function">test_step</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 与train_step部分完全类似，只是少了梯度更新，不用计算loss和grads</span>
+        x<span class="token punctuation">,</span> y <span class="token operator">=</span> data
+        out <span class="token operator">=</span> self<span class="token punctuation">(</span>x<span class="token punctuation">,</span> training<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+        y_onehot <span class="token operator">=</span> tf<span class="token punctuation">.</span>one_hot<span class="token punctuation">(</span>y<span class="token punctuation">,</span> depth<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>
+        loss <span class="token operator">=</span> self<span class="token punctuation">.</span>compiled_loss<span class="token punctuation">(</span>y_onehot<span class="token punctuation">,</span> out<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>compiled_metrics<span class="token punctuation">.</span>update_state<span class="token punctuation">(</span>y<span class="token punctuation">,</span> out<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>m<span class="token punctuation">.</span>name<span class="token punctuation">:</span> m<span class="token punctuation">.</span>result<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">for</span> m <span class="token keyword">in</span> self<span class="token punctuation">.</span>metrics<span class="token punctuation">&#125;</span>
+
+dense_network <span class="token operator">=</span> my_Sequential<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    layers<span class="token punctuation">.</span>Flatten<span class="token punctuation">(</span>input_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span><span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Input'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">256</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense1'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense2'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Output'</span><span class="token punctuation">)</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+tb_callback <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>callbacks<span class="token punctuation">.</span>TensorBoard<span class="token punctuation">(</span>log_dir<span class="token operator">=</span><span class="token string">r"logs/sgd/"</span><span class="token punctuation">,</span> histogram_freq<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 使用tensorboard记录回调信息</span>
+dense_network<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span>optimizer<span class="token operator">=</span>optimizer<span class="token punctuation">,</span> loss<span class="token operator">=</span>my_loss<span class="token punctuation">,</span> metrics<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'accuracy'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+dense_network<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>train_ds<span class="token punctuation">,</span> epochs<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span> validation_data<span class="token operator">=</span>evl_ds<span class="token punctuation">,</span> callbacks<span class="token operator">=</span><span class="token punctuation">[</span>tb_callback<span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 在callbacks中加入tb_callback</span>
+
+dense_network<span class="token punctuation">.</span>evaluate<span class="token punctuation">(</span>evl_ds<span class="token punctuation">,</span> return_dict<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>  <span class="token comment"># 验证集预测</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>训练集正确率为 97.05%，验证集正确率为 96.76%</p>
+<h3 id="遇到的问题"><a class="markdownIt-Anchor" href="#遇到的问题"></a> 遇到的问题</h3>
+<p>上述代码是没有任何问题的代码，在之前的编写过程中发现两个问题：</p>
+<h4 id="准确率计算出错"><a class="markdownIt-Anchor" href="#准确率计算出错"></a> 准确率计算出错</h4>
+<p><code>Model.compile</code> 中 <code>metrics</code> 使用 <code>accuracy</code> 参数对应的测量器到底是什么？</p>
+<ul>
+<li>参考<a target="_blank" rel="noopener" href="https://tensorflow.google.cn/api_docs/python/tf/keras/Model#compile">Model.compile官方文档</a>中metrics介绍，TensorFlow会自动根据数据集的标签和模型的输出自动选择三种不同的准确率测量器：<code>tf.keras.metrics.BinaryAccuracy, tf.keras.metrics.CategoricalAccuracy, tf.keras.metrics.SparseCategoricalAccuracy</code>，这里是多维分类，只注重第二和第三种. 经过尝试发现，<strong>自动选择</strong>原理应该指的是第一次调用compiled_metrics时会确定下来，确定方法如下所示（分类器默认都是比较 <code>[b,*]</code> 除去第一维以外的信息，默认第一维是batch_size）</li>
+<li>第二个 <code>CategoricalAccuracy</code> 多项-多项测量器，通过比对两个<strong>概率分布的最大值</strong>是否相同，如果 <code>y_true,y_pred</code> 最后一维<strong>都是向量时选择</strong>.</li>
+<li>第三个 <code>SparseCategoricalAccuracy</code> 单项-多项测量器，通过比对一个标量是否是另一个<strong>概率分布的最大值</strong>，，如果 <code>y_true</code> 最后一维是<strong>常量</strong>， <code>y_pred</code> 最后一维是<strong>向量时选择</strong>.</li>
+</ul>
+<p>因为我们发现，如果直接使用 <code>CategoricalAccuracy</code> 对真实的标签计算精度准确率会大大下降，因为他会将全部的标签作为一个向量进行比对，也就是比对数目只有batch个，与 <code>Accuracy</code> 比较结果完全不同：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">m <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>metrics<span class="token punctuation">.</span>CategoricalAccuracy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+m<span class="token punctuation">.</span>update_state<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"准确率: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>m<span class="token punctuation">.</span>result<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token format-spec">.2f</span><span class="token punctuation">&#125;</span></span><span class="token string">, 总样本数目: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>m<span class="token punctuation">.</span>count<span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token comment"># 准确率: 0.00, 总样本数目: 1.0</span>
+acc <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>metrics<span class="token punctuation">.</span>Accuracy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+acc<span class="token punctuation">.</span>update_state<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"准确率: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>acc<span class="token punctuation">.</span>result<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token format-spec">.2f</span><span class="token punctuation">&#125;</span></span><span class="token string">, 总样本数目: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>acc<span class="token punctuation">.</span>count<span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token comment"># 准确率: 0.67, 总样本数目: 3.0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>这第一种计算出的准确率大大低于第二种，所以我们只需要将</p>
+<ul>
+<li><code>self.compiled_metrics.update_state(y, tf.argmax(out, axis=-1))</code> 对应 <code>CategoricallAccuracy</code> 测量器. 最终正确率仅有 91.79%，而且重新手写正确的测量器，对模型准确率测量得到正确率为 96% 说明就是测量器使用错误. 因为最后比较的是概率分布，所以这里的正确写法应该是 <code>self.compiled_metrics.update_state(y_onehot, out)</code>，<code>y_true,y_pred</code> 维数均为 <code>[b,10], [b,10]</code></li>
+<li><code>self.compiled_metrics.update_state(y, out)</code> 对应 <code>SparseCategoricalAccuracy</code> 测量器. 最终正确率为 96.73%，没有错误. <code>[b,], [b,10]</code></li>
+</ul>
+<p>这里错误的使用测量器的主要原因在于，默认了 <code>model.compile</code> 中 <code>accuarcy</code> 参数会使用 <code>Accuracy</code> 度量器，但是他使用了 <code>CategoricalAccuracy</code> 度量器，这是以后要注意的问题，因为神经网络最后一层的输出一般为概率分布，所以对应的测量器一般都具有处理概率分布的过程，无需手动转换求预测值 <code>tf.argmax(out, axis=-1)</code>.</p>
+<blockquote>
+<p>ps. 调试fit内部的函数，要使用 <code>tf.print()</code> 进行输出调试，因为整个过程是创建在计算图中的，正常 <code>print</code> 函数无法直接进入到计算图中.</p>
+</blockquote>
+<hr />
+<h4 id="loss函数输出问题"><a class="markdownIt-Anchor" href="#loss函数输出问题"></a> loss函数输出问题</h4>
+<p>第二个问题是在训练过程中，如果不使用compiled_loss计算loss值，直接在输出部分返回自己计算出的loss值：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">test_step</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    x<span class="token punctuation">,</span> y <span class="token operator">=</span> data
+    out <span class="token operator">=</span> self<span class="token punctuation">(</span>x<span class="token punctuation">,</span> training<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+    y_onehot <span class="token operator">=</span> tf<span class="token punctuation">.</span>one_hot<span class="token punctuation">(</span>y<span class="token punctuation">,</span> depth<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>
+    loss <span class="token operator">=</span> tf<span class="token punctuation">.</span>reduce_sum<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>square<span class="token punctuation">(</span>y_true <span class="token operator">-</span> y_pred<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">/</span><span class="token number">32.</span>  <span class="token comment"># 自己计算loss</span>
+    self<span class="token punctuation">.</span>compiled_metrics<span class="token punctuation">.</span>update_state<span class="token punctuation">(</span>y<span class="token punctuation">,</span> out<span class="token punctuation">)</span>
+    matrics <span class="token operator">=</span> <span class="token punctuation">&#123;</span>m<span class="token punctuation">.</span>name<span class="token punctuation">:</span> m<span class="token punctuation">.</span>result<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">for</span> m <span class="token keyword">in</span> self<span class="token punctuation">.</span>metrics<span class="token punctuation">&#125;</span>
+    matrics<span class="token punctuation">[</span><span class="token string">'loss'</span><span class="token punctuation">]</span> <span class="token operator">=</span> loss  <span class="token comment"># 在返回的输出中加上loss</span>
+    <span class="token keyword">return</span> matrics<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>会发现输出的log中验证集的loss值总小于训练集的loss值，而且不是几个数量及倍数的关系.</p>
+<p>但是在evaluate中的输出日志中的loss又是正确的，但是最终返回的log字典中loss又是错误的.</p>
+<p>首先阅读计算validation_data损失值的计算方法，在<a target="_blank" rel="noopener" href="https://github.com/keras-team/keras/blob/e6784e4302c7b8cd116b74a784f4b78d60e83c26/keras/engine/training.py#L1694">train.py第1694行</a>发现，计算validation_data的损失值就是从evaluate返回的log字典中求出来的. 所以问题出在log字典的值于自定义的loss值不同的原因（这里我的猜测是，由于没有使用compiled_loss，所以TF可能自行计算出compiled_loss对应的loss值返回回来，而这个默认的loss函数就正好是MSE，所以loss的均值特别小）.</p>
+<p>这里可能是因为没有自定义loss的测量器导致的，而loss的测量器一般都是取均值，所以为了保持简单，我们选择重写loss函数，然后导入到Model.compile中，这样还是能使用compiled_loss计算loss，而且无需在train_step中返回loss值，于是就有了上述的写法.</p>
+<h3 id="模型可视化"><a class="markdownIt-Anchor" href="#模型可视化"></a> 模型可视化</h3>
+<p>我们使用重写fit函数的目标就是为了使用Tensorboard来进行模型可视化，具体操作非常简单，参考<a target="_blank" rel="noopener" href="https://tensorflow.google.cn/tensorboard/get_started">TF指南 - 开始使用TensorBoard</a>，只需在 <code>Model.fit</code> 的回调选项 <code>callbacks</code> 中加入 <code>tf.keras.callbacks.TensorBoard(log_dir=dir_path, histogram_freq=1)</code> 即可在文件夹 <code>dir_path</code> 中找到模型生成的日志，再使用cmd窗口输入  <code>tensorboard --logdir dir_path</code> 即可运行TensorBoard，cmd中会返回一个网址，从网页中打开即可.</p>
+<p>我们这里分别创建两个log_dir路径，分别命名为 <code>&quot;logs/sgd/&quot;</code> 和 <code>&quot;logs/adam/&quot;</code> 用于比对两种优化器 <code>SGD(lr=0.01)</code> 和 <code>Adam(lr=0.001)</code> 的训练结果.</p>
+<p><img src="https://s1.ax1x.com/2022/11/24/zGBYE6.png" srcset="/img/loading.gif" lazyload alt="Accuracy" /></p>
+<p><img src="https://s1.ax1x.com/2022/11/24/zGBtUK.png" srcset="/img/loading.gif" lazyload alt="loss" /></p>
+<p>可以看出，<code>adam</code> 的训练效果非常好，同样的训练次数下，验证集都快过拟合了🤣，而且loss下降速度也更快.</p>
+<p>在最上面Graphs一栏中，我们还能看到模型的计算图，非常直观</p>
+<p><img src="https://s1.ax1x.com/2022/11/24/zGBN4O.png" srcset="/img/loading.gif" lazyload alt="Graphs" /></p>
+<p>放大 <code>mySeq</code> 也就是神经网络主要结构部分，我们可以看到构建的神经网络框架，非常直观</p>
+<p><img src="https://s1.ax1x.com/2022/11/24/zGBGHx.png" srcset="/img/loading.gif" lazyload alt="Network Struct" /></p>
+<p>在Histograms一栏中，我们可以看到可学习参数的主要分布，可视化模型参数分布</p>
+<p><img src="https://s1.ax1x.com/2022/11/24/zGB6VP.png" srcset="/img/loading.gif" lazyload alt="Histograms" /></p>
+<p>总之本次解决问题学习到了很多TF的可自定义函数，便于以后进行自定义模型构建，应该全部都会按照第三种重写fit函数的形式进行模型自定义，这样也能便于可视化模型，十分方便！</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/TensorFlow2/" class="category-chain-item">TensorFlow2</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MNIST/">#MNIST</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>TensorFlow - 使用GradientTape和重写fit训练结果不同的原因</div>
+      <div>https://wty-yy.github.io/posts/4237/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/65380/" title="Scikit-Learn 常用函数及模型写法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Scikit-Learn 常用函数及模型写法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/48334/" title="TensorFlow常用函数及模型写法">
+                        <span class="hidden-mobile">TensorFlow常用函数及模型写法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

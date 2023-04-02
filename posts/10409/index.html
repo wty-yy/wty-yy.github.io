@@ -1,0 +1,877 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="由于CVPR大作业需要，学校给我们申请了一些服务器账号，这里记录下服务器基本配置方法及操作流程.   登录服务器 我使用的是最简单的方法登录的服务器，直接使用ssh进行连接. （还可以使用vscode连接服务器方法，也比较方便，且可以编辑代码）   Windows，可以使cmd或者PowerShell，这里推荐在Windows Store中下载Windows Terminal，集成了上述两个，而">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在服务器上配置shell及神经网络框架">
+<meta property="og:url" content="https://wty-yy.github.io/posts/10409/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="由于CVPR大作业需要，学校给我们申请了一些服务器账号，这里记录下服务器基本配置方法及操作流程.   登录服务器 我使用的是最简单的方法登录的服务器，直接使用ssh进行连接. （还可以使用vscode连接服务器方法，也比较方便，且可以编辑代码）   Windows，可以使cmd或者PowerShell，这里推荐在Windows Store中下载Windows Terminal，集成了上述两个，而">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/17/ze4O4e.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/17/ze4mTO.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/18/zuZvz8.png">
+<meta property="article:published_time" content="2022-11-17T04:24:38.000Z">
+<meta property="article:modified_time" content="2023-04-02T15:49:43.149Z">
+<meta property="article:author" content="wty">
+<meta property="article:tag" content="Anaconda">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/11/17/ze4O4e.png">
+  
+  
+  
+  <title>在服务器上配置shell及神经网络框架 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/">
+                    
+                    <span>算法模板</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="在服务器上配置shell及神经网络框架"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-17 12:24" pubdate>
+          2022年11月17日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">在服务器上配置shell及神经网络框架</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>由于CVPR大作业需要，学校给我们申请了一些服务器账号，这里记录下服务器基本配置方法及操作流程.</p>
+</blockquote>
+<h2 id="登录服务器"><a class="markdownIt-Anchor" href="#登录服务器"></a> 登录服务器</h2>
+<p>我使用的是最简单的方法登录的服务器，直接使用ssh进行连接. （还可以使用vscode连接服务器方法，也比较方便，且可以编辑代码）</p>
+<ul>
+<li>
+<p>Windows，可以使cmd或者PowerShell，这里推荐在Windows Store中下载Windows Terminal，集成了上述两个，而且界面更加美观.</p>
+</li>
+<li>
+<p>Linux，直接在shell中使用ssh命令即可.</p>
+</li>
+</ul>
+<p>输入使用 <code>ssh 用户名@IP地址</code> 回车，如果第一次登录，下面会提示是否信任该IP地址，输入 <code>yes</code> 即可. 然后会弹出密码输入界面，在后面输入你自己的密码即可.</p>
+<p>注：输入密码时候是不会显示密码的，输入完后直接回车即可.</p>
+<p><img src="https://s1.ax1x.com/2022/11/17/ze4O4e.png" srcset="/img/loading.gif" lazyload alt="ssh登入" /></p>
+<h3 id="修改密码"><a class="markdownIt-Anchor" href="#修改密码"></a> 修改密码</h3>
+<p>登入服务器使用的是默认密码，为安全起见建议修改密码，在shell中输入 <code>passwd</code> 就可以修改密码.</p>
+<h3 id="上传文件"><a class="markdownIt-Anchor" href="#上传文件"></a> 上传文件</h3>
+<p>这里老师推荐的是<a target="_blank" rel="noopener" href="https://winscp.net/eng/news.php">WinSCP</a>，打开之后直接输入IP，用户名，密码即可登录成功. 需要上传文件到Linux系统直接将文件拖入其中即可.</p>
+<p>左侧为本机文件，右侧为服务器文件，直接拖入右侧即可上传</p>
+<p><img src="https://s1.ax1x.com/2022/11/17/ze4mTO.png" srcset="/img/loading.gif" lazyload alt="WinSCP" /></p>
+<h2 id="linux基础知识"><a class="markdownIt-Anchor" href="#linux基础知识"></a> Linux基础知识</h2>
+<p>Linux就是由命令行环境构成，命令行界面称为shell，主要就是做文件处理，bash是shell的一种，在服务器上默认使用的就是bash（而zsh好用的多）. 在shell中，最重要的就是弄清楚当前处于哪个文件路径下. 由于服务器上我们是以用户的权限进入，所以只能改动当前目录下的文件. Linux系统有两个默认路径：</p>
+<ol>
+<li>
+<p><code>/</code> 表示根目录，也就是root目录，一般服务器不能修改该目录的文件.</p>
+</li>
+<li>
+<p><code>~</code> 表示用户目录，也称为home目录，在文件中的缩写为 <code>$HOME</code>，在这个文件夹下，是服务器用户可以修改的东西.</p>
+</li>
+</ol>
+<p>以下有一些文件处理基础操作：（<a href="/posts/64648/#linux">更多常用命令</a>）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">man</span> 命令        <span class="token string">" 显示命令的帮助文档
+pwd             "</span> 显示当前路径
+<span class="token builtin class-name">cd</span> 路径         <span class="token string">" 进入到路径中
+ls              "</span> 显示当前目录下的所有文件
+<span class="token function">ls</span> <span class="token parameter variable">-al</span>          <span class="token string">" 显示当前目录下所有文件的详细信息
+mkdir 目录名    "</span> 在当前目录下创建名为<span class="token string">'目录名'</span>的文件夹
+<span class="token function">vim</span> 文件名      <span class="token string">" 如果存在文件名的文件，则会使用vim编辑器打开，若不存在则会创建该文件
+cp 文件1 文件2  "</span> 复制文件1到文件2，可以在文件名前面加上路径，则会复制到指定路径当中
+<span class="token function">rm</span> 文件1        <span class="token string">" 删除文件1
+mv 文件1 文件2  "</span> 剪切文件1到文件2
+<span class="token function">wget</span> <span class="token string">'URL'</span>      <span class="token string">" URL为文件连接，建议使用单引号括起来
+wget -c -O my.zip 'URL'  "</span> 将URL文件下载后命名为my.zip<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>文件夹将上述文件改为文件夹，并在前加上 <code>-r</code> 或 <code>-f</code> 即可对文件夹进行操作，具体命令请见对应的帮助文档.</p>
+<p>当命令后面加上 <code>-功能命令</code> 就有其他的功能（命令后面加一个空格写），相当于扩展功能，一般的，一个横杠 <code>-</code> 为功能的缩写，两个横杠 <code>--</code> 为功能的全写，例如 <code>ls -h</code> 和 <code>ls --help</code> 等价</p>
+<h3 id="vim基础操作"><a class="markdownIt-Anchor" href="#vim基础操作"></a> VIM基础操作</h3>
+<p>VIM功能强大这里难以一一介绍完整，只需注意，VIM共有三种模式，在左下角可以看到，分别为：“命令模式NORMAL”，“插入模式INSERT”，“选择模式VISUAL”，只有在其他两种模式通过按 <code>ESC</code> 键均可回到命令模式中，在命令模式中按下 <code>i</code> 即可进入编辑模式，可以对文本进行编辑.</p>
+<p>若要退出编辑，先回到命令模式，输入 <code>:wq</code> 为保存并退出，<code>:q</code> 为直接退出，<code>:!q</code> 为不保存强制退出. 更多vim功能请见网上教程 <a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-vim.html">Linux vi/vim | 菜鸟教程</a>.</p>
+<h2 id="安装程序"><a class="markdownIt-Anchor" href="#安装程序"></a> 安装程序</h2>
+<p>由于在服务器上我们没有sudo权限，也就是说无法使用apt-get直接安装程序（因为apt-get是直接安装在根目录下的，需要有sudo权限才能运行），所以我们只能去找文件安装包，用 <code>wget 下载路径</code> 进行下载，然后运行安装程序即可.</p>
+<h3 id="使用编译安装"><a class="markdownIt-Anchor" href="#使用编译安装"></a> 使用编译安装</h3>
+<p>如果安装的文件是github上的项目，一般有后缀为 <code>.tar.gz</code> 的安装包，使用 <code>weget 下载路径</code> 或者在本机上下载下来后再使用WinSCP上传上去也行，这里以安装 <code>ncurses</code> 为例：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> http://ftp.gnu.org/gnu/ncurses/ncurses-6.3.tar.gz  <span class="token string">" 下载安装包
+tar -xf ncurses-6.3.tar.gz  "</span> 解压压缩包
+<span class="token builtin class-name">cd</span> ncurses-6.3/  <span class="token string">" 进入到刚刚解压出的目录中
+./configure --prefix=<span class="token environment constant">$HOME</span>/apps/  "</span> 设置安装目录为 <span class="token environment constant">$HOME</span>/apps/ 文件夹下
+<span class="token function">make</span> <span class="token parameter variable">-j</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span>  " 编译并安装程序<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>安装tmux可参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/tianyunzqs/article/details/110410184">CSDN - Linux安装tmux</a></p>
+<p>简单配置后效果如下（配置方法<a href="/posts/64648/#tmux">请见</a>）</p>
+<p><img src="https://s1.ax1x.com/2022/11/18/zuZvz8.png" srcset="/img/loading.gif" lazyload alt="Tmux分屏效果" /></p>
+<h3 id="anaconda安装及配置"><a class="markdownIt-Anchor" href="#anaconda安装及配置"></a> Anaconda安装及配置</h3>
+<p>首先使用 <code>wget</code> 直接下载安装包，可以在用户目录下安装即可. 查阅Anaconda的版本号请见(<a target="_blank" rel="noopener" href="https://repo.anaconda.com/archive/">https://repo.anaconda.com/archive/</a>)，找到最新的版本号，比如现在是2022.11.17，我们下载 <code>Anaconda3-2022.10-Linux-x86_64.sh</code> 的安装包（注意：找x86_64.sh结尾的安装包，一般处理器架构均为x86），执行</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://repo.continuum.io/archive/Anaconda3-2022.10-Linux-x86_64.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>等待下载完毕，进行安装，输入</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">bash</span> Anaconda3-2022.10-Linux-x86_64.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>进行多次次回车和输入几次yes即可安装成功.</p>
+<h4 id="创建环境"><a class="markdownIt-Anchor" href="#创建环境"></a> 创建环境</h4>
+<p>由于在服务器上进行安装所以需要自行添加Anaconda可执行文件到用户目录中，编辑 <code>~/.bashrc</code> 文件，加入以下这句话</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">export PATH&#x3D;$PATH:$HOME&#x2F;anaconda3&#x2F;bin<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>然后回到shell中，执行</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">source ~&#x2F;.bashrc    # 可加载刚才配置的文件（这句话每次进入服务器时候都要输入一遍）
+source activate     # 激活conda环境<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>接下来的指令就是在conda环境进行的操作，这里给出一些基础的指令</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">conda create -n env_name python&#x3D;3.9     # 创建一个名为env_name的环境，使用python3.9最高版本
+conda create -n env_name python&#x3D;3.9.1   # 创建一个名为env_name的环境，指定使用python3.9.1版本
+conda activate env_name                 # 激活名为env_name的环境
+conda install numpy                     # 安装numpy包
+conda uninstall numpy                   # 删除numpy包
+conda deactivate                        # 退出当前conda环境<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="安装神经网络框架"><a class="markdownIt-Anchor" href="#安装神经网络框架"></a> 安装神经网络框架</h3>
+<h4 id="tensorflow"><a class="markdownIt-Anchor" href="#tensorflow"></a> TensorFlow</h4>
+<p>服务器上一般安装gpu版本的神经网络框架，由于conda中无法下载到高版本的tensorflow-gpu，所以只能通过pip进行安装.</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">pip install tensorflow-gpu&#x3D;&#x3D;2.6.0   # 安装神经网络框架
+pip install keras&#x3D;&#x3D;2.6.0   # 安装神经网络框架
+conda install cudatoolkit   # 这个会自动识别对应的gpu适合的cuda版本
+conda install cudnn         # 这个是cuda神经网络包<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>在python中载入tensorflow包，随便运行一个神经网络代码，这里以<a target="_blank" rel="noopener" href="https://tensorflow.google.cn/overview">官网</a>上的为例：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+mnist <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>datasets<span class="token punctuation">.</span>mnist
+
+<span class="token punctuation">(</span>x_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span>x_test<span class="token punctuation">,</span> y_test<span class="token punctuation">)</span> <span class="token operator">=</span> mnist<span class="token punctuation">.</span>load_data<span class="token punctuation">(</span><span class="token punctuation">)</span>
+x_train<span class="token punctuation">,</span> x_test <span class="token operator">=</span> x_train <span class="token operator">/</span> <span class="token number">255.0</span><span class="token punctuation">,</span> x_test <span class="token operator">/</span> <span class="token number">255.0</span>
+
+model <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>models<span class="token punctuation">.</span>Sequential<span class="token punctuation">(</span><span class="token punctuation">[</span>
+  tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>Flatten<span class="token punctuation">(</span>input_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>Dropout<span class="token punctuation">(</span><span class="token number">0.2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'softmax'</span><span class="token punctuation">)</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+model<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span>optimizer<span class="token operator">=</span><span class="token string">'adam'</span><span class="token punctuation">,</span>
+              loss<span class="token operator">=</span><span class="token string">'sparse_categorical_crossentropy'</span><span class="token punctuation">,</span>
+              metrics<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'accuracy'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+model<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>x_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> epochs<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+model<span class="token punctuation">.</span>evaluate<span class="token punctuation">(</span>x_test<span class="token punctuation">,</span> y_test<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>检查是否可以正常运行，如果差包则对应者继续安装即可，下面代码可以检查是否使用的gpu进行训练（其实在训练网络的日志中就可以看出来）：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+<span class="token keyword">print</span><span class="token punctuation">(</span>tf<span class="token punctuation">.</span>test<span class="token punctuation">.</span>is_gpu_available<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Python/" class="category-chain-item">Python</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Anaconda/">#Anaconda</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>在服务器上配置shell及神经网络框架</div>
+      <div>https://wty-yy.github.io/posts/10409/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/48334/" title="TensorFlow常用函数及模型写法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">TensorFlow常用函数及模型写法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/51678/" title="偏微分方程 - 基础知识 变分问题 极小曲面问题">
+                        <span class="hidden-mobile">偏微分方程 - 基础知识 变分问题 极小曲面问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
