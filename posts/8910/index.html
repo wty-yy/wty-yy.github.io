@@ -18,23 +18,24 @@
   
     <meta name="description" content="D2. Mocha and Diana (Hard Version)  题意 给出两个森林，两个森林中的点编号都是从 1…n1\ldots n1…n，第一个森林中有 m1m_1m1​ 条边，第二个森林中有 m2m_2m2​ 条边，可以进行连边操作，每次对两个森林中的顶点 (u,v)(u, v)(u,v) 进行连边，并要求每次连边之后两个都仍是森林（即不会出现环，注：一棵树也是森林），求最多能连多少">
 <meta property="og:type" content="article">
-<meta property="og:title" content="D2. Mocha and Diana (Hard Version)">
+<meta property="og:title" content="CF1559 - D2. Mocha and Diana (Hard Version)">
 <meta property="og:url" content="https://wty-yy.github.io/posts/8910/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="D2. Mocha and Diana (Hard Version)  题意 给出两个森林，两个森林中的点编号都是从 1…n1\ldots n1…n，第一个森林中有 m1m_1m1​ 条边，第二个森林中有 m2m_2m2​ 条边，可以进行连边操作，每次对两个森林中的顶点 (u,v)(u, v)(u,v) 进行连边，并要求每次连边之后两个都仍是森林（即不会出现环，注：一棵树也是森林），求最多能连多少">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://upload.cc/i1/2021/08/21/LnAz23.png">
 <meta property="article:published_time" content="2021-08-21T01:52:47.000Z">
-<meta property="article:modified_time" content="2023-04-02T15:49:43.145Z">
+<meta property="article:modified_time" content="2023-04-10T14:22:49.845Z">
 <meta property="article:author" content="wty">
+<meta property="article:tag" content="图论">
 <meta property="article:tag" content="并查集">
-<meta property="article:tag" content="构造">
+<meta property="article:tag" content="构造题">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://upload.cc/i1/2021/08/21/LnAz23.png">
   
   
   
-  <title>D2. Mocha and Diana (Hard Version) - wty&#39;s blog</title>
+  <title>CF1559 - D2. Mocha and Diana (Hard Version) - wty&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -238,7 +239,7 @@
                   
                   <a class="dropdown-item" href="/posts/57899/">
                     
-                    <span>算法模板</span>
+                    <span>算法总结</span>
                   </a>
                 
               </div>
@@ -274,7 +275,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="D2. Mocha and Diana (Hard Version)"></span>
+            <span id="subtitle" data-typed-text="CF1559 - D2. Mocha and Diana (Hard Version)"></span>
           
         </div>
 
@@ -297,7 +298,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.6k 字
+          3.4k 字
         
       </span>
     
@@ -308,7 +309,7 @@
         
         
         
-          31 分钟
+          29 分钟
         
       </span>
     
@@ -346,7 +347,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">D2. Mocha and Diana (Hard Version)</h1>
+            <h1 style="display: none">CF1559 - D2. Mocha and Diana (Hard Version)</h1>
             
             
               <div class="markdown-body">
@@ -412,70 +413,70 @@
         点击显/隐代码
     </div>
     <div class='spoiler-content'>
-        <figure><div class="code-wrapper"><pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">#include &lt;bits&#x2F;stdc++.h&gt;
-#define db double
-#define ll long long
-#define int ll
-#define vi vector&lt;int&gt;
-#define vii vector&lt;vi &gt;
-#define pii pair&lt;int, int&gt;
-#define vp vector&lt;pii &gt;
-#define vip vector&lt;vp &gt;
-#define mkp make_pair
-#define pb push_back
-#define Case(x) cout &lt;&lt; &quot;Case #&quot; &lt;&lt; x &lt;&lt; &quot;: &quot;
-using namespace std;
-const int INF &#x3D; 0x3f3f3f3f;
-const int P &#x3D; 998244353;
-const int N &#x3D; 1e5 + 10;
-int fa[2][N];
-int getfa(int i, int x) &#123;
-	if (fa[i][x] &#x3D;&#x3D; x) return x;
-	return fa[i][x] &#x3D; getfa(i, fa[i][x]);
-&#125;
-void join(int i, int x, int y) &#123;
-	fa[i][getfa(i, x)] &#x3D; getfa(i, y);
-&#125;
-signed main()&#123;
-#ifdef _DEBUG
-&#x2F;&#x2F;	FILE *file &#x3D; freopen(&quot;out&quot;, &quot;w&quot;, stdout);
-#endif
-	ios::sync_with_stdio(0);
-	cin.tie(0);
-	int n, m[2];
-	cin &gt;&gt; n &gt;&gt; m[0] &gt;&gt; m[1];
-	for (int i &#x3D; 1; i &lt;&#x3D; n; i++) fa[0][i] &#x3D; fa[1][i] &#x3D; i;
-	for (int i &#x3D; 0; i &lt; 2; i++) &#123;
-		for (int j &#x3D; 0; j &lt; m[i]; j++) &#123;
-			int u, v;
-			cin &gt;&gt; u &gt;&gt; v;
-			join(i, u, v);
-		&#125;
-	&#125;
-	vp ans;
-	for (int i &#x3D; 2; i &lt;&#x3D; n; i++) &#123;
-		if (getfa(0, 1) !&#x3D; getfa(0, i) &amp;&amp; getfa(1, 1) !&#x3D; getfa(1, i)) &#123;
-			ans.pb(&#123;1, i&#125;);
-			join(0, 1, i);
-			join(1, 1, i);
-		&#125;
-	&#125;
-	for (int i &#x3D; 2, j &#x3D; 2; i &lt;&#x3D; n; i++) &#123;
-		if (getfa(0, 1) !&#x3D; getfa(0, i)) &#123;
-			for (; j &lt;&#x3D; n; j++) &#123;
-				if (getfa(1, 1) !&#x3D; getfa(1, j)) &#123;
-					ans.pb(&#123;i, j&#125;);
-					join(0, i, j);
-					join(1, i, j);
-					break;
-				&#125;
-			&#125;
-		&#125;
-	&#125;
-	cout &lt;&lt; ans.size() &lt;&lt; &#39;\n&#39;;
-	for (auto i : ans) cout &lt;&lt; i.first &lt;&lt; &#39; &#39; &lt;&lt; i.second &lt;&lt; &#39;\n&#39;;
-	return 0;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">db</span> <span class="token expression"><span class="token keyword">double</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">ll</span> <span class="token expression"><span class="token keyword">long</span> <span class="token keyword">long</span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">int</span> <span class="token expression">ll</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">vi</span> <span class="token expression">vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">vii</span> <span class="token expression">vector<span class="token operator">&lt;</span>vi <span class="token operator">></span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">pii</span> <span class="token expression">pair<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token operator">></span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">vp</span> <span class="token expression">vector<span class="token operator">&lt;</span>pii <span class="token operator">></span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">vip</span> <span class="token expression">vector<span class="token operator">&lt;</span>vp <span class="token operator">></span></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">mkp</span> <span class="token expression">make_pair</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">pb</span> <span class="token expression">push_back</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name function">Case</span><span class="token expression"><span class="token punctuation">(</span>x<span class="token punctuation">)</span> cout <span class="token operator">&lt;&lt;</span> </span><span class="token string">"Case #"</span> <span class="token expression"><span class="token operator">&lt;&lt;</span> x <span class="token operator">&lt;&lt;</span> </span><span class="token string">": "</span></span>
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> INF <span class="token operator">=</span> <span class="token number">0x3f3f3f3f</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> P <span class="token operator">=</span> <span class="token number">998244353</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">1e5</span> <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> fa<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">[</span>N<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> <span class="token function">getfa</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">,</span> <span class="token keyword">int</span> x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>fa<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>x<span class="token punctuation">]</span> <span class="token operator">==</span> x<span class="token punctuation">)</span> <span class="token keyword">return</span> x<span class="token punctuation">;</span>
+	<span class="token keyword">return</span> fa<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>x<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">getfa</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> fa<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">void</span> <span class="token function">join</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">,</span> <span class="token keyword">int</span> x<span class="token punctuation">,</span> <span class="token keyword">int</span> y<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	fa<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token function">getfa</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">getfa</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">signed</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">_DEBUG</span></span>
+<span class="token comment">//	FILE *file = freopen("out", "w", stdout);</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+	ios<span class="token double-colon punctuation">::</span><span class="token function">sync_with_stdio</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	cin<span class="token punctuation">.</span><span class="token function">tie</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">int</span> n<span class="token punctuation">,</span> m<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+	cin <span class="token operator">>></span> n <span class="token operator">>></span> m<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">>></span> m<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> fa<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> fa<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i<span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">2</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> m<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token keyword">int</span> u<span class="token punctuation">,</span> v<span class="token punctuation">;</span>
+			cin <span class="token operator">>></span> u <span class="token operator">>></span> v<span class="token punctuation">;</span>
+			<span class="token function">join</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> u<span class="token punctuation">,</span> v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+	vp ans<span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">getfa</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token function">getfa</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token function">getfa</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token function">getfa</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			ans<span class="token punctuation">.</span><span class="token function">pb</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token number">1</span><span class="token punctuation">,</span> i<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token function">join</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token function">join</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">,</span> j <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">getfa</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token function">getfa</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">getfa</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token function">getfa</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+					ans<span class="token punctuation">.</span><span class="token function">pb</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>i<span class="token punctuation">,</span> j<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+					<span class="token function">join</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">;</span>
+					<span class="token function">join</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">;</span>
+					<span class="token keyword">break</span><span class="token punctuation">;</span>
+				<span class="token punctuation">&#125;</span>
+			<span class="token punctuation">&#125;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+	cout <span class="token operator">&lt;&lt;</span> ans<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token char">'\n'</span><span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> i <span class="token operator">:</span> ans<span class="token punctuation">)</span> cout <span class="token operator">&lt;&lt;</span> i<span class="token punctuation">.</span>first <span class="token operator">&lt;&lt;</span> <span class="token char">' '</span> <span class="token operator">&lt;&lt;</span> i<span class="token punctuation">.</span>second <span class="token operator">&lt;&lt;</span> <span class="token char">'\n'</span><span class="token punctuation">;</span>
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
     </div>
 </div>
 <h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
@@ -520,9 +521,11 @@ signed main()&#123;
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
+        <a href="/tags/%E5%9B%BE%E8%AE%BA/">#图论</a>
+      
         <a href="/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/">#并查集</a>
       
-        <a href="/tags/%E6%9E%84%E9%80%A0/">#构造</a>
+        <a href="/tags/%E6%9E%84%E9%80%A0%E9%A2%98/">#构造题</a>
       
     </div>
   
@@ -534,7 +537,7 @@ signed main()&#123;
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>D2. Mocha and Diana (Hard Version)</div>
+      <div>CF1559 - D2. Mocha and Diana (Hard Version)</div>
       <div>https://wty-yy.github.io/posts/8910/</div>
     </div>
     <div class="license-meta">
