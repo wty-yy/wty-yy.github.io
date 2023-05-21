@@ -24,7 +24,7 @@
 <meta property="og:description" content="使用vjudge进行题目评测，减少找题的工作量。  ~&#x2F;.vimrc 中g++使用F5快速执行代码， autocmd filetype cpp nnoremap &lt;F5&gt; :w &lt;bar&gt; !g++ % -o %:r &amp;&amp; .&#x2F;%:r&lt;CR&gt;  2023.4月  2023.4.24. 《第一章 算法设计基础》  UVA - 11292">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-05-07T15:28:00.000Z">
-<meta property="article:modified_time" content="2023-05-16T11:24:27.662Z">
+<meta property="article:modified_time" content="2023-05-21T01:39:16.904Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -293,7 +293,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          23k 字
+          25k 字
         
       </span>
     
@@ -304,7 +304,7 @@
         
         
         
-          190 分钟
+          206 分钟
         
       </span>
     
@@ -485,6 +485,7 @@
 <li>[ ] Trie</li>
 <li>[ ] KMP</li>
 <li>[x] 线段树</li>
+<li>[x] SA <code>2023.5.17.</code></li>
 <li>[ ] SAM</li>
 <li>[ ] Tarjan</li>
 <li>[ ] 二分图匹配</li>
@@ -832,6 +833,38 @@ KMP具有求解字符串最小周期长度的作用，首先给出结论：**当
 <li>LibreOJ - 111 - 后缀排序 - 后缀数组模板题<br />
 学习了后缀数组SA的基数排序构造方法，非常巧妙，基于倍增的排序原理，加上基数排序可以在O(nlogn)求出后缀数组，只需要4倍空间大小，比SAM小很多。</li>
 </ol>
+<h5 id="2023517"><a class="markdownIt-Anchor" href="#2023517"></a> 2023.5.17.</h5>
+<p>进一步学习了后缀数组的高度数组<code>height</code>并对<code>sa</code>做了详细笔记，要注意理解的是<code>sa</code>是<code>rk-&gt;i</code>，<code>rk</code>是<code>i-&gt;rk</code>，<code>height</code>是<code>rk-&gt;h</code>，求解实际问题中往往枚举的是后缀的排名<code>rk</code>，其实可以用不同的变量来提醒自己，而不要全部都用<code>i</code>，容易弄错。</p>
+<ol start="69">
+<li>UVA - 11107 - Life Forms - E2 - 多文本串查找最大公共(&gt;n/2)模式串<br />
+由于sa只能处理一个字符串，所以我们可以考虑将字符串用不同的特殊字符(直接用256+id,id为文本串的编号,这样一定不会重复)连接起来得到大文本串T(长度为<code>N</code>)，加入特殊字符就是为了避免两个属于不同的文本串误当做一个模式串与其他文本串进行匹配了(因为有唯一的特殊字符,所以包含特殊字符的模式串一定无法和其他文本串进行匹配)。再结合<code>height</code>数组，我们可以很容易地得到多个文本串之间的公共子串长度(因为公共子串一定会出现在两个文本串后缀的LCP当中)；我们同样会得到同一个文本串内的公共子串，所以我们需要记录T的每个位置i对应的文本串<code>id</code>用<code>bel[i]</code>保存，和对应该文本串的后缀长度<code>len[i]</code>，用<code>flag[i]</code>记录文本串<code>i</code>是否包含当前LCP，如果<code>flag[i]</code>的个数<code>&gt;n/2</code>时，说明当前的LCP长度就是满足要求的。<br />
+所以判断长度为<code>L</code>的前缀，可以通过贪心的方法，找一段连续的<code>height&gt;=L</code>的文本串个数(配合<code>flag[i]</code>，并且还需要用<code>bcnt</code>表示当前连续短的编号)，如果遇到<code>height&lt;L</code>说明当前连续块终止，<code>bcnt++</code>然后重置文本串计数器<code>tot</code>，于是<code>check(M)</code>函数的时间复杂度为<code>O(N)</code>。<br />
+故可以用二分答案的方法求解最小的符合题意的前缀长度<code>L</code>，总时间复杂度<code>O(NlogM)</code>，其中<code>M</code>为单个文本串的最大长度。<br />
+注意：本题查找的是至少大于一般的文本串中出现的子串，也就是<code>tot&gt;=n/2+1</code>，<code>tot</code>为当前串在全部文本串中出现的次数。</li>
+</ol>
+<h5 id="2023520"><a class="markdownIt-Anchor" href="#2023520"></a> 2023.5.20.</h5>
+<p>划水了两天，弄大创浪费了好多时间～如果不能打难题，那打点水题其实也不错🐶</p>
+<ol start="70">
+<li>UVA - 12206 - Stammering Aliens - E3 - 求文本串中出现次数超过m次的最长子串<br />
+后缀数组：类似前一题的方法，二分答案长度为<code>L</code>的公共长度，然后用<code>height[]</code>进行判断出现次数是否超过<code>m</code>，本题要求最右侧出现的位置，所以记得多次记录<code>max</code>值。<br />
+注意：使用这种方法查找长度为<code>L</code>的公共子串的出现次数，一定要注意当<code>height[rk]&lt;L</code>时，是否有<code>n-sa[rk]&gt;=L</code>（也就是后缀长度大于等于<code>L</code>），这种情况就是<code>m=1</code>的时候会出现问题。<br />
+本题的后缀数组做法还有另一种方法：需要发现一个有趣的性质，如果排名为<code>rk</code>的后缀有一个出现次数<code>&gt;=m</code>的前缀<code>t</code>，则<code>t</code>一定是<code>rk-m+1,...,rk</code>的前缀，所以问题就变成求数组<code>height[]</code>的窗口大小为<code>m-1</code>的区间最小值（滑动窗口，单调队列求解，一定要注意是长度为<code>m-1</code>，因为<code>height</code>是相邻后缀的前缀长度，所以<code>m=1</code>的时候必须特判，和二分方法要注意的问题相同），所有窗口的最小值中的最大值就是出现次数至少为<code>m</code>的最长的子串<code>ans1</code>，再用RMQ求<code>sa[rk-m+1,...,rk]</code>中的最大值就是<code>ans2</code>。<br />
+注意：RMQ的<code>log</code>数组如果要使用则只需初始化一次<code>log[0]=log[1] = 0; for (int i = 0; i &lt; maxn; i++) log[i] = log[i&gt;&gt;1]+1;</code>，不然速度不如<code>while(1&lt;&lt;(k+1) &lt;= r-l+1) k++;</code>。<br />
+Hash做法：和后缀数组第一种做法类似，二分答案<code>L</code>，然后将所有的长度为<code>L</code>的子串的Hash值全部提出来放到数组<code>hash[]</code>中，然后得到下标排序（将相同的Hash值放在一起），最后判断连续相同串的个数是否是大于等于<code>m</code>就行了。注意Hash基数的选取最好是素数。<br />
+注意：由于<code>hash</code>,<code>rank</code>变量名和<code>std</code>中的重名了，所以可以选择删去<code>using namespace std;</code>，只需注意在使用<code>sort, max, min, queue, set...</code>的时候加上<code>std::</code>即可。</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">typedef</span> <span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token keyword">long</span> ULL<span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> <span class="token class-name">StrHash</span> <span class="token punctuation">&#123;</span>
+    ULL n<span class="token punctuation">,</span> H<span class="token punctuation">[</span>maxn<span class="token punctuation">]</span><span class="token punctuation">,</span> xp<span class="token punctuation">[</span>maxn<span class="token punctuation">]</span><span class="token punctuation">,</span> x <span class="token operator">=</span> <span class="token number">2027</span><span class="token punctuation">;</span>
+    <span class="token function">StrHash</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> xp<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> maxn<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> xp<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> xp<span class="token punctuation">[</span>i<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">*</span> x<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>s<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        n <span class="token operator">=</span> <span class="token function">strlen</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span> H<span class="token punctuation">[</span>n<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> H<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> H<span class="token punctuation">[</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">*</span> x <span class="token operator">+</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    ULL <span class="token function">hash</span><span class="token punctuation">(</span><span class="token keyword">int</span> l<span class="token punctuation">,</span> <span class="token keyword">int</span> r<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> H<span class="token punctuation">[</span>l<span class="token punctuation">]</span> <span class="token operator">-</span> H<span class="token punctuation">[</span>r<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">*</span> xp<span class="token punctuation">[</span>r<span class="token operator">-</span>l<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>shash<span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
