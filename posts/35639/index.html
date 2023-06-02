@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wty-yy.github.io/figures/ACM/72.SPOJ-BEADS-Glass_Beads.jpg">
 <meta property="article:published_time" content="2023-05-07T15:28:00.000Z">
-<meta property="article:modified_time" content="2023-05-31T07:44:36.938Z">
+<meta property="article:modified_time" content="2023-06-02T03:15:33.522Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/ACM/72.SPOJ-BEADS-Glass_Beads.jpg">
@@ -295,7 +295,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          32k 字
+          33k 字
         
       </span>
     
@@ -306,7 +306,7 @@
         
         
         
-          270 分钟
+          276 分钟
         
       </span>
     
@@ -1023,9 +1023,18 @@ f(i,j,0),\quad j &lt; w_i,\\
     <span class="token keyword">if</span> <span class="token punctuation">(</span>len<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">==</span> len<span class="token punctuation">[</span>q<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> link<span class="token punctuation">[</span>cur<span class="token punctuation">]</span> <span class="token operator">=</span> q<span class="token punctuation">;</span> <span class="token keyword">return</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
     <span class="token function">split</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> p<span class="token punctuation">,</span> q<span class="token punctuation">,</span> cur<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h5 id="2023531"><a class="markdownIt-Anchor" href="#2023531"></a> 2023.5.31.</h5>
 <ol start="94">
 <li>HDU - 6704 - K-th occurrence - 后缀链接树倍增+线段树合并处理endpos集合<br />
-本题是要求文本串<code>T</code>的子串<code>T[l,...,r]</code>在<code>T</code>中的出现次数，首先很容易想到在后缀链接树上倍增求出<code>T[l,...,r]</code>所处的endpos节点（方法就是记录下每个字符串结束位置<code>T[0,...,r]</code>对应的SAM节点<code>pos[r]</code>，然后从<code>pos[r]</code>出发，在后缀链接树上倍增找祖先节点<code>u</code>中满足<code>len[u]&gt;=r-l+1</code>最浅的节点），本题还要求SAM中节点的endpos集合中的第K大元素，那么如何处理endpos集合呢？考虑利用线段树进行维护，我们不用每次重建整棵树，而是对线段树进行合并（类似动态开点，但这里不能使用new节点，因为一个父节点可能存在多个儿子节点，儿子节点之间可能有重合边，而更新父节点时候如果重复更新一条边会将多余的点进行抛弃，这就会导致内存泄漏的问题，因为不清楚那些节点要删去），这里用一个数组记录下来，然后新节点就是在数组上继续向后取值。那么又有最后一个问题：时间复杂度计算已经在<a href="/posts/12920/#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%AE%A1%E7%AE%97">字符串相关算法中 - SAM - 维护endpos集合</a>中给出。</li>
+本题是要求文本串<code>T</code>的子串<code>T[l,...,r]</code>在<code>T</code>中的第<code>K</code>次出现次数，首先很容易想到在后缀链接树上倍增求出<code>T[l,...,r]</code>所处的endpos节点（方法就是记录下每个字符串结束位置<code>T[0,...,r]</code>对应的SAM节点<code>pos[r]</code>，然后从<code>pos[r]</code>出发，在后缀链接树上倍增找祖先节点<code>u</code>中满足<code>len[u]&gt;=r-l+1</code>最浅的节点），本题还要求SAM中节点的endpos集合中的第K大元素，那么如何处理endpos集合呢？考虑利用线段树进行维护，我们不用每次重建整棵树，而是对线段树进行合并（类似动态开点，但这里不能使用new节点，因为一个父节点可能存在多个儿子节点，儿子节点之间可能有重合边，而更新父节点时候如果重复更新一条边会将多余的点进行抛弃，这就会导致内存泄漏的问题，因为不清楚那些节点要删去），这里用一个数组记录下来，然后新节点就是在数组上继续向后取值。那么又有最后一个问题：时间复杂度计算已经在<a href="/posts/12920/#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%AE%A1%E7%AE%97">字符串相关算法中 - SAM - 维护endpos集合</a>中给出。复杂度为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">O</mi><mo stretchy="false">(</mo><mi>n</mi><mi>log</mi><mo>⁡</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">\mathcal{O}(n\log n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.02778em;">O</span></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">n</span></span></span></span>常数较大，且空间要开到<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>n</mi><mi>log</mi><mo>⁡</mo><mn>2</mn><mi>n</mi></mrow><annotation encoding="application/x-tex">2n\log 2n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">2</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mord mathnormal">n</span></span></span></span>，本题还有后缀数组做法，见明天的笔记。</li>
+<li>洛谷 - P3834 - 可持久化线段树 2 - E5<br />
+可持久化线段树模板题，就是一种每个位置上用动态开点构建权值线段树，已在线段树笔记中描述细节。</li>
+</ol>
+<h5 id="202361"><a class="markdownIt-Anchor" href="#202361"></a> 2023.6.1.</h5>
+<ol start="94">
+<li>HDU - 6704 - K-th occurrence - 后缀数组RMQ+二分+可持久化线段树<br />
+这是查询子串<code>T[l,...,r]</code>第<code>K</code>次出现次数的另一种做法，我们有了所有后缀的排序，于是当前<code>T[l,...,r]</code>的子串一定出现在第<code>l</code>个后缀当中，所以我们从<code>rank[l]</code>开始，在排好序的后缀中向上找最小的<code>L&lt;=rank[l]</code>使得<code>(L,rank[l]]</code>中的<code>height</code>数组大小均<code>&gt;=len</code>（二分+在height数组上构建RMQ做check函数）；同理，还要找到<code>R&gt;=rank[l]</code>最大的<code>R</code>使得<code>[rank[l],R)</code>的<code>height</code>数组大小均<code>&gt;=len</code>。于是我们就得到了子串出现的后缀对应的排名：<code>[L,...,R]</code>，最后要求出第<code>K</code>大位置，那么我们就构建根据<code>sa[]</code>数组构建可持久化权值线段树（已记录<a target="_blank" rel="noopener" href="https://wty-yy.space/posts/48555/">可持久化线段树笔记</a>），在<code>root[R],root[L-1]</code>两颗线段树之差上进行查找第<code>K</code>大元素就OK了。<br />
+SA的常数(1.8s,33.2Mb)一般都比SAM(2.3s,104.1Mb)要小的多，而且代码量上近似，只要有好的基本功，分别实现完每个算法最后拼接起来即可。</li>
 </ol>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
