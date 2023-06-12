@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wty-yy.github.io/figures/ACM/72.SPOJ-BEADS-Glass_Beads.jpg">
 <meta property="article:published_time" content="2023-05-07T15:28:00.000Z">
-<meta property="article:modified_time" content="2023-06-06T08:14:55.082Z">
+<meta property="article:modified_time" content="2023-06-12T15:23:24.394Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/ACM/72.SPOJ-BEADS-Glass_Beads.jpg">
@@ -295,7 +295,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          34k 字
+          36k 字
         
       </span>
     
@@ -306,7 +306,7 @@
         
         
         
-          287 分钟
+          297 分钟
         
       </span>
     
@@ -1041,8 +1041,9 @@ SA的常数(1.8s,33.2Mb)一般都比SAM(2.3s,104.1Mb)要小的多，而且代码
 <ul>
 <li>[x] 基础计数</li>
 <li>[ ] 递推关系</li>
-<li>[ ] 二维几何基础</li>
+<li>[x] 二维几何基础</li>
 <li>[ ] 二维几何常用算法</li>
+<li>[x] 凸包</li>
 </ul>
 <ol start="95">
 <li>UVA - 11538 - Chess Queen<br />
@@ -1070,6 +1071,23 @@ SA的常数(1.8s,33.2Mb)一般都比SAM(2.3s,104.1Mb)要小的多，而且代码
 几何计算题，只需分别实现向量夹角<code>angle(u, v)</code>，向量逆时针旋转<code>rotate(u, rad)</code>和计算直线交点<code>line_intersection(A, u, B, v)</code>。</li>
 <li>UVA - 1342 - That Nice Euler Circuit - E2 - 平面图中的Euler定理<br />
 二维平面图的顶点数V、边数E和面数F满足欧拉定理：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>+</mo><mi>F</mi><mo>=</mo><mn>2</mn><mo>+</mo><mi>E</mi></mrow><annotation encoding="application/x-tex">V+F=2+E</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span></span></span></span>，这个定理的证明很有意思，要用到对偶图，以及分别在对偶图上建立对偶生成树（已做笔记）。根据欧拉定理就很容易给出结果，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>=</mo><mn>2</mn><mo>+</mo><mi>E</mi><mo>−</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">F = 2+E-V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span>，现在就要求出图中所有的顶点（包括两边的交点，并且要去重），再通过顶点求边数（如果一个顶点在一条边的内部，则这个点能划分出新的一条边），所以我们只需要分别实现<code>segment_proper_intersection(A1,A2,B1,B2)</code>判断两个线段<code>A1A2</code>和<code>B1B2</code>是否正规相交（即线段的内部有交点），以及<code>on_segment(P,A,B)</code>判断<code>P</code>是否在线段<code>AB</code>的内部。</li>
+</ol>
+<h5 id="202368"><a class="markdownIt-Anchor" href="#202368"></a> 2023.6.8.</h5>
+<ol start="100">
+<li>UVA - 11796 - Dog Distance - 相对运动距离计算<br />
+要求两个折线段的最近距离和最远距离，从每个单独的线段上看，两个在线段上运动的质点之间的相对位移一定是直线段，所以我们考虑固定A点，然后移动B点然后将问题转化为A点到B的移动线段的最短距离，这样就得到了最短距离，而最远距离一定在端点处取到。每次以两个点首先运动到拐点的一个点作为终止，所以总共时间复杂度就是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">P</mi><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mi>A</mi><mi mathvariant="normal">∣</mi><mo>+</mo><mi mathvariant="normal">∣</mi><mi>B</mi><mi mathvariant="normal">∣</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\mathcal{P}(|A|+|B|)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.08222em;">P</span></span><span class="mopen">(</span><span class="mord">∣</span><span class="mord mathnormal">A</span><span class="mord">∣</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord">∣</span><span class="mclose">)</span></span></span></span>.<br />
+只需实现<code>distance2line(P,A,B)</code>点<code>P</code>到直线<code>AB</code>距离，和<code>distance2segment(P,A,B)</code>点<code>P</code>到线段<code>AB</code>距离。</li>
+<li>UVA - 10652 - Board Wrapping - 凸包模板题<br />
+计算出每个矩形的四个点，然后求出凸包，最后求凸包围成的面积即可。需要实现<code>convex_hull(P,n,hull)</code>计算大小为<code>n</code>的点集<code>P</code>构成的凸包<code>hull</code>和利用三角划分求出多边形的有向面积（以逆时针方向为正向）。</li>
+</ol>
+<h5 id="2023610"><a class="markdownIt-Anchor" href="#2023610"></a> 2023.6.10.</h5>
+<p>今天打完了2023年蓝桥杯决赛，感觉还行，总共10题，完整做出了6题，其中一个是树形dp（需要维护每个节点的深度为1，2的前三大权重和（利用一个<code>Max</code>结构体，内部套一个<code>Node</code>结构体，记录<code>id</code>和权重<code>w</code>），分4种情况对答案进行更新），还有一个是SAM模板题（分别统计出现次数为<code>1,...,L</code>的不同子串的个数，<code>L</code>为文本串长度，只需要求出每个节点的endpos大小，然后利用<code>len[p]-len[link[p]]</code>为节点<code>p</code>对应的子串集合大小这个性质对答案进行累加求和即可<code>ans[endpos[p]] += len[p]-len[link[p]]</code>），前两道填空题自认为蛮难，但都有思路（一个dp，一个要用bitset模拟的快速幂），倒数第二题暴力骗了点分，应该是点分治的题，应该要复习下了。<br />
+比较可惜的是一个简单题还没想出来，给两个数组<code>A,B</code>长度分别为<code>n,m</code>，设数组<code>C=&#123;A[i]+B[j]:i,j&#125;</code>，求<code>C</code>中第<code>K</code>大值，范围是<code>n,m&lt;=1e5</code>。</p>
+<h5 id="2023612"><a class="markdownIt-Anchor" href="#2023612"></a> 2023.6.12.</h5>
+<ol start="102">
+<li>UVA - 11168 - Airport - 凸包+点到直线距离<br />
+也是凸包模板题，题目要求的直线一定是凸包上的某一条边，若直线方程为Ax+By+C=0，则点<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span>到直线距离为<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …{\sqrt{A^2+B^2}'>\frac{|Ax+By+C|}{\sqrt{A^2+B^2}</span>，然后由于所有点均在直线的一边，所以绝对值要么全部为正要么为负，所以直接记录<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><mi>x</mi><mo separator="true">,</mo><mo>∑</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">\sum x,\sum y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.00001em;vertical-align:-0.25001em;"></span><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span>，然后直接求出所有点到直线的平均距离，逐一枚举，取最小者即可。<br />
+注意：判断凸包时点集合大小至少为2，所以需要特判只有1个点的情况，输出保留3位小数，所以要输出<code>0.000</code>。</li>
 </ol>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
