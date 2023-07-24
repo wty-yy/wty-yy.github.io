@@ -23,11 +23,14 @@
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="学习视频：YouTube - Inside TensorFlow: tf.Keras (Part 1)，YouTube - Inside TensorFlow: tf.Keras (Part 1)，这两个视频中介绍了Keras的基本实现原理和每个类的自定义方法。 头文件： import tensorflow as tf import tensorflow.experimental.numpy as">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/inside_tensorflow/functional_api_model1.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/inside_tensorflow/functional_api_model2.png">
 <meta property="article:published_time" content="2023-07-23T00:47:24.000Z">
-<meta property="article:modified_time" content="2023-07-23T13:07:40.658Z">
+<meta property="article:modified_time" content="2023-07-24T10:15:20.939Z">
 <meta property="article:author" content="wty">
 <meta property="article:tag" content="TensorFlow">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/inside_tensorflow/functional_api_model1.png">
   
   
   
@@ -294,7 +297,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9k 字
+          12k 字
         
       </span>
     
@@ -305,7 +308,7 @@
         
         
         
-          76 分钟
+          97 分钟
         
       </span>
     
@@ -356,7 +359,7 @@ keras <span class="token operator">=</span> tf<span class="token punctuation">.<
 layers <span class="token operator">=</span> keras<span class="token punctuation">.</span>layers<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h2 id="keraslayerslayer"><a class="markdownIt-Anchor" href="#keraslayerslayer"></a> keras.layers.Layer</h2>
 <h3 id="性质"><a class="markdownIt-Anchor" href="#性质"></a> 性质</h3>
-<p><code>Layer</code> 本质上就是用于计算的容器，其具有一下特点：</p>
+<p><code>Layer</code> 本质上就是用于计算的容器，例如传统的层（全连接层、卷积层等）或者通过层堆叠得到的块（ResNet block, Inception block），其具有一下特点：</p>
 <ul>
 <li>将一个batch的输入转化为一个batch的输出，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>×</mo><mo>⋯</mo></mrow><annotation encoding="application/x-tex">N\times\cdots</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.31em;vertical-align:0em;"></span><span class="minner">⋯</span></span></span></span> 维度的输入对应 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>×</mo><mo>⋯</mo></mrow><annotation encoding="application/x-tex">N\times\cdots</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.31em;vertical-align:0em;"></span><span class="minner">⋯</span></span></span></span> 维度的输出，并且层的计算中每个样本之间都是独立的，两个样本无法进行交互。（例如batch normalize，但是layer normalize如何实现？）
 <ul>
@@ -564,6 +567,16 @@ y <span class="token operator">=</span> batch_normal<span class="token punctuati
 tf<span class="token punctuation">.</span><span class="token keyword">print</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span>  <span class="token comment"># [[0.8 2 2.8], [2.8 2 0.8]]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h2 id="kerasmodel"><a class="markdownIt-Anchor" href="#kerasmodel"></a> keras.Model</h2>
 <p><code>keras.Model</code> 包含 <code>Layer</code> 类的全部功能，在此基础上还有 <code>.fit, .predict, .evaluate, .compile</code> 等方法，使用 <code>model.fit</code> 前先要通过 <code>model.compile</code> 配置模型的超参数，包含：优化器、损失函数、度量器等。</p>
+<h3 id="性质-2"><a class="markdownIt-Anchor" href="#性质-2"></a> 性质</h3>
+<p><code>Model</code> 一般指文献中的模型(model)或者网络(network)，<code>Model</code> 包含所有 <code>Layer</code> 的功能，并且有以下额外功能：</p>
+<ul>
+<li>训练：<code>.compile(), .fit(), .evaluate(), .predict()</code></li>
+<li>保存：<code>.save()</code> 包含拓扑(topology)形式的网络结构，模型状态(weights)，优化器(optimizer)及其参数</li>
+<li>模型摘要、可视化：<code>.summary(), keras.utils.plot_model()</code></li>
+</ul>
+<h4 id="graph-execution-eager-excution"><a class="markdownIt-Anchor" href="#graph-execution-eager-excution"></a> graph execution &amp; eager excution</h4>
+<p>在TF2中，如果调用 <code>model.fit(), model.compile()</code>，TF2将默认使用图执行方法对模型进行搭建和训练（更快），如果想立即执行模型（eagerly mode指想python代码一样，run step by step，更容易调试？）则需要使用 <code>model.compile(..., run_eagerly=True)</code>。</p>
+<p>而如果自己要实现TensorFlow的梯度下降，那么就需要用到 <code>@tf.function</code></p>
 <h3 id="例子-2"><a class="markdownIt-Anchor" href="#例子-2"></a> 例子</h3>
 <h4 id="1-层堆叠"><a class="markdownIt-Anchor" href="#1-层堆叠"></a> 1. 层堆叠</h4>
 <p>以下是将<a href="./#3-%E5%B1%82%E5%A0%86%E5%8F%A0">Layer 例3 层堆叠</a>简单改写得到 <code>Model</code> 类：</p>
@@ -620,6 +633,58 @@ mlp<span class="token punctuation">.</span>fit<span class="token punctuation">(<
 </ol>
 </li>
 </ul>
+<h3 id="functional-api-函数式构建模型"><a class="markdownIt-Anchor" href="#functional-api-函数式构建模型"></a> Functional API 函数式构建模型</h3>
+<p>这是一种能够绘制出模型结构图的模型搭建方式，两个函数之间的调用相当于是在两个模块之间链接一条有向边，从而可以搭建出一个有向无环图。并且自动生成模型的序列化参数，可以通过 <code>model.get_config()</code> 获取。</p>
+<h4 id="性质-3"><a class="markdownIt-Anchor" href="#性质-3"></a> 性质</h4>
+<ul>
+<li>用于绘制层之间关系图(DAG)的API</li>
+<li>让人容易理解层之间的关系，但是如果是开发者，可以不使用该构建方法</li>
+<li>无需编写任何函数，只需执行API调用（接口创建），所有具体计算都在API内部实现</li>
+<li>不容易出错，因为在构建图的过程中，已经自动检测了层之间是否可以连接，并且可以通过输出模型结构图进行简单debug</li>
+</ul>
+<p>特点：易于检查（在建图过程中就进行DEBUG），可绘制（通过 <code>keras.utils.plot_model()</code> 绘制模型结构），直接序列化（通过 <code>model.get_config()</code>）</p>
+<p>DAG图中每个节点具体是由三元组构成：<code>(layer, node_index, tensor_index)</code>，其中</p>
+<ul>
+<li><code>layer</code>：当前层所属的类</li>
+<li><code>node_index</code>：当前层实例化后的节点编号</li>
+<li><code>tensor_index</code>：输入与输出<code>tensor</code>的信息，例如<code>shape</code>大小</li>
+</ul>
+<h4 id="例子1"><a class="markdownIt-Anchor" href="#例子1"></a> 例子1</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">inputs <span class="token operator">=</span> layers<span class="token punctuation">.</span>Input<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">784</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Image'</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">64</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense1'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>inputs<span class="token punctuation">)</span>
+x <span class="token operator">=</span> layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">64</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense2'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+outputs <span class="token operator">=</span> layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'softmax'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Output'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+model <span class="token operator">=</span> keras<span class="token punctuation">.</span>Model<span class="token punctuation">(</span>inputs<span class="token punctuation">,</span> outputs<span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Test Model'</span><span class="token punctuation">)</span>
+save_json<span class="token punctuation">(</span><span class="token string">"test.json"</span><span class="token punctuation">,</span> model<span class="token punctuation">.</span>get_config<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 模型序列化结果为dir，可转成json文件保存下来</span>
+keras<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>plot_model<span class="token punctuation">(</span>model<span class="token punctuation">,</span> show_shapes<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>  <span class="token comment"># 并且可以绘制模型结构图</span>
+
+rebuild_model <span class="token operator">=</span> keras<span class="token punctuation">.</span>Model<span class="token punctuation">.</span>from_config<span class="token punctuation">(</span>model<span class="token punctuation">.</span>get_config<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 可通过Model.from_config重建，类似Layer.from_config进行重建</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="/figures/inside_tensorflow/functional_api_model1.png" srcset="/img/loading.gif" lazyload alt="模型结构图" /></p>
+<h4 id="例子2"><a class="markdownIt-Anchor" href="#例子2"></a> 例子2</h4>
+<p>稍微复杂一点的例子如下（uNet，加上一个分类功能）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Conv</span><span class="token punctuation">(</span>layers<span class="token punctuation">.</span>Conv2D<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> idx<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        kwargs<span class="token punctuation">.</span>update<span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"Conv</span><span class="token interpolation"><span class="token punctuation">&#123;</span>idx<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">,</span> <span class="token string">'activation'</span><span class="token punctuation">:</span> <span class="token string">'relu'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+        
+<span class="token keyword">class</span> <span class="token class-name">ConvT</span><span class="token punctuation">(</span>layers<span class="token punctuation">.</span>Conv2DTranspose<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> idx<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        kwargs<span class="token punctuation">.</span>update<span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"ConvT</span><span class="token interpolation"><span class="token punctuation">&#123;</span>idx<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">,</span> <span class="token string">'activation'</span><span class="token punctuation">:</span> <span class="token string">'relu'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+        
+inputs <span class="token operator">=</span> layers<span class="token punctuation">.</span>Input<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span><span class="token number">28</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Image'</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> Conv<span class="token punctuation">(</span>idx<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> filters<span class="token operator">=</span><span class="token number">128</span><span class="token punctuation">,</span> kernel_size<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> strides<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">(</span>inputs<span class="token punctuation">)</span>
+x <span class="token operator">=</span> Conv<span class="token punctuation">(</span>idx<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> filters<span class="token operator">=</span><span class="token number">256</span><span class="token punctuation">,</span> kernel_size<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> strides<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+x <span class="token operator">=</span> layers<span class="token punctuation">.</span>Flatten<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">'Flatten'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+outputs1 <span class="token operator">=</span> layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span>units<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'softmax'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'CLF'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+feature <span class="token operator">=</span> layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span>units<span class="token operator">=</span><span class="token number">1024</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Feature'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+x <span class="token operator">=</span> layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span>units<span class="token operator">=</span><span class="token number">7</span><span class="token operator">*</span><span class="token number">7</span><span class="token operator">*</span><span class="token number">256</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>feature<span class="token punctuation">)</span>
+x <span class="token operator">=</span> layers<span class="token punctuation">.</span>Reshape<span class="token punctuation">(</span>target_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">256</span><span class="token punctuation">)</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Reshape'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+x <span class="token operator">=</span> ConvT<span class="token punctuation">(</span>idx<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> filters<span class="token operator">=</span><span class="token number">128</span><span class="token punctuation">,</span> kernel_size<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> strides<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+img <span class="token operator">=</span> ConvT<span class="token punctuation">(</span>idx<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> filters<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> kernel_size<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> strides<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+model <span class="token operator">=</span> keras<span class="token punctuation">.</span>Model<span class="token punctuation">(</span>inputs<span class="token punctuation">,</span> <span class="token punctuation">(</span>x<span class="token punctuation">,</span> outputs1<span class="token punctuation">)</span><span class="token punctuation">)</span>
+keras<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>plot_model<span class="token punctuation">(</span>model<span class="token punctuation">,</span> show_shapes<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="/figures/inside_tensorflow/functional_api_model2.png" srcset="/img/loading.gif" lazyload alt="模型结构图" /></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
