@@ -1,0 +1,967 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="tf.function  参考：   YouTube - tf.function and Autograph (TF Dev Summit ‘19)   tensorflow.org - tf.function   CSDN【Tensorflow教程笔记】常用模块 tf.function ：图执行模式    import tensorflow as tf tf.function修饰的函数会将其中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tf.function笔记">
+<meta property="og:url" content="https://wty-yy.github.io/posts/53297/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="tf.function  参考：   YouTube - tf.function and Autograph (TF Dev Summit ‘19)   tensorflow.org - tf.function   CSDN【Tensorflow教程笔记】常用模块 tf.function ：图执行模式    import tensorflow as tf tf.function修饰的函数会将其中">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-25T04:02:17.000Z">
+<meta property="article:modified_time" content="2023-07-25T04:07:01.486Z">
+<meta property="article:author" content="wty">
+<meta property="article:tag" content="TensorFlow">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>tf.function笔记 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="tf.function笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-25 12:02" pubdate>
+          2023年7月25日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          51 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">tf.function笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="tffunction"><a class="markdownIt-Anchor" href="#tffunction"></a> tf.function</h2>
+<blockquote>
+<p>参考：</p>
+<ol>
+<li>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Up9CvRLIIIw">YouTube - tf.function and Autograph (TF Dev Summit ‘19)</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://tensorflow.google.cn/api_docs/python/tf/function?hl=en">tensorflow.org - tf.function</a></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/nanke_4869/article/details/114220354">CSDN【Tensorflow教程笔记】常用模块 tf.function ：图执行模式</a></p>
+</li>
+</ol>
+</blockquote>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p><code>tf.function</code>修饰的函数会将其中的操作转化为Graph execution（图执行），效率会高于Eagerly execution（直接计算，step by step）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">v <span class="token operator">=</span> tf<span class="token punctuation">.</span>Variable<span class="token punctuation">(</span><span class="token number">1.</span><span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> v<span class="token punctuation">.</span>assign_add<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="speed-graph-execution-eagerly-execution"><a class="markdownIt-Anchor" href="#speed-graph-execution-eagerly-execution"></a> Speed: Graph execution &gt; Eagerly execution</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># lstm_cell = tf.keras.layers.LSTMCell(10)</span>
+dense_layer <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">4096</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">fn</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> dense_layer<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">)</span>
+
+<span class="token builtin">input</span> <span class="token operator">=</span> tf<span class="token punctuation">.</span>ones<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span><span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> state <span class="token operator">=</span> <span class="token punctuation">[</span>tf<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">*</span> <span class="token number">2</span>
+
+<span class="token keyword">from</span> timeit <span class="token keyword">import</span> timeit
+<span class="token comment"># slow 0.8845837010001105</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>timeit<span class="token punctuation">(</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> dense_layer<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">)</span><span class="token punctuation">,</span> number<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># fast 0.616030851000005</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>timeit<span class="token punctuation">(</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> fn<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">)</span><span class="token punctuation">,</span> number<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="计算图的重复利用与重建"><a class="markdownIt-Anchor" href="#计算图的重复利用与重建"></a> 计算图的重复利用与重建</h3>
+<p>通过<code>@tf.function</code>修饰的函数被称为泛型函数(GenericFunction)，而每次调用该函数就会进行实例化，会基于传入参数的属性得到对应的具象函数(ConcreteFunction)，通过<code>fn.get_concrete_function()</code>可以将<code>GenericFunction</code>转化为<code>ConcreteFunction</code>，对于<code>ConcreteFunction</code>就存在计算图可以修改（修改方式应该和TF1.x类似）：</p>
+<ul>
+<li><code>fn.get_concrete_function(实参/tf.TensorSpec())</code>：向函数具象化里传入<strong>实参</strong>或者指定传入的<code>Tensor</code>类型。</li>
+</ul>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">add_double</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> a <span class="token operator">+</span> a
+a <span class="token operator">=</span> add_double<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>ones<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span><span class="token string">'float32'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># [[2. 2.], [2. 2.]]</span>
+b <span class="token operator">=</span> add_double<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>ones<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span><span class="token string">'int32'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># [[2 2], [2 2]]</span>
+c <span class="token operator">=</span> add_double<span class="token punctuation">(</span><span class="token string">'a'</span><span class="token punctuation">)</span>  <span class="token comment"># b'aa'</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c<span class="token punctuation">,</span> sep<span class="token operator">=</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">type</span><span class="token punctuation">(</span>add_double<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># polymorphic_function.Function</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">type</span><span class="token punctuation">(</span>fn<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># monomorphic_function.ConcreteFunction</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">type</span><span class="token punctuation">(</span>fn<span class="token punctuation">.</span>graph<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># func_graph.FuncGraph</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>并且要避免向<code>tf.function</code>传递Python中的标量或者列表，这会导致计算图的重复构建，降低效率。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">return</span> tf<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+f1 <span class="token operator">=</span> f<span class="token punctuation">.</span>get_concrete_function<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+f2 <span class="token operator">=</span> f<span class="token punctuation">.</span>get_concrete_function<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># Slow - compiles new graph</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>f1 <span class="token keyword">is</span> f2<span class="token punctuation">)</span>  <span class="token comment"># false</span>
+
+f1 <span class="token operator">=</span> f<span class="token punctuation">.</span>get_concrete_function<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+f2 <span class="token operator">=</span> f<span class="token punctuation">.</span>get_concrete_function<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># Fast - reuses f1</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>f1 <span class="token keyword">is</span> f2<span class="token punctuation">)</span>  <span class="token comment"># true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>当多次创建计算图时（大于5次），TF就会发出警告</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">f<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+f<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+f<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+f<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+f<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+f<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span>
+<span class="token triple-quoted-string string">"""
+WARNING:tensorflow:5 out of the last 6 calls to &lt;function f at 0x7fef69992b60> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
+"""</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="计算图的输入限制"><a class="markdownIt-Anchor" href="#计算图的输入限制"></a> 计算图的输入限制</h3>
+<p>可以在两个位置对计算图的输入参数进行限制</p>
+<ol>
+<li><code>fn.get_concrete_function(tf.TensorSpec(), tf.TensorSpec(), ...)</code>：在函数具象化时加入限制，得到结果是<code>ConcreteFunction</code></li>
+<li><code>@tf.function(input_signature=[tf.TensorSpec(), tf.TensorSpec(), ...])</code>：在<code>tf.function</code>构建时候就通过<code>input_signature</code>属性对输入进行限制，得到的函数是<code>GenericFunction</code></li>
+</ol>
+<p>上述两个方法都是有多少个输入变量就写多少个<code>tf.TensorSpec()</code></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 加入函数的输入变量形式的限制，利用tf.TensorSpec，tensor specific</span>
+fn <span class="token operator">=</span> add_double<span class="token punctuation">.</span>get_concrete_function<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>TensorSpec<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span><span class="token string">'string'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>fn<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token string">'a'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># b'aa'</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>fn<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># error</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># one input</span>
+<span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span><span class="token punctuation">(</span>
+    input_signature<span class="token operator">=</span><span class="token punctuation">[</span>tf<span class="token punctuation">.</span>TensorSpec<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span><span class="token string">'string'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">add_double</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> a <span class="token operator">+</span> a
+<span class="token keyword">print</span><span class="token punctuation">(</span>add_double<span class="token punctuation">(</span><span class="token string">'a'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># b'aa'</span>
+<span class="token keyword">try</span><span class="token punctuation">:</span> add_double<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># error!</span>
+<span class="token keyword">except</span><span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"error!!!"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># two input</span>
+<span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span><span class="token punctuation">(</span>
+    input_signature<span class="token operator">=</span><span class="token punctuation">[</span>tf<span class="token punctuation">.</span>TensorSpec<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span><span class="token string">'int32'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                     tf<span class="token punctuation">.</span>TensorSpec<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span><span class="token string">'float32'</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    a <span class="token operator">=</span> tf<span class="token punctuation">.</span>cast<span class="token punctuation">(</span>a<span class="token punctuation">,</span> <span class="token string">'float32'</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> a <span class="token operator">+</span> b
+add<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">2.</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 3.0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>在保持原有代码逻辑的前提下，尽可能使用并行计算提高速度</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">a <span class="token operator">=</span> tf<span class="token punctuation">.</span>Variable<span class="token punctuation">(</span><span class="token number">1.</span><span class="token punctuation">)</span>
+b <span class="token operator">=</span> tf<span class="token punctuation">.</span>Variable<span class="token punctuation">(</span><span class="token number">2.</span><span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># (a,b), (x,y) -> (b*y, b+a*x)</span>
+    a<span class="token punctuation">.</span>assign<span class="token punctuation">(</span>y <span class="token operator">*</span> b<span class="token punctuation">)</span>
+    b<span class="token punctuation">.</span>assign_add<span class="token punctuation">(</span>x <span class="token operator">*</span> a<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> a <span class="token operator">+</span> b
+f<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="tfvariable-的创建和删除"><a class="markdownIt-Anchor" href="#tfvariable-的创建和删除"></a> tf.Variable 的创建和删除？</h3>
+<p>下面这样写会报错，因为tf.function不清楚内部定义的变量<code>v</code>究竟是每次要为其创建一个新的计算图，还是利用之前的已经创建过的变量<code>v</code>：</p>
+<ul>
+<li>如果是<code>tf 1.x</code>，那么就只会创建一次（graph execution）</li>
+<li>如果是eagerly execution，那么会每次创建出<code>v</code>然后在函数结束时删除<code>v</code>，不断删除再创建<br />
+解决方法：</li>
+</ul>
+<ol>
+<li>在图执行函数外创建变量</li>
+<li>通过编写类，并在第一次调用该类的时候创建变量，类似Layer中的<code>build()</code>函数</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    v <span class="token operator">=</span> tf<span class="token punctuation">.</span>Variable<span class="token punctuation">(</span><span class="token number">1.</span><span class="token punctuation">)</span>
+    v<span class="token punctuation">.</span>assign_add<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> v
+f<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># error</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># build class' variable once</span>
+<span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">:</span> <span class="token keyword">pass</span>
+obj <span class="token operator">=</span> C<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> obj<span class="token punctuation">.</span>v <span class="token operator">=</span> <span class="token boolean">None</span>
+<span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">g</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> obj<span class="token punctuation">.</span>v <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        obj<span class="token punctuation">.</span>v <span class="token operator">=</span> tf<span class="token punctuation">.</span>Variable<span class="token punctuation">(</span><span class="token number">1.</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> obj<span class="token punctuation">.</span>v<span class="token punctuation">.</span>assign_add<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+g<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># 3.0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="自动生成计算图的函数限制"><a class="markdownIt-Anchor" href="#自动生成计算图的函数限制"></a> 自动生成计算图的函数限制</h3>
+<p><code>tf.function</code> 支持Python原生函数：<code>if, while</code>，其中 <code>if</code> 会自动转化为 <code>tf.cond</code>，<code>while</code> 会自动转化为 <code>tf.while_loop</code>；</p>
+<p>并且有类似C++中的数组 <code>tf.TensorArray(dtype, size)</code>（在<code>tf.function</code>中对<code>tf.TensorArray</code>进行初始化，作为计算图中的一个数组，最后需要将其通过<code>ta.stack()</code>返回出来）：</p>
+<ul>
+<li>动态：<code>ta = tf.TensorArray(dtype, size, dynamic_size=True)</code></li>
+<li>静态：<code>dynamic_size</code>默认为<code>False</code>，<code>size</code>就是当前数组的固定大小</li>
+<li>加入元素：<code>ta = ta.write(pos, val)</code>类似于<code>ta[pos] = val</code>，如果是静态数组，则要求有<code>pos &lt; ta.size()</code></li>
+<li>重置数组：<code>ta = ta.unstack([...])</code>将<code>ta</code>重置为列表<code>[...]</code>，如果是静态数组，则需要保证<code>len([...]) &lt;= ta.size()</code></li>
+<li>数组转化：<code>ta.stack()</code>将<code>ta</code>转化为<code>tf.Tensor</code>的形式</li>
+</ul>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># tf.TensorArray使用方法</span>
+<span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    ta <span class="token operator">=</span> tf<span class="token punctuation">.</span>TensorArray<span class="token punctuation">(</span><span class="token string">'int32'</span><span class="token punctuation">,</span> size<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> dynamic_size<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> tf<span class="token punctuation">.</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        ta <span class="token operator">=</span> ta<span class="token punctuation">.</span>write<span class="token punctuation">(</span>i<span class="token punctuation">,</span> x<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> ta<span class="token punctuation">.</span>stack<span class="token punctuation">(</span><span class="token punctuation">)</span>
+f<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># [1,2,3]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># while循环的结果</span>
+<span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">fn</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">while</span> tf<span class="token punctuation">.</span>reduce_sum<span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0.7</span><span class="token punctuation">:</span>
+        x<span class="token punctuation">.</span>assign<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>tanh<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        tf<span class="token punctuation">.</span><span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> x
+fn<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>Variable<span class="token punctuation">(</span><span class="token number">2.</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 0.964027584 0.746068 0.632797241</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="计算图中-python-内置函数只会被执行一次"><a class="markdownIt-Anchor" href="#计算图中-python-内置函数只会被执行一次"></a> 计算图中 Python 内置函数只会被执行一次</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">fn</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"now </span><span class="token interpolation"><span class="token punctuation">&#123;</span>a<span class="token operator">=</span><span class="token punctuation">&#125;</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">&#123;</span>b<span class="token operator">=</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> a<span class="token punctuation">,</span> b
+fn<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># print (build new graph)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">fn<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># no print</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">fn<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># print (build new graph)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">fn<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> tf<span class="token punctuation">.</span>constant<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># no print</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<h3 id="在梯度下降中应用的例子"><a class="markdownIt-Anchor" href="#在梯度下降中应用的例子"></a> 在梯度下降中应用的例子</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>preprocessing <span class="token keyword">import</span> StandardScaler
+<span class="token keyword">from</span> tqdm <span class="token keyword">import</span> tqdm
+
+<span class="token punctuation">(</span>train_X<span class="token punctuation">,</span> train_y<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>eval_X<span class="token punctuation">,</span> eval_y<span class="token punctuation">)</span> <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>datasets<span class="token punctuation">.</span>boston_housing<span class="token punctuation">.</span>load_data<span class="token punctuation">(</span><span class="token punctuation">)</span>
+std_scaler <span class="token operator">=</span> StandardScaler<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 数据集标准化</span>
+train_X <span class="token operator">=</span> std_scaler<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>train_X<span class="token punctuation">)</span>
+eval_X <span class="token operator">=</span> std_scaler<span class="token punctuation">.</span>transform<span class="token punctuation">(</span>eval_X<span class="token punctuation">)</span>
+
+model <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>Sequential<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 用多层感知机</span>
+loss_fn <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>losses<span class="token punctuation">.</span>MeanSquaredError<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># MSE损失函数</span>
+optimizer <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>optimizers<span class="token punctuation">.</span>Adam<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 优化器</span>
+metric <span class="token operator">=</span> tf<span class="token punctuation">.</span>metrics<span class="token punctuation">.</span>Mean<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 对loss的均值度量器，每个epoch计算显示一次结果</span>
+
+<span class="token decorator annotation punctuation">@tf<span class="token punctuation">.</span>function</span>
+<span class="token keyword">def</span> <span class="token function">train_step</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">with</span> tf<span class="token punctuation">.</span>GradientTape<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> tape<span class="token punctuation">:</span>
+        logits <span class="token operator">=</span> model<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>expand_dims<span class="token punctuation">(</span>x<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        loss <span class="token operator">=</span> loss_fn<span class="token punctuation">(</span>y<span class="token punctuation">,</span> logits<span class="token punctuation">)</span>
+    grads <span class="token operator">=</span> tape<span class="token punctuation">.</span>gradient<span class="token punctuation">(</span>loss<span class="token punctuation">,</span> model<span class="token punctuation">.</span>trainable_weights<span class="token punctuation">)</span>
+    optimizer<span class="token punctuation">.</span>apply_gradients<span class="token punctuation">(</span><span class="token builtin">zip</span><span class="token punctuation">(</span>grads<span class="token punctuation">,</span> model<span class="token punctuation">.</span>trainable_weights<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    metric<span class="token punctuation">.</span>update_state<span class="token punctuation">(</span>loss<span class="token punctuation">)</span>
+    
+<span class="token keyword">def</span> <span class="token function">train_step_no</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">with</span> tf<span class="token punctuation">.</span>GradientTape<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">as</span> tape<span class="token punctuation">:</span>
+        logits <span class="token operator">=</span> model<span class="token punctuation">(</span>tf<span class="token punctuation">.</span>expand_dims<span class="token punctuation">(</span>x<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        loss <span class="token operator">=</span> loss_fn<span class="token punctuation">(</span>y<span class="token punctuation">,</span> logits<span class="token punctuation">)</span>
+    grads <span class="token operator">=</span> tape<span class="token punctuation">.</span>gradient<span class="token punctuation">(</span>loss<span class="token punctuation">,</span> model<span class="token punctuation">.</span>trainable_weights<span class="token punctuation">)</span>
+    optimizer<span class="token punctuation">.</span>apply_gradients<span class="token punctuation">(</span><span class="token builtin">zip</span><span class="token punctuation">(</span>grads<span class="token punctuation">,</span> model<span class="token punctuation">.</span>trainable_weights<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    metric<span class="token punctuation">.</span>update_state<span class="token punctuation">(</span>loss<span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> epoch <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    metric<span class="token punctuation">.</span>reset_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> x<span class="token punctuation">,</span> y <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span><span class="token builtin">zip</span><span class="token punctuation">(</span>train_X<span class="token punctuation">,</span> train_y<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        train_step<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+        <span class="token comment"># train_step_no(x, y)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"epoch: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>epoch<span class="token punctuation">&#125;</span></span><span class="token string">, loss: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>metric<span class="token punctuation">.</span>result<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token comment"># use tf.function: 00:00, 960.08it/s Amazing!</span>
+<span class="token comment"># no tf.function: 00:05, 76.84it/s  slow!</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/TensorFlow2/" class="category-chain-item">TensorFlow2</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/TensorFlow/">#TensorFlow</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>tf.function笔记</div>
+      <div>https://wty-yy.github.io/posts/53297/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/2554/" title="Inside TensorFlow - tf.keras 笔记">
+                        <span class="hidden-mobile">Inside TensorFlow - tf.keras 笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
