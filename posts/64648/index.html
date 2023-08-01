@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://s1.ax1x.com/2023/01/22/pSJtI3V.png">
 <meta property="og:image" content="https://s1.ax1x.com/2022/12/07/zglsr8.png">
 <meta property="article:published_time" content="2022-11-18T11:03:38.000Z">
-<meta property="article:modified_time" content="2023-07-07T01:48:29.426Z">
+<meta property="article:modified_time" content="2023-08-01T09:09:33.383Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s1.ax1x.com/2022/11/18/zuZvz8.png">
@@ -302,7 +302,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          15k 字
+          16k 字
         
       </span>
     
@@ -313,7 +313,7 @@
         
         
         
-          127 分钟
+          133 分钟
         
       </span>
     
@@ -424,7 +424,8 @@ tmux a <span class="token parameter variable">-t</span> mywork<span aria-hidden=
 <p>re是用于表示正则表达式，而fnmatch是用于处理shell样式通配符. 更多正则表达式内容可以参考 <a target="_blank" rel="noopener" href="https://regex101.com/">regex101</a>，该网页还能解释给出的正则表达式非常智能.</p>
 <ul>
 <li><code>pattern = re.compile(pattern)</code>：编译正则表达式 <code>pattern</code>.</li>
-<li><code>pattern.search(string)</code>：在string中搜索 <code>pattern</code> 所包含的正则表达式.</li>
+<li><code>pattern.search(string)</code>：在 <code>string</code> 中搜索 <code>pattern</code> 所包含的第一个正则表达位置及长度.</li>
+<li><code>pattern.findall(string)</code>: 在 <code>string</code> 中搜索每一个 <code>pattern</code> 匹配得到的串.</li>
 </ul>
 <hr />
 <ul>
@@ -477,6 +478,20 @@ tmux a <span class="token parameter variable">-t</span> mywork<span aria-hidden=
 
     </div>
 </div>
+<h3 id="warning"><a class="markdownIt-Anchor" href="#warning"></a> warning</h3>
+<p>自定义 <code>warning</code> 信息，用于给出警告，但是默认的 <code>warning</code> 输出信息非常丑陋，难以识别，在文件开头处加上以下代码</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> warnings
+<span class="token keyword">def</span> <span class="token function">custom_warning_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span> category<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> lineno<span class="token punctuation">,</span> <span class="token builtin">file</span><span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> line<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">'%s, line %s,\n%s\n\n'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>filename<span class="token punctuation">,</span> lineno<span class="token punctuation">,</span> message<span class="token punctuation">)</span>
+warnings<span class="token punctuation">.</span>formatwarning <span class="token operator">=</span> custom_warning_message<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>使用方法 <code>warnings.warn('警号信息')</code>，一个例子：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">warnings<span class="token punctuation">.</span>warn<span class="token punctuation">(</span>f"\
+Warning<span class="token punctuation">:</span> <span class="token punctuation">&#123;</span>self<span class="token punctuation">.</span>model_name<span class="token punctuation">&#125;</span>'s <span class="token punctuation">&#123;</span>self<span class="token punctuation">.</span>data_name<span class="token punctuation">&#125;</span> \
+dataset don<span class="token string">'t have '</span>epoch_sizes<span class="token punctuation">.</span>json' <span class="token builtin">file</span><span class="token punctuation">,</span> \
+default by <span class="token number">1</span>"<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>效果：（可以给出warning的文件路径、行号、warning信息）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/home/wty/Coding/GitHub/RL-framework/utils/logs_manager.py, line <span class="token number">366</span>,
+Warning: /home/wty/Coding/GitHub/RL-framework/logs/DQN-1<span class="token string">'s history-0002 dataset don'</span>t have <span class="token string">'epoch_sizes.json'</span> file, default by <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
 <h3 id="pathlib"><a class="markdownIt-Anchor" href="#pathlib"></a> pathlib</h3>
 <ul>
 <li>
