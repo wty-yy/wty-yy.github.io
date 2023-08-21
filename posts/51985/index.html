@@ -16,19 +16,19 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Ubuntu设置休眠选项 我的笔记本是Yoga14s，经常发现和上笔记本后进入待机模式耗电非常高，而且启动速度很慢，考虑使用休眠模式代替。休眠模式主要思路是将内存中的数据保存到磁盘上的一个叫交换空间“swap area”的位置，然后关闭电脑，下次启动就从交换空间中提取数据到内存中启动; 而待机模式是保证对内存的供电，仍然耗电。  1. 关闭Secure Boot 关键：首先要在BIOS中(按F1">
+    <meta name="description" content="Ubuntu设置休眠选项 我的笔记本是Yoga14s，经常发现和上笔记本后进入待机模式耗电非常高，而且启动速度很慢，考虑使用休眠模式代替。休眠模式主要思路是将内存中的数据保存到磁盘上的一个叫交换空间“swap area”的位置，然后关闭电脑，下次启动就从交换空间中提取数据到内存中启动; 而待机模式是保证对内存的供电，仍然耗电。 由于默认的Ubuntu安装系统方式只会自动分配2Gb的swap空间，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Ubuntu 22.04 设置休眠选项">
 <meta property="og:url" content="https://wty-yy.github.io/posts/51985/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="Ubuntu设置休眠选项 我的笔记本是Yoga14s，经常发现和上笔记本后进入待机模式耗电非常高，而且启动速度很慢，考虑使用休眠模式代替。休眠模式主要思路是将内存中的数据保存到磁盘上的一个叫交换空间“swap area”的位置，然后关闭电脑，下次启动就从交换空间中提取数据到内存中启动; 而待机模式是保证对内存的供电，仍然耗电。  1. 关闭Secure Boot 关键：首先要在BIOS中(按F1">
+<meta property="og:description" content="Ubuntu设置休眠选项 我的笔记本是Yoga14s，经常发现和上笔记本后进入待机模式耗电非常高，而且启动速度很慢，考虑使用休眠模式代替。休眠模式主要思路是将内存中的数据保存到磁盘上的一个叫交换空间“swap area”的位置，然后关闭电脑，下次启动就从交换空间中提取数据到内存中启动; 而待机模式是保证对内存的供电，仍然耗电。 由于默认的Ubuntu安装系统方式只会自动分配2Gb的swap空间，">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/swapfile%E7%A3%81%E7%9B%98%E5%81%8F%E7%A7%BB%E9%87%8F.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E5%86%85%E6%A0%B8%E9%85%8D%E7%BD%AEswap%E7%A9%BA%E9%97%B4%E4%BD%8D%E7%BD%AE.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E4%BC%91%E7%9C%A0%E9%80%89%E9%A1%B9.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%92%8C%E7%9B%96%E4%BC%91%E7%9C%A0.png">
 <meta property="article:published_time" content="2023-04-04T06:51:25.000Z">
-<meta property="article:modified_time" content="2023-04-04T09:18:43.846Z">
+<meta property="article:modified_time" content="2023-08-21T15:42:06.509Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/swapfile%E7%A3%81%E7%9B%98%E5%81%8F%E7%A7%BB%E9%87%8F.png">
@@ -298,7 +298,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.6k 字
+          2.7k 字
         
       </span>
     
@@ -309,7 +309,7 @@
         
         
         
-          22 分钟
+          23 分钟
         
       </span>
     
@@ -353,6 +353,7 @@
                 
                 <h2 id="ubuntu设置休眠选项"><a class="markdownIt-Anchor" href="#ubuntu设置休眠选项"></a> Ubuntu设置休眠选项</h2>
 <p>我的笔记本是Yoga14s，经常发现和上笔记本后进入待机模式耗电非常高，而且启动速度很慢，考虑使用休眠模式代替。休眠模式主要思路是将内存中的数据保存到磁盘上的一个叫交换空间“swap area”的位置，然后关闭电脑，下次启动就从交换空间中提取数据到内存中启动; 而待机模式是保证对内存的供电，仍然耗电。</p>
+<p>由于默认的Ubuntu安装系统方式只会自动分配2Gb的swap空间，远小于内存空间，所以下面方法是对于swap空间不够时的解决方法，如果你在安装系统时已经将swap空间大于内存，那么可以直接参考这篇 <a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1240123/how-to-enable-the-hibernate-option-in-ubuntu-20-04">How to enable the hibernate option in Ubuntu 20.04?</a></p>
 <h3 id="1-关闭secure-boot"><a class="markdownIt-Anchor" href="#1-关闭secure-boot"></a> 1. 关闭Secure Boot</h3>
 <p><strong>关键</strong>：首先要在BIOS中(按F12进入)找到安全启动(Secure Boot)，将其关闭（参考<a target="_blank" rel="noopener" href="https://askubuntu.com/a/1241902">How to enable the hibernate option in Ubuntu 20.04?</a>第一个回答中的评论），然后执行 <code>cat /sys/power/state</code>，应该会返回 <code>freeze mem disk</code>，这样就可以了。</p>
 <p>接下来参考 <a target="_blank" rel="noopener" href="https://ubuntuhandbook.org/index.php/2021/08/enable-hibernate-ubuntu-21-10/">How to Enable Hibernate Function in Ubuntu 22.04 LTS</a> 的方法：</p>
