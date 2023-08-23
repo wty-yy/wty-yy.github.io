@@ -16,22 +16,22 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Jax note  As accelerated Numpy 首先Jax有类似 numpy 的函数库，API使用基本一致： import jax.numpy as jnp x &#x3D; jnp.aranga(int(1e8)) %timeit jnp.dot(x, x)  # 比 np.dot() 要快, gpu上更快  First Transformation grad 和数学中求导一致，Jax可以">
+    <meta name="description" content="As accelerated Numpy 首先Jax有类似 numpy 的函数库，API使用基本一致： import jax.numpy as jnp x &#x3D; jnp.aranga(int(1e8)) %timeit jnp.dot(x, x)  # 比 np.dot() 要快, gpu上更快  First Transformation grad 和数学中求导一致，Jax可以自动对Python中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Jax学习笔记">
+<meta property="og:title" content="Jax+Flax+Optax 学习笔记">
 <meta property="og:url" content="https://wty-yy.github.io/posts/8349/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="Jax note  As accelerated Numpy 首先Jax有类似 numpy 的函数库，API使用基本一致： import jax.numpy as jnp x &#x3D; jnp.aranga(int(1e8)) %timeit jnp.dot(x, x)  # 比 np.dot() 要快, gpu上更快  First Transformation grad 和数学中求导一致，Jax可以">
+<meta property="og:description" content="As accelerated Numpy 首先Jax有类似 numpy 的函数库，API使用基本一致： import jax.numpy as jnp x &#x3D; jnp.aranga(int(1e8)) %timeit jnp.dot(x, x)  # 比 np.dot() 要快, gpu上更快  First Transformation grad 和数学中求导一致，Jax可以自动对Python中">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-08-21T15:38:24.000Z">
-<meta property="article:modified_time" content="2023-08-21T15:42:38.093Z">
+<meta property="article:modified_time" content="2023-08-23T02:14:54.952Z">
 <meta property="article:author" content="wty">
 <meta property="article:tag" content="Jax">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Jax学习笔记 - wty&#39;s blog</title>
+  <title>Jax+Flax+Optax 学习笔记 - wty&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -271,7 +271,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Jax学习笔记"></span>
+            <span id="subtitle" data-typed-text="Jax+Flax+Optax 学习笔记"></span>
           
         </div>
 
@@ -305,7 +305,7 @@
         
         
         
-          123 分钟
+          128 分钟
         
       </span>
     
@@ -342,13 +342,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Jax学习笔记</h1>
+            <h1 id="seo-header">Jax+Flax+Optax 学习笔记</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="jax-note"><a class="markdownIt-Anchor" href="#jax-note"></a> Jax note</h1>
-<h2 id="as-accelerated-numpy"><a class="markdownIt-Anchor" href="#as-accelerated-numpy"></a> As accelerated Numpy</h2>
+                <h2 id="as-accelerated-numpy"><a class="markdownIt-Anchor" href="#as-accelerated-numpy"></a> As accelerated Numpy</h2>
 <p>首先Jax有类似 <code>numpy</code> 的函数库，API使用基本一致：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> jax<span class="token punctuation">.</span>numpy <span class="token keyword">as</span> jnp
 x <span class="token operator">=</span> jnp<span class="token punctuation">.</span>aranga<span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">1e8</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -787,6 +786,25 @@ Epoch 2/3
 1875/1875 [==============================] - 5s 3ms/step - loss: 0.1009 - acc: 0.9696 - val_loss: 0.1117 - val_acc: 0.9654
 Epoch 3/3
 1875/1875 [==============================] - 5s 3ms/step - loss: 0.0667 - acc: 0.9793 - val_loss: 0.1513 - val_acc: 0.9543<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="利用tensorboar和wandb可视化训练过程"><a class="markdownIt-Anchor" href="#利用tensorboar和wandb可视化训练过程"></a> 利用tensorboar和wandb可视化训练过程</h2>
+<p>这里利用 <code>tensorboardX</code> 在 <code>tensorboard</code> 上进行图像绘制，并利用 <code>wandb</code> 的云存储功能记录训练结果，并且有更好的效果图，<code>tensorboardX</code> 和 <code>wandb</code> 配合的使用方法如下：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> tensorboardX <span class="token keyword">import</span> SummaryWriter
+<span class="token keyword">import</span> wandb
+
+wandb<span class="token punctuation">.</span>init<span class="token punctuation">(</span>
+    project<span class="token operator">=</span><span class="token string">"project_name"</span><span class="token punctuation">,</span>  <span class="token comment"># 项目名称</span>
+    sync_tensorboard<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>  <span class="token comment"># 同步当前tenorboard</span>
+    config<span class="token operator">=</span><span class="token builtin">dict</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># args为当前参数字典，记录当前训练的全部参数配置（会显示在info界面上）</span>
+    name<span class="token operator">=</span><span class="token string">"run_name"</span><span class="token punctuation">,</span>  <span class="token comment"># 当前实验名称</span>
+    save_code<span class="token operator">=</span><span class="token boolean">True</span>  <span class="token comment"># 保存当前代码，可以在网页中查看</span>
+<span class="token punctuation">)</span>
+writer <span class="token operator">=</span> SummaryWriter<span class="token punctuation">(</span><span class="token string">"log_save_path"</span><span class="token punctuation">)</span>  <span class="token comment"># 用SummaryWriter创建实例，并确定日志保存目录</span>
+writer<span class="token punctuation">.</span>add_text<span class="token punctuation">(</span><span class="token string">"text_name"</span><span class="token punctuation">,</span> <span class="token string">"text_content"</span><span class="token punctuation">)</span>  <span class="token comment"># 添加文本</span>
+<span class="token keyword">for</span> epoch <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span>total_epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># training... 完成后记录参数</span>
+	writer<span class="token punctuation">.</span>add_scalar<span class="token punctuation">(</span><span class="token string">"metrics/loss"</span><span class="token punctuation">,</span> value<span class="token punctuation">,</span> global_step<span class="token punctuation">)</span>  <span class="token comment"># 在metrics分类中的名称为loss图像中设置第global_step对应的值为value</span>
+writer<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 完成全部记录后关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>训练曲线图：<a target="_blank" rel="noopener" href="https://wandb.ai/wty-yy/wandb_test/runs/nists3jd/workspace">wanb - mnist_test__42__20230822_175254</a>，<a target="_blank" rel="noopener" href="https://wandb.ai/wty-yy/wandb_test/runs/nists3jd/code">完整代码</a></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
@@ -839,7 +857,7 @@ Epoch 3/3
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Jax学习笔记</div>
+      <div>Jax+Flax+Optax 学习笔记</div>
       <div>https://wty-yy.github.io/posts/8349/</div>
     </div>
     <div class="license-meta">
@@ -883,6 +901,12 @@ Epoch 3/3
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/posts/56847/" title="Jax+Flax+Optax 常用API">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Jax+Flax+Optax 常用API</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
