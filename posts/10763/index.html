@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wty-yy.github.io/figures/RL/SAC/SAC_rewards.jpg">
 <meta property="article:published_time" content="2023-09-05T12:15:35.000Z">
-<meta property="article:modified_time" content="2023-09-06T11:58:53.281Z">
+<meta property="article:modified_time" content="2023-09-07T02:35:10.545Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/RL/SAC/SAC_rewards.jpg">
@@ -306,7 +306,7 @@
         
         
         
-          88 分钟
+          89 分钟
         
       </span>
     
@@ -452,7 +452,8 @@ s.t.&amp;\quad\  \mathbb{E}_{\rho_{\pi}}[\mathcal{H}(\pi(\cdot|s_t)]\geqslant \b
 <p>我的强化学习框架KataRL中用JAX完成了SAC的实现<a target="_blank" rel="noopener" href="https://github.com/wty-yy/KataRL/blob/master/katarl/agents/sac_jax.py">核心代码 sac_jax.py</a>，使用方法：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">python katarl/run/sac/sac.py <span class="token parameter variable">--train</span> --wandb-track <span class="token parameter variable">--seed</span> <span class="token variable">$i</span>
 python katarl/run/sac/sac.py <span class="token parameter variable">--train</span> --wandb-track <span class="token parameter variable">--seed</span> <span class="token variable">$i</span> --env-name Acrobot-v1 --flag-autotune-alpha no<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
-<p>训练效果可以见wandb的<a target="_blank" rel="noopener" href="https://wandb.ai/wty-yy/KataRL/reports/Algorithms-compare--Vmlldzo1MjY2MzIz">报告</a>，看得出来SAC只能勉强和DDQN打平手，最终稳定性较优。</p>
+<p>训练效果可以见wandb的<a target="_blank" rel="noopener" href="https://api.wandb.ai/links/wty-yy/4f1r6xav">报告</a>，看得出来SAC只能勉强在Cartpole-v1上和DDQN打平手，最终稳定性较优；但在Acrobot-v1上效果极差，调参也难以解决。</p>
+<p>主要的超参数为目标信息熵大小 <span class='katex-error' title='ParseError: KaTeX parse error: Undefined control sequence: \bat at position 1: \̲b̲a̲t̲{\mathcal{H}}'>\bat{\mathcal{H}}</span>，该模型对该参数的敏感度极高，或者可以不自动调整 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span>，固定 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">\alpha = 0.2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">2</span></span></span></span>。</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
