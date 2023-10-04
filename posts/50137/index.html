@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv3/yolov3-network.jpg">
 <meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv3/ResNet50_and_DarkNet53.png">
 <meta property="article:published_time" content="2023-10-04T02:06:33.000Z">
-<meta property="article:modified_time" content="2023-10-04T08:14:09.618Z">
+<meta property="article:modified_time" content="2023-10-04T08:25:47.409Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv3/test_build_dataset.jpg">
@@ -297,7 +297,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9.9k 字
+          10k 字
         
       </span>
     
@@ -308,7 +308,7 @@
         
         
         
-          83 分钟
+          84 分钟
         
       </span>
     
@@ -356,7 +356,7 @@
 全部代码，自己用JAX+Flax+Optax实现，仅在数据读入处使用TensorFlow，从零开始实现YOLOv3，包括模型预训练和全模型训练：<a target="_blank" rel="noopener" href="https://github.com/wty-yy/KataCV/blob/master/katacv/yolov3/">GitHub - KataCV/yolov3</a></p>
 </blockquote>
 <h2 id="yolov2-yolov3"><a class="markdownIt-Anchor" href="#yolov2-yolov3"></a> YOLOv2, YOLOv3</h2>
-<p>在YOLOv2的基础上对YOLOv1进行了非常多细节上的改动，而YOLOv3则对网络架构进一步改进（Gauss金字塔），从而得到性能极强的YOLOv3。同时它的识别速度极快，我在JAX上进行复现，对视频文件进行处理过程中发现，模型的识别速度竟然有447fps，最终剪辑速度为92fps（被视频读取速度所限制）。</p>
+<p>在YOLOv2的基础上对YOLOv1进行了非常多细节上的改动，而YOLOv3则对网络架构进一步改进（Gauss金字塔），从而得到性能极强的YOLOv3。同时它的识别速度极快，我在JAX上进行复现，对视频文件进行处理过程中发现，模型的识别速度竟然有447fps，最终剪辑速度为92fps（被视频读取速度所限制，GPU为RTX4080），在CPU上的识别速度只有4fps（CPU为R7 4800U）。</p>
 <p>值得一提的是YOLOv3是YOLO发明者Joseph Redmon目前所发表的最后一篇论文（2018/04/08），在这篇论文的最后一段讲述了其原因在于：当前的目标识别技术被商业化用于捕捉客户的隐私数据、被军方投入武器使用当中。这使得作者放弃了对YOLO系列的进一步改进，不过后续也有很多版本，当前已更新到YOLOv8，不过只有YOLOv4是学术研究，后面所有的版本均带有公司版权以商业化作为目的（例如YOLOv5是美团做的）无法直接使用。</p>
 <p>并且，通过学习YOLOv4，本质上其对YOLOv3的核心框架没有任何更改，只是对其进行了大量细节上的微调，同时保证速度不降的前提下，使得mAP提升了10%左右。所以如果想做YOLOv4，一定先要研究清楚YOLOv2和YOLOv3。</p>
 <p>下面我们逐步分析YOLOv2和YOLOv3中进行的改进。</p>
