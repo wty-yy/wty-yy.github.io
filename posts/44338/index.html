@@ -1,0 +1,2307 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="端到端的机器学习项目实例 《机器学习实战：基于Scikit-Learn，Keras和TensorFlow》中第二章内容，英文代码可参考github - handson-ml2&#x2F;02_end_to_end_machine_learning_project.ipynb 下面内容对应的Jupyter Notebook代码位于github：2.end_to_end_machine_learning_pr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《机器学习实战》第二章 端到端的机器学习项目">
+<meta property="og:url" content="https://wty-yy.github.io/posts/44338/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="端到端的机器学习项目实例 《机器学习实战：基于Scikit-Learn，Keras和TensorFlow》中第二章内容，英文代码可参考github - handson-ml2&#x2F;02_end_to_end_machine_learning_project.ipynb 下面内容对应的Jupyter Notebook代码位于github：2.end_to_end_machine_learning_pr">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/31/pS96tit.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/31/pS96GdA.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/31/pS96JII.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/31/pS96NJP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/31/pS96URf.png">
+<meta property="og:image" content="https://s1.ax1x.com/2023/01/01/pSCWpLT.png">
+<meta property="article:published_time" content="2022-12-31T08:06:06.000Z">
+<meta property="article:modified_time" content="2024-02-12T09:43:15.368Z">
+<meta property="article:author" content="wty">
+<meta property="article:tag" content="scikit-learn">
+<meta property="article:tag" content="pandas">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/12/31/pS96tit.png">
+  
+  
+  
+  <title>《机器学习实战》第二章 端到端的机器学习项目 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="《机器学习实战》第二章 端到端的机器学习项目"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-31 16:06" pubdate>
+          2022年12月31日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          43 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">《机器学习实战》第二章 端到端的机器学习项目</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="端到端的机器学习项目实例"><a class="markdownIt-Anchor" href="#端到端的机器学习项目实例"></a> 端到端的机器学习项目实例</h1>
+<p>《机器学习实战：基于Scikit-Learn，Keras和TensorFlow》中第二章内容，英文代码可参考<a target="_blank" rel="noopener" href="https://github.com/ageron/handson-ml2/blob/master/02_end_to_end_machine_learning_project.ipynb">github - handson-ml2/02_end_to_end_machine_learning_project.ipynb</a></p>
+<p>下面内容对应的Jupyter Notebook代码位于github：<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ml-scikit-keras-tf2/blob/main/2.end_to_end_machine_learning_project.ipynb">2.end_to_end_machine_learning_project.ipynb</a></p>
+<h2 id="数据集预处理"><a class="markdownIt-Anchor" href="#数据集预处理"></a> 数据集预处理</h2>
+<p>数据集下载位置：<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/ageron/handson-ml2/master/datasets/housing/housing.tgz">https://raw.githubusercontent.com/ageron/handson-ml2/master/datasets/housing/housing.tgz</a></p>
+<p>将 <code>housing.tgz</code> 文件放到 <code>./datasets/housing</code> 下.</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
+<span class="token keyword">import</span> tarfile
+
+DATASETS_ROOT <span class="token operator">=</span> <span class="token string">r"https://raw.githubusercontent.com/ageron/handson-ml2/master/datasets"</span>
+HOUSING_PATH <span class="token operator">=</span> Path<span class="token punctuation">.</span>cwd<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>joinpath<span class="token punctuation">(</span><span class="token string">'./datasets/housing'</span><span class="token punctuation">)</span>
+HOUSING_URL <span class="token operator">=</span> DATASETS_ROOT <span class="token operator">+</span> <span class="token string">"/housing/housing.tgz"</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'数据集路径:'</span><span class="token punctuation">,</span> HOUSING_PATH<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">fetch_housing_data</span><span class="token punctuation">(</span>url<span class="token operator">=</span>HOUSING_URL<span class="token punctuation">,</span> path<span class="token operator">=</span>HOUSING_PATH<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    path<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>  <span class="token comment"># 创建本地目录</span>
+    save_path <span class="token operator">=</span> path<span class="token punctuation">.</span>joinpath<span class="token punctuation">(</span><span class="token string">'housing.tgz'</span><span class="token punctuation">)</span>  <span class="token comment"># 保存路径</span>
+    housing_tgz <span class="token operator">=</span> tarfile<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>save_path<span class="token punctuation">)</span>
+    housing_tgz<span class="token punctuation">.</span>extractall<span class="token punctuation">(</span>path<span class="token operator">=</span>path<span class="token punctuation">)</span>
+    housing_tgz<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    
+fetch_housing_data<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">数据集路径: D:\yy\DeepLearning\ml-scikit-keras-tf2\datasets\housing
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">load_housing_data</span><span class="token punctuation">(</span>path<span class="token operator">=</span>HOUSING_PATH<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    csv_path <span class="token operator">=</span> path<span class="token punctuation">.</span>joinpath<span class="token punctuation">(</span><span class="token string">'housing.csv'</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span>csv_path<span class="token punctuation">)</span>
+
+df <span class="token operator">=</span> load_housing_data<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>median_house_value</th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-122.23</td>
+      <td>37.88</td>
+      <td>41.0</td>
+      <td>880.0</td>
+      <td>129.0</td>
+      <td>322.0</td>
+      <td>126.0</td>
+      <td>8.3252</td>
+      <td>452600.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-122.22</td>
+      <td>37.86</td>
+      <td>21.0</td>
+      <td>7099.0</td>
+      <td>1106.0</td>
+      <td>2401.0</td>
+      <td>1138.0</td>
+      <td>8.3014</td>
+      <td>358500.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-122.24</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1467.0</td>
+      <td>190.0</td>
+      <td>496.0</td>
+      <td>177.0</td>
+      <td>7.2574</td>
+      <td>352100.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1274.0</td>
+      <td>235.0</td>
+      <td>558.0</td>
+      <td>219.0</td>
+      <td>5.6431</td>
+      <td>341300.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1627.0</td>
+      <td>280.0</td>
+      <td>565.0</td>
+      <td>259.0</td>
+      <td>3.8462</td>
+      <td>342200.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+  </tbody>
+</table>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 20640 entries, 0 to 20639
+Data columns (total 10 columns):
+ #   Column              Non-Null Count  Dtype  
+---  ------              --------------  -----  
+ 0   longitude           20640 non-null  float64
+ 1   latitude            20640 non-null  float64
+ 2   housing_median_age  20640 non-null  float64
+ 3   total_rooms         20640 non-null  float64
+ 4   total_bedrooms      20433 non-null  float64
+ 5   population          20640 non-null  float64
+ 6   households          20640 non-null  float64
+ 7   median_income       20640 non-null  float64
+ 8   median_house_value  20640 non-null  float64
+ 9   ocean_proximity     20640 non-null  object 
+dtypes: float64(9), object(1)
+memory usage: 1.6+ MB
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df<span class="token punctuation">[</span><span class="token string">'ocean_proximity'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>value_counts<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">&lt;1H OCEAN     9136
+INLAND        6551
+NEAR OCEAN    2658
+NEAR BAY      2290
+ISLAND           5
+Name: ocean_proximity, dtype: int64
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df<span class="token punctuation">.</span>describe<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>median_house_value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20433.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>-119.569704</td>
+      <td>35.631861</td>
+      <td>28.639486</td>
+      <td>2635.763081</td>
+      <td>537.870553</td>
+      <td>1425.476744</td>
+      <td>499.539680</td>
+      <td>3.870671</td>
+      <td>206855.816909</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>2.003532</td>
+      <td>2.135952</td>
+      <td>12.585558</td>
+      <td>2181.615252</td>
+      <td>421.385070</td>
+      <td>1132.462122</td>
+      <td>382.329753</td>
+      <td>1.899822</td>
+      <td>115395.615874</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>-124.350000</td>
+      <td>32.540000</td>
+      <td>1.000000</td>
+      <td>2.000000</td>
+      <td>1.000000</td>
+      <td>3.000000</td>
+      <td>1.000000</td>
+      <td>0.499900</td>
+      <td>14999.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>-121.800000</td>
+      <td>33.930000</td>
+      <td>18.000000</td>
+      <td>1447.750000</td>
+      <td>296.000000</td>
+      <td>787.000000</td>
+      <td>280.000000</td>
+      <td>2.563400</td>
+      <td>119600.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>-118.490000</td>
+      <td>34.260000</td>
+      <td>29.000000</td>
+      <td>2127.000000</td>
+      <td>435.000000</td>
+      <td>1166.000000</td>
+      <td>409.000000</td>
+      <td>3.534800</td>
+      <td>179700.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>-118.010000</td>
+      <td>37.710000</td>
+      <td>37.000000</td>
+      <td>3148.000000</td>
+      <td>647.000000</td>
+      <td>1725.000000</td>
+      <td>605.000000</td>
+      <td>4.743250</td>
+      <td>264725.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>-114.310000</td>
+      <td>41.950000</td>
+      <td>52.000000</td>
+      <td>39320.000000</td>
+      <td>6445.000000</td>
+      <td>35682.000000</td>
+      <td>6082.000000</td>
+      <td>15.000100</td>
+      <td>500001.000000</td>
+    </tr>
+  </tbody>
+</table>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>bins<span class="token operator">=</span><span class="token number">50</span><span class="token punctuation">,</span> figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">18</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p><img src="https://s1.ax1x.com/2022/12/31/pS96tit.png" srcset="/img/loading.gif" lazyload alt="每种数据柱状图" /></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>seed<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span>  <span class="token comment"># 固定初始随机种子</span>
+<span class="token keyword">def</span> <span class="token function">split_train_test</span><span class="token punctuation">(</span>df<span class="token punctuation">,</span> test_ratio<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    shuffled_indices <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>permutation<span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>df<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    test_size <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>df<span class="token punctuation">)</span> <span class="token operator">*</span> test_ratio<span class="token punctuation">)</span>
+    test_indices <span class="token operator">=</span> shuffled_indices<span class="token punctuation">[</span><span class="token punctuation">:</span>test_size<span class="token punctuation">]</span>
+    train_indices <span class="token operator">=</span> shuffled_indices<span class="token punctuation">[</span>test_size<span class="token punctuation">:</span><span class="token punctuation">]</span>
+    <span class="token keyword">return</span> df<span class="token punctuation">.</span>iloc<span class="token punctuation">[</span>train_indices<span class="token punctuation">]</span><span class="token punctuation">,</span> df<span class="token punctuation">.</span>iloc<span class="token punctuation">[</span>test_indices<span class="token punctuation">]</span>
+
+train_df<span class="token punctuation">,</span> test_df <span class="token operator">=</span> split_train_test<span class="token punctuation">(</span>df<span class="token punctuation">,</span> <span class="token number">0.2</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'训练集大小:'</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>train_df<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'测试集大小:'</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>test_df<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">训练集大小: 16512 测试集大小: 4128
+</code></pre></div></figure>
+<h3 id="两种划分训练集与测试集的方法"><a class="markdownIt-Anchor" href="#两种划分训练集与测试集的方法"></a> 两种划分训练集与测试集的方法</h3>
+<ol>
+<li>
+<p>使用上述方式，确定随机种子后，可以保证对于同一数据集的随机结果保持相同，但缺点是如果加入新的数据，划分出的训练集与测试集内容可能完全不同.</p>
+</li>
+<li>
+<p>利用每个样本的Hash值，作为划分标准，一个样本的Hash值需要是该样本的唯一标识符，例如：“索引”，“房产的经纬度”</p>
+</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 利用Hash值进行划分</span>
+<span class="token keyword">from</span> zlib <span class="token keyword">import</span> crc32
+
+<span class="token keyword">def</span> <span class="token function">test_check</span><span class="token punctuation">(</span>identifier<span class="token punctuation">,</span> test_ratio<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> crc32<span class="token punctuation">(</span>np<span class="token punctuation">.</span>int64<span class="token punctuation">(</span>identifier<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xffffffff</span> <span class="token operator">&lt;</span> test_ratio <span class="token operator">*</span> <span class="token number">2</span><span class="token operator">**</span><span class="token number">32</span>  <span class="token comment"># 左侧为使用crc32计算出的Hash值</span>
+
+<span class="token keyword">def</span> <span class="token function">split_train_test_by_hash</span><span class="token punctuation">(</span>df<span class="token punctuation">,</span> test_ratio<span class="token punctuation">,</span> id_column<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    ids <span class="token operator">=</span> df<span class="token punctuation">[</span>id_column<span class="token punctuation">]</span>
+    is_test <span class="token operator">=</span> ids<span class="token punctuation">.</span><span class="token builtin">apply</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> id_<span class="token punctuation">:</span> test_check<span class="token punctuation">(</span>id_<span class="token punctuation">,</span> test_ratio<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> df<span class="token punctuation">.</span>loc<span class="token punctuation">[</span><span class="token operator">~</span>is_test<span class="token punctuation">]</span><span class="token punctuation">,</span> df<span class="token punctuation">.</span>loc<span class="token punctuation">[</span>is_test<span class="token punctuation">]</span>
+
+df_idx <span class="token operator">=</span> df<span class="token punctuation">.</span>reset_index<span class="token punctuation">(</span><span class="token punctuation">)</span>
+train<span class="token punctuation">,</span> test <span class="token operator">=</span> split_train_test_by_hash<span class="token punctuation">(</span>df_idx<span class="token punctuation">,</span> <span class="token number">0.2</span><span class="token punctuation">,</span> <span class="token string">'index'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'训练集大小:'</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>train_df<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'测试集大小:'</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>test_df<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">训练集大小: 16512 测试集大小: 4128
+</code></pre></div></figure>
+<h3 id="使用scikit-learn中的方法对数据进行划分"><a class="markdownIt-Anchor" href="#使用scikit-learn中的方法对数据进行划分"></a> 使用Scikit-Learn中的方法对数据进行划分</h3>
+<ol>
+<li>
+<p>设定随机种子进行均匀划分，<code>train_test_split(df, test_size=0.2, random_state=42)</code>：df为数据集，test_size为测试集比例，random_state为随机种子.</p>
+</li>
+<li>
+<p>分层划分数据集，由于测试集需要代表整个数据集的整体信息，首先对数据特征进行层划分，在每一层中，我们希望都要有足够的信息来表示这种类别，表示该层的重要程度.</p>
+</li>
+</ol>
+<p>首先利用 <code>pd.cut()</code> 对层进行划分，例如划分为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>1.5</mn><mo separator="true">,</mo><mn>3</mn><mo separator="true">,</mo><mn>4.5</mn><mo separator="true">,</mo><mn>6</mn><mo separator="true">,</mo><mi mathvariant="normal">∞</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0, 1.5, 3, 4.5, 6, \infty]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mord">.</span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">4</span><span class="mord">.</span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">6</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">∞</span><span class="mclose">]</span></span></span></span> 这样 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn></mrow><annotation encoding="application/x-tex">5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span></span></span></span> 段.</p>
+<p>再使用Scikit中的api函数实例化划分模型 <code>split=StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)</code>：<code>n_splits</code> 表示划分的总数据集个数，<code>test_size</code> 为测试集占比，<code>random_state</code> 表示随机种子.</p>
+<p>最后通过迭代方式生成训练集与测试集：<code>train_idx, test_idx = next(split.split(df, df['income_cat']))</code>（由于只生成一个数据集，所以可以直接用next获取第一个迭代结果）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
+
+train<span class="token punctuation">,</span> test <span class="token operator">=</span> train_test_split<span class="token punctuation">(</span>df<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'训练集大小:'</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>train_df<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'测试集大小:'</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>test_df<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">训练集大小: 16512 测试集大小: 4128
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df<span class="token punctuation">[</span><span class="token string">'income_cat'</span><span class="token punctuation">]</span> <span class="token operator">=</span> pd<span class="token punctuation">.</span>cut<span class="token punctuation">(</span>df<span class="token punctuation">[</span><span class="token string">'median_income'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0.</span><span class="token punctuation">,</span> <span class="token number">1.5</span><span class="token punctuation">,</span> <span class="token number">3.</span><span class="token punctuation">,</span> <span class="token number">4.5</span><span class="token punctuation">,</span> <span class="token number">6.</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>inf<span class="token punctuation">]</span><span class="token punctuation">,</span> labels<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+df<span class="token punctuation">[</span><span class="token string">'income_cat'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>hist<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="https://s1.ax1x.com/2022/12/31/pS96GdA.png" srcset="/img/loading.gif" lazyload alt="png" /></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> StratifiedShuffleSplit
+
+split <span class="token operator">=</span> StratifiedShuffleSplit<span class="token punctuation">(</span>n_splits<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span>
+<span class="token comment"># for train_idx, test_idx in split.split(df, df['income_cat']):</span>
+train_idx<span class="token punctuation">,</span> test_idx <span class="token operator">=</span> <span class="token builtin">next</span><span class="token punctuation">(</span>split<span class="token punctuation">.</span>split<span class="token punctuation">(</span>df<span class="token punctuation">,</span> df<span class="token punctuation">[</span><span class="token string">'income_cat'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+strat_train <span class="token operator">=</span> df<span class="token punctuation">.</span>loc<span class="token punctuation">[</span>train_idx<span class="token punctuation">]</span>
+strat_test <span class="token operator">=</span> df<span class="token punctuation">.</span>loc<span class="token punctuation">[</span>test_idx<span class="token punctuation">]</span>
+
+strat_income_ratio <span class="token operator">=</span> strat_test<span class="token punctuation">[</span><span class="token string">'income_cat'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>value_counts<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token builtin">len</span><span class="token punctuation">(</span>strat_test<span class="token punctuation">)</span>
+base_income_ratio <span class="token operator">=</span> df<span class="token punctuation">[</span><span class="token string">'income_cat'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>value_counts<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token builtin">len</span><span class="token punctuation">(</span>df<span class="token punctuation">)</span>
+test_income_cate <span class="token operator">=</span> pd<span class="token punctuation">.</span>cut<span class="token punctuation">(</span>test<span class="token punctuation">[</span><span class="token string">'median_income'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0.</span><span class="token punctuation">,</span> <span class="token number">1.5</span><span class="token punctuation">,</span> <span class="token number">3.</span><span class="token punctuation">,</span> <span class="token number">4.5</span><span class="token punctuation">,</span> <span class="token number">6.</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>inf<span class="token punctuation">]</span><span class="token punctuation">,</span> labels<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+random_income_ratio <span class="token operator">=</span> test_income_cate<span class="token punctuation">.</span>value_counts<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token builtin">len</span><span class="token punctuation">(</span>test<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">calc_error</span><span class="token punctuation">(</span>base<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>x <span class="token operator">-</span> base<span class="token punctuation">)</span> <span class="token operator">/</span> base <span class="token operator">*</span> <span class="token number">100</span>
+diff_test_sample <span class="token operator">=</span> pd<span class="token punctuation">.</span>concat<span class="token punctuation">(</span><span class="token punctuation">[</span>base_income_ratio<span class="token punctuation">,</span> strat_income_ratio<span class="token punctuation">,</span> random_income_ratio<span class="token punctuation">,</span>
+                              calc_error<span class="token punctuation">(</span>base_income_ratio<span class="token punctuation">,</span> strat_income_ratio<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                              calc_error<span class="token punctuation">(</span>base_income_ratio<span class="token punctuation">,</span> random_income_ratio<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+diff_test_sample<span class="token punctuation">.</span>columns <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'Overall'</span><span class="token punctuation">,</span> <span class="token string">'Stratified'</span><span class="token punctuation">,</span> <span class="token string">'Random'</span><span class="token punctuation">,</span> <span class="token string">'Strated error %'</span><span class="token punctuation">,</span> <span class="token string">'Random error %'</span><span class="token punctuation">]</span>
+diff_test_sample <span class="token operator">=</span> diff_test_sample<span class="token punctuation">.</span>sort_index<span class="token punctuation">(</span><span class="token punctuation">)</span>
+diff_test_sample<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Overall</th>
+      <th>Stratified</th>
+      <th>Random</th>
+      <th>Strated error %</th>
+      <th>Random error %</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>0.039826</td>
+      <td>0.039971</td>
+      <td>0.040213</td>
+      <td>0.364964</td>
+      <td>0.973236</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.318847</td>
+      <td>0.318798</td>
+      <td>0.324370</td>
+      <td>-0.015195</td>
+      <td>1.732260</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.350581</td>
+      <td>0.350533</td>
+      <td>0.358527</td>
+      <td>-0.013820</td>
+      <td>2.266446</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.176308</td>
+      <td>0.176357</td>
+      <td>0.167393</td>
+      <td>0.027480</td>
+      <td>-5.056334</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.114438</td>
+      <td>0.114341</td>
+      <td>0.109496</td>
+      <td>-0.084674</td>
+      <td>-4.318374</td>
+    </tr>
+  </tbody>
+</table>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 删除income_cat该列</span>
+<span class="token keyword">for</span> ds <span class="token keyword">in</span> <span class="token punctuation">(</span>strat_train<span class="token punctuation">,</span> strat_test<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    ds<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token string">'income_cat'</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> inplace<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="数据集可视化"><a class="markdownIt-Anchor" href="#数据集可视化"></a> 数据集可视化</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">config <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">"font.family"</span><span class="token punctuation">:</span> <span class="token string">'serif'</span><span class="token punctuation">,</span> <span class="token comment"># 衬线字体</span>
+    <span class="token string">"figure.figsize"</span><span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 图像大小</span>
+    <span class="token string">"font.size"</span><span class="token punctuation">:</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token comment"># 字号大小</span>
+    <span class="token string">"font.serif"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'SimSun'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment"># 宋体</span>
+    <span class="token string">"mathtext.fontset"</span><span class="token punctuation">:</span> <span class="token string">'stix'</span><span class="token punctuation">,</span> <span class="token comment"># 渲染数学公式字体</span>
+    <span class="token string">'axes.unicode_minus'</span><span class="token punctuation">:</span> <span class="token boolean">False</span> <span class="token comment"># 显示负号</span>
+<span class="token punctuation">&#125;</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">.</span>update<span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+
+df <span class="token operator">=</span> strat_train<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+df<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>kind<span class="token operator">=</span><span class="token string">'scatter'</span><span class="token punctuation">,</span> x<span class="token operator">=</span><span class="token string">'longitude'</span><span class="token punctuation">,</span> y<span class="token operator">=</span><span class="token string">'latitude'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">,</span> xlabel<span class="token operator">=</span><span class="token string">'经度'</span><span class="token punctuation">,</span> ylabel<span class="token operator">=</span><span class="token string">'纬度'</span><span class="token punctuation">,</span> figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="https://s1.ax1x.com/2022/12/31/pS96JII.png" srcset="/img/loading.gif" lazyload alt="房屋坐标图" /></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> matplotlib <span class="token keyword">as</span> mpl
+ax <span class="token operator">=</span> df<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>kind<span class="token operator">=</span><span class="token string">'scatter'</span><span class="token punctuation">,</span> x<span class="token operator">=</span><span class="token string">'longitude'</span><span class="token punctuation">,</span> y<span class="token operator">=</span><span class="token string">'latitude'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.4</span><span class="token punctuation">,</span>
+        s<span class="token operator">=</span>df<span class="token punctuation">[</span><span class="token string">'population'</span><span class="token punctuation">]</span><span class="token operator">/</span><span class="token number">100</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token string">'人口数'</span><span class="token punctuation">,</span> figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        c<span class="token operator">=</span><span class="token string">'median_house_value'</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'jet'</span><span class="token punctuation">,</span> colorbar<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span>
+        xlabel<span class="token operator">=</span><span class="token string">'经度'</span><span class="token punctuation">,</span> ylabel<span class="token operator">=</span><span class="token string">'纬度'</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>figure<span class="token punctuation">.</span>colorbar<span class="token punctuation">(</span>plt<span class="token punctuation">.</span>cm<span class="token punctuation">.</span>ScalarMappable<span class="token punctuation">(</span>
+    norm<span class="token operator">=</span>mpl<span class="token punctuation">.</span>colors<span class="token punctuation">.</span>Normalize<span class="token punctuation">(</span>vmin<span class="token operator">=</span>df<span class="token punctuation">[</span><span class="token string">'median_house_value'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">min</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vmax<span class="token operator">=</span>df<span class="token punctuation">[</span><span class="token string">'median_house_value'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'jet'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    label<span class="token operator">=</span><span class="token string">'房价中位数'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.4</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>legend<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="https://s1.ax1x.com/2022/12/31/pS96NJP.png" srcset="/img/loading.gif" lazyload alt="房价与人口的坐标图" /></p>
+<h3 id="数据相关性"><a class="markdownIt-Anchor" href="#数据相关性"></a> 数据相关性</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># Pearson's correlation coefficient</span>
+corr_matrix <span class="token operator">=</span> df<span class="token punctuation">.</span>corr<span class="token punctuation">(</span><span class="token punctuation">)</span>
+corr_matrix<span class="token punctuation">[</span><span class="token string">'median_house_value'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>sort_values<span class="token punctuation">(</span>ascending<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">median_house_value    1.000000
+median_income         0.687151
+total_rooms           0.135140
+housing_median_age    0.114146
+households            0.064590
+total_bedrooms        0.047781
+population           -0.026882
+longitude            -0.047466
+latitude             -0.142673
+Name: median_house_value, dtype: float64
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pandas<span class="token punctuation">.</span>plotting <span class="token keyword">import</span> scatter_matrix
+
+attributes <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'median_house_value'</span><span class="token punctuation">,</span> <span class="token string">'median_income'</span><span class="token punctuation">,</span> <span class="token string">'total_rooms'</span><span class="token punctuation">,</span> <span class="token string">'housing_median_age'</span><span class="token punctuation">]</span>
+scatter_matrix<span class="token punctuation">(</span>df<span class="token punctuation">[</span>attributes<span class="token punctuation">]</span><span class="token punctuation">,</span> figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="https://s1.ax1x.com/2022/12/31/pS96URf.png" srcset="/img/loading.gif" lazyload alt="散点图矩阵" /></p>
+<h3 id="数据清理"><a class="markdownIt-Anchor" href="#数据清理"></a> 数据清理</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df_x <span class="token operator">=</span> strat_train<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token string">'median_house_value'</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+df_y <span class="token operator">=</span> strat_train<span class="token punctuation">[</span><span class="token string">'median_house_value'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+df_x<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 16512 entries, 12655 to 19773
+Data columns (total 9 columns):
+ #   Column              Non-Null Count  Dtype  
+---  ------              --------------  -----  
+ 0   longitude           16512 non-null  float64
+ 1   latitude            16512 non-null  float64
+ 2   housing_median_age  16512 non-null  float64
+ 3   total_rooms         16512 non-null  float64
+ 4   total_bedrooms      16354 non-null  float64
+ 5   population          16512 non-null  float64
+ 6   households          16512 non-null  float64
+ 7   median_income       16512 non-null  float64
+ 8   ocean_proximity     16512 non-null  object 
+dtypes: float64(8), object(1)
+memory usage: 1.3+ MB
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df_x<span class="token punctuation">[</span>df_x<span class="token punctuation">[</span><span class="token string">'total_bedrooms'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>isna<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1606</th>
+      <td>-122.08</td>
+      <td>37.88</td>
+      <td>26.0</td>
+      <td>2947.0</td>
+      <td>NaN</td>
+      <td>825.0</td>
+      <td>626.0</td>
+      <td>2.9330</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <th>10915</th>
+      <td>-117.87</td>
+      <td>33.73</td>
+      <td>45.0</td>
+      <td>2264.0</td>
+      <td>NaN</td>
+      <td>1970.0</td>
+      <td>499.0</td>
+      <td>3.4193</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <th>19150</th>
+      <td>-122.70</td>
+      <td>38.35</td>
+      <td>14.0</td>
+      <td>2313.0</td>
+      <td>NaN</td>
+      <td>954.0</td>
+      <td>397.0</td>
+      <td>3.7813</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <th>4186</th>
+      <td>-118.23</td>
+      <td>34.13</td>
+      <td>48.0</td>
+      <td>1308.0</td>
+      <td>NaN</td>
+      <td>835.0</td>
+      <td>294.0</td>
+      <td>4.2891</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <th>16885</th>
+      <td>-122.40</td>
+      <td>37.58</td>
+      <td>26.0</td>
+      <td>3281.0</td>
+      <td>NaN</td>
+      <td>1145.0</td>
+      <td>480.0</td>
+      <td>6.3580</td>
+      <td>NEAR OCEAN</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1350</th>
+      <td>-121.95</td>
+      <td>38.03</td>
+      <td>5.0</td>
+      <td>5526.0</td>
+      <td>NaN</td>
+      <td>3207.0</td>
+      <td>1012.0</td>
+      <td>4.0767</td>
+      <td>INLAND</td>
+    </tr>
+    <tr>
+      <th>4691</th>
+      <td>-118.37</td>
+      <td>34.07</td>
+      <td>50.0</td>
+      <td>2519.0</td>
+      <td>NaN</td>
+      <td>1117.0</td>
+      <td>516.0</td>
+      <td>4.3667</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <th>9149</th>
+      <td>-118.50</td>
+      <td>34.46</td>
+      <td>17.0</td>
+      <td>10267.0</td>
+      <td>NaN</td>
+      <td>4956.0</td>
+      <td>1483.0</td>
+      <td>5.5061</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <th>16757</th>
+      <td>-122.48</td>
+      <td>37.70</td>
+      <td>33.0</td>
+      <td>4492.0</td>
+      <td>NaN</td>
+      <td>3477.0</td>
+      <td>1537.0</td>
+      <td>3.0546</td>
+      <td>NEAR OCEAN</td>
+    </tr>
+    <tr>
+      <th>13336</th>
+      <td>-117.67</td>
+      <td>34.04</td>
+      <td>13.0</td>
+      <td>1543.0</td>
+      <td>NaN</td>
+      <td>776.0</td>
+      <td>358.0</td>
+      <td>3.0598</td>
+      <td>INLAND</td>
+    </tr>
+  </tbody>
+</table>
+<p>158 rows × 9 columns</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df_x<span class="token punctuation">.</span>fillna<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>loc<span class="token punctuation">[</span><span class="token number">1606</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">longitude              -122.08
+latitude                 37.88
+housing_median_age        26.0
+total_rooms             2947.0
+total_bedrooms             0.0
+population               825.0
+households               626.0
+median_income            2.933
+ocean_proximity       NEAR BAY
+Name: 1606, dtype: object
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 使用Scikit-Learn中的填补方式</span>
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>impute <span class="token keyword">import</span> SimpleImputer
+imputer <span class="token operator">=</span> SimpleImputer<span class="token punctuation">(</span>strategy<span class="token operator">=</span><span class="token string">'median'</span><span class="token punctuation">)</span>  <span class="token comment"># 利用每列的中位数进行填补</span>
+df_num <span class="token operator">=</span> df_x<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token string">'ocean_proximity'</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+train_x <span class="token operator">=</span> imputer<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>df_num<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>preprocessing <span class="token keyword">import</span> OrdinalEncoder
+ordinal_encoder <span class="token operator">=</span> OrdinalEncoder<span class="token punctuation">(</span><span class="token punctuation">)</span>
+df_cat_encoded <span class="token operator">=</span> ordinal_encoder<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>df_cat<span class="token punctuation">)</span>
+df_cat_encoded<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">10</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">array([[1.],
+       [4.],
+       [1.],
+       [4.],
+       [0.],
+       [3.],
+       [0.],
+       [0.],
+       [0.],
+       [0.]])
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>preprocessing <span class="token keyword">import</span> OneHotEncoder
+onehot_encoder <span class="token operator">=</span> OneHotEncoder<span class="token punctuation">(</span><span class="token punctuation">)</span>
+df_cat_onehot <span class="token operator">=</span> onehot_encoder<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>df_cat<span class="token punctuation">)</span>
+df_cat_onehot<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">.</span>toarray<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">array([[0., 1., 0., 0., 0.],
+       [0., 0., 0., 0., 1.],
+       [0., 1., 0., 0., 0.],
+       [0., 0., 0., 0., 1.],
+       [1., 0., 0., 0., 0.],
+       [0., 0., 0., 1., 0.],
+       [1., 0., 0., 0., 0.],
+       [1., 0., 0., 0., 0.],
+       [1., 0., 0., 0., 0.],
+       [1., 0., 0., 0., 0.]])
+</code></pre></div></figure>
+<h3 id="自定义转化器"><a class="markdownIt-Anchor" href="#自定义转化器"></a> 自定义转化器</h3>
+<p>通过该转化器可以为特征(Character)增加新的属性(Attribute)：</p>
+<ol>
+<li>
+<p>每户平均所用房间数: <code>rooms_per_households</code>.</p>
+</li>
+<li>
+<p>每户平均人口数：<code>population_per_households</code>.</p>
+</li>
+<li>
+<p>每间房的平均卧室数：<code>bedrooms_per_rooms</code>. （可选是否添加）</p>
+</li>
+</ol>
+<p>所需列的索引编号分别有 <code>total_rooms, total_bedrooms, population, households</code></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>base <span class="token keyword">import</span> BaseEstimator<span class="token punctuation">,</span> TransformerMixin
+
+<span class="token keyword">class</span> <span class="token class-name">CombinedAttributersAdder</span><span class="token punctuation">(</span>BaseEstimator<span class="token punctuation">,</span> TransformerMixin<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> idxs<span class="token punctuation">,</span> add_bedrooms_per_rooms<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>idxs <span class="token operator">=</span> idxs
+        self<span class="token punctuation">.</span>add_bedrooms_per_rooms <span class="token operator">=</span> add_bedrooms_per_rooms
+    <span class="token keyword">def</span> <span class="token function">fit</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> self
+    <span class="token keyword">def</span> <span class="token function">transform</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> X<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        rooms_per_households <span class="token operator">=</span> <span class="token punctuation">(</span>X<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>idxs<span class="token punctuation">[</span><span class="token string">'total_rooms'</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">/</span> X<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>idxs<span class="token punctuation">[</span><span class="token string">'households'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+        population_per_households <span class="token operator">=</span> <span class="token punctuation">(</span>X<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>idxs<span class="token punctuation">[</span><span class="token string">'population'</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">/</span> X<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>idxs<span class="token punctuation">[</span><span class="token string">'households'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+        ret <span class="token operator">=</span> <span class="token punctuation">[</span>X<span class="token punctuation">,</span> rooms_per_households<span class="token punctuation">,</span> population_per_households<span class="token punctuation">]</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>add_bedrooms_per_rooms<span class="token punctuation">:</span>
+            ret<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span>X<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>idxs<span class="token punctuation">[</span><span class="token string">'total_bedrooms'</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">/</span> X<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>idxs<span class="token punctuation">[</span><span class="token string">'total_rooms'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> np<span class="token punctuation">.</span>concatenate<span class="token punctuation">(</span>ret<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+idxs <span class="token operator">=</span> <span class="token builtin">dict</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">(</span>col<span class="token punctuation">,</span> i<span class="token punctuation">)</span> <span class="token keyword">for</span> i<span class="token punctuation">,</span> col <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>df_x<span class="token punctuation">.</span>columns<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+attr_adder <span class="token operator">=</span> CombinedAttributersAdder<span class="token punctuation">(</span>idxs<span class="token punctuation">,</span> add_bedrooms_per_rooms<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+df_extra_attribs <span class="token operator">=</span> attr_adder<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>df_x<span class="token punctuation">.</span>values<span class="token punctuation">)</span>
+df_extra_attribs<span class="token punctuation">.</span>shape<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">(16512, 11)
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">attr_adder<span class="token punctuation">.</span>set_params<span class="token punctuation">(</span>add_bedrooms_per_rooms<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+attr_adder<span class="token punctuation">.</span>get_params<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">&#123;'add_bedrooms_per_rooms': False,
+ 'idxs': &#123;'longitude': 0,
+  'latitude': 1,
+  'housing_median_age': 2,
+  'total_rooms': 3,
+  'total_bedrooms': 4,
+  'population': 5,
+  'households': 6,
+  'median_income': 7,
+  'ocean_proximity': 8&#125;&#125;
+</code></pre></div></figure>
+<h3 id="特征缩放"><a class="markdownIt-Anchor" href="#特征缩放"></a> 特征缩放</h3>
+<ol>
+<li>
+<p>归一化 <code>MinMaxScaler</code>，将数据集减去最小值后除以最大值，<code>X = (X - np.min(X)) / np.max(X)</code>.</p>
+</li>
+<li>
+<p>标准化 <code>StandardScaler</code>，将数据集减去均值后除以标准差，<code>X = (X - np.mean(X)) / np.std(X)</code>.</p>
+</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>preprocessing <span class="token keyword">import</span> StandardScaler
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>preprocessing <span class="token keyword">import</span> MinMaxScaler
+std_scaler <span class="token operator">=</span> StandardScaler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+mm_scaler <span class="token operator">=</span> MinMaxScaler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+X <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>df_x<span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'housing_median_age'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+scale1 <span class="token operator">=</span> std_scaler<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>X<span class="token punctuation">)</span>
+scale2 <span class="token operator">=</span> mm_scaler<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>X<span class="token punctuation">)</span>
+X1 <span class="token operator">=</span> <span class="token punctuation">(</span>X <span class="token operator">-</span> np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>X<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> np<span class="token punctuation">.</span>std<span class="token punctuation">(</span>X<span class="token punctuation">)</span>
+X2 <span class="token operator">=</span> <span class="token punctuation">(</span>X <span class="token operator">-</span> np<span class="token punctuation">.</span><span class="token builtin">min</span><span class="token punctuation">(</span>X<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> np<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span>X<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="转换流水线"><a class="markdownIt-Anchor" href="#转换流水线"></a> 转换流水线</h3>
+<p>在Scikit-Learn中 <code>Pipline</code> 是由一系列的转换器进行的堆叠（也就是必须要有 <code>fit_transform()</code> 函数），而堆叠的最后一个只需是一个估计器（也就是可以只有 <code>fit()</code> 函数），最后流水线也具有最后一个估计器的功能，如果最后一个估计器有 <code>transform()</code> 函数，那么流水线也有 <code>fit_transform()</code> 函数，如果最后一个估计器有 <code>predict()</code> 函数，那么流水线也具有 <code>fit_predict()</code> 函数.</p>
+<p><code>Pipline</code> 的构造函数包含一个元组列表，每个元组包含 <code>(名称, 转化器)</code>，第一个属性为转化器的名称，命名自定义（不包含双下划线，不能重复），第二个属性为转化器构造函数</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>pipeline <span class="token keyword">import</span> Pipeline
+
+num_pipeline <span class="token operator">=</span> Pipeline<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token punctuation">(</span><span class="token string">'imputer'</span><span class="token punctuation">,</span> SimpleImputer<span class="token punctuation">(</span>strategy<span class="token operator">=</span><span class="token string">"median"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token string">'attribs_adder'</span><span class="token punctuation">,</span> CombinedAttributersAdder<span class="token punctuation">(</span>idxs<span class="token punctuation">,</span> add_bedrooms_per_rooms<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token string">'std_scaler'</span><span class="token punctuation">,</span> StandardScaler<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+df_num_tr <span class="token operator">=</span> num_pipeline<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>df_num<span class="token punctuation">)</span>
+df_num_tr<span class="token punctuation">.</span>shape<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">(16512, 11)
+</code></pre></div></figure>
+<h4 id="对不同列分别进行转换"><a class="markdownIt-Anchor" href="#对不同列分别进行转换"></a> 对不同列分别进行转换</h4>
+<p>由于原数据集中既有数字特征，也有文本特征，所以需要分别做预处理，<code>sklearn.compose.ColumnTransformer</code> 可以很好的完成这项操作. 它可以非常好的适配 <code>DataFrame</code> 数据类型，通过列索引找到需要处理的列，最后逇返回值，会根据最终矩阵的稠密度来判断是否使用稀疏矩阵还是密集矩阵（矩阵密度定义为非零值的占比，默认阈值为 <code>sparse_threshold=0.3</code>）</p>
+<p>构造函数中，需要一个元组列表，每个元组包含 <code>名称, 转化器, 列索引列表</code>，名称同 <code>Pipline</code> 的要求（自定义，不重复，无双下划线），列索引列表可以直接为 <code>DataFrame</code> 中的列名.</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>compose <span class="token keyword">import</span> ColumnTransformer
+
+<span class="token comment"># 从分层抽样后的训练数据中划分出特征与标签</span>
+df_x <span class="token operator">=</span> strat_train<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token string">'median_house_value'</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+df_num <span class="token operator">=</span> df_x<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token string">'ocean_proximity'</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 划分出纯数字特征，便于预处理</span>
+train_y <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>strat_train<span class="token punctuation">[</span><span class="token string">'median_house_value'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 注意不要破坏原始数据集</span>
+
+num_attribs <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>df_num<span class="token punctuation">)</span>  <span class="token comment"># numeral</span>
+cat_attribs <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'ocean_proximity'</span><span class="token punctuation">]</span>  <span class="token comment"># category</span>
+
+full_pipline <span class="token operator">=</span> ColumnTransformer<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token punctuation">(</span><span class="token string">'num'</span><span class="token punctuation">,</span> num_pipeline<span class="token punctuation">,</span> num_attribs<span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 将数字使用之前的pipline进行转化</span>
+    <span class="token punctuation">(</span><span class="token string">'cat'</span><span class="token punctuation">,</span> OneHotEncoder<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cat_attribs<span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 将字符串转化为one-hot类别</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+train_x <span class="token operator">=</span> full_pipline<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>df_x<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="选择与训练模型"><a class="markdownIt-Anchor" href="#选择与训练模型"></a> 选择与训练模型</h2>
+<p>这里我们将尝试三种基本机器学习模型，并选择其中较好的模型进一步微调：</p>
+<ol>
+<li>
+<p>线性回归模型.</p>
+</li>
+<li>
+<p>决策树模型.</p>
+</li>
+<li>
+<p>随机森林模型.</p>
+</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 线性回归</span>
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>linear_model <span class="token keyword">import</span> LinearRegression
+
+lin_reg <span class="token operator">=</span> LinearRegression<span class="token punctuation">(</span><span class="token punctuation">)</span>
+lin_reg<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">)</span>  <span class="token comment"># 模型估计</span>
+
+x <span class="token operator">=</span> train_x<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span>
+y <span class="token operator">=</span> train_y<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Predictions:"</span><span class="token punctuation">,</span> lin_reg<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 预测结果</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Labels"</span><span class="token punctuation">,</span> <span class="token builtin">list</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">Predictions: [ 85657.90192014 305492.60737488 152056.46122456 186095.70946094
+ 244550.67966089]
+Labels [72100.0, 279600.0, 82700.0, 112500.0, 238300.0]
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>metrics <span class="token keyword">import</span> mean_squared_error
+lin_mse <span class="token operator">=</span> mean_squared_error<span class="token punctuation">(</span>train_y<span class="token punctuation">,</span> lin_reg<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>train_x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+lin_rmse <span class="token operator">=</span> np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span>lin_mse<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Line RMSE:"</span><span class="token punctuation">,</span> lin_rmse<span class="token punctuation">)</span>  <span class="token comment"># 欠拟合</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">Line RMSE: 68627.87390018745
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 决策树</span>
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>tree <span class="token keyword">import</span> DecisionTreeRegressor
+
+tree_reg <span class="token operator">=</span> DecisionTreeRegressor<span class="token punctuation">(</span><span class="token punctuation">)</span>
+tree_reg<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">)</span>
+
+tree_mse <span class="token operator">=</span> mean_squared_error<span class="token punctuation">(</span>train_y<span class="token punctuation">,</span> tree_reg<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>train_x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+tree_rmse <span class="token operator">=</span> np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span>tree_mse<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Tree RMSE:"</span><span class="token punctuation">,</span> tree_rmse<span class="token punctuation">)</span>  <span class="token comment"># 严重过拟合</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">Tree RMSE: 0.0
+</code></pre></div></figure>
+<h3 id="交叉验证"><a class="markdownIt-Anchor" href="#交叉验证"></a> 交叉验证</h3>
+<p>一种简单的方法是使用 <code>train_test_split</code> 将训练集进一步划分为较小的训练集和验证集，然后使用较小的数据集进行训练，并在验证集上进行评估.</p>
+<p>另一种方便的做法是使用Scikit-Learn中的K-折交叉验证功能 <code>sklearn.model_selection.cross_val_score</code>，假设 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">K=10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span></span></span></span>，则具体做法是将训练集随机划分为10个不同的子集，每个子集称为一个折叠，对模型进行10次训练与评估——每次选取1个折叠作为验证集，剩余9个折叠作为训练集，返回一个包含10次评分的数组，评分规则可以在 <code>scoring</code> 属性中设定.</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> cross_val_score
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>metrics <span class="token keyword">import</span> make_scorer
+
+tree_scores <span class="token operator">=</span> cross_val_score<span class="token punctuation">(</span>tree_reg<span class="token punctuation">,</span> train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">,</span> scoring<span class="token operator">=</span>make_scorer<span class="token punctuation">(</span>mean_squared_error<span class="token punctuation">)</span><span class="token punctuation">,</span> cv<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+lin_scores <span class="token operator">=</span> cross_val_score<span class="token punctuation">(</span>lin_reg<span class="token punctuation">,</span> train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">,</span> scoring<span class="token operator">=</span>make_scorer<span class="token punctuation">(</span>mean_squared_error<span class="token punctuation">)</span><span class="token punctuation">,</span> cv<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">display_scores</span><span class="token punctuation">(</span>scores<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"得分:"</span><span class="token punctuation">,</span> scores<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"均值:"</span><span class="token punctuation">,</span> scores<span class="token punctuation">.</span>mean<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"标准差:"</span><span class="token punctuation">,</span> scores<span class="token punctuation">.</span>std<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'决策树:'</span><span class="token punctuation">)</span>
+display_scores<span class="token punctuation">(</span>np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span>tree_scores<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\n线性回归:'</span><span class="token punctuation">)</span>
+display_scores<span class="token punctuation">(</span>np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span>lin_scores<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 从均值可以看出决策树比线性回归还差</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">决策树:
+得分: [69044.77910565 70786.57350426 68989.97289114 74120.47872383
+ 70840.03725076]
+均值: 70756.36829512753
+标准差: 1864.1267179081194
+
+线性回归:
+得分: [68076.63768302 67881.16711321 69712.97514343 71266.9225777
+ 68390.25096271]
+均值: 69065.59069601327
+标准差: 1272.9445955637493
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 随机森林模型</span>
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>ensemble <span class="token keyword">import</span> RandomForestRegressor
+
+forest_reg <span class="token operator">=</span> RandomForestRegressor<span class="token punctuation">(</span><span class="token punctuation">)</span>
+forest_reg<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">)</span>
+forest_scores <span class="token operator">=</span> cross_val_score<span class="token punctuation">(</span>forest_reg<span class="token punctuation">,</span> train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">,</span> scoring<span class="token operator">=</span>make_scorer<span class="token punctuation">(</span>mean_squared_error<span class="token punctuation">)</span><span class="token punctuation">,</span> cv<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'随机森林:'</span><span class="token punctuation">)</span>
+display_scores<span class="token punctuation">(</span>np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span>forest_scores<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 均值最小，说明该模型效果不错</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">随机森林:
+得分: [49944.24394028 50069.54102601 49720.76735777 51561.67277575
+ 51410.4086245 ]
+均值: 50541.32674486087
+标准差: 780.8734448089192
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 模型保存</span>
+<span class="token keyword">import</span> joblib
+
+joblib<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>forest_reg<span class="token punctuation">,</span> <span class="token string">"forest.pkl"</span><span class="token punctuation">)</span>
+model_loaded <span class="token operator">=</span> joblib<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token string">"forest.pkl"</span><span class="token punctuation">)</span>
+
+model_loaded<span class="token punctuation">.</span>set_params<span class="token punctuation">(</span>verbose<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+model_loaded<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>train_x<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 尝试简单预测</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">array([ 72910., 293380.,  81403., 124556., 228456.])
+</code></pre></div></figure>
+<h3 id="模型微调"><a class="markdownIt-Anchor" href="#模型微调"></a> 模型微调</h3>
+<p>可以从交叉验证结果看出随机森林效果不错，下面对其参数进行进一步微调.</p>
+<h4 id="网格搜索"><a class="markdownIt-Anchor" href="#网格搜索"></a> 网格搜索</h4>
+<p>通过Scikit-Learn的 <code>sklearn.model_selection.GridSearchCV</code> 可以方便的尝试模型不同给定的参数组合，其会在不同的参数组合下进行交叉验证，所以也有 <code>cv</code> 参数设置，交叉验证的打分结果默认为越大越好，所以是负的均方误差 <code>neg_mean_squared_error</code>.</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> GridSearchCV
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>ensemble <span class="token keyword">import</span> RandomForestRegressor
+
+params_grid <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span><span class="token string">'n_estimators'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'max_features'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span><span class="token string">'bootstrap'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token boolean">False</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'n_estimators'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'max_features'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+forest_reg <span class="token operator">=</span> RandomForestRegressor<span class="token punctuation">(</span>random_state<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span>
+
+grid_search <span class="token operator">=</span> GridSearchCV<span class="token punctuation">(</span>forest_reg<span class="token punctuation">,</span> params_grid<span class="token punctuation">,</span> cv<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> scoring<span class="token operator">=</span><span class="token string">'neg_mean_squared_error'</span><span class="token punctuation">,</span> return_train_score<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+grid_search<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 输出最好的组合及得分</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"参数组合:"</span><span class="token punctuation">,</span> grid_search<span class="token punctuation">.</span>best_params_<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"得分:"</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span><span class="token operator">-</span>grid_search<span class="token punctuation">.</span>best_score_<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">参数组合: &#123;'max_features': 8, 'n_estimators': 30&#125;
+得分: 49898.98913455217
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 输出不同参数对应的均值RMSE</span>
+cvres <span class="token operator">=</span> grid_search<span class="token punctuation">.</span>cv_results_
+<span class="token keyword">for</span> mean_score<span class="token punctuation">,</span> params <span class="token keyword">in</span> <span class="token builtin">zip</span><span class="token punctuation">(</span>cvres<span class="token punctuation">[</span><span class="token string">'mean_test_score'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cvres<span class="token punctuation">[</span><span class="token string">'params'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span><span class="token operator">-</span>mean_score<span class="token punctuation">)</span><span class="token punctuation">,</span> params<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">63895.161577951665 &#123;'max_features': 2, 'n_estimators': 3&#125;
+54916.32386349543 &#123;'max_features': 2, 'n_estimators': 10&#125;
+52885.86715332332 &#123;'max_features': 2, 'n_estimators': 30&#125;
+60075.3680329983 &#123;'max_features': 4, 'n_estimators': 3&#125;
+52495.01284985185 &#123;'max_features': 4, 'n_estimators': 10&#125;
+50187.24324926565 &#123;'max_features': 4, 'n_estimators': 30&#125;
+58064.73529982314 &#123;'max_features': 6, 'n_estimators': 3&#125;
+51519.32062366315 &#123;'max_features': 6, 'n_estimators': 10&#125;
+49969.80441627874 &#123;'max_features': 6, 'n_estimators': 30&#125;
+58895.824998155826 &#123;'max_features': 8, 'n_estimators': 3&#125;
+52459.79624724529 &#123;'max_features': 8, 'n_estimators': 10&#125;
+49898.98913455217 &#123;'max_features': 8, 'n_estimators': 30&#125;
+62381.765106921855 &#123;'bootstrap': False, 'max_features': 2, 'n_estimators': 3&#125;
+54476.57050944266 &#123;'bootstrap': False, 'max_features': 2, 'n_estimators': 10&#125;
+59974.60028085155 &#123;'bootstrap': False, 'max_features': 3, 'n_estimators': 3&#125;
+52754.5632813202 &#123;'bootstrap': False, 'max_features': 3, 'n_estimators': 10&#125;
+57831.136061214274 &#123;'bootstrap': False, 'max_features': 4, 'n_estimators': 3&#125;
+51278.37877140253 &#123;'bootstrap': False, 'max_features': 4, 'n_estimators': 10&#125;
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">pd<span class="token punctuation">.</span>DataFrame<span class="token punctuation">(</span>grid_search<span class="token punctuation">.</span>cv_results_<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean_fit_time</th>
+      <th>std_fit_time</th>
+      <th>mean_score_time</th>
+      <th>std_score_time</th>
+      <th>param_max_features</th>
+      <th>param_n_estimators</th>
+      <th>param_bootstrap</th>
+      <th>params</th>
+      <th>split0_test_score</th>
+      <th>split1_test_score</th>
+      <th>...</th>
+      <th>mean_test_score</th>
+      <th>std_test_score</th>
+      <th>rank_test_score</th>
+      <th>split0_train_score</th>
+      <th>split1_train_score</th>
+      <th>split2_train_score</th>
+      <th>split3_train_score</th>
+      <th>split4_train_score</th>
+      <th>mean_train_score</th>
+      <th>std_train_score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.056342</td>
+      <td>0.003779</td>
+      <td>0.003243</td>
+      <td>0.000397</td>
+      <td>2</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>{'max_features': 2, 'n_estimators': 3}</td>
+      <td>-4.119912e+09</td>
+      <td>-3.723465e+09</td>
+      <td>...</td>
+      <td>-4.082592e+09</td>
+      <td>1.867375e+08</td>
+      <td>18</td>
+      <td>-1.155630e+09</td>
+      <td>-1.089726e+09</td>
+      <td>-1.153843e+09</td>
+      <td>-1.118149e+09</td>
+      <td>-1.093446e+09</td>
+      <td>-1.122159e+09</td>
+      <td>2.834288e+07</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.195027</td>
+      <td>0.017347</td>
+      <td>0.009637</td>
+      <td>0.001599</td>
+      <td>2</td>
+      <td>10</td>
+      <td>NaN</td>
+      <td>{'max_features': 2, 'n_estimators': 10}</td>
+      <td>-2.973521e+09</td>
+      <td>-2.810319e+09</td>
+      <td>...</td>
+      <td>-3.015803e+09</td>
+      <td>1.139808e+08</td>
+      <td>11</td>
+      <td>-5.982947e+08</td>
+      <td>-5.904781e+08</td>
+      <td>-6.123850e+08</td>
+      <td>-5.727681e+08</td>
+      <td>-5.905210e+08</td>
+      <td>-5.928894e+08</td>
+      <td>1.284978e+07</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.549724</td>
+      <td>0.007784</td>
+      <td>0.022255</td>
+      <td>0.000432</td>
+      <td>2</td>
+      <td>30</td>
+      <td>NaN</td>
+      <td>{'max_features': 2, 'n_estimators': 30}</td>
+      <td>-2.801229e+09</td>
+      <td>-2.671474e+09</td>
+      <td>...</td>
+      <td>-2.796915e+09</td>
+      <td>7.980892e+07</td>
+      <td>9</td>
+      <td>-4.412567e+08</td>
+      <td>-4.326398e+08</td>
+      <td>-4.553722e+08</td>
+      <td>-4.320746e+08</td>
+      <td>-4.311606e+08</td>
+      <td>-4.385008e+08</td>
+      <td>9.184397e+06</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.085986</td>
+      <td>0.001792</td>
+      <td>0.002960</td>
+      <td>0.000096</td>
+      <td>4</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>{'max_features': 4, 'n_estimators': 3}</td>
+      <td>-3.528743e+09</td>
+      <td>-3.490303e+09</td>
+      <td>...</td>
+      <td>-3.609050e+09</td>
+      <td>1.375683e+08</td>
+      <td>16</td>
+      <td>-9.782368e+08</td>
+      <td>-9.806455e+08</td>
+      <td>-1.003780e+09</td>
+      <td>-1.016515e+09</td>
+      <td>-1.011270e+09</td>
+      <td>-9.980896e+08</td>
+      <td>1.577372e+07</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.283107</td>
+      <td>0.012133</td>
+      <td>0.008094</td>
+      <td>0.000168</td>
+      <td>4</td>
+      <td>10</td>
+      <td>NaN</td>
+      <td>{'max_features': 4, 'n_estimators': 10}</td>
+      <td>-2.742620e+09</td>
+      <td>-2.609311e+09</td>
+      <td>...</td>
+      <td>-2.755726e+09</td>
+      <td>1.182604e+08</td>
+      <td>7</td>
+      <td>-5.063215e+08</td>
+      <td>-5.257983e+08</td>
+      <td>-5.081984e+08</td>
+      <td>-5.174405e+08</td>
+      <td>-5.282066e+08</td>
+      <td>-5.171931e+08</td>
+      <td>8.882622e+06</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.846614</td>
+      <td>0.018781</td>
+      <td>0.025807</td>
+      <td>0.006609</td>
+      <td>4</td>
+      <td>30</td>
+      <td>NaN</td>
+      <td>{'max_features': 4, 'n_estimators': 30}</td>
+      <td>-2.522176e+09</td>
+      <td>-2.440241e+09</td>
+      <td>...</td>
+      <td>-2.518759e+09</td>
+      <td>8.488084e+07</td>
+      <td>3</td>
+      <td>-3.776568e+08</td>
+      <td>-3.902106e+08</td>
+      <td>-3.885042e+08</td>
+      <td>-3.830866e+08</td>
+      <td>-3.894779e+08</td>
+      <td>-3.857872e+08</td>
+      <td>4.774229e+06</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.109496</td>
+      <td>0.001429</td>
+      <td>0.003194</td>
+      <td>0.000403</td>
+      <td>6</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>{'max_features': 6, 'n_estimators': 3}</td>
+      <td>-3.362127e+09</td>
+      <td>-3.311863e+09</td>
+      <td>...</td>
+      <td>-3.371513e+09</td>
+      <td>1.378086e+08</td>
+      <td>13</td>
+      <td>-8.909397e+08</td>
+      <td>-9.583733e+08</td>
+      <td>-9.000201e+08</td>
+      <td>-8.964731e+08</td>
+      <td>-9.151927e+08</td>
+      <td>-9.121998e+08</td>
+      <td>2.444837e+07</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.371871</td>
+      <td>0.006231</td>
+      <td>0.008252</td>
+      <td>0.000400</td>
+      <td>6</td>
+      <td>10</td>
+      <td>NaN</td>
+      <td>{'max_features': 6, 'n_estimators': 10}</td>
+      <td>-2.622099e+09</td>
+      <td>-2.669655e+09</td>
+      <td>...</td>
+      <td>-2.654240e+09</td>
+      <td>6.967978e+07</td>
+      <td>5</td>
+      <td>-4.939906e+08</td>
+      <td>-5.145996e+08</td>
+      <td>-5.023512e+08</td>
+      <td>-4.959467e+08</td>
+      <td>-5.147087e+08</td>
+      <td>-5.043194e+08</td>
+      <td>8.880106e+06</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>1.130365</td>
+      <td>0.010059</td>
+      <td>0.022360</td>
+      <td>0.000711</td>
+      <td>6</td>
+      <td>30</td>
+      <td>NaN</td>
+      <td>{'max_features': 6, 'n_estimators': 30}</td>
+      <td>-2.446142e+09</td>
+      <td>-2.446594e+09</td>
+      <td>...</td>
+      <td>-2.496981e+09</td>
+      <td>7.357046e+07</td>
+      <td>2</td>
+      <td>-3.760968e+08</td>
+      <td>-3.876636e+08</td>
+      <td>-3.875307e+08</td>
+      <td>-3.760938e+08</td>
+      <td>-3.861056e+08</td>
+      <td>-3.826981e+08</td>
+      <td>5.418747e+06</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.143730</td>
+      <td>0.002764</td>
+      <td>0.003008</td>
+      <td>0.000005</td>
+      <td>8</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>{'max_features': 8, 'n_estimators': 3}</td>
+      <td>-3.590333e+09</td>
+      <td>-3.232664e+09</td>
+      <td>...</td>
+      <td>-3.468718e+09</td>
+      <td>1.293758e+08</td>
+      <td>14</td>
+      <td>-9.505012e+08</td>
+      <td>-9.166119e+08</td>
+      <td>-9.033910e+08</td>
+      <td>-9.070642e+08</td>
+      <td>-9.459386e+08</td>
+      <td>-9.247014e+08</td>
+      <td>1.973471e+07</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.479244</td>
+      <td>0.002045</td>
+      <td>0.008288</td>
+      <td>0.000386</td>
+      <td>8</td>
+      <td>10</td>
+      <td>NaN</td>
+      <td>{'max_features': 8, 'n_estimators': 10}</td>
+      <td>-2.721311e+09</td>
+      <td>-2.675886e+09</td>
+      <td>...</td>
+      <td>-2.752030e+09</td>
+      <td>6.258030e+07</td>
+      <td>6</td>
+      <td>-4.998373e+08</td>
+      <td>-4.997970e+08</td>
+      <td>-5.099880e+08</td>
+      <td>-5.047868e+08</td>
+      <td>-5.348043e+08</td>
+      <td>-5.098427e+08</td>
+      <td>1.303601e+07</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>1.444280</td>
+      <td>0.008099</td>
+      <td>0.022597</td>
+      <td>0.000362</td>
+      <td>8</td>
+      <td>30</td>
+      <td>NaN</td>
+      <td>{'max_features': 8, 'n_estimators': 30}</td>
+      <td>-2.492636e+09</td>
+      <td>-2.444818e+09</td>
+      <td>...</td>
+      <td>-2.489909e+09</td>
+      <td>7.086483e+07</td>
+      <td>1</td>
+      <td>-3.801679e+08</td>
+      <td>-3.832972e+08</td>
+      <td>-3.823818e+08</td>
+      <td>-3.778452e+08</td>
+      <td>-3.817589e+08</td>
+      <td>-3.810902e+08</td>
+      <td>1.916605e+06</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>0.086494</td>
+      <td>0.001798</td>
+      <td>0.003198</td>
+      <td>0.000396</td>
+      <td>2</td>
+      <td>3</td>
+      <td>False</td>
+      <td>{'bootstrap': False, 'max_features': 2, 'n_est...</td>
+      <td>-4.020842e+09</td>
+      <td>-3.951861e+09</td>
+      <td>...</td>
+      <td>-3.891485e+09</td>
+      <td>8.648595e+07</td>
+      <td>17</td>
+      <td>-0.000000e+00</td>
+      <td>-4.306828e+01</td>
+      <td>-1.051392e+04</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-2.111398e+03</td>
+      <td>4.201294e+03</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>0.284451</td>
+      <td>0.004976</td>
+      <td>0.009399</td>
+      <td>0.000489</td>
+      <td>2</td>
+      <td>10</td>
+      <td>False</td>
+      <td>{'bootstrap': False, 'max_features': 2, 'n_est...</td>
+      <td>-2.901352e+09</td>
+      <td>-3.036875e+09</td>
+      <td>...</td>
+      <td>-2.967697e+09</td>
+      <td>4.582448e+07</td>
+      <td>10</td>
+      <td>-0.000000e+00</td>
+      <td>-3.876145e+00</td>
+      <td>-9.462528e+02</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-1.900258e+02</td>
+      <td>3.781165e+02</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>0.112028</td>
+      <td>0.007602</td>
+      <td>0.004233</td>
+      <td>0.001024</td>
+      <td>3</td>
+      <td>3</td>
+      <td>False</td>
+      <td>{'bootstrap': False, 'max_features': 3, 'n_est...</td>
+      <td>-3.687132e+09</td>
+      <td>-3.446245e+09</td>
+      <td>...</td>
+      <td>-3.596953e+09</td>
+      <td>8.011960e+07</td>
+      <td>15</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>0.000000e+00</td>
+      <td>0.000000e+00</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>0.364553</td>
+      <td>0.003523</td>
+      <td>0.009679</td>
+      <td>0.000402</td>
+      <td>3</td>
+      <td>10</td>
+      <td>False</td>
+      <td>{'bootstrap': False, 'max_features': 3, 'n_est...</td>
+      <td>-2.837028e+09</td>
+      <td>-2.619558e+09</td>
+      <td>...</td>
+      <td>-2.783044e+09</td>
+      <td>8.862580e+07</td>
+      <td>8</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>0.000000e+00</td>
+      <td>0.000000e+00</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.136975</td>
+      <td>0.001282</td>
+      <td>0.003008</td>
+      <td>0.000004</td>
+      <td>4</td>
+      <td>3</td>
+      <td>False</td>
+      <td>{'bootstrap': False, 'max_features': 4, 'n_est...</td>
+      <td>-3.549428e+09</td>
+      <td>-3.318176e+09</td>
+      <td>...</td>
+      <td>-3.344440e+09</td>
+      <td>1.099355e+08</td>
+      <td>12</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>0.000000e+00</td>
+      <td>0.000000e+00</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>0.447112</td>
+      <td>0.003923</td>
+      <td>0.009294</td>
+      <td>0.000389</td>
+      <td>4</td>
+      <td>10</td>
+      <td>False</td>
+      <td>{'bootstrap': False, 'max_features': 4, 'n_est...</td>
+      <td>-2.692499e+09</td>
+      <td>-2.542704e+09</td>
+      <td>...</td>
+      <td>-2.629472e+09</td>
+      <td>8.510266e+07</td>
+      <td>4</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>-0.000000e+00</td>
+      <td>0.000000e+00</td>
+      <td>0.000000e+00</td>
+    </tr>
+  </tbody>
+</table>
+<p>18 rows × 23 columns</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">grid_search<span class="token punctuation">.</span>cv_results_<span class="token punctuation">.</span>keys<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">dict_keys(['mean_fit_time', 'std_fit_time', 'mean_score_time', 'std_score_time', 'param_max_features', 'param_n_estimators', 'param_bootstrap', 'params', 'split0_test_score', 'split1_test_score', 'split2_test_score', 'split3_test_score', 'split4_test_score', 'mean_test_score', 'std_test_score', 'rank_test_score', 'split0_train_score', 'split1_train_score', 'split2_train_score', 'split3_train_score', 'split4_train_score', 'mean_train_score', 'std_train_score'])
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> RandomizedSearchCV
+<span class="token keyword">from</span> scipy<span class="token punctuation">.</span>stats <span class="token keyword">import</span> randint
+
+params_distrib <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span><span class="token string">'n_estimators'</span><span class="token punctuation">:</span> randint<span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">33</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'max_features'</span><span class="token punctuation">:</span> randint<span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+forest_reg <span class="token operator">=</span> RandomForestRegressor<span class="token punctuation">(</span>random_state<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span>
+
+rand_search <span class="token operator">=</span> RandomizedSearchCV<span class="token punctuation">(</span>forest_reg<span class="token punctuation">,</span> params_distrib<span class="token punctuation">,</span> cv<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> n_iter<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">,</span>
+                                 scoring<span class="token operator">=</span><span class="token string">'neg_mean_squared_error'</span><span class="token punctuation">,</span> return_train_score<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+rand_search<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 输出最好的组合及得分，可以看出随机组合的得分比网格搜索的结果更好</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"参数组合:"</span><span class="token punctuation">,</span> rand_search<span class="token punctuation">.</span>best_params_<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"得分:"</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span><span class="token operator">-</span>rand_search<span class="token punctuation">.</span>best_score_<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">参数组合: &#123;'max_features': 8, 'n_estimators': 32&#125;
+得分: 49842.263664875936
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 尝试过的组合及对应的打分</span>
+cvres <span class="token operator">=</span> rand_search<span class="token punctuation">.</span>cv_results_
+<span class="token keyword">for</span> mean_score<span class="token punctuation">,</span> params <span class="token keyword">in</span> <span class="token builtin">zip</span><span class="token punctuation">(</span>cvres<span class="token punctuation">[</span><span class="token string">'mean_test_score'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> cvres<span class="token punctuation">[</span><span class="token string">'params'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span><span class="token operator">-</span>mean_score<span class="token punctuation">)</span><span class="token punctuation">,</span> params<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">50073.941984726036 &#123;'max_features': 9, 'n_estimators': 31&#125;
+49928.56733204831 &#123;'max_features': 7, 'n_estimators': 30&#125;
+49855.054296768314 &#123;'max_features': 7, 'n_estimators': 32&#125;
+50154.159979801916 &#123;'max_features': 9, 'n_estimators': 29&#125;
+50118.217225106 &#123;'max_features': 9, 'n_estimators': 30&#125;
+50076.27434408333 &#123;'max_features': 9, 'n_estimators': 32&#125;
+50076.27434408333 &#123;'max_features': 9, 'n_estimators': 32&#125;
+49882.90700266577 &#123;'max_features': 8, 'n_estimators': 31&#125;
+49911.07348226599 &#123;'max_features': 8, 'n_estimators': 29&#125;
+49947.86413574509 &#123;'max_features': 7, 'n_estimators': 28&#125;
+49842.263664875936 &#123;'max_features': 8, 'n_estimators': 32&#125;
+49947.86413574509 &#123;'max_features': 7, 'n_estimators': 28&#125;
+50118.217225106 &#123;'max_features': 9, 'n_estimators': 30&#125;
+50154.159979801916 &#123;'max_features': 9, 'n_estimators': 29&#125;
+50118.217225106 &#123;'max_features': 9, 'n_estimators': 30&#125;
+50073.941984726036 &#123;'max_features': 9, 'n_estimators': 31&#125;
+49928.56733204831 &#123;'max_features': 7, 'n_estimators': 30&#125;
+49928.56733204831 &#123;'max_features': 7, 'n_estimators': 30&#125;
+50076.27434408333 &#123;'max_features': 9, 'n_estimators': 32&#125;
+49904.569413113204 &#123;'max_features': 7, 'n_estimators': 29&#125;
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 随机森林模型有每种类别的重要性分数</span>
+feature_importances <span class="token operator">=</span> rand_search<span class="token punctuation">.</span>best_estimator_<span class="token punctuation">.</span>feature_importances_
+<span class="token comment"># 进一步我们可以获得每种类别的重要度排名</span>
+extra_attribs <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'rooms_per_households'</span><span class="token punctuation">,</span> <span class="token string">'popultion_per_households'</span><span class="token punctuation">,</span> <span class="token string">'bedrooms_per_rooms'</span><span class="token punctuation">]</span>  <span class="token comment"># 额外加入的属性</span>
+cat_encoder <span class="token operator">=</span> full_pipline<span class="token punctuation">.</span>named_transformers_<span class="token punctuation">[</span><span class="token string">'cat'</span><span class="token punctuation">]</span>
+cat_attribs <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>cat_encoder<span class="token punctuation">.</span>categories_<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 字符串列表</span>
+attributes <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>df_num<span class="token punctuation">)</span> <span class="token operator">+</span> extra_attribs <span class="token operator">+</span> cat_attribs
+<span class="token builtin">sorted</span><span class="token punctuation">(</span><span class="token builtin">zip</span><span class="token punctuation">(</span>feature_importances<span class="token punctuation">,</span> attributes<span class="token punctuation">)</span><span class="token punctuation">,</span> reverse<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">[(0.38172022914549825, 'median_income'),
+ (0.165994178010966, 'INLAND'),
+ (0.10653004837910676, 'popultion_per_households'),
+ (0.06894855994908974, 'longitude'),
+ (0.059534576077903516, 'latitude'),
+ (0.05392562234554215, 'rooms_per_households'),
+ (0.04722669031431806, 'bedrooms_per_rooms'),
+ (0.043182846603246804, 'housing_median_age'),
+ (0.015983911178773656, 'population'),
+ (0.015450335997150988, 'total_bedrooms'),
+ (0.01527186966684709, 'total_rooms'),
+ (0.014934070980648344, 'households'),
+ (0.006547710175385619, '&lt;1H OCEAN'),
+ (0.0031214750700245385, 'NEAR OCEAN'),
+ (0.0015469548512138229, 'NEAR BAY'),
+ (8.092125428472885e-05, 'ISLAND')]
+</code></pre></div></figure>
+<h3 id="测试集上评估"><a class="markdownIt-Anchor" href="#测试集上评估"></a> 测试集上评估</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">model <span class="token operator">=</span> rand_search<span class="token punctuation">.</span>best_estimator_
+
+df_x <span class="token operator">=</span> strat_test<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token string">'median_house_value'</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+test_y <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>strat_test<span class="token punctuation">[</span><span class="token string">'median_house_value'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+test_x <span class="token operator">=</span> full_pipline<span class="token punctuation">.</span>transform<span class="token punctuation">(</span>df_x<span class="token punctuation">)</span>  <span class="token comment"># 注意使用transform而不是fit_transform</span>
+test_pred <span class="token operator">=</span> model<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>test_x<span class="token punctuation">)</span>
+
+rmse <span class="token operator">=</span> mean_squared_error<span class="token punctuation">(</span>test_y<span class="token punctuation">,</span> test_pred<span class="token punctuation">,</span> squared<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+rmse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">47886.90979155171
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 计算泛化误差置信度为0.95的置信区间用来评估模型效果</span>
+<span class="token keyword">from</span> scipy <span class="token keyword">import</span> stats
+
+confidence <span class="token operator">=</span> <span class="token number">0.95</span>
+squared_errors <span class="token operator">=</span> <span class="token punctuation">(</span>test_y <span class="token operator">-</span> test_pred<span class="token punctuation">)</span> <span class="token operator">**</span> <span class="token number">2</span>
+np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span>stats<span class="token punctuation">.</span>t<span class="token punctuation">.</span>interval<span class="token punctuation">(</span>confidence<span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>squared_errors<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> loc<span class="token operator">=</span>squared_errors<span class="token punctuation">.</span>mean<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> scale<span class="token operator">=</span>stats<span class="token punctuation">.</span>sem<span class="token punctuation">(</span>squared_errors<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">array([45902.05283165, 49792.7083478 ])
+</code></pre></div></figure>
+<h2 id="练习题"><a class="markdownIt-Anchor" href="#练习题"></a> 练习题</h2>
+<ol>
+<li>第一个练习题是使用SVM进行预测，看作者的代码结果效果并不如随机森林好，所以跳过.</li>
+<li>用 <code>RandomizedSearchCV</code> 替换 <code>GridSearchCV</code>，已经在上面对随机森林实验过了，效果不错.</li>
+</ol>
+<h3 id="3-在流水线中添加一个转化器用于筛选重要信息"><a class="markdownIt-Anchor" href="#3-在流水线中添加一个转化器用于筛选重要信息"></a> 3. 在流水线中添加一个转化器用于筛选重要信息</h3>
+<p>现有的流水线包括：<br />
+<img src="https://s1.ax1x.com/2023/01/01/pSCWpLT.png" srcset="/img/loading.gif" lazyload alt="流水线内容" /></p>
+<p>期望在 <code>full_pipline</code> 后面再加入 <code>TopFeatureSelector</code> 根据特征的重要性排序进行选择最高的特征值，具有属性 <code>k</code> 表示选取前 <code>k</code> 重要的属性值.</p>
+<p>注意！！</p>
+<p>由于对OneHotEncoder也在每次折叠数据中，由于包含 <code>Island</code> 的数据仅有5个，所以部分折叠数据集可能完全没有 <code>Island</code>，就会导致OneHotEncoder不会对其进行编码，导致列数目减少一个，所以一定要判断列数（其实正确做法应该是在数据读入进来时就将字符串数据进行OneHot表示，就不会有这些问题了）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">arg_sorted <span class="token operator">=</span> np<span class="token punctuation">.</span>argsort<span class="token punctuation">(</span>feature_importances<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>
+<span class="token keyword">class</span> <span class="token class-name">TopFeatureSelector</span><span class="token punctuation">(</span>BaseEstimator<span class="token punctuation">,</span> TransformerMixin<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> k<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>k <span class="token operator">=</span> k
+    <span class="token keyword">def</span> <span class="token function">fit</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> x<span class="token punctuation">,</span> y<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> self
+    <span class="token keyword">def</span> <span class="token function">transform</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        now_arg <span class="token operator">=</span> arg_sorted<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> x<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">15</span><span class="token punctuation">:</span>  <span class="token comment"># 如果输入数据中没有ISLAND列，将最后5列索引向前移</span>
+            now_arg<span class="token punctuation">[</span>now_arg <span class="token operator">></span> <span class="token number">13</span><span class="token punctuation">]</span> <span class="token operator">-=</span> <span class="token number">1</span>
+        <span class="token keyword">return</span> x<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> now_arg<span class="token punctuation">[</span><span class="token punctuation">:</span>self<span class="token punctuation">.</span>k<span class="token punctuation">]</span><span class="token punctuation">]</span>
+
+preparer_and_selector_pipline <span class="token operator">=</span> Pipeline<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token punctuation">(</span><span class="token string">'preparer'</span><span class="token punctuation">,</span> full_pipline<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token string">'feature_selector'</span><span class="token punctuation">,</span> TopFeatureSelector<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+train_x_selected <span class="token operator">=</span> preparer_and_selector<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>df_x<span class="token punctuation">)</span>  <span class="token comment"># 经过重要度选择后的列</span>
+preparer_and_selector_pipline  <span class="token comment"># 显示完整预处理流水线</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="4-创建一个覆盖完整的数据准备和最终预测的流水线"><a class="markdownIt-Anchor" href="#4-创建一个覆盖完整的数据准备和最终预测的流水线"></a> 4. 创建一个覆盖完整的数据准备和最终预测的流水线</h3>
+<p>在 <code>preparer_and_selector_pipline</code> 的基础上加上预测器即可</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df_train_x <span class="token operator">=</span> strat_train<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token string">'median_house_value'</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+complete_pipline <span class="token operator">=</span> Pipeline<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token punctuation">(</span><span class="token string">'preparer_and_seletor'</span><span class="token punctuation">,</span> preparer_and_selector_pipline<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token string">'model'</span><span class="token punctuation">,</span> RandomForestRegressor<span class="token punctuation">(</span><span class="token operator">**</span>rand_search<span class="token punctuation">.</span>best_params_<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+complete_pipline<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>df_train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 测试集上进行计算得分</span>
+df_test_x <span class="token operator">=</span> strat_test<span class="token punctuation">.</span>drop<span class="token punctuation">(</span><span class="token string">'median_house_value'</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+test_pred <span class="token operator">=</span> complete_pipline<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>df_test_x<span class="token punctuation">)</span>
+mean_squared_error<span class="token punctuation">(</span>test_y<span class="token punctuation">,</span> test_pred<span class="token punctuation">,</span> squared<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">49064.16896575968
+</code></pre></div></figure>
+<h3 id="5-使用gridsearchcv自动探寻超参数"><a class="markdownIt-Anchor" href="#5-使用gridsearchcv自动探寻超参数"></a> 5. 使用GridSearchCV自动探寻超参数</h3>
+<p>基于 <code>complete_pipline</code> 和双下划线 <code>__</code> 可以修改内部估计器的超参数. 预计修改的超参数：</p>
+<ol>
+<li><code>preparer_and_seletor__feature_selector__k</code>：选择前 <code>k</code> 重要的特征，</li>
+<li><code>preparer_and_seletor__preparer__num__imputer__strategy</code>：三种填补缺失值策略 <code>median, mean, most_frequent</code>.</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">params_grid <span class="token operator">=</span> <span class="token punctuation">[</span>  <span class="token comment"># 总共尝试个数3x2x3=18</span>
+    <span class="token punctuation">&#123;</span><span class="token string">'preparer_and_seletor__preparer__cat__handle_unknown'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'ignore'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment"># 关键，onehot编码可能在transform中见到fit中未见到的值，所以会报错，一定要加入ignore来保证输出结果正确</span>
+     <span class="token string">'preparer_and_seletor__feature_selector__k'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+     <span class="token string">'preparer_and_seletor__preparer__num__imputer__strategy'</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'median'</span><span class="token punctuation">,</span> <span class="token string">'mean'</span><span class="token punctuation">,</span> <span class="token string">'most_frequent'</span><span class="token punctuation">]</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+
+grid_search <span class="token operator">=</span> GridSearchCV<span class="token punctuation">(</span>complete_pipline<span class="token punctuation">,</span> params_grid<span class="token punctuation">,</span> cv<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> scoring<span class="token operator">=</span><span class="token string">'neg_mean_squared_error'</span><span class="token punctuation">,</span> verbose<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> error_score<span class="token operator">=</span><span class="token string">'raise'</span><span class="token punctuation">)</span>
+grid_search<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>df_train_x<span class="token punctuation">,</span> train_y<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'得分:'</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span><span class="token operator">-</span>grid_search<span class="token punctuation">.</span>best_score_<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'参数:'</span><span class="token punctuation">,</span> grid_search<span class="token punctuation">.</span>best_params_<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">得分: 49934.92197039834
+参数: &#123;'preparer_and_seletor__feature_selector__k': 15, 'preparer_and_seletor__preparer__cat__handle_unknown': 'ignore', 'preparer_and_seletor__preparer__num__imputer__strategy': 'mean'&#125;
+</code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'测试集得分:'</span><span class="token punctuation">,</span> mean_squared_error<span class="token punctuation">(</span>grid_search<span class="token punctuation">.</span>best_estimator_<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>df_test_x<span class="token punctuation">)</span><span class="token punctuation">,</span> test_y<span class="token punctuation">,</span> squared<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">测试集得分: 47935.68785194382
+</code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/" class="category-chain-item">机器学习实战</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/scikit-learn/" class="print-no-link">#scikit-learn</a>
+      
+        <a href="/tags/pandas/" class="print-no-link">#pandas</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>《机器学习实战》第二章 端到端的机器学习项目</div>
+      <div>https://wty-yy.github.io/posts/44338/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年12月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/64618/" title="《机器学习实战》第三章 分类">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">《机器学习实战》第三章 分类</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/65380/" title="Scikit-Learn 常用函数及模型写法">
+                        <span class="hidden-mobile">Scikit-Learn 常用函数及模型写法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

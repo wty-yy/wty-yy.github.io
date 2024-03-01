@@ -1,0 +1,1138 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="China Academy of Launch Vehicle Technology (CALVT) 中国运载火箭技术研究院（航天工业部第一研究院） 劳动竞赛环境：百度网盘 - 劳动竞赛2023 完整代码GitHub：GitHub-Blog-file-CALVT2023 也可以从上面的网盘分享中下载 CALVT2023_太初.zip，解压后执行 agent_train.py 即可看到红蓝方执行设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CALVT - 2023劳动竞赛（智能体对抗）总结">
+<meta property="og:url" content="https://wty-yy.github.io/posts/15725/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="China Academy of Launch Vehicle Technology (CALVT) 中国运载火箭技术研究院（航天工业部第一研究院） 劳动竞赛环境：百度网盘 - 劳动竞赛2023 完整代码GitHub：GitHub-Blog-file-CALVT2023 也可以从上面的网盘分享中下载 CALVT2023_太初.zip，解压后执行 agent_train.py 即可看到红蓝方执行设">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-20T13:56:09.000Z">
+<meta property="article:modified_time" content="2024-02-12T09:43:15.368Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>CALVT - 2023劳动竞赛（智能体对抗）总结 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CALVT - 2023劳动竞赛（智能体对抗）总结"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-11-20 21:56" pubdate>
+          2023年11月20日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CALVT - 2023劳动竞赛（智能体对抗）总结</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>China Academy of Launch Vehicle Technology (CALVT) 中国运载火箭技术研究院（航天工业部第一研究院）</p>
+<p>劳动竞赛环境：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1y4mZfdRQbXFFtQLtEanXag?pwd=1234">百度网盘 - 劳动竞赛2023</a></p>
+<p>完整代码GitHub：<a target="_blank" rel="noopener" href="https://github.com/wty-yy/Blog-SourceCode/tree/master/source/file/CALVT2023">GitHub-Blog-file-CALVT2023</a><br />
+也可以从上面的网盘分享中下载 <code>CALVT2023_太初.zip</code>，解压后执行 <code>agent_train.py</code> 即可看到红蓝方执行设计好的策略了</p>
+<p>相关依赖包只有 <code>numpy</code>，需要 <code>python&gt;=3.8</code></p>
+</blockquote>
+<h2 id="交互方法"><a class="markdownIt-Anchor" href="#交互方法"></a> 交互方法</h2>
+<p><strong>启动模拟器</strong>：在启动软件《决胜千里》（<code>XJ.zip</code>文件解压后，打开<code>CraftGameV1.exe</code>）-开始仿真-训练模式-选择地图new1-确认创建-开始训练，当弹出新的显示世界地图的窗口时，则模拟器已准备完成。</p>
+<p><strong>传包交互</strong>：Python的交互方法是通过模拟器本机上创建的虚拟IP地址，利用 <code>socket</code> 向模拟器收发信息，所有收发包都是 <code>json</code> 格式，需要使用 <code>json.loads</code> 转化为 <code>dict</code> 或者使用 <code>env.statusparer</code> 进行 <code>status</code> 转化。IP地址和端口为 <code>127.0.0.1:20001</code>，在 <code>config</code> 文件夹下可以查到。</p>
+<p>在 <code>code/input</code> 文件夹下设定了文档中所给的参数配置。</p>
+<h2 id="状态信息"><a class="markdownIt-Anchor" href="#状态信息"></a> 状态信息</h2>
+<p>环境初始化方法：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">IDlist <span class="token operator">=</span> json<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>env<span class="token punctuation">.</span>Reset<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment"># IDlist gives red/blue team unit id names by dict, respectively.</span>
+act <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token comment"># Each agent instance must have `deploy` func to set the default location for each unit.</span>
+act <span class="token operator">+=</span> redAgent<span class="token punctuation">.</span>deploy<span class="token punctuation">(</span>IDlist<span class="token punctuation">[</span><span class="token string">'RedShipID'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> act <span class="token operator">+=</span> blueAgent<span class="token punctuation">.</span>deploy<span class="token punctuation">(</span>IDlist<span class="token punctuation">[</span><span class="token string">'BlueShipID'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+env<span class="token punctuation">.</span>Step<span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token string">'Action'</span><span class="token punctuation">:</span> act<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>  <span class="token comment"># deploy units in default location</span>
+r_state<span class="token punctuation">,</span> b_state <span class="token operator">=</span> get_states<span class="token punctuation">(</span>env<span class="token punctuation">)</span>  <span class="token comment"># red/blue initial state</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="单位部署"><a class="markdownIt-Anchor" href="#单位部署"></a> 单位部署</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># Get initial infomation from environment.</span>
+shipIDlist <span class="token operator">=</span> env<span class="token punctuation">.</span>Reset<span class="token punctuation">(</span><span class="token punctuation">)</span>
+shipIDlist <span class="token operator">=</span> json<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>shipIDlist<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"red shipIDlist:"</span><span class="token punctuation">,</span> <span class="token builtin">sorted</span><span class="token punctuation">(</span>shipIDlist<span class="token punctuation">[</span><span class="token string">'RedShipID'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"blue shipIDlist:"</span><span class="token punctuation">,</span> <span class="token builtin">sorted</span><span class="token punctuation">(</span>shipIDlist<span class="token punctuation">[</span><span class="token string">'BlueShipID'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="红色方"><a class="markdownIt-Anchor" href="#红色方"></a> 红色方</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># Armor car: deploy params=(x, y, z, pierce_num, explosive_num)</span>
+<span class="token string">'MainBattleTank_ZTZ100_0'</span><span class="token punctuation">,</span> <span class="token string">'MainBattleTank_ZTZ100_1'</span><span class="token punctuation">,</span> <span class="token string">'MainBattleTank_ZTZ100_2'</span><span class="token punctuation">,</span> <span class="token string">'MainBattleTank_ZTZ100_3'</span><span class="token punctuation">,</span> <span class="token comment"># 主战坦克</span>
+<span class="token string">'Howitzer_C100_0'</span><span class="token punctuation">,</span>  <span class="token comment"># 榴弹炮 (120mm 自行迫榴炮)</span>
+
+<span class="token comment"># Normal deploy params=(x, y, z)</span>
+<span class="token string">'ArmoredTruck_ZTL100_0'</span><span class="token punctuation">,</span> <span class="token string">'ArmoredTruck_ZTL100_1'</span><span class="token punctuation">,</span>  <span class="token comment"># 突击车</span>
+<span class="token string">'Infantry0'</span><span class="token punctuation">,</span> <span class="token string">'Infantry1'</span><span class="token punctuation">,</span>  <span class="token comment"># 步兵</span>
+<span class="token string">'WheeledCmobatTruck_ZB100_0'</span><span class="token punctuation">,</span> <span class="token string">'WheeledCmobatTruck_ZB100_1'</span><span class="token punctuation">,</span>  <span class="token comment"># 装甲车</span>
+<span class="token string">'missile_truck0'</span><span class="token punctuation">,</span> <span class="token string">'missile_truck1'</span><span class="token punctuation">,</span> <span class="token string">'missile_truck2'</span>  <span class="token comment"># 导弹发射车</span>
+<span class="token string">'ShipboardCombat_plane0'</span><span class="token punctuation">,</span>  <span class="token comment"># 舰载战斗机 (无人察打一体飞机)</span>
+
+<span class="token string">'HEO_infrared_satallite2'</span><span class="token punctuation">,</span> <span class="token string">'redbmc3'</span>  <span class="token comment"># 未知参数</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="蓝色方"><a class="markdownIt-Anchor" href="#蓝色方"></a> 蓝色方</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># Armor car: deploy params=(x, y, z, pierce_num, explosive_num)</span>
+<span class="token string">'MainBattleTank_ZTZ200_0'</span><span class="token punctuation">,</span> <span class="token string">'MainBattleTank_ZTZ200_1'</span><span class="token punctuation">,</span> <span class="token string">'MainBattleTank_ZTZ200_2'</span><span class="token punctuation">,</span> <span class="token string">'MainBattleTank_ZTZ200_3'</span><span class="token punctuation">,</span>  <span class="token comment"># 主战坦克</span>
+
+<span class="token comment"># Normal deploy params=(x, y, z)</span>
+<span class="token string">'Infantry2'</span><span class="token punctuation">,</span> <span class="token string">'Infantry3'</span><span class="token punctuation">,</span> <span class="token string">'Infantry4'</span><span class="token punctuation">,</span> <span class="token string">'Infantry5'</span><span class="token punctuation">,</span>  <span class="token comment"># 步兵</span>
+<span class="token string">'WheeledCmobatTruck_ZB200_0'</span><span class="token punctuation">,</span> <span class="token string">'WheeledCmobatTruck_ZB200_1'</span><span class="token punctuation">,</span> <span class="token string">'WheeledCmobatTruck_ZB200_2'</span><span class="token punctuation">,</span> <span class="token string">'WheeledCmobatTruck_ZB200_3'</span><span class="token punctuation">,</span>  <span class="token comment"># 装甲车</span>
+<span class="token string">'missile_truck3'</span><span class="token punctuation">,</span> <span class="token string">'missile_truck4'</span><span class="token punctuation">,</span> <span class="token string">'missile_truck5'</span><span class="token punctuation">,</span> <span class="token string">'missile_truck6'</span><span class="token punctuation">,</span> <span class="token string">'missile_truck7'</span>  <span class="token comment"># 导弹发射车</span>
+<span class="token string">'ShipboardCombat_plane1'</span>  <span class="token comment"># 无人察打一体飞机</span>
+    
+<span class="token string">'HEO_infrared_satallite1'</span><span class="token punctuation">,</span> <span class="token string">'bluebmc3'</span>  <span class="token comment"># 未知参数</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="配弹"><a class="markdownIt-Anchor" href="#配弹"></a> 配弹</h4>
+<p>只有坦克，迫击炮需要对穿甲弹和杀爆弹的弹药进行设定，其他兵种无需设定。</p>
+<table>
+<thead>
+<tr>
+<th>杀伤类型</th>
+<th>id</th>
+<th>从属兵种</th>
+<th>配单量</th>
+<th>射程</th>
+<th>冷却</th>
+<th>可打击对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1速子弹</td>
+<td><code>Bullet</code></td>
+<td>步兵</td>
+<td>1500发每人150发</td>
+<td>400m</td>
+<td>0s</td>
+<td>步兵</td>
+</tr>
+<tr>
+<td>2速子弹</td>
+<td><code>Bullet_ZT</code></td>
+<td>装甲车，突击车，坦克，榴弹炮</td>
+<td>2500发</td>
+<td>700m</td>
+<td>0s</td>
+<td>步兵</td>
+</tr>
+<tr>
+<td>近程导弹</td>
+<td><code>ShortRangeMissile</code></td>
+<td>红方导弹发射车</td>
+<td>16发</td>
+<td>0~600km</td>
+<td>94s</td>
+<td>除导弹外所有单位</td>
+</tr>
+<tr>
+<td>拦截导弹</td>
+<td><code>LDJS_sm6</code></td>
+<td>蓝方导弹发射车</td>
+<td>16发</td>
+<td>?</td>
+<td>47s</td>
+<td>近程导弹</td>
+</tr>
+<tr>
+<td>空对地导弹</td>
+<td><code>AGM</code></td>
+<td>飞机</td>
+<td>4发</td>
+<td>15km</td>
+<td>?</td>
+<td>陆地单位</td>
+</tr>
+<tr>
+<td>RPG</td>
+<td><code>RPG</code></td>
+<td>步兵/突击车</td>
+<td>4发/2发</td>
+<td>1000m</td>
+<td>12s</td>
+<td>除导弹外所有单位</td>
+</tr>
+<tr>
+<td>1/2速穿甲弹<br />1/2速杀爆弹</td>
+<td><code>ArmorPiercingShot(_ZT)</code><br /><code>HighExplosiveShot(_ZT)</code></td>
+<td>坦克(2速)，榴弹炮(1速)</td>
+<td>坦克共60发，榴弹炮共80发</td>
+<td>2800m</td>
+<td>8s</td>
+<td>陆地单位</td>
+</tr>
+</tbody>
+</table>
+<h2 id="通视视野规则"><a class="markdownIt-Anchor" href="#通视视野规则"></a> 通视，视野规则</h2>
+<p>单方视野共享，依概率探测到对方位置。视野收到三方面影响：</p>
+<ul>
+<li>
+<p>视野范围：不同的单位有不同的视野范围。</p>
+</li>
+<li>
+<p>地形：丛林内被探测到的概率下降 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>20</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">20\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">2</span><span class="mord">0</span><span class="mord">%</span></span></span></span>，工事内被探测到的概率下降 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>80</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">80\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">8</span><span class="mord">0</span><span class="mord">%</span></span></span></span>。</p>
+</li>
+<li>
+<p>掩蔽：处于掩蔽状态中的单位被探测到的概率下降 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>50</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">50\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">5</span><span class="mord">0</span><span class="mord">%</span></span></span></span>。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>单位</th>
+<th>探测半径</th>
+<th>可探测对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>装甲车，突击车，导弹发射车，步兵，榴弹炮</td>
+<td>400m</td>
+<td>所有单位</td>
+</tr>
+<tr>
+<td>坦克</td>
+<td>2500m</td>
+<td>所有单位</td>
+</tr>
+<tr>
+<td>飞机</td>
+<td>5km</td>
+<td>所有单位</td>
+</tr>
+<tr>
+<td>近程导弹</td>
+<td>4km</td>
+<td>除导弹外所有单位</td>
+</tr>
+<tr>
+<td>空对地导弹</td>
+<td>4km</td>
+<td>陆地单位</td>
+</tr>
+</tbody>
+</table>
+<h2 id="毁伤规则"><a class="markdownIt-Anchor" href="#毁伤规则"></a> 毁伤规则</h2>
+<h3 id="毁伤等级"><a class="markdownIt-Anchor" href="#毁伤等级"></a> 毁伤等级</h3>
+<p>车辆4个等级（从低到高：N正常，M无法移动，F无法攻击，K销毁），步兵4个等级（正常、死亡、重伤、轻伤），飞机2个等级正常、销毁）</p>
+<h3 id="毁伤属性"><a class="markdownIt-Anchor" href="#毁伤属性"></a> 毁伤属性</h3>
+<p>杀爆弹、近程导弹具有<strong>范围型杀伤</strong>，毁伤范围分别为15m和30m，子弹、穿甲弹只具有单体杀伤。步兵班总共10人，只要没有被全歼，则需要按照剩余单位数量对其输出计算，只有当全歼时步兵班被销毁。</p>
+<h3 id="毁伤判定"><a class="markdownIt-Anchor" href="#毁伤判定"></a> 毁伤判定</h3>
+<p>毁伤存在两种判定方法：</p>
+<ol>
+<li>击中概率：若单位被特定武器击中则直接销毁。（击中概率均为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>80</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">80\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">8</span><span class="mord">0</span><span class="mord">%</span></span></span></span>）</li>
+<li>累计毁伤：需要根据物理模拟结果计算单位的受伤等级。设第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span> 次对单位造成等级 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 的毁伤概率为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">T_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，则该单位受到等级 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 的累计毁伤概率为： <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>A</mi></msub><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn><mo>−</mo><msubsup><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>T</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P_A(n) = 1 - \prod_{i=1}^n(1-T_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">A</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.104002em;vertical-align:-0.29971000000000003em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∏</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.804292em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。当累计毁伤概率 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>A</mi></msub><mo>&gt;</mo><mn>80</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">P_A &gt; 80\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">A</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">8</span><span class="mord">0</span><span class="mord">%</span></span></span></span> 时，则单位出现等级 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 的毁伤。</li>
+</ol>
+<h3 id="毁伤因素"><a class="markdownIt-Anchor" href="#毁伤因素"></a> 毁伤因素</h3>
+<ol>
+<li>地形：丛林 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>×</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">T_i\times 0.8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">8</span></span></span></span>；河流 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>×</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">T_i\times 0.7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">7</span></span></span></span>；工事 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>×</mo><mn>0.6</mn></mrow><annotation encoding="application/x-tex">T_i\times 0.6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">6</span></span></span></span>。</li>
+<li>步兵掩蔽状态 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>×</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">T_i\times 0.9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span></span></span></span>。</li>
+<li>步兵上车状态 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>×</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">T_i\times 0.8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">8</span></span></span></span>。</li>
+<li>距离衰减，不同武器根据不同衰减曲线进行毁伤概率衰减，最远处衰减 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>×</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">T_i\times 0.4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">4</span></span></span></span>。</li>
+<li>设步兵班人数为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>，则步兵班武器发出的毁伤概率为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">T_i\times n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>。</li>
+</ol>
+<h2 id="射击规则"><a class="markdownIt-Anchor" href="#射击规则"></a> 射击规则</h2>
+<p>除榴弹炮和导弹发射车需要停止状态下射击，其他单位都可以移动中射击。</p>
+<p><strong>直瞄射击</strong>要求：</p>
+<ol>
+<li>武器射程范围内且仍有弹药量。</li>
+<li>武器不处于冷却当中。</li>
+</ol>
+<p><strong>间瞄射击</strong>要求：</p>
+<ol>
+<li>可执行间瞄射击单位为：坦克和榴弹炮。</li>
+<li>间瞄射击引导时间为20s，20s内无法执行其他动作。</li>
+<li>武器打击点会在目标地点的20m范围内随机分布。</li>
+</ol>
+<h2 id="注意事项"><a class="markdownIt-Anchor" href="#注意事项"></a> 注意事项</h2>
+<ul>
+<li>
+<p>一回合1000帧（demo中给的是3000帧？）</p>
+</li>
+<li>
+<p>夺控点坐标 <code>(2.71 E, 39.76 N)</code> （夺控点中心半径 <strong>100m</strong> 内可以开始夺控），除了导弹发射车和飞机无法进行夺控，其他单位均可执行夺控操作。</p>
+</li>
+</ul>
+<h2 id="qa"><a class="markdownIt-Anchor" href="#qa"></a> Q&amp;A</h2>
+<ol>
+<li>
+<p>无法实现多进程或多线程交互，当模拟器启动数量超过一个时，前一个直接关闭。（无多线程/多进程）</p>
+</li>
+<li>
+<p>无法关闭可视化界面，令 <code>env.SetRender(False)</code> 仍然会进行渲染，环境推断平均帧数不到 <code>40fps</code>（执行 <code>env.step(action)</code> 和 <code>get_states(env)</code>）。（可直接关闭前段地图界面）</p>
+</li>
+<li>
+<p>单位初始化部署的问题</p>
+<ol>
+<li>初始位置问题：参考文档中只给出了初始部署区域范围为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>20</mn><mo>×</mo><mn>20</mn></mrow><annotation encoding="application/x-tex">20\times 20</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">0</span></span></span></span>，没有具体坐标，难道是整个岛屿的区域么，还是说初始部署位置已经固定为代码中所给出的坐标？（基于岛屿作战区域概略坐标）</li>
+<li>初始配弹问题：坦克的初始穿甲+杀爆弹最大上限总共60发（榴弹发射器也有该问题），demo中默认均匀分配，所以可以自行配置两种炸弹数目么。（可以自行配置弹药量）</li>
+</ol>
+</li>
+<li>
+<p>单位夺控命令是什么，还是说只要夺控点内没有敌方单位40帧就算夺控成功？（正确）</p>
+</li>
+<li>
+<p>坦克具有两个探测方法，视野400m和红外2500m，那么坦克的探测距离就是2500m，视野用于直瞄射击？（正确）</p>
+</li>
+<li>
+<p>杀爆弹和近程导弹的H伤范围具体多大？（15m和30m）拦截弹能否攻击空对地导弹和飞机（第15面表中属于被攻击方中，但是并不在32面表中的攻击目标中）？（拦截弹只能攻击近程导弹）</p>
+</li>
+<li>
+<p>直瞄射击和间瞄射击在指令中有什么区别，只看到 <code>_Attack_Action</code> 输入目标经纬度进行打击。还是说环境会自动判断视野内是否存在目标判断是直瞄射击还是间瞄射击？（间瞄射击主要包含引导部分，需要20s的额外时间进行引导）</p>
+</li>
+</ol>
+<h1 id="bugs"><a class="markdownIt-Anchor" href="#bugs"></a> BUGs</h1>
+<blockquote>
+<p>下面这些bug都已解决</p>
+</blockquote>
+<h2 id="装甲车上车问题"><a class="markdownIt-Anchor" href="#装甲车上车问题"></a> 装甲车上车问题</h2>
+<p>以蓝色方为例，demo中装甲车上的步兵无法上车，自己测试后也发现上车前后查看步兵状态字典，其完全没有改变，查看实时渲染结果也可以看出，步兵没有坐在装甲车上移动。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 初始化self.iftr[3]和self.whc[3]位置相同</span>
+<span class="token keyword">def</span> <span class="token function">mytest</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>num <span class="token operator">==</span> <span class="token number">100</span><span class="token punctuation">:</span>  <span class="token comment"># 上车</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"iftr:"</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>status<span class="token punctuation">[</span>self<span class="token punctuation">.</span>iftr<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 检查步兵状态</span>
+        self<span class="token punctuation">.</span>_On_Board_Action<span class="token punctuation">(</span>self<span class="token punctuation">.</span>whc<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>iftr<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>num <span class="token operator">==</span> <span class="token number">150</span><span class="token punctuation">:</span>  <span class="token comment"># 装甲车移动</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"iftr:"</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>status<span class="token punctuation">[</span>self<span class="token punctuation">.</span>iftr<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 二者状态完全没有改变</span>
+        self<span class="token punctuation">.</span>_Move_Action<span class="token punctuation">(</span>self<span class="token punctuation">.</span>whc<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">2.7</span><span class="token punctuation">,</span> <span class="token number">39.7</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>num <span class="token operator">==</span> <span class="token number">500</span><span class="token punctuation">:</span>  <span class="token comment"># 停车</span>
+        self<span class="token punctuation">.</span>_Change_State<span class="token punctuation">(</span>self<span class="token punctuation">.</span>whc<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>num <span class="token operator">==</span> <span class="token number">550</span><span class="token punctuation">:</span>  <span class="token comment"># 下车</span>
+        self<span class="token punctuation">.</span>_Off_Board_Action<span class="token punctuation">(</span>self<span class="token punctuation">.</span>whc<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> self<span class="token punctuation">.</span>num <span class="token operator">==</span> <span class="token number">600</span><span class="token punctuation">:</span>  <span class="token comment"># 步兵移动</span>
+        self<span class="token punctuation">.</span>_Move_Action<span class="token punctuation">(</span>self<span class="token punctuation">.</span>iftr<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">2.75</span><span class="token punctuation">,</span> <span class="token number">39.7</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="通视问题"><a class="markdownIt-Anchor" href="#通视问题"></a> 通视问题</h2>
+<h3 id="问题1"><a class="markdownIt-Anchor" href="#问题1"></a> 问题1</h3>
+<p>为什么初始化红色飞机位置为 <code>[2.8,39.65,1128]</code> （地图右下角），蓝色导弹发射车 <code>[2.8,39.85,22]</code>（地图右上角），但是第一步的侦测结果显示，导弹发射车能够检测到飞机的位置？二者的距离应该有 <code>22235.49</code> m，也就是22km左右，但手册上给的探测距离只有4km，请问这是怎么检测到的呢？</p>
+<h3 id="问题2"><a class="markdownIt-Anchor" href="#问题2"></a> 问题2</h3>
+<p>为什么两个坦克的无法相互检测到对方，我将两方的坦克分别选一个初始化地图中间，相距100米距离，具体坐标为红色 <code>[2.7, 39.75, 250]</code> 蓝色 <code>[2.701166, 39.749973, 224]</code>，但二者无法检测到对方？</p>
+<h1 id="算法设计"><a class="markdownIt-Anchor" href="#算法设计"></a> 算法设计</h1>
+<p>将整个任务分为三个大类：<code>BaseAgent</code>（总指挥部）， <code>UnitAgent</code>（部队单位），<code>UnitControler</code>（部队策略控制）；以及对常量的记录：<code>constant.py</code>。</p>
+<h2 id="基本思路"><a class="markdownIt-Anchor" href="#基本思路"></a> 基本思路</h2>
+<p>由于第一次参加该比赛，所以没有考虑过多的策略，只是对每个单位的攻击和运动方式进行了设定，攻击策略只是最简单的跟踪+打击，夺控策略就是保持一直存在一个单位位于夺控范围之内（当上一个单位被击败时，下一个单位补充其位置）。</p>
+<blockquote>
+<p>这次比赛中，我没有用到步兵的RPG，因为步兵过于容易阵亡，所以所有时刻都在装甲车上，主要攻击手段为坦克、飞机的导弹和突击车上的RPG，所以飞机基本上是无法被攻击到的。</p>
+</blockquote>
+<p><code>UnitAgent</code> 用于对每个部队单位进行控制，其核心算法指令包含（更多方法请见下文）：</p>
+<ul>
+<li>
+<p>攻击目标 <code>attack</code>：需指定所选的武器，判断该武器是否还有剩余弹药，若有则进行发射。</p>
+</li>
+<li>
+<p>带有Gauss噪声的指向性移动 <code>move_target</code>和带有Gauss噪声的绕圈移动 <code>move_circle</code>：这两种移动都是通过差分方式实现，即先计算出目标方向向量，然后对该向量加入带有Gauss噪声的夹角构建出旋转矩阵，对该方向向量作用该旋转矩阵得到带有噪声的目标方向，从部队的当前位置沿着带有噪声的目标方向，求出相差100m处的位置就是当前步的移动目标。</p>
+</li>
+</ul>
+<p><code>UnitControler</code> 用于对 <code>UnitAgent</code> 每一步的行为进行决策，总共有三种不同的决策状态（子类）：</p>
+<ul>
+<li>路径巡逻 <code>Seach</code>：固定一个巡航路线  <code>path</code>，部队单位在该路线上进行往复巡逻侦察。</li>
+<li>定点巡逻 <code>Patrol</code>：固定一个点，使得该部队能基于该点为圆心进行圆周运动。</li>
+<li>跟踪打击 <code>Follow</code>：首先基于id去跟踪一个目标，在跟踪状态下先向目标最后出现的位置进行移动，然后当目标静止时，保持攻击距离范围内的圆周运动，保持自身移动时对其完成攻击，直到该目标从侦测器上消失，停止打击，由总指挥切换其进入下一个状态。</li>
+</ul>
+<p><code>BaseAgent</code> 总指挥，对于红蓝方分别有两个子类 <code>RedAgent</code> 和 <code>BlueAgent</code>，其作用为：</p>
+<ol>
+<li>总指挥完成对每个单位的初始位置、配弹量部署（最终比赛时由主办方的程序完成）</li>
+<li>总指挥完成对每个单位初始策略的决定，坦克执行搜寻工作，移速快的单位（装甲车、导弹发射车）执行夺控任务，多余单位分别在不同区域进行巡逻。</li>
+<li>如果侦测到对方单位，则总指挥从当前所有的空余部队（执行巡逻工作且非夺控）中选出具有打击该目标的单位，将其状态转化为跟踪打击的状态。</li>
+</ol>
+<blockquote>
+<p>如果是红色放有导弹发射车，则直接向夺控点进行循环轰炸，因为导弹可以在一定范围内自动寻找可打击目标，所以无需操控，就很容易打击到敌方。</p>
+</blockquote>
+<p>下面分别对每个代码功能进行介绍：</p>
+<h2 id="constant-常量"><a class="markdownIt-Anchor" href="#constant-常量"></a> Constant 常量</h2>
+<p>由于默认的部队id实在过于复杂，所以首先将名称进行简化：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">name2aux <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token string">'tank'</span><span class="token punctuation">:</span> <span class="token string">'MainBattleTank'</span><span class="token punctuation">,</span>
+  <span class="token string">'howitzer'</span><span class="token punctuation">:</span> <span class="token string">'Howitzer'</span><span class="token punctuation">,</span>
+  <span class="token string">'infantry'</span><span class="token punctuation">:</span> <span class="token string">'Infantry'</span><span class="token punctuation">,</span>
+  <span class="token string">'armor'</span><span class="token punctuation">:</span> <span class="token string">'ArmoredTruck'</span><span class="token punctuation">,</span>
+  <span class="token string">'wheel'</span><span class="token punctuation">:</span> <span class="token string">'WheeledCmobatTruck'</span><span class="token punctuation">,</span>
+  <span class="token string">'missile'</span><span class="token punctuation">:</span> <span class="token string">'missile_truck'</span><span class="token punctuation">,</span>
+  <span class="token string">'plane'</span><span class="token punctuation">:</span> <span class="token string">'ShipboardCombat_plane'</span><span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>记录不同部队的初始化配弹量信息 <code>weapon_unit_init</code>，不同子弹的攻击范围 <code>bullet_range</code>，地图边角 <code>map_corner</code>，目标夺控点 <code>target_lla</code>，红蓝方的初始化坐标点 <code>red_initial_lla</code>, <code>blue_initial_lla</code>，不同部队的检测范围 <code>detection_range</code>，固定的一些巡逻点、巡逻路径 <code>patrol_point</code>, <code>search_path</code>，分别确定红蓝方的初始策略 <code>red_init_controler</code>, <code>blue_init_controler</code>。</p>
+<p>包含两个函数：</p>
+<ul>
+<li><code>check_in_boundary</code>：判断单位是否超出边界。</li>
+<li><code>check_weapon2target</code>：判断武器类别是否可以攻击到目标。</li>
+</ul>
+<h2 id="baseagent-总指挥"><a class="markdownIt-Anchor" href="#baseagent-总指挥"></a> BaseAgent 总指挥</h2>
+<p><code>BaseAgent</code> 具有两个子类 <code>RedAgent</code> 和 <code>BlueAgent</code> 分别为红方和蓝色方的总指挥。<code>BaseAgent</code> 类需要维护以下参数：</p>
+<ul>
+<li><code>units</code>, <code>units_flatten</code>, <code>units_id</code>：<code>units</code> 为字典，key为部队的简称，value为包含属于该简称的所有部队的 <code>UnitAgent</code> 列表。其余两个是 <code>units</code> 的两种不同形式。</li>
+<li><code>cmd</code>：列表，记录当前总指挥产生的指令，包含所有的部队产生的指令。</li>
+<li><code>step_num</code>：记录当前的总步数，用于做基于时间的策略变化决定。</li>
+<li><code>state</code>：当前环境返回的状态字典。</li>
+<li><code>detection</code>：当前时刻所检测到的所有的单位。</li>
+<li><code>detection_history</code>：按照敌方id，记录每个单位上一个被侦测到的位置和时刻。</li>
+<li><code>detection_forget_time</code>：遗忘时间，当敌方id连续消失超过这个时刻，则放弃对其跟踪。</li>
+</ul>
+<p>类方法：</p>
+<ul>
+<li><code>deploy</code>：初始化部署部队（只在自己测试时使用，比赛时由主办方进行初始化）</li>
+<li><code>update_state</code>：用当前环境返回的 <code>state</code> 更新当前状态，每个 <code>units</code> 中的所有单位更新自身的参数，<code>BaseAgent</code> 更新 <code>detection_history</code>，并判断是否有新的敌方目标出现，有旧的单位被遗忘，基于此修改每个单位的状态。</li>
+</ul>
+<h2 id="unitagent-部队单位"><a class="markdownIt-Anchor" href="#unitagent-部队单位"></a> UnitAgent 部队单位</h2>
+<p><code>UnitAgent</code> 就是对每个部队单独进行控制的类，存储在总指挥中的 <code>units</code> 中，可以被 <code>UnitControler</code> 控制。需要维护的参数包含：</p>
+<ul>
+<li><code>name</code>, <code>id</code>：当前部队的名称缩写和完整编号。</li>
+<li><code>weapons</code>：字典类型，key为武器名称，value存储目前剩余的弹药量和冷却cd。</li>
+<li><code>position</code>, <code>position_last</code>：当前部队的坐标位置，及上一个时刻时部队的坐标位置。</li>
+<li><code>alive</code>：表示当前部队是否存活。</li>
+<li><code>cmd</code>：该列表和从属的总指挥相同，用于添加指令。</li>
+<li><code>controler</code>：当前单位控制的策略 <code>Controler</code>，是 <code>SearchControler</code>, <code>PatrolControler</code>, <code>FollowControler</code> 三者之一。</li>
+<li><code>last_patrol_controler</code>：之前最后一个巡逻的控制策略，用于攻击策略完成继续进行巡逻。</li>
+<li><code>rotation_direction</code>：表示当前做圆周运动是顺时针还是逆时针方向，用于避免卡到地图边界处无法移动。</li>
+</ul>
+<p>类方法：</p>
+<ul>
+<li><code>deploy</code>：当前单位部署（只在自己测试时使用，比赛时由主办方进行初始化）</li>
+<li><code>move_target</code>, <code>move_circle</code>：分别为带有Gauss噪声的定点移动和圆周运动，具体实现方法请见上文基本思路部分。</li>
+<li><code>attack</code>, <code>find_attack_weapon</code>：攻击目标，及从当前可用武器中选取可打击的武器。</li>
+<li><code>update</code>：更新当前单位的状态，例如武器状态、单位是否存活、位置信息。</li>
+<li><code>reset</code>：重置全部状态。</li>
+<li><code>change_state</code>：执行状态的转化，0,1,2分别表示移动、停止、隐蔽状态。</li>
+<li><code>on_board_action</code>, <code>off_board_action</code>：步兵的上车及下车操作。</li>
+</ul>
+<h2 id="controler-单位的策略控制"><a class="markdownIt-Anchor" href="#controler-单位的策略控制"></a> Controler 单位的策略控制</h2>
+<p><code>Controler</code> 包含三个子类 <code>SearchControler</code> 路径巡逻，<code>PatrolControler</code> 定点巡逻，<code>FollowControler</code> 跟踪打击，每个子类功能请见上文<strong>基本思路</strong>部分，子类的具体不难实现，不详细说明。下面介绍 <code>Controler</code> 需要维护的参数：</p>
+<ul>
+<li><code>unit</code>, <code>aux_unit</code>：主控单位、附加单位，这里的附加单位只能是步兵单位，这里将装甲车和步兵视为一个整体进行控制。</li>
+<li><code>mode</code>：字符串，指当前模式 <code>search, patrol, follow</code> 其中一个。</li>
+<li><code>boarding</code>：如果 <code>unit</code> 为装甲车，则可以判断其是否载有步兵。</li>
+</ul>
+<p>需具体实现的方法：</p>
+<ul>
+<li><code>step(detection)</code>：基于当前侦测的信息，给出当前单位的具体行为，例如移动或者打击。</li>
+<li><code>update_boarding_state</code>：更新是否载有步兵的信息。</li>
+<li><code>board</code>：步兵上车操作，若人车距离超过200米，则车向人进行移动；否则，执行上车指令。</li>
+</ul>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>没有设计过于复杂的策略，可以改进的地方还有很多，例如</p>
+<ul>
+<li>移动操作容易遇到难以攀爬的高度就会卡住，只能靠随机噪声进行调整；</li>
+<li>是否可能在对方单位处于移动状态是对其进行打击；</li>
+<li>对红方的导弹发射车的策略进行提升，而不是循环定点轰炸；</li>
+<li>对步兵加入下车攻击的策略，而非一直躲在车里；</li>
+<li>对总指挥加入更优的攻击顺序，而非侦测到就直接派兵跟踪打击。</li>
+</ul>
+<p>第一次打比赛拿了个亚军，感觉还是有所收获吧！😆</p>
+<blockquote>
+<p>可惜在决赛时候，应该是定点巡航坐标出了问题，所有的装甲车都卡在了地图边缘处，导致夺控单位被击败后，没有单位继续填补，红色方失败，导致最终失败。</p>
+</blockquote>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AB%9E%E8%B5%9B/" class="category-chain-item">竞赛</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CALVT - 2023劳动竞赛（智能体对抗）总结</div>
+      <div>https://wty-yy.github.io/posts/15725/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年11月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/751/" title="狭义相对论学习笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">狭义相对论学习笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/40875/" title="YOLOv4 笔记">
+                        <span class="hidden-mobile">YOLOv4 笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
