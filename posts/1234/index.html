@@ -16,15 +16,15 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="SQL 笔记  本文参考Mick的《SQL基础教程》，基于PostgreSQL对SQL进行入门学习。   前置芝士  背景故事 第一个问题，数据库（Database, DB）和Excel表格有什么区别？ 解释：当前普遍使用的数据库称为关系数据库（Relation Database, RDB）和普通二维表格没什么结构上区别，只是对每一列有特定的格式要求；但是DB的管理系统（Database Man">
+    <meta name="description" content="本文参考Mick的《SQL基础教程》，基于PostgreSQL对SQL进行入门学习。   前置芝士  背景故事 第一个问题，数据库（Database, DB）和Excel表格有什么区别？ 解释：当前普遍使用的数据库称为关系数据库（Relation Database, RDB）和普通二维表格没什么结构上区别，只是对每一列有特定的格式要求；但是DB的管理系统（Database Management">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SQL 笔记">
 <meta property="og:url" content="https://wty-yy.github.io/posts/1234/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="SQL 笔记  本文参考Mick的《SQL基础教程》，基于PostgreSQL对SQL进行入门学习。   前置芝士  背景故事 第一个问题，数据库（Database, DB）和Excel表格有什么区别？ 解释：当前普遍使用的数据库称为关系数据库（Relation Database, RDB）和普通二维表格没什么结构上区别，只是对每一列有特定的格式要求；但是DB的管理系统（Database Man">
+<meta property="og:description" content="本文参考Mick的《SQL基础教程》，基于PostgreSQL对SQL进行入门学习。   前置芝士  背景故事 第一个问题，数据库（Database, DB）和Excel表格有什么区别？ 解释：当前普遍使用的数据库称为关系数据库（Relation Database, RDB）和普通二维表格没什么结构上区别，只是对每一列有特定的格式要求；但是DB的管理系统（Database Management">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-03-03T13:24:59.000Z">
-<meta property="article:modified_time" content="2024-03-03T14:05:59.986Z">
+<meta property="article:modified_time" content="2024-03-07T10:58:41.753Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -293,7 +293,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          1.8k 字
         
       </span>
     
@@ -304,7 +304,7 @@
         
         
         
-          10 分钟
+          16 分钟
         
       </span>
     
@@ -346,8 +346,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="sql-笔记"><a class="markdownIt-Anchor" href="#sql-笔记"></a> SQL 笔记</h1>
-<blockquote>
+                <blockquote>
 <p>本文参考Mick的《SQL基础教程》，基于<a target="_blank" rel="noopener" href="https://www.postgresql.org/">PostgreSQL</a>对SQL进行入门学习。</p>
 </blockquote>
 <h2 id="前置芝士"><a class="markdownIt-Anchor" href="#前置芝士"></a> 前置芝士</h2>
@@ -397,6 +396,71 @@
 <p>然后在 Shell 中使用新创建的用户登入：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">psql <span class="token operator">-</span>U <span class="token operator">&lt;</span>user_name<span class="token operator">></span> <span class="token operator">-</span>d <span class="token operator">&lt;</span>database_name<span class="token operator">></span>  <span class="token comment"># 使用新创建的用户登入新创建的数据集</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
 <p>这样的好处在于可以在VSCode中下载 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres">PostgreSQL</a> 插件来更加方便的书写 SQL 命令，缺点是不能输入 <code>\c, \q, \d</code> 这类非 SQL 指令。</p>
+<h3 id="sql中的注释"><a class="markdownIt-Anchor" href="#sql中的注释"></a> SQL中的注释</h3>
+<p>SQL 中的<strong>注释</strong>方法有两种：</p>
+<ol>
+<li><code>-- 单行注释</code>：两个横杠。</li>
+<li><code>/* 多行注释 */</code>：和C语言一样的多行注释方法。</li>
+</ol>
+<h2 id="创建数据库及表"><a class="markdownIt-Anchor" href="#创建数据库及表"></a> 创建数据库及表</h2>
+<h3 id="创建数据库"><a class="markdownIt-Anchor" href="#创建数据库"></a> 创建数据库</h3>
+<p>创建一个 DATABASE 将其命名为 <code>shop</code></p>
+<blockquote>
+<p>注: SQL中所有的名称定义（数据库名、表名、列名）直接输入名称都将默认转换为小写，除非用双引号括起来</p>
+</blockquote>
+<figure><div class="code-wrapper"><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">DATABASE</span> shop<span class="token punctuation">;</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">DATABASE</span> Shop<span class="token punctuation">;</span>  <span class="token comment">-- 与上一行等价</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">DATABASE</span> <span class="token string">"Shop"</span><span class="token punctuation">;</span>  <span class="token comment">-- 创建名为Shop的表</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>PostgreSQL中查看当前已有数据库的命令为 ‘\l’，打开该数据集两种常用方法：</p>
+<ul>
+<li>进入交互界面时给定 <code>psql -U &lt;username&gt; -d &lt;database_name&gt;</code></li>
+<li>进入交互界面之后切换 <code>\c &lt;database_name&gt;</code></li>
+</ul>
+<h3 id="创建表"><a class="markdownIt-Anchor" href="#创建表"></a> 创建表</h3>
+<p>创建一个Table其名称为product（直接输入名称是默认全部小写，除非用双引号括起来）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment">-- 创建表的格式如下（在当前进入的数据库中创建，表名不能重复）</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token operator">&lt;</span>table_name<span class="token operator">></span> <span class="token punctuation">(</span>
+  <span class="token operator">&lt;</span>column_name<span class="token operator">></span> <span class="token operator">&lt;</span>data_type<span class="token operator">></span> <span class="token operator">&lt;</span>condition<span class="token operator">></span><span class="token punctuation">,</span>
+  <span class="token operator">&lt;</span>column_name<span class="token operator">></span> <span class="token operator">&lt;</span>data_type<span class="token operator">></span> <span class="token operator">&lt;</span>condition<span class="token operator">></span><span class="token punctuation">,</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  <span class="token operator">&lt;</span><span class="token keyword">table</span> <span class="token keyword">constraint</span> condition<span class="token operator">></span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> product <span class="token punctuation">(</span>
+  product_id      <span class="token keyword">CHAR</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>       <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>  <span class="token comment">-- 列名称 数据类型 该列的约束条件</span>
+  product_name    <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span>  <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  product_type    <span class="token keyword">VARCHAR</span><span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span>   <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+  sale_price      <span class="token keyword">INTEGER</span><span class="token punctuation">,</span>
+  purchase_price  <span class="token keyword">INTEGER</span><span class="token punctuation">,</span>
+  regist_date     <span class="token keyword">DATE</span><span class="token punctuation">,</span>
+  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>product_id<span class="token punctuation">)</span>  <span class="token comment">-- 该表的约束条件（指定product_id列为主键）</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>SQL支持的数据类型：</p>
+<ul>
+<li><code>INTEGER</code>: 32位整形</li>
+<li><code>CHAR(n)</code>: 长度n的定长字符串，字符串长度小于n时使用空格补全，字符串长度大于n时报错</li>
+<li><code>VARCHAR(n)</code>: 长度为n的可变长字符串，字符串长度小于n时也不会用空格补全</li>
+<li><code>DATE</code>: 日期型，固定格式 <code>YYYY-MM-DD</code>，例如<code>2024-03-05</code>, <code>2024-3-5</code>，并且会自动检测日期的正确性</li>
+</ul>
+<h3 id="名称变更操作"><a class="markdownIt-Anchor" href="#名称变更操作"></a> 名称变更操作</h3>
+<p>ALTER TABLE &lt;table_name&gt; TO &lt;new_table_name&gt;;  – 修改表名<br />
+DROP TABLE &lt;table_name&gt;;  – 删除表<br />
+ALTER TABLE &lt;table_name&gt; ADD &lt;column_name&gt;;  – 加入列<br />
+ALTER TABLE &lt;table_name&gt; DROP &lt;column_name&gt;;  – 删除列</p>
+<h3 id="数据插入到表"><a class="markdownIt-Anchor" href="#数据插入到表"></a> 数据插入到表</h3>
+<p><code>TRANSACTION</code>事务节点，由<code>BEGIN</code>开始，<code>COMMIT</code>结束，在事务节点中时，可以使用<code>ROLLBACK</code>使数据库回到<code>BEGIN</code>时的状态（当使用<code>COMMIT</code>后就无法使用<code>ROLLBACK</code>回滚了）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">BEGIN</span> <span class="token keyword">TRANSACTION</span><span class="token punctuation">;</span>  <span class="token comment">-- PostgreSQL中创建一个事务节点，用户ROLLBACK回溯，也可以不创建节点，直接插入数据</span>
+<span class="token comment">-- INSERT INTO &lt;table_name></span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> product <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'0001'</span><span class="token punctuation">,</span> <span class="token string">'T恤'</span> <span class="token punctuation">,</span><span class="token string">'衣服'</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">,</span> <span class="token string">'2009-09-20'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> product <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'0002'</span><span class="token punctuation">,</span> <span class="token string">'打孔器'</span><span class="token punctuation">,</span> <span class="token string">'办公用品'</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">,</span> <span class="token number">320</span><span class="token punctuation">,</span> <span class="token string">'2009-09-11'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> product <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'0003'</span><span class="token punctuation">,</span> <span class="token string">'运动T恤'</span><span class="token punctuation">,</span> <span class="token string">'衣服'</span><span class="token punctuation">,</span> <span class="token number">4000</span><span class="token punctuation">,</span> <span class="token number">2800</span><span class="token punctuation">,</span> <span class="token boolean">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> product <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'0004'</span><span class="token punctuation">,</span> <span class="token string">'菜刀'</span><span class="token punctuation">,</span> <span class="token string">'厨房用具'</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">,</span> <span class="token number">2800</span><span class="token punctuation">,</span> <span class="token string">'2009-09-20'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> product <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'0005'</span><span class="token punctuation">,</span> <span class="token string">'高压锅'</span><span class="token punctuation">,</span> <span class="token string">'厨房用具'</span><span class="token punctuation">,</span> <span class="token number">6800</span><span class="token punctuation">,</span> <span class="token number">5000</span><span class="token punctuation">,</span> <span class="token string">'2009-01-15'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> product <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'0006'</span><span class="token punctuation">,</span> <span class="token string">'叉子'</span><span class="token punctuation">,</span> <span class="token string">'厨房用具'</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">,</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> <span class="token string">'2009-09-20'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> product <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'0007'</span><span class="token punctuation">,</span> <span class="token string">'擦菜板'</span><span class="token punctuation">,</span> <span class="token string">'厨房用具'</span><span class="token punctuation">,</span> <span class="token number">880</span><span class="token punctuation">,</span> <span class="token number">790</span><span class="token punctuation">,</span> <span class="token string">'2008-04-28'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> <span class="token keyword">INTO</span> product <span class="token keyword">VALUES</span> <span class="token punctuation">(</span><span class="token string">'0008'</span><span class="token punctuation">,</span> <span class="token string">'圆珠笔'</span><span class="token punctuation">,</span> <span class="token string">'办公用品'</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span> <span class="token string">'2009-11-11'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">COMMIT</span><span class="token punctuation">;</span>
+<span class="token comment">-- 查看表中全部信息</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> product<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
