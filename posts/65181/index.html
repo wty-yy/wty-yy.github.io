@@ -24,7 +24,7 @@
 <meta property="og:description" content="adb&amp;waydroid常用命令  waydroid官方参考文档，adb速查表   adb常用命令   adb devices ：列出当前连接的设别（当连接设别数目大于1个时，使用 adb shell 控制命令需要加入 -s 设别号 指定控制的设备）   adb connect &lt;IP:port&gt;：使用 adb 连接当前 ip 对应的Android设备。例如：使用 waydr">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-02-26T13:15:41.000Z">
-<meta property="article:modified_time" content="2024-02-26T13:28:33.415Z">
+<meta property="article:modified_time" content="2024-06-11T07:01:13.755Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -237,6 +237,14 @@
                     <span>算法总结</span>
                   </a>
                 
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
               </div>
             </li>
           
@@ -293,7 +301,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k 字
+          2.4k 字
         
       </span>
     
@@ -304,7 +312,7 @@
         
         
         
-          15 分钟
+          20 分钟
         
       </span>
     
@@ -377,6 +385,24 @@
 <li>
 <p><code>adb shell input tap &lt;X&gt; &lt;Y&gt;</code>：点击屏幕上的 <code>(X,Y)</code> 像素位置。</p>
 </li>
+<li>
+<p><code>adb shell pm list package -3</code>：查看设备中安装的第三方APP的包名（不输入 <code>-3</code> 就是全部包名）。</p>
+</li>
+<li>
+<p><code>adb shell am start -n &lt;包名&gt;/&lt;Activity名&gt;</code>：启动包名对应的APP，其中包名为上述命令查看到的名称，而<code>Activity名</code>获取方法是通过<a target="_blank" rel="noopener" href="https://aaptdownload.com/">下载aapt</a>工具，找到软件安装的apk文件，执行：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Linux</span>
+$ aapt dump badging /your/path/AppName.apk <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"activity"</span>
+<span class="token comment"># Windows</span>
+$ aapt dump badging /your/path/AppName.apk <span class="token operator">|</span> findstr <span class="token string">"activity"</span>
+
+<span class="token comment"># 以百词斩为例，假如返回结果为</span>
+<span class="token operator">></span> launchable-activity: <span class="token assign-left variable">name</span><span class="token operator">=</span><span class="token string">'com.baicizhan.main.activity.LoadingPageActivity'</span>  <span class="token assign-left variable">label</span><span class="token operator">=</span><span class="token string">''</span> <span class="token assign-left variable">icon</span><span class="token operator">=</span><span class="token string">''</span>
+<span class="token comment"># 那么我们的启动该APP的命令为（包名为com.jiongji.andriod.card）</span>
+$ adb shell am start <span class="token parameter variable">-n</span> com.jiongji.andriod.card/com.baicizhan.main.activity.LoadingPageActivity<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+</li>
+<li>
+<p><code>adb shell am force-stop &lt;包名&gt;</code>：终止当前包名对应的APP（直接退出后台进程）。</p>
+</li>
 </ul>
 <h2 id="waydroid常用命令"><a class="markdownIt-Anchor" href="#waydroid常用命令"></a> Waydroid常用命令</h2>
 <p>Ubuntu安装方式参考<a target="_blank" rel="noopener" href="https://docs.waydro.id/usage/install-on-desktops#ubuntu-debian-and-derivatives">官网</a>，虽然Waydroid使用容器实现的，但是当前并不支持容器多开（创建多个instances实例）。</p>
@@ -398,7 +424,7 @@ waydroid prop <span class="token builtin class-name">set</span> persist.waydroid
 <p><a target="_blank" rel="noopener" href="https://github.com/casualsnek/waydroid_script">Waydroid script</a> 是一个python脚本程序，可以为你的Waydroid加入新的插件，例如使用 <code>libhoudini</code> 安装 <code>arm</code> 架构的APP（大部分国产软件s）。</p>
 <p>使用方法：从github上clone或者下载zip文件，解压后使用一个python环境（也可以使用系统默认的python，不过最好创建一个环境），使用</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> waydroid-script
-python intall <span class="token parameter variable">-r</span> requirements.py
+pip <span class="token function">install</span> <span class="token parameter variable">-r</span> requirements.py
 where python  <span class="token comment"># 查看环境的python位置</span>
 <span class="token function">sudo</span> your/python/path/bin/python main.py<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>选择 <code>Android11 -&gt; Install -&gt; 用空格选择你需要安装的APP</code>（安装了 <code>libhoudini</code> 后就可以安装 <code>arm</code> 架构的APP）。</p>
@@ -484,6 +510,12 @@ where python  <span class="token comment"># 查看环境的python位置</span>
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/posts/9164/" title="用JAX复现基于Transformer的miniGPT模型">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">用JAX复现基于Transformer的miniGPT模型</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
