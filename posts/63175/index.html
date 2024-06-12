@@ -1,0 +1,921 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这次数值分析的大作业要求是“观察龙格现象”，利用Newton迭代法和三次样条插值法做对比，体现出高次插值多项式在距离较远的地方会有明显的“震荡”，而分段低次插值就不会有这种问题，由于本次作业是用Latex写的不想再写一次Markdown网页版了（懒~ 所以就直接给出这次算法的pdf版，里面对计算过程转化有非常详细解释，完整的MATLAB代码在附录中也有给出，这里再贴一遍😄（我的MATLAB脚本习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三次样条插值法&amp;牛顿插值法&amp;切比雪夫插值法 MATLAB实现 数值分析 - 观察龙格现象">
+<meta property="og:url" content="https://wty-yy.github.io/posts/63175/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="这次数值分析的大作业要求是“观察龙格现象”，利用Newton迭代法和三次样条插值法做对比，体现出高次插值多项式在距离较远的地方会有明显的“震荡”，而分段低次插值就不会有这种问题，由于本次作业是用Latex写的不想再写一次Markdown网页版了（懒~ 所以就直接给出这次算法的pdf版，里面对计算过程转化有非常详细解释，完整的MATLAB代码在附录中也有给出，这里再贴一遍😄（我的MATLAB脚本习">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-19T05:03:09.000Z">
+<meta property="article:modified_time" content="2023-11-28T13:25:35.946Z">
+<meta property="article:author" content="wty">
+<meta property="article:tag" content="插值法">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>三次样条插值法&amp;牛顿插值法&amp;切比雪夫插值法 MATLAB实现 数值分析 - 观察龙格现象 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="三次样条插值法&amp;牛顿插值法&amp;切比雪夫插值法 MATLAB实现 数值分析 - 观察龙格现象"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-03-19 13:03" pubdate>
+          2022年3月19日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">三次样条插值法&amp;牛顿插值法&amp;切比雪夫插值法 MATLAB实现 数值分析 - 观察龙格现象</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>这次数值分析的大作业要求是“观察龙格现象”，利用Newton迭代法和三次样条插值法做对比，体现出高次插值多项式在距离较远的地方会有明显的“震荡”，而分段低次插值就不会有这种问题，由于本次作业是用Latex写的不想再写一次Markdown网页版了（懒~</p>
+<p>所以就直接给出这次算法的pdf版，里面对计算过程转化有非常详细解释，完整的MATLAB代码在附录中也有给出，这里再贴一遍😄（我的MATLAB脚本习惯喜欢用main函数，就是程序默认先执行的函数，这样和C语言很相似，看得更加清楚~）</p>
+<p>如果打不开插件可以换个浏览器试试~（手机浏览器是无法在线预览的，只能下载下来看😣）</p>
+<p><a href="/file/Spline_Newton.pdf">pdf下载链接</a></p>
+
+
+	<div class="row">
+    <embed src="/file/Spline_Newton.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+
+<br>
+<blockquote>
+<p>3.29. 更新<br />
+在附录中加入Chebyshev插值法，更正插值结果（系数过小的项直接删去）</p>
+</blockquote>
+<p>附上完整MATLAB代码</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-matlab" data-language="matlab"><code class="language-matlab"><span class="token keyword">function</span> main
+    format short
+    a <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    b <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    x <span class="token operator">=</span> <span class="token punctuation">(</span>a<span class="token operator">:</span><span class="token number">0.01</span><span class="token operator">:</span>b<span class="token punctuation">)</span><span class="token operator">'</span><span class="token punctuation">;</span>
+    <span class="token function">plot</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">,</span> <span class="token string">'linewidth'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% f(x)图像</span>
+    hold on
+    <span class="token comment">% Newton插值法求N5,N10</span>
+    xx <span class="token operator">=</span> <span class="token punctuation">(</span>a<span class="token operator">:</span><span class="token number">2</span><span class="token operator">/</span><span class="token number">5</span><span class="token operator">:</span>b<span class="token punctuation">)</span><span class="token operator">'</span><span class="token punctuation">;</span>
+    y <span class="token operator">=</span> <span class="token function">Newton</span><span class="token punctuation">(</span>xx<span class="token punctuation">,</span> <span class="token function">f</span><span class="token punctuation">(</span>xx<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">class</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span>
+    <span class="token function">disp</span><span class="token punctuation">(</span>"N5 <span class="token operator">=</span> "<span class="token punctuation">)</span>
+    <span class="token function">disp</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span> <span class="token comment">% 输出N5插值结果</span>
+    <span class="token function">plot</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token function">subs</span><span class="token punctuation">(</span>y<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'color'</span><span class="token punctuation">,</span> <span class="token string">'#43A047'</span><span class="token punctuation">,</span> <span class="token string">'linewidth'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% N5图像</span>
+    hold on
+    xx <span class="token operator">=</span> <span class="token punctuation">(</span>a<span class="token operator">:</span><span class="token number">2</span><span class="token operator">/</span><span class="token number">10</span><span class="token operator">:</span>b<span class="token punctuation">)</span><span class="token operator">'</span><span class="token punctuation">;</span>
+    y <span class="token operator">=</span> <span class="token function">Newton</span><span class="token punctuation">(</span>xx<span class="token punctuation">,</span> <span class="token function">f</span><span class="token punctuation">(</span>xx<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">disp</span><span class="token punctuation">(</span>"N10 <span class="token operator">=</span> "<span class="token punctuation">)</span>
+    <span class="token function">disp</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span> <span class="token comment">% 输出N10插值结果</span>
+    <span class="token function">plot</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token function">subs</span><span class="token punctuation">(</span>y<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'linewidth'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% N10图像</span>
+    hold on
+    <span class="token comment">% 三次样条插值</span>
+    xx <span class="token operator">=</span> <span class="token punctuation">(</span>a<span class="token operator">:</span><span class="token number">2</span><span class="token operator">/</span><span class="token number">10</span><span class="token operator">:</span>b<span class="token punctuation">)</span><span class="token operator">'</span><span class="token punctuation">;</span>
+    y <span class="token operator">=</span> <span class="token function">mySpline</span><span class="token punctuation">(</span>xx<span class="token punctuation">,</span> <span class="token function">f</span><span class="token punctuation">(</span>xx<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">fff</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">fff</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">disp</span><span class="token punctuation">(</span>"S10 <span class="token operator">=</span> "<span class="token punctuation">)</span>
+    <span class="token function">disp</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> <span class="token number">i</span> <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">:</span> <span class="token number">10</span>
+        l <span class="token operator">=</span> <span class="token function">xx</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        r <span class="token operator">=</span> l <span class="token operator">+</span> <span class="token number">2</span><span class="token operator">/</span><span class="token number">10</span><span class="token punctuation">;</span>
+        x <span class="token operator">=</span> l<span class="token operator">:</span><span class="token number">0.01</span><span class="token operator">:</span>r<span class="token punctuation">;</span>
+        <span class="token function">plot</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token function">subs</span><span class="token punctuation">(</span><span class="token function">y</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">,</span> <span class="token string">'linewidth'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">% S10图像</span>
+        hold on
+    <span class="token keyword">end</span>
+    <span class="token function">legend</span><span class="token punctuation">(</span><span class="token punctuation">[</span>"<span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>" "N5" "N10" "S10"<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">set</span><span class="token punctuation">(</span>gca<span class="token punctuation">,</span> <span class="token string">'FontName'</span><span class="token punctuation">,</span> <span class="token string">'Times New Roman'</span><span class="token punctuation">,</span> <span class="token string">'FontSize'</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">end</span>
+
+<span class="token keyword">function</span> y <span class="token operator">=</span> <span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    y <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">./</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">25</span> <span class="token operator">*</span> x <span class="token operator">.*</span> x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">end</span>
+<span class="token keyword">function</span> y <span class="token operator">=</span> <span class="token function">fff</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    y <span class="token operator">=</span> <span class="token number">50</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">75</span><span class="token operator">*</span>x<span class="token operator">.*</span>x<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">./</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">+</span><span class="token number">25</span><span class="token operator">*</span>x<span class="token operator">.*</span>x<span class="token punctuation">)</span><span class="token operator">^</span><span class="token number">3</span><span class="token punctuation">;</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">% Newton插值法,a为插值点列向量,b为插值点对应的函数值列向量</span>
+<span class="token keyword">function</span> N <span class="token operator">=</span> <span class="token function">Newton</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span>
+    <span class="token punctuation">[</span>n<span class="token punctuation">,</span> <span class="token operator">~</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">size</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    diff <span class="token operator">=</span> <span class="token function">zeros</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 初始化差商表</span>
+    <span class="token function">diff</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">:</span><span class="token punctuation">)</span> <span class="token operator">=</span> b<span class="token operator">'</span><span class="token punctuation">;</span>
+    syms x <span class="token comment">% 定义参数x</span>
+    now <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token comment">% 对应上文中的 pi(x)</span>
+    N <span class="token operator">=</span> <span class="token function">diff</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">% 递推计算差商表，并同时计算出插值多项式N(x)</span>
+    <span class="token keyword">for</span> <span class="token number">i</span> <span class="token operator">=</span> <span class="token number">2</span> <span class="token operator">:</span> n
+        <span class="token keyword">for</span> <span class="token number">j</span> <span class="token operator">=</span> <span class="token number">i</span> <span class="token operator">:</span> n
+            <span class="token function">diff</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span> <span class="token number">j</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token function">diff</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">j</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token function">diff</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">j</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token function">a</span><span class="token punctuation">(</span><span class="token number">j</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token number">j</span><span class="token operator">-</span><span class="token number">i</span><span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">end</span>
+        now <span class="token operator">=</span> now <span class="token operator">*</span> <span class="token punctuation">(</span>x<span class="token operator">-</span><span class="token function">a</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        N <span class="token operator">=</span> N <span class="token operator">+</span> <span class="token function">diff</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span> <span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">*</span> now<span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+    N <span class="token operator">=</span> <span class="token function">expand</span><span class="token punctuation">(</span>N<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 展开插值多项式</span>
+    N <span class="token operator">=</span> <span class="token function">vpa</span><span class="token punctuation">(</span>N<span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 将分式系数转化为小数系数</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">% 三次样条插值法</span>
+<span class="token comment">% a为传入的插值点构成的向量,b为插值点对应函数值构成的向量,M1,Mn为边界条件</span>
+<span class="token keyword">function</span> S <span class="token operator">=</span> <span class="token function">mySpline</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> M1<span class="token punctuation">,</span> Mn<span class="token punctuation">)</span>
+    <span class="token punctuation">[</span>n<span class="token punctuation">,</span> <span class="token operator">~</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">size</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">% 向量定义</span>
+    h <span class="token operator">=</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">:</span>n<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 求解向量h</span>
+    mu <span class="token operator">=</span> <span class="token function">h</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">./</span> <span class="token punctuation">(</span><span class="token function">h</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token function">h</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 求解向量mu</span>
+    la <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">-</span> mu<span class="token punctuation">;</span> <span class="token comment">% 求解向量lambda</span>
+    h1 <span class="token operator">=</span> <span class="token function">h</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 定义中间变量h1</span>
+    h2 <span class="token operator">=</span> <span class="token function">h</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 定义中间变量h2</span>
+    <span class="token comment">% 求解向量d</span>
+    d <span class="token operator">=</span> <span class="token number">6</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">b</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">:</span>n<span class="token punctuation">)</span><span class="token operator">-</span><span class="token function">b</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">./</span>h2<span class="token operator">-</span><span class="token punctuation">(</span><span class="token function">b</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token function">b</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">./</span>h1<span class="token punctuation">)</span><span class="token operator">./</span><span class="token punctuation">(</span>h1<span class="token operator">+</span>h2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">% 生成系数矩阵A，修改d向量，利用追赶法求解M</span>
+    A <span class="token operator">=</span> <span class="token function">zeros</span><span class="token punctuation">(</span>n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 初始化系数矩阵A</span>
+    <span class="token keyword">for</span> <span class="token number">i</span> <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">:</span> n<span class="token operator">-</span><span class="token number">2</span> <span class="token comment">% 循环构造系数矩阵A</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token number">i</span> <span class="token operator">></span> <span class="token number">1</span><span class="token punctuation">)</span>
+            <span class="token function">A</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span> <span class="token number">i</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">mu</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 对角线下方</span>
+        <span class="token keyword">end</span>
+        <span class="token function">A</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span> <span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span> <span class="token comment">% 对角线</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token number">i</span> <span class="token operator">&lt;</span> n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span>
+            <span class="token function">A</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span> <span class="token number">i</span><span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">la</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 对角线上方</span>
+        <span class="token keyword">end</span>
+    <span class="token keyword">end</span>
+    <span class="token function">d</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">d</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">mu</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> M1<span class="token punctuation">;</span> <span class="token comment">% 修改向量d</span>
+    <span class="token function">d</span><span class="token punctuation">(</span>n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">d</span><span class="token punctuation">(</span>n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">la</span><span class="token punctuation">(</span>n<span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">*</span> Mn<span class="token punctuation">;</span> <span class="token comment">% 修改向量d</span>
+    M <span class="token operator">=</span> <span class="token punctuation">[</span>M1<span class="token punctuation">;</span> <span class="token function">chase</span><span class="token punctuation">(</span>A<span class="token punctuation">,</span> d<span class="token punctuation">)</span><span class="token operator">'</span><span class="token punctuation">;</span> Mn<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">% 利用追赶法求解方程组,并解出向量M</span>
+
+    <span class="token comment">% 求解三次样条插值函数S(x)</span>
+    syms x <span class="token comment">% 定义参数x</span>
+    <span class="token comment">% 根据上述定义,计算出以下6个中间变量</span>
+    x1 <span class="token operator">=</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">:</span>n<span class="token punctuation">)</span> <span class="token operator">-</span> x<span class="token punctuation">;</span>
+    x2 <span class="token operator">=</span> x <span class="token operator">-</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    m1 <span class="token operator">=</span> <span class="token function">M</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    m2 <span class="token operator">=</span> <span class="token function">M</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">:</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    y1 <span class="token operator">=</span> <span class="token function">b</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">:</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    y2 <span class="token operator">=</span> <span class="token function">b</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">:</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">% 求解三次样条插值函数</span>
+    S <span class="token operator">=</span> <span class="token punctuation">(</span>x1<span class="token operator">.^</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token operator">.*</span>m1<span class="token operator">./</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token operator">*</span>h<span class="token punctuation">)</span><span class="token operator">+</span><span class="token punctuation">(</span>x2<span class="token operator">.^</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token operator">.*</span>m2<span class="token operator">./</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token operator">*</span>h<span class="token punctuation">)</span><span class="token operator">+</span><span class="token punctuation">(</span>y1<span class="token operator">-</span>h<span class="token operator">.^</span><span class="token number">2.</span><span class="token operator">*</span>m1<span class="token operator">/</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token operator">.*</span>x1<span class="token operator">./</span>h<span class="token operator">+</span><span class="token punctuation">(</span>y2<span class="token operator">-</span>h<span class="token operator">.^</span><span class="token number">2.</span><span class="token operator">*</span>m2<span class="token operator">/</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token operator">.*</span>x2<span class="token operator">./</span>h<span class="token punctuation">;</span>
+    S <span class="token operator">=</span> <span class="token function">expand</span><span class="token punctuation">(</span>S<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 展开插值多项式</span>
+    S <span class="token operator">=</span> <span class="token function">vpa</span><span class="token punctuation">(</span>S<span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">% 将分式系数转化为小数系数</span>
+<span class="token keyword">end</span>
+
+<span class="token comment">% 求解三对角方程组的追赶法</span>
+<span class="token keyword">function</span> x <span class="token operator">=</span> <span class="token function">chase</span><span class="token punctuation">(</span>A<span class="token punctuation">,</span> d<span class="token punctuation">)</span> <span class="token comment">% A为系数矩阵,d为方程组右侧列向量</span>
+    <span class="token punctuation">[</span>n<span class="token punctuation">,</span> <span class="token operator">~</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">size</span><span class="token punctuation">(</span>A<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">% 预分配内存,提高运算速度</span>
+    u <span class="token operator">=</span> <span class="token function">zeros</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    l <span class="token operator">=</span> <span class="token function">zeros</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    y <span class="token operator">=</span> <span class="token function">zeros</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">% 参考课本第36面代码</span>
+    <span class="token function">u</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">A</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">y</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">d</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token number">i</span> <span class="token operator">=</span> <span class="token number">2</span> <span class="token operator">:</span> n
+        <span class="token function">l</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">A</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span> <span class="token number">i</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token function">u</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">u</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">A</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span> <span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">l</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token function">A</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">i</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">y</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">d</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">l</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token function">y</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+    <span class="token function">x</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">y</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token function">u</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token number">i</span> <span class="token operator">=</span> n<span class="token operator">-</span><span class="token number">1</span> <span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span> <span class="token operator">:</span> <span class="token number">1</span>
+        <span class="token function">x</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token function">y</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">A</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">,</span> <span class="token number">i</span><span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token function">x</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token function">u</span><span class="token punctuation">(</span><span class="token number">i</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">end</span>
+<span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Math/" class="category-chain-item">Math</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Math/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/" class="category-chain-item">数值分析</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%8F%92%E5%80%BC%E6%B3%95/" class="print-no-link">#插值法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>三次样条插值法&amp;牛顿插值法&amp;切比雪夫插值法 MATLAB实现 数值分析 - 观察龙格现象</div>
+      <div>https://wty-yy.github.io/posts/63175/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年3月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/51787/" title="数值分析中一些算法的MATLAB代码">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数值分析中一些算法的MATLAB代码</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/11000/" title="使用Moodle中实现代码高亮">
+                        <span class="hidden-mobile">使用Moodle中实现代码高亮</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

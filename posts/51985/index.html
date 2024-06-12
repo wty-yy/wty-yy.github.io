@@ -1,0 +1,816 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Ubuntu设置休眠选项 我的笔记本是Yoga14s，经常发现和上笔记本后进入待机模式耗电非常高，而且启动速度很慢，考虑使用休眠模式代替。休眠模式主要思路是将内存中的数据保存到磁盘上的一个叫交换空间“swap area”的位置，然后关闭电脑，下次启动就从交换空间中提取数据到内存中启动; 而待机模式是保证对内存的供电，仍然耗电。 由于默认的Ubuntu安装系统方式只会自动分配2Gb的swap空间，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu 22.04 设置休眠选项">
+<meta property="og:url" content="https://wty-yy.github.io/posts/51985/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="Ubuntu设置休眠选项 我的笔记本是Yoga14s，经常发现和上笔记本后进入待机模式耗电非常高，而且启动速度很慢，考虑使用休眠模式代替。休眠模式主要思路是将内存中的数据保存到磁盘上的一个叫交换空间“swap area”的位置，然后关闭电脑，下次启动就从交换空间中提取数据到内存中启动; 而待机模式是保证对内存的供电，仍然耗电。 由于默认的Ubuntu安装系统方式只会自动分配2Gb的swap空间，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/swapfile%E7%A3%81%E7%9B%98%E5%81%8F%E7%A7%BB%E9%87%8F.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E5%86%85%E6%A0%B8%E9%85%8D%E7%BD%AEswap%E7%A9%BA%E9%97%B4%E4%BD%8D%E7%BD%AE.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E4%BC%91%E7%9C%A0%E9%80%89%E9%A1%B9.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%92%8C%E7%9B%96%E4%BC%91%E7%9C%A0.png">
+<meta property="article:published_time" content="2023-04-04T06:51:25.000Z">
+<meta property="article:modified_time" content="2023-08-21T15:42:06.509Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/swapfile%E7%A3%81%E7%9B%98%E5%81%8F%E7%A7%BB%E9%87%8F.png">
+  
+  
+  
+  <title>Ubuntu 22.04 设置休眠选项 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"gtag":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Ubuntu 22.04 设置休眠选项"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-04 14:51" pubdate>
+          2023年4月4日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Ubuntu 22.04 设置休眠选项</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="ubuntu设置休眠选项"><a class="markdownIt-Anchor" href="#ubuntu设置休眠选项"></a> Ubuntu设置休眠选项</h2>
+<p>我的笔记本是Yoga14s，经常发现和上笔记本后进入待机模式耗电非常高，而且启动速度很慢，考虑使用休眠模式代替。休眠模式主要思路是将内存中的数据保存到磁盘上的一个叫交换空间“swap area”的位置，然后关闭电脑，下次启动就从交换空间中提取数据到内存中启动; 而待机模式是保证对内存的供电，仍然耗电。</p>
+<p>由于默认的Ubuntu安装系统方式只会自动分配2Gb的swap空间，远小于内存空间，所以下面方法是对于swap空间不够时的解决方法，如果你在安装系统时已经将swap空间大于内存，那么可以直接参考这篇 <a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1240123/how-to-enable-the-hibernate-option-in-ubuntu-20-04">How to enable the hibernate option in Ubuntu 20.04?</a></p>
+<h3 id="1-关闭secure-boot"><a class="markdownIt-Anchor" href="#1-关闭secure-boot"></a> 1. 关闭Secure Boot</h3>
+<p><strong>关键</strong>：首先要在BIOS中(按F12进入)找到安全启动(Secure Boot)，将其关闭（参考<a target="_blank" rel="noopener" href="https://askubuntu.com/a/1241902">How to enable the hibernate option in Ubuntu 20.04?</a>第一个回答中的评论），然后执行 <code>cat /sys/power/state</code>，应该会返回 <code>freeze mem disk</code>，这样就可以了。</p>
+<p>接下来参考 <a target="_blank" rel="noopener" href="https://ubuntuhandbook.org/index.php/2021/08/enable-hibernate-ubuntu-21-10/">How to Enable Hibernate Function in Ubuntu 22.04 LTS</a> 的方法：</p>
+<h3 id="2-配置并修改swapfile"><a class="markdownIt-Anchor" href="#2-配置并修改swapfile"></a> 2. 配置并修改swapfile</h3>
+<p>修改swapfile的大小，如果默认装系统的设置，swapfile大小只有2Gb，远小于内存大小，最好保证swapfile空间大小比内存大小大，我的内存大小为 16Gb (使用 <code>free -hm</code> 查看)</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> swapoff /swapfile  <span class="token comment"># 首先关闭当前的swapfile</span>
+<span class="token function">sudo</span> <span class="token function">dd</span> <span class="token assign-left variable">if</span><span class="token operator">=</span>/dev/zero <span class="token assign-left variable">of</span><span class="token operator">=</span>/swapfile <span class="token assign-left variable">count</span><span class="token operator">=</span><span class="token number">16384</span> <span class="token assign-left variable">bs</span><span class="token operator">=</span>1MiB  <span class="token comment"># 按Mb计算需要的空间大小</span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">600</span> /swapfile  <span class="token comment"># 设置权限为可读和写</span>
+<span class="token function">sudo</span> <span class="token function">mkswap</span> /swapfile  <span class="token comment"># 设置为swap空间</span>
+<span class="token function">sudo</span> <span class="token function">swapon</span> /swapfile  <span class="token comment"># 启动swap空间</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>检查是否开机自动启动swap空间：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">cat</span> /etc/fstab <span class="token operator">|</span><span class="token function">grep</span> swap  <span class="token comment"># 检查文件/etc/fstab中是否有关于swapfile启动的内容，如果有下面这行就说明启动了</span>
+/swapfile                                 none            swap    sw              <span class="token number">0</span>       <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>如果没有上面的内容，则执行下面代码，从而加入swap启动。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'/swapfile none swap sw 0 0'</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> <span class="token parameter variable">-a</span> /etc/fstab  <span class="token comment"># 这句话是开机自动启动swap空间，如果</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<h3 id="3-寻找uuid和offset"><a class="markdownIt-Anchor" href="#3-寻找uuid和offset"></a> 3. 寻找UUid和Offset</h3>
+<p>找到swap空间的 UUID（磁盘唯一编码） 和 Offset 量（磁盘偏移量），首先使用命令 <code>blkid</code> 返回磁盘UUID值，例如我的是 <code>d5cc2a80-31ca-43f3-9899-5d966f31598a</code></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ blkid
+/dev/nvme0n1p2: <span class="token assign-left variable">UUID</span><span class="token operator">=</span><span class="token string">"d5cc2a80-31ca-43f3-9899-5d966f31598a"</span> <span class="token assign-left variable">BLOCK_SIZE</span><span class="token operator">=</span><span class="token string">"4096"</span> <span class="token assign-left variable">TYPE</span><span class="token operator">=</span><span class="token string">"ext4"</span> <span class="token assign-left variable">PARTUUID</span><span class="token operator">=</span><span class="token string">"2d6c34a5-6061-4a69-886a-070eb4f5be04"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>再通过命令 <code>sudo filefrag -v /swapfile</code> 找到 <code>/swapfile</code> 的offset值（<strong>找第一行第四列值</strong>，例如我的是 <code>51759104</code>）<br />
+<img src="/figures/My_Ubuntu.assets/swapfile%E7%A3%81%E7%9B%98%E5%81%8F%E7%A7%BB%E9%87%8F.png" srcset="/img/loading.gif" lazyload alt="swapfile磁盘偏移量" /></p>
+<h3 id="4-配置内核文件"><a class="markdownIt-Anchor" href="#4-配置内核文件"></a> 4. 配置内核文件</h3>
+<p>通过内核配置文件，修改swap空间位置：使用Ubuntu自带的编辑器打开配置文件 <code>sudo gedit /etc/default/grub</code>，在 <code>GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet splash </code> 的后面加上 <strong>resume=UUID=xxx resume_offset=xxx</strong>，其中UUid后面填写你的磁盘UUid值、resume_offset后面填写offset值，如下图所示：<br />
+<img src="/figures/My_Ubuntu.assets/%E5%86%85%E6%A0%B8%E9%85%8D%E7%BD%AEswap%E7%A9%BA%E9%97%B4%E4%BD%8D%E7%BD%AE.png" srcset="/img/loading.gif" lazyload alt="内核配置swap空间位置" /></p>
+<p>最后更新配置设置：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">update-grub</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>重启电脑，执行 <code>sudo pm-hibernate</code>，然后看电脑电源是否关闭，如果关闭则说明成功进入休眠模式，重新启动应该会恢复原有应用；如果一段时间后又自动启动，说明没能进入休眠模式，使用 <code>sudo dmesg | grep PM</code> 命令查看具体原因（这两段测试命令来源 <a target="_blank" rel="noopener" href="https://blog.csdn.net/u013810296/article/details/109689738">CSDN - 解决ubuntu20.10 休眠耗电问题</a>），检查上述设置UUid和Offset值是否设置正确（如果还是不行，参考 <a target="_blank" rel="noopener" href="https://ubuntuhandbook.org/index.php/2021/08/enable-hibernate-ubuntu-21-10/">How to Enable Hibernate Function in Ubuntu 22.04 LTS 中 Regenerate initramfs</a> 的方法，到这一步我就已经可以用了）</p>
+<h3 id="5-安装休眠按钮插件"><a class="markdownIt-Anchor" href="#5-安装休眠按钮插件"></a> 5. 安装休眠按钮插件</h3>
+<p>通过插件实现在关机栏中可选择休眠模式：修改文件 <code>sudo gedit /etc/polkit-1/localauthority/50-local.d/com.ubuntu.enable-hibernate.pkla</code> 加入一下配置</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim"><span class="token punctuation">[</span>Re<span class="token operator">-</span>enable hibernate by default <span class="token keyword">in</span> upower<span class="token punctuation">]</span>
+Identity<span class="token operator">=</span>unix<span class="token operator">-</span>user<span class="token punctuation">:</span><span class="token operator">*</span>
+Action<span class="token operator">=</span>org<span class="token operator">.</span>freedesktop<span class="token operator">.</span>upower<span class="token operator">.</span>hibernate
+ResultActive<span class="token operator">=</span>yes
+
+<span class="token punctuation">[</span>Re<span class="token operator">-</span>enable hibernate by default <span class="token keyword">in</span> logind<span class="token punctuation">]</span>
+Identity<span class="token operator">=</span>unix<span class="token operator">-</span>user<span class="token punctuation">:</span><span class="token operator">*</span>
+Action<span class="token operator">=</span>org<span class="token operator">.</span>freedesktop<span class="token operator">.</span>login1<span class="token operator">.</span>hibernate<span class="token punctuation">;</span>org<span class="token operator">.</span>freedesktop<span class="token operator">.</span>login1<span class="token operator">.</span>handle<span class="token operator">-</span>hibernate<span class="token operator">-</span><span class="token builtin">key</span><span class="token punctuation">;</span>org<span class="token operator">.</span>freedesktop<span class="token operator">.</span>login1<span class="token punctuation">;</span>org<span class="token operator">.</span>freedesktop<span class="token operator">.</span>login1<span class="token operator">.</span>hibernate<span class="token operator">-</span>multiple<span class="token operator">-</span>sessions<span class="token punctuation">;</span>org<span class="token operator">.</span>freedesktop<span class="token operator">.</span>login1<span class="token operator">.</span>hibernate<span class="token operator">-</span>ignore<span class="token operator">-</span>inhibit
+ResultActive<span class="token operator">=</span>yes<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>最后从 <code>Gnome extension</code> （Gnome extension安装方法见上文 <a href="./#%E4%B8%BB%E9%A2%98%E8%87%AA%E5%AE%9A%E4%B9%89">主题自定义</a>）中安装插件 <a target="_blank" rel="noopener" href="https://extensions.gnome.org/extension/755/hibernate-status-button/">Hibernate Status Button</a>，就能在关机选项中看到休眠选项了：<br />
+<img src="/figures/My_Ubuntu.assets/%E4%BC%91%E7%9C%A0%E9%80%89%E9%A1%B9.png" srcset="/img/loading.gif" lazyload alt="休眠选项" /></p>
+<h3 id="6-设置休眠模式为默认模式"><a class="markdownIt-Anchor" href="#6-设置休眠模式为默认模式"></a> 6. 设置休眠模式为默认模式</h3>
+<p>设置笔记本和盖默认为休眠：参考 <a target="_blank" rel="noopener" href="https://www.dell.com/support/kbdoc/zh-cn/000179566/how-to-disable-sleep-and-configure-lid-power-settings-for-ubuntu-or-red-hat-enterprise-linux-7">如何禁用 Ubuntu 或 Red Hat Enterprise Linux 7 的睡眠和配置盖板电源设置</a>，执行以下命令</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl unmask sleep.target suspend.target hibernate.target hybrid-sleep.target
+<span class="token function">sudo</span> gedit /etc/systemd/logind.conf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>找到 <code>#HandleLidSwitch=suspend</code> 这一行，删除注释符 <code>#</code>，替换为 <code>HandleLidSwitch=hibernate</code>，如下图所示：<br />
+<img src="/figures/My_Ubuntu.assets/%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E5%92%8C%E7%9B%96%E4%BC%91%E7%9C%A0.png" srcset="/img/loading.gif" lazyload alt="修改默认和盖休眠" /></p>
+<p>保存文件并执行命令 <code>systemctl restart systemd-logind</code> 执行修改。</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Ubuntu 22.04 设置休眠选项</div>
+      <div>https://wty-yy.github.io/posts/51985/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/50571/" title="CF1809 - Educational Codeforces Round 145 (Rated for Div. 2)">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CF1809 - Educational Codeforces Round 145 (Rated for Div. 2)</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/46722/" title="从零配置Ubuntu全过程">
+                        <span class="hidden-mobile">从零配置Ubuntu全过程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
