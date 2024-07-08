@@ -44,7 +44,7 @@
 <meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96-%E4%BF%AE%E6%94%B9%E6%97%B6%E9%97%B4%E6%98%BE%E7%A4%BA.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8A%A8%E6%80%81%E5%A3%81%E7%BA%B8.png">
 <meta property="article:published_time" content="2023-03-31T17:28:49.000Z">
-<meta property="article:modified_time" content="2024-06-28T06:32:09.299Z">
+<meta property="article:modified_time" content="2024-07-08T14:18:52.953Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/Ubuntu%E4%B8%BB%E9%A2%98%E6%A1%8C%E9%9D%A2.png">
@@ -333,7 +333,7 @@
         
         
         
-          97 分钟
+          103 分钟
         
       </span>
     
@@ -712,6 +712,37 @@ PrintScreen  <span class="token comment"># 使用自带截图工具进行截图<
 <h3 id="下载sourceforge一个文件夹内的所有文件"><a class="markdownIt-Anchor" href="#下载sourceforge一个文件夹内的所有文件"></a> 下载SourceForge一个文件夹内的所有文件</h3>
 <p>参考：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/39668291/download-whole-folder-from-sourceforge%EF%BC%8C%E7%94%A8%E7%BD%91%E9%A1%B5%E8%BF%9E%E6%8E%A5%E6%9B%BF%E6%8D%A2%E6%8E%89">https://stackoverflow.com/questions/39668291/download-whole-folder-from-sourceforge，用网页连接替换掉</a> <code>&lt;URL&gt;</code> 即可。</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token string">"&lt;URL>"</span> <span class="token operator">|</span> <span class="token function">tr</span> <span class="token string">'"'</span> <span class="token string">"<span class="token entity" title="\n">\n</span>"</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"sourceforge.net/projects/.*/download"</span>  <span class="token operator">|</span> <span class="token function">sort</span>  <span class="token operator">|</span> <span class="token function">uniq</span> <span class="token operator">|</span> <span class="token keyword">while</span> <span class="token builtin class-name">read</span> url<span class="token punctuation">;</span> <span class="token keyword">do</span> <span class="token assign-left variable">url</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token builtin class-name">echo</span> $url <span class="token operator">|</span> <span class="token function">sed</span> <span class="token string">'s|/download$||'</span><span class="token variable">`</span></span><span class="token punctuation">;</span> <span class="token function">wget</span> <span class="token variable">$url</span> <span class="token punctuation">;</span> <span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<h2 id="常见问题"><a class="markdownIt-Anchor" href="#常见问题"></a> 常见问题</h2>
+<h3 id="ubuntu自动更新内核后黑屏"><a class="markdownIt-Anchor" href="#ubuntu自动更新内核后黑屏"></a> Ubuntu自动更新内核后黑屏</h3>
+<p>我的情况：有Nvidia显卡的电脑上，当Ubuntu自动更新内核后，登录界面输入密码后就会黑屏，我认为原因在于 Nvidia 显卡驱动和内核版本号绑定，Gnome 可视化界面又和 Nvidia 驱动绑定，因此需要先重装 Nvidia 驱动，再重装 Gnome 才能解决，具体方法：</p>
+<ol>
+<li>按 <code>Ctrl + Alt + F3</code> 进入 tty 纯命令行模式；</li>
+<li>重装 Nvidia 驱动</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> purge <span class="token string">"nvidia-driver*"</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> autoremove
+<span class="token function">sudo</span> ubuntu-drivers list  <span class="token comment"># 查看可安装的驱动版本</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> nvidia-driver-535  <span class="token comment"># 例如我的驱动版本为535</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        Nvidia 535以上版本的驱动编译过程报错
+    </div>
+    <div class='spoiler-content'>
+        <p>如果在驱动安装编译过程中发生报错，535 版本的驱动可能报错，这是 Ubuntu 22.04 的默认 gcc 版本为 11，而驱动的编译版本为 <code>gcc-12</code>，我们需要去将其修改为 <code>gcc-12</code>：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gcc-12  <span class="token comment"># 安装gcc-12</span>
+<span class="token builtin class-name">cd</span> /usr/bin
+<span class="token function">ls</span> <span class="token parameter variable">-ls</span> <span class="token operator">|</span> <span class="token function">grep</span> gcc  <span class="token comment"># 看到 gcc -> gcc-11, 说明当前使用的是 gcc-11</span>
+<span class="token function">sudo</span> <span class="token function">ln</span> <span class="token parameter variable">-sf</span> gcc-12 gcc  <span class="token comment"># 重新连接到 gcc-12</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> nvidia-driver-535  <span class="token comment"># 重新安装驱动</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<ol start="3">
+<li>重装 <code>gnome-shell</code>，会将 <code>gdm3, ubuntu-desktop</code> 都全部重新安装一遍</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> purge gnome-shell
+<span class="token comment"># 如果退出了命令行界面，按 Ctrl+Alt+F3 重新进入</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gnome-shell
+<span class="token function">reboot</span>  <span class="token comment"># 重启再输入命令看是否可以进入可视化界面</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
