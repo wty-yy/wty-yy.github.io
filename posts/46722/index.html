@@ -1,0 +1,1152 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="My Ubuntu 第一次安装 Ubuntu22.04 LTS 记录下安装遇到的问题和解决方法。   安装内容（推荐顺序安装）：  开始安装软件前记得换源，安装完Ubuntu修改apt源，安装完miniforge后记得对conda，pip换源。 老方法：Nvidia驱动安装方法：CSDN-【ubunbu 22.04】 手把手教你安装nvidia驱动 2024.6.12 更新：安装了很多次Nvid">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从零配置Ubuntu全过程">
+<meta property="og:url" content="https://wty-yy.github.io/posts/46722/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="My Ubuntu 第一次安装 Ubuntu22.04 LTS 记录下安装遇到的问题和解决方法。   安装内容（推荐顺序安装）：  开始安装软件前记得换源，安装完Ubuntu修改apt源，安装完miniforge后记得对conda，pip换源。 老方法：Nvidia驱动安装方法：CSDN-【ubunbu 22.04】 手把手教你安装nvidia驱动 2024.6.12 更新：安装了很多次Nvid">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/Ubuntu%E4%B8%BB%E9%A2%98%E6%A1%8C%E9%9D%A2.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/Ubuntu%E9%85%8D%E7%BD%AE%E5%90%8E%E6%95%88%E6%9E%9C%E5%9B%BE.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E6%98%BE%E7%A4%BA%E9%9A%90%E8%97%8F%E6%96%87%E4%BB%B6.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E9%80%89%E6%8B%A9IBus%E4%BD%9C%E4%B8%BA%E9%BB%98%E8%AE%A4%E8%BE%93%E5%85%A5%E6%B3%95.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E8%AE%BE%E7%BD%AE%E8%BE%93%E5%85%A5%E6%B3%95.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E8%AE%BE%E7%BD%AE%E8%BE%93%E5%85%A5%E6%B3%95%EF%BC%91.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E9%85%8D%E7%BD%AE%E8%BE%93%E5%85%A5%E6%B3%95%EF%BC%91.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E7%81%AB%E7%8B%90%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AE%A1%E7%90%86%E6%8F%92%E4%BB%B6.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/tweaks%E5%A4%96%E8%A7%82%E9%85%8D%E7%BD%AE.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E9%BC%A0%E6%A0%87%E5%A4%A7%E5%B0%8F%E4%BF%AE%E6%94%B9.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E5%85%A8%E9%83%A8%E5%AD%97%E4%BD%93.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E6%98%BE%E7%A4%BA%E5%B7%B2%E6%9C%89%E5%AD%97%E4%BD%93.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E7%BD%91%E6%98%93%E4%BA%91%E8%84%9A%E6%9C%AC%E4%BF%AE%E6%94%B9.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/wps%E8%A7%A3%E5%86%B3%E7%BC%BA%E5%A4%B1%E5%AD%97%E4%BD%93%E9%97%AE%E9%A2%98.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%8F%9C%E5%8D%95%E6%95%88%E6%9E%9C%E5%9B%BE.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/Firefox%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8F%8C%E6%8C%87%E7%BC%A9%E6%94%BE%E9%85%8D%E7%BD%AE1.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/Firefox%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8F%8C%E6%8C%87%E7%BC%A9%E6%94%BE%E9%85%8D%E7%BD%AE2.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E4%B8%AD%E6%96%87%E5%AD%97%E4%BD%93%E4%BF%AE%E6%AD%A3.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96-%E4%BF%AE%E6%94%B9%E6%97%B6%E9%97%B4%E6%98%BE%E7%A4%BA.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8A%A8%E6%80%81%E5%A3%81%E7%BA%B8.png">
+<meta property="article:published_time" content="2023-03-31T17:28:49.000Z">
+<meta property="article:modified_time" content="2024-09-04T12:37:18.490Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/My_Ubuntu.assets/Ubuntu%E4%B8%BB%E9%A2%98%E6%A1%8C%E9%9D%A2.png">
+  
+  
+  
+  <title>从零配置Ubuntu全过程 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="从零配置Ubuntu全过程"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-01 01:28" pubdate>
+          2023年4月1日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          43 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">从零配置Ubuntu全过程</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="my-ubuntu"><a class="markdownIt-Anchor" href="#my-ubuntu"></a> My Ubuntu</h1>
+<p>第一次安装 Ubuntu22.04 LTS 记录下安装遇到的问题和解决方法。</p>
+<p><img src="/figures/My_Ubuntu.assets/Ubuntu%E4%B8%BB%E9%A2%98%E6%A1%8C%E9%9D%A2.png" srcset="/img/loading.gif" lazyload alt="Ubuntu Orchis主题桌面" /></p>
+<p><img src="/figures/My_Ubuntu.assets/Ubuntu%E9%85%8D%E7%BD%AE%E5%90%8E%E6%95%88%E6%9E%9C%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="Ubuntu配置后效果图" /></p>
+<p>安装内容（推荐顺序安装）：</p>
+<blockquote>
+<p>开始安装软件前记得换源，安装完Ubuntu修改apt源，安装完miniforge后记得对conda，pip换源。</p>
+<p>老方法：Nvidia驱动安装方法：<a target="_blank" rel="noopener" href="https://blog.csdn.net/huiyoooo/article/details/128015155">CSDN-【ubunbu 22.04】 手把手教你安装nvidia驱动</a><br />
+2024.6.12 更新：安装了很多次Nvidia驱动，推荐方法还是按照 Ubuntu 官方给出的<a target="_blank" rel="noopener" href="https://ubuntu.com/server/docs/nvidia-drivers-installation">安装方法</a>，使用 <code>sudo ubuntu-drivers list</code> 查看建议安装的 Nvidia 驱动，<code>sudo ubuntu-drivers install nvidia:535</code> 安装指定的显卡版本，重启即可。</p>
+</blockquote>
+<ol>
+<li>中文输入法（使用Fcitx5中的pinyin，注意如果动态链接库版本过高请使用 <code>aptitude</code> 进行适当降级，如果使用的是Ubuntu20.04是无法安装Fcitx5的，推荐使用搜狗输入法，效果也不错）</li>
+<li>主题自定义（重装Firefox浏览器，安装 <code>gnome-tweaks</code> 和 <code>chrome-gnome-shell</code> 用于主题配置）</li>
+<li>配置终端（安装vim, git，并对git进行ssh文件配置，zsh, oh-my-zsh，配置vim，直接从我的 <a target="_blank" rel="noopener" href="https://github.com/wty-yy/dotfiles">dotfiles</a> 然后直接执行 <code>./setup.sh</code> ）</li>
+<li>安装VSCode和LaTeX（LaTeX速度是Windows上的数倍，编译多长的文件都是一秒不到）</li>
+<li>安装QQ，微信，网易云，WPS，Clash for Windows。</li>
+<li>安装g++, mambaforge（作为系统默认的 python）</li>
+<li>安装Blog配置（安装nvm，nodejs，npm，cnpm，hexo）</li>
+<li>安装TensorFlow和Jupyter，配置Jupyter主题、matplotlib字体。</li>
+</ol>
+<h2 id="ubuntu基础知识"><a class="markdownIt-Anchor" href="#ubuntu基础知识"></a> Ubuntu基础知识</h2>
+<p>Linux基础路径解释和vim的基础用法可以参考Blog中的 <a target="_blank" rel="noopener" href="https://wty-yy.space/posts/10409/#linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86">在服务器上配置shell - Linux基础知识</a> 部分。</p>
+<h3 id="下载命令"><a class="markdownIt-Anchor" href="#下载命令"></a> 下载命令</h3>
+<h4 id="安装安装包"><a class="markdownIt-Anchor" href="#安装安装包"></a> 安装安装包</h4>
+<p>首先对Ubuntu安装包下载地址换源，<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">清华源官网</a>中方法写的非常清楚（记得备份）</p>
+<p>Ubuntu的安装包后缀一般为 <code>.deb</code> 可以使用</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> ./package.deb  <span class="token comment"># 可能出现可视化窗口，需要通过 tab 选中 ok 按钮，然后 enter 回车</span>
+<span class="token function">sudo</span> dpkg <span class="token parameter variable">-i</span> package.deb  <span class="token comment">#  直接安装</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>Ubuntu的安装有 <code>apt</code> 和 <code>apt-get</code> 两种，查看全部安装包和卸载安装包方法如下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> list <span class="token operator">|</span> <span class="token function">grep</span> fcitx  <span class="token comment"># 查看全部包含 fcitx 名称的安装包</span>
+<span class="token comment"># 推荐使用 purge 可以删除相关的无用文件</span>
+<span class="token function">sudo</span> <span class="token function">apt-get</span> purge <span class="token string">'fcitx*'</span>  <span class="token comment"># 可以删除全部以 fcitx 开头的安装包，避免卸载不干净</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>如果从git上clone下来的仓库中，有脚本安装文件以 <code>*.sh</code> 结尾，需要先赋予运行权限，然后执行：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 例如安装脚本名称为 install.sh</span>
+<span class="token function">chmod</span> <span class="token number">777</span> install.sh  <span class="token comment"># 赋予权限</span>
+./install.sh  <span class="token comment"># 执行安装</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="下载url链接文件"><a class="markdownIt-Anchor" href="#下载url链接文件"></a> 下载url链接文件</h4>
+<p>下载url连接所用的命令，<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9830242/what-does-wget-o-mean">stack overflow - What does “wget -O” mean?</a>。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> URL  <span class="token comment"># 默认下到当前目录下</span>
+<span class="token function">wget</span> <span class="token string">'URL'</span>  <span class="token comment"># 如果链接太长记得加上单引号</span>
+<span class="token function">wget</span> <span class="token parameter variable">-P</span> ~/Downloads URL  <span class="token comment"># 将文件下载到目录 ~/Downloads 中</span>
+<span class="token function">wget</span> -O- ~/Downloads URL <span class="token operator">|</span> <span class="token function">sh</span>  <span class="token comment"># 将*.sh文件直接用sh命令进行安装</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="ubuntu常用路径"><a class="markdownIt-Anchor" href="#ubuntu常用路径"></a> Ubuntu常用路径</h3>
+<p>所有以 <code>.</code> 开头的文件名都是<strong>隐藏文件</strong>，要在Ubuntu的文件管理器中显示可以看下图操作：</p>
+<p><img src="/figures/My_Ubuntu.assets/%E6%98%BE%E7%A4%BA%E9%9A%90%E8%97%8F%E6%96%87%E4%BB%B6.png" srcset="/img/loading.gif" lazyload alt="显示隐藏文件" /></p>
+<p>Ubuntu中有以下的一些常用路径，便于后续找到文件位置：</p>
+<ul>
+<li>根目录下可执行文件位于 <code>/bin/</code> 文件夹内。</li>
+<li>用户安装的字体位于 <code>~/.local/share/fonts/</code> 文件夹内。</li>
+<li>用户配置的搜索栏应用快捷图标位于 <code>~/.local/share/applications/</code> 文件夹内。</li>
+<li>用户配置的开机自启位于 <code>~/.config/autostart/</code> 文件夹内（如果不是自定义启动文件，推荐使用tweaks设置开机启动项）。</li>
+<li>安装完主题配置插件 <code>User Themes</code> 后，<code>~/.icons</code> 文件夹用于保存主题图标和鼠标图标，<code>~/.themes</code> 用于保存GNOME窗口配色。</li>
+</ul>
+<h2 id="重要配置"><a class="markdownIt-Anchor" href="#重要配置"></a> 重要配置</h2>
+<h3 id="安装中文输入法"><a class="markdownIt-Anchor" href="#安装中文输入法"></a> 安装中文输入法</h3>
+<p>常用有两种输入法：<strong>Fcitx, IBus</strong></p>
+<p>使用了Fcitx4和IBus输入法后，最终选择了比较新的Fcitx5，输入非常流畅，比较推荐使用，安装教程参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/508797663">知乎 - Ubuntu22.04安装Fcitx5中文输入法（详细）</a>。</p>
+<p>环境变量配置（参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/341637818">知乎 - 开心的使用fcitx5进行输入</a>）：</p>
+<ol>
+<li><code>~/.xprofile</code> 中加入如下信息（没有文件则进行创建，用于 X11 的环境变量配置）</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">export XIM<span class="token operator">=</span><span class="token string">"fcitx"</span>
+export GTK_IM_MODULE<span class="token operator">=</span>fcitx
+export QT_IM_MODULE<span class="token operator">=</span>fcitx
+export XMODIFIERS<span class="token operator">=</span>@<span class="token builtin">im</span><span class="token operator">=</span>fcitx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<ol start="2">
+<li><code>~/.pam_environment</code> 中加入如下信息（没有文件则进行创建）</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">GTK_IM_MODULE DEFAULT<span class="token operator">=</span>fcitx
+QT_IM_MODULE  DEFAULT<span class="token operator">=</span>fcitx
+XMODIFIERS    DEFAULT<span class="token operator">=</span>\@<span class="token builtin">im</span><span class="token operator">=</span>fcitx
+SDL_IM_MODULE DEFAULT<span class="token operator">=</span>fcitx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>最后是外观修改，可以在下文<a href="./#%E4%B8%BB%E9%A2%98%E8%87%AA%E5%AE%9A%E4%B9%89">主题自定义</a>中更新完FireFox和安装完 <code>chrome-gnome-shell</code> 之后，安装 <a target="_blank" rel="noopener" href="https://extensions.gnome.org/extension/261/kimpanel/">Input Method Panel</a>，即可修改输入法颜色，最好的是还能修改字体大小，非常好用。</p>
+<blockquote>
+<p>如果无法安装Fcitx5可以使用搜狗输入法，效果也不错，可以自定义外观，在输入的文本框中右键设置即可对其进行配置。<a target="_blank" rel="noopener" href="https://shurufa.sogou.com/linux?r=pinyin">搜狗输入法-官方下载及安装教程</a></p>
+</blockquote>
+<p>关键！！！：如果你之前更新过Ubuntu，就会导致安装过程中提示依赖包确实，这时候就需要使用 <code>aptitude</code> 对包进行降级（不推荐对主用机进行频繁升级）：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">aptitude</span>
+<span class="token function">sudo</span> <span class="token function">aptitude</span> <span class="token function">install</span> fcitx5-chinese-addons  <span class="token comment"># 例如我之前无法安装fcitx5-chinese-addons</span>
+<span class="token comment"># 首先它会向你介绍需要哪些安装报，主要看remove，install，downgrade哪些包，如果remove的包中有相关的依赖包，例如包含fcitx名称的，就继续按`n`然后回车，让它给你更多的选择，由于之前升级了包，所以主要看是否有之前包版本进行了downgrade，如果有，则按`y`然后回车进行安装。反复多试几次就能装上。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>使用Fcitx4输入法可以安装搜狗输入法，但是比较老，不推荐使用，参考 <a target="_blank" rel="noopener" href="https://blog.csdn.net/mr_sudo/article/details/124874239">CSDN - Ubuntu 22.04安装搜狗输入法</a>。</p>
+<p>IBus 输入法会经常卡顿，不推荐使用，以下是以前安装IBus的方法，参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/132558860">知乎 - 安装ibus中文输入法(Linux/Ubuntu)</a>。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        之前安装IBus的详细过程
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> ibus ibus-clutter ibus-gtk ibus-gtk3 ibus-qt4  <span class="token comment"># 安装ibus框架</span>
+im-config <span class="token parameter variable">-s</span> ibus  <span class="token comment"># 切换ibus框架</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> ibus-pinyin  <span class="token comment"># 安装拼音</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>打开Settings - Region &amp; Language - Manage Installed Languages，在Language Support中设置默认的输入法为 <code>IBus</code>。</p>
+<p><img src="/figures/My_Ubuntu.assets/%E9%80%89%E6%8B%A9IBus%E4%BD%9C%E4%B8%BA%E9%BB%98%E8%AE%A4%E8%BE%93%E5%85%A5%E6%B3%95.png" srcset="/img/loading.gif" lazyload alt="选择IBus作为默认输入法" /></p>
+<p>重启后，再打开Settings - Keyboard</p>
+<p><img src="/figures/My_Ubuntu.assets/%E8%AE%BE%E7%BD%AE%E8%BE%93%E5%85%A5%E6%B3%95.png" srcset="/img/loading.gif" lazyload alt="设置输入法" /></p>
+<p><img src="/figures/My_Ubuntu.assets/%E8%AE%BE%E7%BD%AE%E8%BE%93%E5%85%A5%E6%B3%95%EF%BC%91.png" srcset="/img/loading.gif" lazyload alt="设置输入法１" /></p>
+<p>然后就可以通过 <code>super + space</code>　（Ｕbuntu中 <code>super</code> 键就是 <code>win</code> 键）切换输入法，进行中文输入。以下是对输入法的一些配置，不要开太多功能，会使得性能下降。可以打开部分混淆词替换和词典。</p>
+<p><img src="/figures/My_Ubuntu.assets/%E9%85%8D%E7%BD%AE%E8%BE%93%E5%85%A5%E6%B3%95%EF%BC%91.png" srcset="/img/loading.gif" lazyload alt="配置输入法" /></p>
+
+    </div>
+</div>
+<h3 id="主题自定义"><a class="markdownIt-Anchor" href="#主题自定义"></a> 主题自定义</h3>
+<p>这里无需修改Firefox版本，也可以使用gnome-shell，只需要下载插件 <a target="_blank" rel="noopener" href="https://addons.mozilla.org/en-US/firefox/addon/gnome-shell-integration/">GNOME Shell</a> 即可直接而使用。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        之前修改Firefox版本的方法
+    </div>
+    <div class='spoiler-content'>
+        <p>首先参考 <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Cu4hrOYRt0c&amp;t=217s">YouTube - 15 Things to Do After Installing Ubuntu 22.04</a> 进行Firefox 优化：安装Mozilla Firefox，速度更快，且能使用GNOME插件管理器，原版是snap版本，类似于镜像版本，功能少很多。<a target="_blank" rel="noopener" href="https://www.mozilla.org/en-US/firefox/new/">Firefox - 下载连接</a>，<a target="_blank" rel="noopener" href="https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-from-mozilla-builds-for-advanced-users">Firefox - 替换方法</a>。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://raw.githubusercontent.com/mozilla/sumo-kb/main/install-firefox-linux/firefox.desktop  <span class="token comment"># 先wget下来（如果不能使用sudo下载这个链接）</span>
+<span class="token function">sudo</span> <span class="token function">mkdir</span> /usr/local/share/applications  <span class="token comment"># 这个文件夹可能不存在</span>
+<span class="token function">sudo</span> <span class="token function">mv</span> firefox.desktop /usr/local/share/applications  <span class="token comment"># 最后移动到快捷搜索路劲中	</span>
+/usr/local/bin/firefox <span class="token comment"># 执行这句话就能打开新的火狐浏览器</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+
+    </div>
+</div>
+<p>安装插件管理器</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gnome-tweaks  <span class="token comment"># gnome管理器</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> chrome-gnome-shell  <span class="token comment"># 插件管理器</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gnome-shell-extensions  <span class="token comment"># 安装extension，可以配置安装的插件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>安装完后打开该网页，点击上面信任插件安装，最后效果如下：</p>
+<p><img src="/figures/My_Ubuntu.assets/%E7%81%AB%E7%8B%90%E6%B5%8F%E8%A7%88%E5%99%A8%E7%AE%A1%E7%90%86%E6%8F%92%E4%BB%B6.png" srcset="/img/loading.gif" lazyload alt="FireFox浏览器管理插件" /></p>
+<p>需要先在 extension manager 中安装 <code>User Themes</code>，才能进一步进行下述操作，安装主题可参考 <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=4yA9IAY9pJU">Give Your GNOME A Fresh And Elegant Look With Orchis Theme 2022 |  Ubuntu 22.04 Customization</a>。</p>
+<p>主题配置可以从 gnome look 中选择自己喜欢的配置，我的选择有以下三个，修改文件的方式均是在tweaks - Appearance中进行修改：</p>
+<p><img src="/figures/My_Ubuntu.assets/tweaks%E5%A4%96%E8%A7%82%E9%85%8D%E7%BD%AE.png" srcset="/img/loading.gif" lazyload alt="tweaks外观配置" /></p>
+<ol>
+<li>
+<p>窗口外观：<a target="_blank" rel="noopener" href="https://www.pling.com/s/Gnome/p/1357889">Orchis gtk theme</a>，使用方法，将文件解压后，放到 <code>~/.themes</code> 文件夹下。</p>
+</li>
+<li>
+<p>图标：<a target="_blank" rel="noopener" href="https://www.gnome-look.org/p/1305251">Candy icons</a>，使用方法，将文件解压后，然后放到 <code>~/.icons</code> 文件夹下。</p>
+</li>
+<li>
+<p>鼠标：由于原版鼠标大小太小，我是从<a target="_blank" rel="noopener" href="https://github.com/keeferrourke/capitaine-cursors">GitHub -  capitaine-cursors</a> 上下载的，然后生成的多种大小的尺寸，最后拷贝到 <code>~/.icons</code> 文件夹中，并在tweaks中选择该鼠标外观。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 根据GitHub网站给出的设置方法，先安装生成器，然后生成较大的图标，生成完的图标位于dist下</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> inkscape x11-apps
+./build.sh <span class="token parameter variable">-p</span> unix <span class="token parameter variable">-t</span> dark <span class="token parameter variable">-d</span> hd
+<span class="token function">mv</span> ./dist/dark ~/.icons/capitaine-dark-hd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+</li>
+</ol>
+<p>最后根据 <a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1158191/how-to-change-mouse-pointer-size-and-appearance-in-gnome-18-04">How to change mouse pointer size and appearance in GNOME (18.04)?</a> 中的方法，下载dconf-editor，定位到配置文件 <code>org/gnome/desktop/interface/cursor-size</code> 中修改鼠标大小，我最后设置的为30。</p>
+   <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> dconf-editor<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p><img src="/figures/My_Ubuntu.assets/%E9%BC%A0%E6%A0%87%E5%A4%A7%E5%B0%8F%E4%BF%AE%E6%94%B9.png" srcset="/img/loading.gif" lazyload alt="使用dconf-editor修改鼠标大小" /></p>
+<p><strong>好用的插件</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://extensions.gnome.org/extension/261/kimpanel/">Input Method Panel</a>：在输入法中提到，用于修改输入法字体大小并与主题颜色相配。</li>
+<li><a target="_blank" rel="noopener" href="https://extensions.gnome.org/extension/5004/dash-to-dock-for-cosmic/">Dash to Dock for COSMIC</a>：用来配置边框栏。(<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_26095375/article/details/120010167">解决ubuntu使用Dash to dock后休眠出现重影两个dock</a>)</li>
+<li><a target="_blank" rel="noopener" href="https://extensions.gnome.org/extension/3193/blur-my-shell/">Blur my Shell</a>：用于锁屏有背景雾化效果。</li>
+<li><a target="_blank" rel="noopener" href="https://extensions.gnome.org/extension/750/openweather/">OpenWeather</a>：在上方显示天气和温度。</li>
+</ol>
+<h3 id="配置终端"><a class="markdownIt-Anchor" href="#配置终端"></a> 配置终端</h3>
+<p>首先安装vim, git，并将vim的粘贴板和系统的绑定：</p>
+<blockquote>
+<p>注：安装插件 <code>vim-gtk</code> 之后，就可以通过 <code>+</code> 这个寄存器和系统粘贴版共享数据了，使用方法和其他寄存器类似 <code>&quot; + y</code> 拷贝， <code>&quot; + p</code> 粘贴。<br />
+由于按 + 号蛮复杂的，所以可以直接将二者绑定在一起，如果在删除或拷贝某些内容后，需要重新调用系统剪切板，可以用 <code>&quot; + p</code> 进行粘贴。<br />
+另一种很好的方法是将剪切板帮顶为 <code>; y</code> 这样也非常方便。</p>
+</blockquote>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">vim</span> <span class="token function">git</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> vim-gtk  <span class="token comment"># 将vim和剪切板绑定的软件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>在 <code>.vimrc</code> 中加入配置</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim"><span class="token comment">" 将系统剪切板和vim绑定在一起</span>
+<span class="token keyword">set</span> <span class="token builtin">clipboard</span><span class="token operator">=</span>unnamedplus
+
+<span class="token comment">" 或者设置复制命令为 `; y`</span>
+map <span class="token punctuation">;</span><span class="token keyword">y</span> <span class="token comment">"+y</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>并设置git的SSH key并上传到自己的GitHub上：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-t</span> rsa <span class="token parameter variable">-b</span> <span class="token number">4096</span>  <span class="token comment"># 生成ssh密钥</span>
+<span class="token function">vim</span> ~/.ssh/id_rsa.pub  <span class="token comment"># 复制内部的全部文字，拷贝到Settings - SSH and GPG keys - New SSH key粘贴进去</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>保存GitHub登陆密码，由于现在GitHub使用token进行登陆，为了避免每次都要拷贝，可以只输入一次，然后设置git存储下来，以后就不用再找了：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config <span class="token parameter variable">--global</span> credential.helper store  <span class="token comment"># 设置为存储密码</span>
+<span class="token comment"># 在下次要求输入密码时，从Settings - Developer settings(最下面) - Personal access tokens - Tokens(classic) - Generate new token - Generate new token(classic) 然后全部选中（可以选择永久时长的），最后生成，拷贝给出的token,输入到shell中登陆，以后就再也不用输入u密码了</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>下载zsh和oh-my-zsh，使用国内的镜像，国外的可能无法下载下来：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">zsh</span>
+<span class="token comment"># 国内下载并安装链接</span>
+<span class="token function">sh</span> <span class="token parameter variable">-c</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">wget</span> -O- https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh<span class="token variable">)</span></span>"</span>
+<span class="token comment"># 国外下载并安装链接</span>
+<span class="token function">sh</span> <span class="token parameter variable">-c</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">wget</span> -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="token variable">)</span></span>"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>可以直接从<a target="_blank" rel="noopener" href="https://github.com/wty-yy/dotfiles">我的dotfiles</a>中配置zsh，oh-my-zsh，vim，介绍内容已经写的非常详细了，有一键安装脚本。</p>
+<h3 id="安装vscode-latex"><a class="markdownIt-Anchor" href="#安装vscode-latex"></a> 安装VSCode &amp; LaTeX</h3>
+<p>VSCode安装参考：<a target="_blank" rel="noopener" href="https://cyfeng.science/2021/05/20/vs-code-chinese-input/">Ubuntu 20.04 正确安装支持中文输入的 VS Code</a>，不要使用snap方法下载的VSCode，不然无法输入中文。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> <span class="token parameter variable">-q</span> https://packages.microsoft.com/keys/microsoft.asc -O- <span class="token operator">|</span> <span class="token function">sudo</span> apt-key <span class="token function">add</span> -
+<span class="token function">sudo</span> add-apt-repository <span class="token string">"deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> update <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> code<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>LaTeX的安装包和Windows通用，LaTeX安装参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/136209984">知乎 - Ubuntu(20.04 LTS) OS 下 VS Code + LaTeX 快速配置指南</a>。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 加入到./zshrc或者./bashrc中，我装的是2021版本的，具体根据自己安装的版本写</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span>/usr/local/texlive/2021/bin/x86_64-linux:<span class="token environment constant">$PATH</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span>/usr/local/texlive/2021/texmf-dist/scripts/latexindent:<span class="token environment constant">$PATH</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">MANPATH</span><span class="token operator">=</span>/usr/local/texlive/2021/texmf-dist/doc/man:<span class="token variable">$MANPATH</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">INFOPATH</span><span class="token operator">=</span>/usr/local/texlive/2021/texmf-dist/doc/info:<span class="token variable">$INFOPATH</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><strong>中文字体配置</strong>，配置给定的字体，英文字体族配置教程（中文类似）：<a target="_blank" rel="noopener" href="https://tex.stackexchange.com/questions/31739/specify-different-fonts-for-bold-and-italic-with-fontspec">Specify different fonts for bold and italic with fontspec</a>，全部为以下10个字体（均已放到 <code>Latex-Product/Fonts</code> 下），全部安装完成后就可以直接运行我的LaTeX文件了。</p>
+<p><img src="/figures/My_Ubuntu.assets/%E5%85%A8%E9%83%A8%E5%AD%97%E4%BD%93.png" srcset="/img/loading.gif" lazyload alt="全部字体" /></p>
+<p>由于LaTeX可以直接使用到用户安装的字体，所以只要找到字体的正确名称即可，使用以下命令找到相应的字体：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> fc-cache <span class="token parameter variable">-fv</span>  <span class="token comment"># 更新字体缓存</span>
+fc-list <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"home"</span>  <span class="token comment"># fc-list 列出所有字体，grep "home" 筛选出路径中包含 "home" 的字体</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>通过上述方法可以找到相应的字体，看到 <code>.ttf</code> 文件后的名称就是在LaTeX中配置的名称：</p>
+<p><img src="/figures/My_Ubuntu.assets/%E6%98%BE%E7%A4%BA%E5%B7%B2%E6%9C%89%E5%AD%97%E4%BD%93.png" srcset="/img/loading.gif" lazyload alt="显示用户目录下已有字体" /></p>
+<h3 id="qqwechat网易云wpsclash"><a class="markdownIt-Anchor" href="#qqwechat网易云wpsclash"></a> QQ,WeChat,网易云,WPS,Clash</h3>
+<p>2024.06.12 更新：后来才发现<a target="_blank" rel="noopener" href="https://www.spark-app.store/">星火应用商店</a>这个国产的好东西，我在 Ubuntu 22.04 和 Ubuntu 24.04 上都进行了测试，如下安装方法没有问题，首先到<a target="_blank" rel="noopener" href="https://www.spark-app.store/download_latest">gitee - 星火应用商店 Spark-Store</a>上下载最新的 <code>*_amd64.deb</code>：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> dpkg <span class="token parameter variable">-i</span> *_amd64.deb  <span class="token comment"># 可能出现报错，使用后续代码修复</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> --fix-broken <span class="token function">install</span>  <span class="token comment"># 安装缺少的包即可</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>在菜单中打开 spark-store，搜索 QQ, WeChat, 网易云直接安装即可。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        之前分别安装QQ,WeChat,网易云的详细过程
+    </div>
+    <div class='spoiler-content'>
+        <p><strong>新版QQ</strong>：<a target="_blank" rel="noopener" href="https://im.qq.com/linuxqq/index.shtml">https://im.qq.com/linuxqq/index.shtml</a></p>
+<p><strong>微信</strong>：使用windows移植版本deepin-wine：<a target="_blank" rel="noopener" href="https://github.com/zq1997/deepin-wine">https://github.com/zq1997/deepin-wine</a></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> -O- https://deepin-wine.i-m.dev/setup.sh <span class="token operator">|</span> <span class="token function">sh</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> com.qq.weixin.deepin
+<span class="token comment"># 如无法发送照片</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libjpeg62:i386
+<span class="token comment"># 然后在.zshrc中加入wechat的快捷命令，便于直接打开，或者类似下面clash的方式创建快捷方式</span>
+<span class="token builtin class-name">alias</span> <span class="token assign-left variable">wechat</span><span class="token operator">=</span>/opt/apps/com.qq.weixin.deepin/files/run.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<blockquote>
+<p>微信分辨率太小解决方法：<a target="_blank" rel="noopener" href="https://github.com/zq1997/deepin-wine/issues/330">Ubuntu22 安装微信后程序界面、字体和托盘区图标都特别小</a><br />
+<strong>先关闭微信</strong>，再执行以下代码，在其中找到Graphic选项，将Screen resolution调大即可</p>
+</blockquote>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">WINEPREFIX</span><span class="token operator">=~</span>/.deepinwine/Deepin-WeChat deepin-wine6-stable winecfg<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p><strong>网易云</strong>是19年版本，但是功能仍然齐全蛮耗用：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 首先下载安装包到 ~/Downloads</span>
+<span class="token function">wget</span> <span class="token parameter variable">-P</span> ~/Downloads https://d1.music.126.net/dmusic/netease-cloud-music_1.2.1_amd64_ubuntu_20190428.deb
+<span class="token comment"># 安装网易云</span>
+<span class="token function">sudo</span> dpkg <span class="token parameter variable">-i</span> ~/Downloads/netease-cloud-music_1.2.1_amd64_ubuntu_20190428.deb<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>由于动态链接库问题，需要编辑网易云脚本位置 <code>/opt/netease/netease-cloud-music/netease-cloud-music.bash</code>：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /opt/netease/netease-cloud-music/netease-cloud-music.bash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>在第6行和第7行之间加上 <code>cd /lib/x86_64-linux-gnu/</code> 即可，在终端中执行 <code>netease-cloud-music </code> 可以启动，也可在应用界面直接启动。（参考博客的评论：<a target="_blank" rel="noopener" href="https://blog.csdn.net/luoweid/article/details/124484949">Ubuntu 22.4网易云音乐启动失败处理方法</a>）</p>
+<p><img src="/figures/My_Ubuntu.assets/%E7%BD%91%E6%98%93%E4%BA%91%E8%84%9A%E6%9C%AC%E4%BF%AE%E6%94%B9.png" srcset="/img/loading.gif" lazyload alt="网易云脚本修改" /></p>
+
+    </div>
+</div>
+<p><strong>WPS 2019</strong>：<a target="_blank" rel="noopener" href="https://www.wps.cn/product/wpslinux">https://www.wps.cn/product/wpslinux</a></p>
+<p>缺失图像字体从这里下载 <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1bFmSqWVDxc7Kc4kbJt3uEQ?_at_=1680680543255">百度网盘 - wps_symbol_fonts</a>，提取码：m5jw，将解压后的文件夹放到用户字体目录 <code>~/.local/share/fonts</code> 中然后重启wps解决问题。<br />
+<img src="/figures/My_Ubuntu.assets/wps%E8%A7%A3%E5%86%B3%E7%BC%BA%E5%A4%B1%E5%AD%97%E4%BD%93%E9%97%AE%E9%A2%98.png" srcset="/img/loading.gif" lazyload alt="wps解决确实字体问题" /></p>
+<p>2024.5.24更新：Ubuntu 24.04中出现<strong>无法打开与导出PDF</strong>，原因在于Ubuntu 23.04之后就更新为<code>libtiff.so.6</code>，因此WPS无法找到 <code>libtiff.so.5</code> 文件，需要创建一个软连接指向 <code>libtiff.so.6</code>：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">cd &#x2F;usr&#x2F;lib&#x2F;x86_64-linux-gnu
+sudo ln -s libtiff.so.6 libtiff.so.5<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p><strong>Clash科学上网</strong>：我使用的是 Clash for windows 也就是可视化的Clash，参考教程：<a target="_blank" rel="noopener" href="https://www.cfmem.com/2021/09/linux-clash-for-windows-vpnv2ray.html">Linux/ubuntu下实现科学上网使用 clash for windows 详细步骤</a>，对应的YouTube教程：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=pTlso8m_iRk&amp;t=314s">https://www.youtube.com/watch?v=pTlso8m_iRk&amp;t=314s</a></p>
+<p>设置开机自启，在目录 <code>~/.config/autostart/</code> 下用vim编辑 <code>clash.desktop</code> 文件并保存</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim"><span class="token punctuation">[</span>Desktop Entry<span class="token punctuation">]</span>
+Name<span class="token operator">=</span>Clash
+Type<span class="token operator">=</span>Application
+Exec<span class="token operator">=</span><span class="token operator">/</span>home<span class="token operator">/</span>wty<span class="token operator">/</span>Programs<span class="token operator">/</span>Clash<span class="token operator">/</span>cfw<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="自定义菜单"><a class="markdownIt-Anchor" href="#自定义菜单"></a> 自定义菜单</h4>
+<p>参考YouTube教程：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=gdYp2d_p8T0">How to add appimage to Linux menu</a>，网页教程来自 <a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/desktop_entries">archLinux Desktop entries</a>，以创建 <code>clash</code> 的快捷方式为例：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/.local/share/applications/  <span class="token comment"># 该文件夹存储 .desktop 后缀的文件，该文件的格式如网站中所描述，下面是一个例子</span>
+<span class="token function">vim</span> clash.desktop<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>Desktop Entry<span class="token punctuation">]</span>
+<span class="token comment"># 文件类型</span>
+Type <span class="token operator">=</span> Application
+<span class="token comment"># 文件名称，用于搜索</span>
+Name <span class="token operator">=</span> Clash
+<span class="token comment"># 文件的可执行文件绝对路径</span>
+Exec <span class="token operator">=</span> /home/wty/Programs/Clash/cfw
+<span class="token comment"># 可选项，文件图标，从晚上下载下来即可</span>
+Icon <span class="token operator">=</span> /home/wty/Pictures/icons/clash.png<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 使用下面代码检查正确性</span>
+desktop-file-validate clash.desktop
+<span class="token comment"># 保存文件后，输入以下命令刷新菜单，完成配置</span>
+update-desktop-database ~/.local/share/applications<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="/figures/My_Ubuntu.assets/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%8F%9C%E5%8D%95%E6%95%88%E6%9E%9C%E5%9B%BE.png" srcset="/img/loading.gif" lazyload alt="自定义菜单效果图" /></p>
+<h3 id="安装g-miniforge"><a class="markdownIt-Anchor" href="#安装g-miniforge"></a> 安装g++, miniforge</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> g++  <span class="token comment"># gcc无需安装，系统自带</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>通过miniforge中base环境下的python作为系统默认python，从 <a target="_blank" rel="noopener" href="https://github.com/conda-forge/miniforge/releases">GitHub - miniforge</a> 上直接下载安装包，现在推荐安装 mambaforge，安装方法和功能与miniforge完全一样，只不过用mamba命令代替conda，并且有多线程下载，下载速度起飞！</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">chmod</span> <span class="token number">777</span> Mambaforge-23.1.0-1-Linux-x86_64.sh  <span class="token comment"># 赋予可执行权限</span>
+./Mambaforge-23.1.0-1-Linux-x86_64.sh  <span class="token comment"># 开始安装，自行设定安装位置</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>最后在 <code>~/.zshrc</code> 中配置为默认python：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 将miniforge base环境作为默认python</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"<span class="token environment constant">$HOME</span>/Programs/miniforge3/bin:<span class="token environment constant">$PATH</span>"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>安装完python后第一件事还是换源：<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">conda 清华源</a>，<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/">pip 清华源</a>。</p>
+<h3 id="安装blog配置"><a class="markdownIt-Anchor" href="#安装blog配置"></a> 安装Blog配置</h3>
+<p>如果你有自己的博客，可以参考<a target="_blank" rel="noopener" href="https://github.com/wty-yy/Blog-SourceCode">我的Blog配置</a>中的安装nvm, nodejs, npm, cnpm, hexo的方法（并且换源，简单有效）</p>
+<h3 id="安装tensorflow-jupyter"><a class="markdownIt-Anchor" href="#安装tensorflow-jupyter"></a> 安装TensorFlow &amp; Jupyter</h3>
+<p>由于没有显卡，直接使用pip安装TensorFlow，Jupyter notebook建议使用mamba安装。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip <span class="token function">install</span> tensorflow
+mamba <span class="token function">install</span> jupyter notebook<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>在Jupyter中使用Vim方法见：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/384989800">怎么在Jupyter Notebook里使用vim？</a>，安装主题见：<a target="_blank" rel="noopener" href="https://wty-yy.space/posts/18857/#%E4%B8%BB%E9%A2%98%E9%A2%9C%E8%89%B2%E9%85%8D%E7%BD%AE">Jupyter notebook  主题颜色配置</a>。</p>
+<p><strong>Matplotlib绘图中文字体无法显示</strong>：首先在该网站 <a target="_blank" rel="noopener" href="https://www.fontpalace.com/font-details/SimHei/">下载SimHei.ttf</a> 字体，先直接进行安装，看是否可以显示，如果不行则进行以下操作：在Jupyter Notebook中执行以下代码，找到 <code>mpl-data</code> 文件夹</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> matplotlib
+matplotlib<span class="token punctuation">.</span>matplotlib_fname<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>进入 <code>.../site-packages/matplotlib/mpl-data/fonts/ttf</code> 中，将刚刚下载的字体复制进来，然后重启内核即可显示中文字体。</p>
+<h2 id="ubuntu优化"><a class="markdownIt-Anchor" href="#ubuntu优化"></a> Ubuntu优化</h2>
+<h3 id="开启休眠模式"><a class="markdownIt-Anchor" href="#开启休眠模式"></a> 开启休眠模式</h3>
+<p>参考另一片博文 <a href="/posts/51985/">Ubuntu 22.04 设置休眠选项</a></p>
+<h3 id="firefox浏览器双指缩放"><a class="markdownIt-Anchor" href="#firefox浏览器双指缩放"></a> Firefox浏览器双指缩放</h3>
+<p>参考 <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_36138462/article/details/116952566">CSDN - Ubuntu Linux下开启Firefox浏览器对触屏缩放的支持</a>，修改配置文件 <code>/etc/security/pam_env.conf</code>，在最后一行加上 <code>MOZ_USE_XINPUT2 DEFAULT=1</code>：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gedit /etc/security/pam_env.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p><img src="/figures/My_Ubuntu.assets/Firefox%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8F%8C%E6%8C%87%E7%BC%A9%E6%94%BE%E9%85%8D%E7%BD%AE1.png" srcset="/img/loading.gif" lazyload alt="Firefox浏览器双指缩放配置1.png" /></p>
+<p>并且在Firefox浏览器中网址栏输入 <code>about:config</code>，查找 <code>dom.w3c_touch_events.enabled</code> 并设置为 <code>1</code>：<br />
+<img src="/figures/My_Ubuntu.assets/Firefox%E6%B5%8F%E8%A7%88%E5%99%A8%E5%8F%8C%E6%8C%87%E7%BC%A9%E6%94%BE%E9%85%8D%E7%BD%AE2.png" srcset="/img/loading.gif" lazyload alt="Firefox浏览器双指缩放配置2.png" /></p>
+<p>登出再登入即可解决问题！</p>
+<h3 id="中文字体显示问题"><a class="markdownIt-Anchor" href="#中文字体显示问题"></a> 中文字体显示问题</h3>
+<p>参考文章 <a target="_blank" rel="noopener" href="https://blog.csdn.net/mbdong/article/details/122358856">CSDN - Ubuntu添加和设置默认中文字体</a>。Ubuntu的默认中文字体是韩语中的汉字，部分字体非常难看，而且有些繁体和简体不分，例如“将”和“径”这些字，修改文件</p>
+<ul>
+<li>Ubuntu 22.04: <code>sudo vim /etc/fonts/conf.d/64-language-selector-prefer.conf</code></li>
+<li>Ubuntu 24.04: <code>sudo vim /etc/fonts/conf.d/64-language-selector-cjk-prefer.conf</code></li>
+</ul>
+<p>然后将带有 <code>SC</code> 的字体提到第一位（<code>CaskaydiaCove Nerd Font</code>这个字体是我喜欢用的等宽字体，可以在 <a target="_blank" rel="noopener" href="https://github.com/ryanoasis/nerd-fonts/releases/download/v2.3.3/CascadiaCode.zip">GitHub - nerd font - CascadiaCode.zip</a> 下载到该字体）：</p>
+<blockquote>
+<p>查找可用字体详细全称，可以通过 <code>fc-list | grep &quot;你想找的字体名称&quot;</code> 查找</p>
+</blockquote>
+<p><img src="/figures/My_Ubuntu.assets/%E4%B8%AD%E6%96%87%E5%AD%97%E4%BD%93%E4%BF%AE%E6%AD%A3.png" srcset="/img/loading.gif" lazyload alt="中文字体修正" /></p>
+<p>登出用户，再登入即可看到修改后的效果。</p>
+<blockquote>
+<p>非常可惜，GNOME的终端中使用代码连字符（Ligature）的功能，参考 <a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1447271/how-can-i-enable-firacode-ligature-on-gnome-terminal">How can I enable firacode ligature on gnome-terminal?</a></p>
+</blockquote>
+<h3 id="主题配置-背景写字"><a class="markdownIt-Anchor" href="#主题配置-背景写字"></a> 主题配置-背景写字</h3>
+<p>（由于无法与三指切换配合，切换时字会显示出来，很难看，所以弃用）</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        之前安装背景写字的详细过程
+    </div>
+    <div class='spoiler-content'>
+        <p>之前使用的是closebox73的 <a target="_blank" rel="noopener" href="https://github.com/closebox73/Taurus">GitHub - Taurus</a> 中的 Pleione，基于Conky实现，天气修改方法见 <a target="_blank" rel="noopener" href="https://github.com/closebox73/applying-theme">applying-theme</a>。</p>
+<p>需要修改城市为当前所在城市，这样可以显示正确的天气：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /home/wty-yy/.config/conky/Pleione/scripts/weather.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>在 <a target="_blank" rel="noopener" href="https://openweathermap.org/find">https://openweathermap.org/find</a> 中找到对应的城市编号（网址的最后一串数字，例如我的是 <code>1790630</code>），修改</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">city_id</span><span class="token operator">=</span><span class="token number">1790630</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>最后修改日期显示为英文：</p>
+<p><img src="/figures/My_Ubuntu.assets/%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96-%E4%BF%AE%E6%94%B9%E6%97%B6%E9%97%B4%E6%98%BE%E7%A4%BA.png" srcset="/img/loading.gif" lazyload alt="修改时间显示" /></p>
+
+    </div>
+</div>
+<h3 id="自定义动态壁纸"><a class="markdownIt-Anchor" href="#自定义动态壁纸"></a> 自定义动态壁纸</h3>
+<p>使用Ubuntu自带的Shotwell就能实现自定义动态壁纸，首先确定壁纸文件夹，然后打开Shotwell，点击左上角 File - Import from folder 选择你的图片文件夹，然后点击 Import 加载进来，最后选中你要播放的图片，在点击左上角 File - Set as Desktop Sildeshow，自己设定转换时间即可。</p>
+<p><img src="/figures/My_Ubuntu.assets/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8A%A8%E6%80%81%E5%A3%81%E7%BA%B8.png" srcset="/img/loading.gif" lazyload alt="自定义动态壁纸" /></p>
+<h2 id="ubuntu常用快捷键"><a class="markdownIt-Anchor" href="#ubuntu常用快捷键"></a> Ubuntu常用快捷键</h2>
+<h3 id="截图"><a class="markdownIt-Anchor" href="#截图"></a> 截图</h3>
+<p>使用Ｕbuntu自带的截图功能：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Alt + PrintScreen  <span class="token comment"># 截取当前程序窗口</span>
+PrintScreen  <span class="token comment"># 使用自带截图工具进行截图</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<h2 id="ubuntu常用工具"><a class="markdownIt-Anchor" href="#ubuntu常用工具"></a> Ubuntu常用工具</h2>
+<h3 id="drawing"><a class="markdownIt-Anchor" href="#drawing"></a> drawing</h3>
+<p>绘图工具，类似windows的画图，常与截图键结合</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> drawing<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<h3 id="下载sourceforge一个文件夹内的所有文件"><a class="markdownIt-Anchor" href="#下载sourceforge一个文件夹内的所有文件"></a> 下载SourceForge一个文件夹内的所有文件</h3>
+<p>参考：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/39668291/download-whole-folder-from-sourceforge%EF%BC%8C%E7%94%A8%E7%BD%91%E9%A1%B5%E8%BF%9E%E6%8E%A5%E6%9B%BF%E6%8D%A2%E6%8E%89">https://stackoverflow.com/questions/39668291/download-whole-folder-from-sourceforge，用网页连接替换掉</a> <code>&lt;URL&gt;</code> 即可。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token string">"&lt;URL>"</span> <span class="token operator">|</span> <span class="token function">tr</span> <span class="token string">'"'</span> <span class="token string">"<span class="token entity" title="\n">\n</span>"</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"sourceforge.net/projects/.*/download"</span>  <span class="token operator">|</span> <span class="token function">sort</span>  <span class="token operator">|</span> <span class="token function">uniq</span> <span class="token operator">|</span> <span class="token keyword">while</span> <span class="token builtin class-name">read</span> url<span class="token punctuation">;</span> <span class="token keyword">do</span> <span class="token assign-left variable">url</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token builtin class-name">echo</span> $url <span class="token operator">|</span> <span class="token function">sed</span> <span class="token string">'s|/download$||'</span><span class="token variable">`</span></span><span class="token punctuation">;</span> <span class="token function">wget</span> <span class="token variable">$url</span> <span class="token punctuation">;</span> <span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<h2 id="常见问题"><a class="markdownIt-Anchor" href="#常见问题"></a> 常见问题</h2>
+<h3 id="ubuntu自动更新内核后黑屏"><a class="markdownIt-Anchor" href="#ubuntu自动更新内核后黑屏"></a> Ubuntu自动更新内核后黑屏</h3>
+<p>我的情况：有Nvidia显卡的电脑上，当Ubuntu自动更新内核后，登录界面输入密码后就会黑屏，我认为原因在于 Nvidia 显卡驱动和内核版本号绑定，Gnome 可视化界面又和 Nvidia 驱动绑定，因此需要先重装 Nvidia 驱动，再重装 Gnome 才能解决，具体方法：</p>
+<ol>
+<li>按 <code>Ctrl + Alt + F3</code> 进入 tty 纯命令行模式；</li>
+<li>重装 Nvidia 驱动</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> purge <span class="token string">"nvidia-driver*"</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> autoremove
+<span class="token function">sudo</span> ubuntu-drivers list  <span class="token comment"># 查看可安装的驱动版本</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> nvidia-driver-535  <span class="token comment"># 例如我的驱动版本为535</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        Nvidia 535以上版本的驱动编译过程报错
+    </div>
+    <div class='spoiler-content'>
+        <p>如果在驱动安装编译过程中发生报错，535 版本的驱动可能报错，这是 Ubuntu 22.04 的默认 gcc 版本为 11，而驱动的编译版本为 <code>gcc-12</code>，我们需要去将其修改为 <code>gcc-12</code>：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gcc-12  <span class="token comment"># 安装gcc-12</span>
+<span class="token builtin class-name">cd</span> /usr/bin
+<span class="token function">ls</span> <span class="token parameter variable">-ls</span> <span class="token operator">|</span> <span class="token function">grep</span> gcc  <span class="token comment"># 看到 gcc -> gcc-11, 说明当前使用的是 gcc-11</span>
+<span class="token function">sudo</span> <span class="token function">ln</span> <span class="token parameter variable">-sf</span> gcc-12 gcc  <span class="token comment"># 重新连接到 gcc-12</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> nvidia-driver-535  <span class="token comment"># 重新安装驱动</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<ol start="3">
+<li>重装 <code>gnome-shell</code>，会将 <code>gdm3, ubuntu-desktop</code> 都全部重新安装一遍</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> purge gnome-shell
+<span class="token comment"># 如果退出了命令行界面，按 Ctrl+Alt+F3 重新进入</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gnome-shell
+<span class="token function">reboot</span>  <span class="token comment"># 重启再输入命令看是否可以进入可视化界面</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>从零配置Ubuntu全过程</div>
+      <div>https://wty-yy.github.io/posts/46722/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/51985/" title="Ubuntu 22.04 设置休眠选项">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Ubuntu 22.04 设置休眠选项</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/39924/" title="CF1793 - Codeforces Round">
+                        <span class="hidden-mobile">CF1793 - Codeforces Round</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

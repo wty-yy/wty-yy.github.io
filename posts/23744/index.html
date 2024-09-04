@@ -1,0 +1,1183 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="2022年CVPR期末考试题                   计算机视觉为1-11题，模式识别为12-17题  卷积的性质及证明，卷积的计算 双线性插值，计算例子 双边滤波，原理，效果 六种二维几何变换矩阵具体是什么，及对应的性质 Canny边缘检测，具体步骤，什么是好的边缘（这里我没写，ppt里有不难） Harris角点检测检测，具体步骤，不变性与等变性 相机坐标">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机视觉与模式识别(CVPR) 期末复习">
+<meta property="og:url" content="https://wty-yy.github.io/posts/23744/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="2022年CVPR期末考试题                   计算机视觉为1-11题，模式识别为12-17题  卷积的性质及证明，卷积的计算 双线性插值，计算例子 双边滤波，原理，效果 六种二维几何变换矩阵具体是什么，及对应的性质 Canny边缘检测，具体步骤，什么是好的边缘（这里我没写，ppt里有不难） Harris角点检测检测，具体步骤，不变性与等变性 相机坐标">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216082130478.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215162533241.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215162600296.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215162856082.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215162921390.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215163106362.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215163632931.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215163655099.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215163813887.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215164017473.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215164047599.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215164109866.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215164248396.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215164404184.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215164426561.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215164735971.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215165326217.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215165404247.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215170336025.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215171233691.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215171253019.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215171315062.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215171942275.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230215172301822.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216092258290.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216092213394.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216092425016.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216092724864.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216092809655.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216093028143.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216093419050.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216094939693.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216095158817.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216100342662.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216101728613.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216102352560.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216110159320.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216105653924.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216105843862.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216105949854.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216110110263.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216110702869.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216111312108.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216111444429.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216112234516.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216112302840.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216112527751.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216112633117.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216114155617.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216113344574.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216113416765.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216114751376.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216115216699.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216115818769.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216120216016.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216120324917.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216120809776.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216151554206.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216152031702.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216152045588.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216152337372.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216153808894.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216153831448.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216154101351.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216164126309.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216164203178.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216164232790.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216164249470.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216164537272.png">
+<meta property="article:published_time" content="2023-02-16T04:13:33.000Z">
+<meta property="article:modified_time" content="2024-09-04T12:37:18.480Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/CVPR_reviews.figure/image-20230216082130478.png">
+  
+  
+  
+  <title>计算机视觉与模式识别(CVPR) 期末复习 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="计算机视觉与模式识别(CVPR) 期末复习"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-16 12:13" pubdate>
+          2023年2月16日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">计算机视觉与模式识别(CVPR) 期末复习</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        2022年CVPR期末考试题
+    </div>
+    <div class='spoiler-content'>
+        <p>计算机视觉为1-11题，模式识别为12-17题</p>
+<ol>
+<li>卷积的性质及证明，卷积的计算</li>
+<li>双线性插值，计算例子</li>
+<li>双边滤波，原理，效果</li>
+<li>六种二维几何变换矩阵具体是什么，及对应的性质</li>
+<li>Canny边缘检测，具体步骤，什么是好的边缘（这里我没写，ppt里有不难）</li>
+<li>Harris角点检测检测，具体步骤，不变性与等变性</li>
+<li>相机坐标变换，给出例子计算结果</li>
+<li>三维的RANSAC阐述算法过程，计算得到至少一个正常点对概率p（三维和二维的区别就是把n=3）</li>
+<li>极点和极限定义，根据基础矩阵求对极限（概念）</li>
+<li>给出具体的基础矩阵，给像点求对极线，并求出左右极点</li>
+<li>L-K光流估计，当物体移动较大时L-K估计的问题，解决方法Coarse-to-fine（Gauss金字塔）</li>
+<li>3个简单选择题，例：多分类选择Softmax函数，二分类选sigmoid函数</li>
+<li>最近邻，K近邻</li>
+<li>排序题，五个选项，对随机梯度下降法操作顺序排序</li>
+<li>给出输入大小，卷积核大小，给出输出的计算公式，计算输出大小</li>
+<li>链式求导（流式梯度下降），只有两步非常简单，带sigmoid的计算图</li>
+<li>Adam的设计思路和具体计算方法</li>
+</ol>
+
+    </div>
+</div>
+<p>高斯核，中值滤波，双边滤波，fourier变换，频域和空间域的关系，图像变换和逆变换，插值，Gauss金字塔和Laplace金字塔（4题）</p>
+<p>tiny边缘检测，计算图像梯度，NMS，角点检测（平移不变性，旋转不变性），shift描述子（如何描述平移不变性和旋转不变性），UISIKe（3题）</p>
+<p>相机标记，数目视觉，对极几何（4题）</p>
+<p>运动场和光流场的区别，光流场反应的运动，光流约束，Gauss大运动转化为小运动（1题）</p>
+<p>计算机视觉部分请见PDF：</p>
+
+
+	<div class="row">
+    <embed src="/file/CVPR期末复习_wty0.5修正.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+
+<p>下面为模式识别部分：</p>
+<h2 id="传统分类器"><a class="markdownIt-Anchor" href="#传统分类器"></a> 传统分类器</h2>
+<h3 id="knn"><a class="markdownIt-Anchor" href="#knn"></a> KNN</h3>
+<p>中间<strong>空的区域原理</strong>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo mathvariant="normal">≠</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">K\neq 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel"><span class="mord vbox"><span class="thinbox"><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>的情况.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216082130478.png" srcset="/img/loading.gif" lazyload alt="image-20230216082130478" style="zoom:50%;" />
+<p>决策边界是两个不同分类区域之间的边界，决策边界可能是有噪声的；它会受到离群点的影响，如何平滑决策边界？使用更多的近邻！</p>
+<p>当K＞1时，不同类之间可能会出现间隙，这需要用某种方式消除！</p>
+<h3 id="贝叶斯分类器"><a class="markdownIt-Anchor" href="#贝叶斯分类器"></a> 贝叶斯分类器</h3>
+<p>贝叶斯规则（贝叶斯公式）</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215162533241.png" srcset="/img/loading.gif" lazyload alt="image-20230215162533241" style="zoom: 50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215162600296.png" srcset="/img/loading.gif" lazyload alt="image-20230215162600296" style="zoom:50%;" />
+<p>多元高斯分布，确定 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold-italic">x</mi></mrow><annotation encoding="application/x-tex">\boldsymbol{x}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol">x</span></span></span></span></span></span> 的概率分布</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215162856082.png" srcset="/img/loading.gif" lazyload alt="image-20230215162856082" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215162921390.png" srcset="/img/loading.gif" lazyload alt="image-20230215162921390" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215163106362.png" srcset="/img/loading.gif" lazyload alt="image-20230215163106362" style="zoom:50%;" />
+<h3 id="线性分类器"><a class="markdownIt-Anchor" href="#线性分类器"></a> 线性分类器</h3>
+<p>打分机制，从三种不同视角查看分类器结果（代数视角，视觉视角，几何视角）</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215163632931.png" srcset="/img/loading.gif" lazyload alt="image-20230215163632931" style="zoom: 33%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215163655099.png" srcset="/img/loading.gif" lazyload alt="image-20230215163655099" style="zoom: 33%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215163813887.png" srcset="/img/loading.gif" lazyload alt="image-20230215163813887" style="zoom: 33%;" />
+<h3 id="支持向量机"><a class="markdownIt-Anchor" href="#支持向量机"></a> 支持向量机</h3>
+<img src="/figures/CVPR_reviews.figure/image-20230215164017473.png" srcset="/img/loading.gif" lazyload alt="image-20230215164017473" style="zoom: 33%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215164047599.png" srcset="/img/loading.gif" lazyload alt="image-20230215164047599" style="zoom: 33%;" />
+<p>打分函数：Hinge损失</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215164109866.png" srcset="/img/loading.gif" lazyload alt="image-20230215164109866" style="zoom: 33%;" />
+<p>多分类的计算结果；交叉熵损失</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215164248396.png" srcset="/img/loading.gif" lazyload alt="image-20230215164248396" style="zoom:33%;" />
+<p>交叉熵损失 vs SVM损失</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215164404184.png" srcset="/img/loading.gif" lazyload alt="image-20230215164404184" style="zoom:33%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215164426561.png" srcset="/img/loading.gif" lazyload alt="image-20230215164426561" style="zoom:33%;" />
+<h2 id="深度神经网络"><a class="markdownIt-Anchor" href="#深度神经网络"></a> 深度神经网络</h2>
+<p>如何描述非线性可分问题的解决思路（通过非线性变换）</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215164735971.png" srcset="/img/loading.gif" lazyload alt="image-20230215164735971" style="zoom:50%;" />
+<p>神经网络作为可学习的特征转换</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215165326217.png" srcset="/img/loading.gif" lazyload alt="image-20230215165326217" style="zoom:33%;" />
+<p>实现非线性变化的原理：激活函数（Sigmoid, tanh, ReLU）掌握梯度计算结果（用于梯度下降法）.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215165404247.png" srcset="/img/loading.gif" lazyload alt="image-20230215165404247" style="zoom:33%;" />
+<h3 id="梯度下降法重点"><a class="markdownIt-Anchor" href="#梯度下降法重点"></a> 梯度下降法（重点）</h3>
+<p>通过上游梯度计算下游梯度，掌握梯度反向传播原理. 可能考察标量和矢量计算，不会考察矩阵计算.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215170336025.png" srcset="/img/loading.gif" lazyload alt="image-20230215170336025" style="zoom:33%;" />
+<p>流式传播可以便于求解梯度，计算速度更快.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215171233691.png" srcset="/img/loading.gif" lazyload alt="image-20230215171233691" style="zoom:33%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215171253019.png" srcset="/img/loading.gif" lazyload alt="image-20230215171253019" style="zoom:33%;" />
+<p>其他激活函数的梯度</p>
+<img src="/figures/CVPR_reviews.figure/image-20230215171315062.png" srcset="/img/loading.gif" lazyload alt="image-20230215171315062" style="zoom: 70%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215171942275.png" srcset="/img/loading.gif" lazyload alt="image-20230215171942275" style="zoom:33%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230215172301822.png" srcset="/img/loading.gif" lazyload alt="image-20230215172301822" style="zoom:33%;" />
+<h3 id="优化算法"><a class="markdownIt-Anchor" href="#优化算法"></a> 优化算法</h3>
+<p>数值梯度，解析梯度.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216092258290.png" srcset="/img/loading.gif" lazyload alt="image-20230216092258290" style="zoom:50%;" />
+<p>随机梯度下降法(SGD)</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216092213394.png" srcset="/img/loading.gif" lazyload alt="image-20230216092213394" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216092425016.png" srcset="/img/loading.gif" lazyload alt="image-20230216092425016" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216092724864.png" srcset="/img/loading.gif" lazyload alt="image-20230216092724864" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216092809655.png" srcset="/img/loading.gif" lazyload alt="image-20230216092809655" style="zoom:50%;" />
+<p><strong>动量(Momentum)的定义</strong>，掌握Adam算法原理，解释优化的道理.</p>
+<p><img src="/figures/CVPR_reviews.figure/image-20230216093028143.png" srcset="/img/loading.gif" lazyload alt="image-20230216093028143" /></p>
+<p>上述定义中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span> 称为<strong>学习率（步长）</strong>，两种动量定义：</p>
+<p><img src="/figures/CVPR_reviews.figure/image-20230216093419050.png" srcset="/img/loading.gif" lazyload alt="image-20230216093419050" /></p>
+<p><strong>牛顿动量</strong>：使用<u>速度更新到达新的一点</u>，计算这一点的梯度并与速度混合作为当前的更新方向，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover></mrow><annotation encoding="application/x-tex">\tilde{x}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6678599999999999em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6678599999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.22222em;"><span class="mord">~</span></span></span></span></span></span></span></span></span></span> 为Newton动量中的参数位置，主要因为只想去更新 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo separator="true">,</mo><mi>f</mi><mo stretchy="false">(</mo><mover accent="true"><mi>x</mi><mo>~</mo></mover><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\tilde{x},f(\tilde{x})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6678599999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.22222em;"><span class="mord">~</span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6678599999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">x</span></span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.22222em;"><span class="mord">~</span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></p>
+<img src="/figures/CVPR_reviews.figure/image-20230216094939693.png" srcset="/img/loading.gif" lazyload alt="image-20230216094939693" style="zoom:50%;" />
+<p><strong>AdaGrad归一化原理</strong>：缩放每个参数反比于其所有梯度历史平方值总和的平方根，也称为“参数学习率”或“自适应学习率”。<strong>特点</strong>：沿着“陡峭”方向的前进受到阻碍； 沿“平坦”方向前进加快 .</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>w</mi><mi>s</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>←</mo><msubsup><mi>w</mi><mi>s</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msubsup><mo>+</mo><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∇</mi><msup><mi>w</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msup><mi mathvariant="normal">∣</mi><msubsup><mi mathvariant="normal">∣</mi><mn>2</mn><mn>2</mn></msubsup><mo separator="true">,</mo><mspace width="1em"/><mi><msub><mi mathvariant="bold-italic">v</mi><mi mathvariant="bold-italic">i</mi></msub></mi><mo>=</mo><mo>−</mo><mi>α</mi><mfrac><mrow><mi mathvariant="normal">∇</mi><msup><mi>w</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msup></mrow><msqrt><msubsup><mi>w</mi><mi>s</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msubsup></msqrt></mfrac></mrow><annotation encoding="application/x-tex">w_s^{(i)} \leftarrow w_s^{(i-1)} + ||\nabla w^{(i)}||_2^2,\quad  \boldsymbol{v_i} =  -\alpha\frac{\nabla w^{(i)}}{\sqrt{w_s^{(i)}}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.185em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-2.4530000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.185em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-2.4530000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.188em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord">∣</span><span class="mord">∇</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33528199999999997em;"><span style="top:-2.5500000000000003em;margin-left:-0.03704em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord boldsymbol mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.295em;vertical-align:-1.73em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.565em;"><span style="top:-2.1100000000000003em;"><span class="pstrut" style="height:3.449104em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.449104em;"><span class="svg-align" style="top:-3.8em;"><span class="pstrut" style="height:3.8em;"></span><span class="mord" style="padding-left:1em;"><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.5834080000000004em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.11659200000000003em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.4091039999999997em;"><span class="pstrut" style="height:3.8em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.8800000000000001em;"><svg width='400em' height='1.8800000000000001em' viewBox='0 0 400000 1944' preserveAspectRatio='xMinYMin slice'><path d='M983 90
+l0 -0
+c4,-6.7,10,-10,18,-10 H400000v40
+H1013.1s-83.4,268,-264.1,840c-180.7,572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7
+s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744
+c-10,12,-21,25,-33,39s-32,39,-32,39c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30
+c26.7,-32.7,52,-63,76,-91s52,-60,52,-60s208,722,208,722
+c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,-658.5
+c53.7,-170.3,84.5,-266.8,92.5,-289.5z
+M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.39089600000000013em;"><span></span></span></span></span></span></span></span><span style="top:-3.679104em;"><span class="pstrut" style="height:3.449104em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-4.126104em;"><span class="pstrut" style="height:3.449104em;"></span><span class="mord"><span class="mord">∇</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8879999999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.73em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>其中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>w</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">w^{(i)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8879999999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8879999999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span> 表示第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathnormal">i</span></span></span></span> 次更新前的梯度值，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>w</mi><mi>s</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msubsup></mrow><annotation encoding="application/x-tex">w^{(i)}_s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.161392em;vertical-align:-0.11659199999999997em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.5834080000000004em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.11659199999999997em;"><span></span></span></span></span></span></span></span></span></span> 表示第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathnormal">i</span></span></span></span> 次更新前全部梯度的二范数平方.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216095158817.png" srcset="/img/loading.gif" lazyload alt="image-20230216095158817" style="zoom:50%;" />
+<p><strong>RMSProp</strong>: “Leaky Adagrad”，带有衰减系数的Adagrad，令衰减系数为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>∈</mo><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\delta\in (0,1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span>.</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>w</mi><mi>s</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>←</mo><mi>δ</mi><msubsup><mi>w</mi><mi>s</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msubsup><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>δ</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∇</mi><msup><mi>w</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msup><mi mathvariant="normal">∣</mi><msubsup><mi mathvariant="normal">∣</mi><mn>2</mn><mn>2</mn></msubsup><mo separator="true">,</mo><mspace width="1em"/><mi><msub><mi mathvariant="bold-italic">v</mi><mi mathvariant="bold-italic">i</mi></msub></mi><mo>=</mo><mo>−</mo><mi>α</mi><mfrac><mrow><mi mathvariant="normal">∇</mi><msup><mi>w</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msup></mrow><msqrt><msubsup><mi>w</mi><mi>s</mi><mrow><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow></msubsup></msqrt></mfrac></mrow><annotation encoding="application/x-tex">w_s^{(i)} \leftarrow \delta w_s^{(i-1)} + (1-\delta)||\nabla w^{(i)}||_2^2,\quad  \boldsymbol{v_i} =  -\alpha\frac{\nabla w^{(i)}}{\sqrt{w_s^{(i)}}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.185em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-2.4530000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.185em;vertical-align:-0.247em;"></span><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-2.4530000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.188em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="mclose">)</span><span class="mord">∣</span><span class="mord">∣</span><span class="mord">∇</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33528199999999997em;"><span style="top:-2.5500000000000003em;margin-left:-0.03704em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord boldsymbol mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.295em;vertical-align:-1.73em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.565em;"><span style="top:-2.1100000000000003em;"><span class="pstrut" style="height:3.449104em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.449104em;"><span class="svg-align" style="top:-3.8em;"><span class="pstrut" style="height:3.8em;"></span><span class="mord" style="padding-left:1em;"><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0448em;"><span style="top:-2.5834080000000004em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span><span style="top:-3.2198em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.11659200000000003em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.4091039999999997em;"><span class="pstrut" style="height:3.8em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.8800000000000001em;"><svg width='400em' height='1.8800000000000001em' viewBox='0 0 400000 1944' preserveAspectRatio='xMinYMin slice'><path d='M983 90
+l0 -0
+c4,-6.7,10,-10,18,-10 H400000v40
+H1013.1s-83.4,268,-264.1,840c-180.7,572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7
+s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744
+c-10,12,-21,25,-33,39s-32,39,-32,39c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30
+c26.7,-32.7,52,-63,76,-91s52,-60,52,-60s208,722,208,722
+c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,-658.5
+c53.7,-170.3,84.5,-266.8,92.5,-289.5z
+M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.39089600000000013em;"><span></span></span></span></span></span></span></span><span style="top:-3.679104em;"><span class="pstrut" style="height:3.449104em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-4.126104em;"><span class="pstrut" style="height:3.449104em;"></span><span class="mord"><span class="mord">∇</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8879999999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">i</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.73em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<img src="/figures/CVPR_reviews.figure/image-20230216100342662.png" srcset="/img/loading.gif" lazyload alt="image-20230216100342662" style="zoom:50%;" />
+<p><strong>自适应矩估计(Adam)</strong>：RMSProp + Momentum，Adam同时兼顾了动量 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">v</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\boldsymbol{v}_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.59444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 和RMSProp（动量修正 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">v_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>）的优点.</p>
+<p>将 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="bold-italic">v</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\boldsymbol{v}_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.59444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 称为一阶矩（向量），<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">v_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 称为二阶矩（常量）</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">{</mo><mtable rowspacing="0.24999999999999992em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><msub><mi mathvariant="bold-italic">v</mi><mn>1</mn></msub><mo>←</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi mathvariant="bold-italic">v</mi><mn>1</mn></msub><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mi mathvariant="normal">∇</mi><mi>w</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><msub><mi>v</mi><mn>2</mn></msub><mo>←</mo><msub><mi>β</mi><mn>2</mn></msub><msub><mi>v</mi><mn>2</mn></msub><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∇</mi><mi>w</mi><mi mathvariant="normal">∣</mi><msubsup><mi mathvariant="normal">∣</mi><mn>2</mn><mn>2</mn></msubsup></mrow></mstyle></mtd></mtr></mtable></mrow><mspace width="1em"/><mo>⇒</mo><mspace width="1em"/><mi mathvariant="bold-italic">v</mi><mo>=</mo><mo>−</mo><mi>α</mi><mfrac><mi mathvariant="bold-italic">v</mi><msqrt><msub><mi>v</mi><mn>2</mn></msub></msqrt></mfrac></mrow><annotation encoding="application/x-tex">\left\{\begin{aligned}
+&amp;\boldsymbol{v}_1\leftarrow \beta_1\boldsymbol{v}_1 + (1-\beta_1)\nabla w\\
+&amp;v_2\leftarrow \beta_2v_2+(1-\beta_2)||\nabla w||_2^2
+\end{aligned}\right.
+\quad \Rightarrow \quad \boldsymbol{v} = -\alpha\frac{\boldsymbol{v}}{\sqrt{v_2}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.024108em;vertical-align:-1.262054em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.762054em;"><span style="top:-3.786162em;"><span class="pstrut" style="height:2.864108em;"></span><span class="mord"></span></span><span style="top:-2.262054em;"><span class="pstrut" style="height:2.864108em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.262054em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.762054em;"><span style="top:-3.922054em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">∇</span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span></span></span><span style="top:-2.397946em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">∣</span><span class="mord">∣</span><span class="mord">∇</span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mord">∣</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.262054em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇒</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.12216em;vertical-align:-1.00072em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.12144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.72528em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.68528em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.31472em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.00072em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>当 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 时，算法无法启动 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">v_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 几乎为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>，所以还需进行偏置修正（修正从原点初始化的一阶矩和二阶矩的估计）：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">{</mo><mtable rowspacing="0.24999999999999992em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><msubsup><mi mathvariant="bold-italic">v</mi><mn>1</mn><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><mfrac><msub><mi mathvariant="bold-italic">v</mi><mn>1</mn></msub><mrow><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>1</mn><mi>t</mi></msubsup></mrow></mfrac></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><msubsup><mi>v</mi><mn>2</mn><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup><mo>=</mo><mfrac><msub><mi>v</mi><mn>2</mn></msub><mrow><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>2</mn><mi>t</mi></msubsup></mrow></mfrac></mrow></mstyle></mtd></mtr></mtable></mrow><mspace width="1em"/><mo>⇒</mo><mspace width="1em"/><mi mathvariant="bold-italic">v</mi><mo>=</mo><mo>−</mo><mi>α</mi><mfrac><mi><msup><mi mathvariant="bold-italic">v</mi><mo mathvariant="bold" lspace="0em" rspace="0em">′</mo></msup></mi><msqrt><msubsup><mi>v</mi><mn>2</mn><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msubsup></msqrt></mfrac></mrow><annotation encoding="application/x-tex">\left\{\begin{aligned}
+&amp;\boldsymbol{v}_1&#x27;= \frac{\boldsymbol{v}_1}{1-\beta_1^t}\\
+&amp;v_2&#x27;= \frac{v_2}{1-\beta_2^t}
+\end{aligned}\right.
+\quad \Rightarrow \quad \boldsymbol{v} = -\alpha\frac{\boldsymbol{v&#x27;}}{\sqrt{v_2&#x27;}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:4.800040000000001em;vertical-align:-2.15002em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.6500200000000005em;"><span style="top:-1.8999899999999998em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎩</span></span></span><span style="top:-1.89499em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-2.18999em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-2.20499em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-3.15001em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎨</span></span></span><span style="top:-4.2950099999999996em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-4.59001em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-4.60501em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-4.90002em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎧</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.15002em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.616808em;"><span style="top:-4.616808em;"><span class="pstrut" style="height:3.1214399999999998em;"></span><span class="mord"></span></span><span style="top:-2.25694em;"><span class="pstrut" style="height:3.1214399999999998em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.116808em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.616808em;"><span style="top:-4.616808em;"><span class="pstrut" style="height:3.1214399999999998em;"></span><span class="mord"><span class="mord"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8018919999999999em;"><span style="top:-2.4530000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.12144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7753559999999999em;"><span style="top:-2.433692em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.0448000000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.26630799999999993em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9523079999999999em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-2.25694em;"><span class="pstrut" style="height:3.1214399999999998em;"></span><span class="mord"><span class="mord"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8018919999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1075599999999999em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7753559999999999em;"><span style="top:-2.433692em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.0448000000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.26630799999999993em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9523079999999999em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.116808em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇒</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.558892em;vertical-align:-1.13em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.428892em;"><span style="top:-2.1913080000000003em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9186920000000001em;"><span class="svg-align" style="top:-3.2em;"><span class="pstrut" style="height:3.2em;"></span><span class="mord" style="padding-left:1em;"><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.733692em;"><span style="top:-2.433692em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.0448000000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.26630799999999993em;"><span></span></span></span></span></span></span></span></span><span style="top:-2.878692em;"><span class="pstrut" style="height:3.2em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.28em;"><svg width='400em' height='1.28em' viewBox='0 0 400000 1296' preserveAspectRatio='xMinYMin slice'><path d='M263,681c0.7,0,18,39.7,52,119
+c34,79.3,68.167,158.7,102.5,238c34.3,79.3,51.8,119.3,52.5,120
+c340,-704.7,510.7,-1060.3,512,-1067
+l0 -0
+c4.7,-7.3,11,-11,19,-11
+H40000v40H1012.3
+s-271.3,567,-271.3,567c-38.7,80.7,-84,175,-136,283c-52,108,-89.167,185.3,-111.5,232
+c-22.3,46.7,-33.8,70.3,-34.5,71c-4.7,4.7,-12.3,7,-23,7s-12,-1,-12,-1
+s-109,-253,-109,-253c-72.7,-168,-109.3,-252,-110,-252c-10.7,8,-22,16.7,-34,26
+c-22,17.3,-33.3,26,-34,26s-26,-26,-26,-26s76,-59,76,-59s76,-60,76,-60z
+M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3213079999999999em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord"><span class="mord"><span class="mord boldsymbol" style="margin-right:0.03704em;">v</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathbf mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.13em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<img src="/figures/CVPR_reviews.figure/image-20230216101728613.png" srcset="/img/loading.gif" lazyload alt="image-20230216101728613" style="zoom:50%;" />
+<blockquote>
+<p>Adam算法中取beta1 = 0.9, beta2 = 0.999,  learning_rate = 1e-3, 5e-4, 1e-4对于很多模型来说是一个好的起始点!</p>
+</blockquote>
+<img src="/figures/CVPR_reviews.figure/image-20230216102352560.png" srcset="/img/loading.gif" lazyload alt="image-20230216102352560" style="zoom:50%;" />
+<ul>
+<li>Adam 在很多情况下都是不错的默认选择</li>
+<li>SGD+Momentum 可以优于Adam，但是需要更多的调整</li>
+<li>如果你可以进行完整的批量更新，可以尝试使用  L-BFGS (不要忘记禁用所有噪声源)</li>
+</ul>
+<p>二阶牛顿法难于计算不考.</p>
+<h2 id="卷积神经网络-cnn"><a class="markdownIt-Anchor" href="#卷积神经网络-cnn"></a> 卷积神经网络 CNN</h2>
+<h3 id="卷积的计算"><a class="markdownIt-Anchor" href="#卷积的计算"></a> 卷积的计算</h3>
+<p>卷积核加入填充（padding），步伐（stride）后计算输出结果的大小.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216110159320.png" srcset="/img/loading.gif" lazyload alt="image-20230216110159320" style="zoom:50%;" />
+<p>掌握例子：</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216105653924.png" srcset="/img/loading.gif" lazyload alt="image-20230216105653924" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216105843862.png" srcset="/img/loading.gif" lazyload alt="image-20230216105843862" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216105949854.png" srcset="/img/loading.gif" lazyload alt="image-20230216105949854" style="zoom:50%;" />
+<p>1x1卷积：堆叠1x1卷积层等价于对每个位置进行 全连接层。</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216110110263.png" srcset="/img/loading.gif" lazyload alt="image-20230216110110263" style="zoom:50%;" />
+<h3 id="池化的原理"><a class="markdownIt-Anchor" href="#池化的原理"></a> 池化的原理</h3>
+<p>池化层: 另外一种下采样（downsmaple）方式，输出结果的大小：</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216110702869.png" srcset="/img/loading.gif" lazyload alt="image-20230216110702869" style="zoom:50%;" />
+<h3 id="rnn的经典架构"><a class="markdownIt-Anchor" href="#rnn的经典架构"></a> RNN的经典架构</h3>
+<p>经典架构：[Conv, ReLU, Pool] x N, flatten, [FC, ReLU] x N, FC</p>
+<p>[Conv, ReLU, Pool]：称为一个卷积块，由卷积层，非线性函数(ReLU)和池化层组成.</p>
+<p>flatten：将卷积的输出图像 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mi>H</mi><mo>×</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">3\times H\times W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span> 展平为一维向量.</p>
+<p>[FC, ReLU]：全连接层(Full connect)与非线性函数(ReLU)构成的全连接块.</p>
+<p>FC：最后用一个全连接层作为输出层.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216111312108.png" srcset="/img/loading.gif" lazyload alt="image-20230216111312108" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216111444429.png" srcset="/img/loading.gif" lazyload alt="image-20230216111444429" style="zoom:50%;" />
+<h3 id="归一化原理"><a class="markdownIt-Anchor" href="#归一化原理"></a> 归一化原理</h3>
+<h4 id="批归一化batch-normalization"><a class="markdownIt-Anchor" href="#批归一化batch-normalization"></a> 批归一化（Batch Normalization）</h4>
+<img src="/figures/CVPR_reviews.figure/image-20230216112234516.png" srcset="/img/loading.gif" lazyload alt="image-20230216112234516" style="zoom:50%;" />
+<p>前面一层的输出维度为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span>，如果是图像 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mi>H</mi><mo>×</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">3\times H\times W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span>，则可以将 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>×</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">H\times W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span> 展平后视为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span> ，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 表示 mini-batch的大小.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216112302840.png" srcset="/img/loading.gif" lazyload alt="image-20230216112302840" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216112527751.png" srcset="/img/loading.gif" lazyload alt="image-20230216112527751" style="zoom:50%;" />
+<p>估计参数时依赖整个mini-batch的数据，但在测试时不能这样做! 所以在<strong>测试时需利用训练数据的平均值进行代替</strong>.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216112633117.png" srcset="/img/loading.gif" lazyload alt="image-20230216112633117" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216114155617.png" srcset="/img/loading.gif" lazyload alt="image-20230216114155617" style="zoom:50%;" />
+<p><strong>批归一化优点</strong>：</p>
+<ul>
+<li>使得网络更加容易训练!</li>
+<li>允许使用更大的学习率，使网络收敛速度加快；</li>
+<li>网络对于不同初始化值更加鲁棒；</li>
+<li>归一化在训练的过程中起到正则化的作用；</li>
+<li>测试时零开销: 可以与卷积层融合!</li>
+</ul>
+<p><strong>批归一化缺点</strong>：</p>
+<ul>
+<li>至今为止没有很好的理论上的解释；（仅能解释为减少“内部方差偏移”）</li>
+<li>训练和测试上的操作行为不一致: 这是日常代码中一种常见的bug来源!</li>
+</ul>
+<p><strong>层归一化（Layer Normalization）</strong>：</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216113344574.png" srcset="/img/loading.gif" lazyload alt="image-20230216113344574" style="zoom:50%;" />
+<p><strong>实例归一化（Instance Normalization）</strong>：</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216113416765.png" srcset="/img/loading.gif" lazyload alt="image-20230216113416765" style="zoom:50%;" />
+<h2 id="cnn-网络结构"><a class="markdownIt-Anchor" href="#cnn-网络结构"></a> CNN 网络结构</h2>
+<p>神经网络架构：AlexNet，VGG，GoogleNet，ResNet.</p>
+<p>掌握<strong>道理</strong>，每个神经网络解决了什么问题？通过神经网络结构判别神经网络架构.</p>
+<h3 id="alexnet"><a class="markdownIt-Anchor" href="#alexnet"></a> AlexNet</h3>
+<p>227 x 227 的输入，5 个卷积层，最大池化层，3 个全联接层，ReLU 非线性激活函数.</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>多数存储开销是在位置靠前的卷积层；</li>
+<li>接近所有参数都在全联接层；</li>
+<li>大多数浮点运算计算量出现在卷积层上.</li>
+</ul>
+<h3 id="vgg"><a class="markdownIt-Anchor" href="#vgg"></a> VGG</h3>
+<p>VGG-16比AlexNet大得多！VGG 设计规则：</p>
+<ul>
+<li>所有<strong>卷积层为 3x3 大小，stride为1，pad为1</strong>；</li>
+<li>所有最大池化层为 2x2 大小，stride为2；</li>
+<li>池化层后，通道数加倍.</li>
+</ul>
+<img src="/figures/CVPR_reviews.figure/image-20230216114751376.png" srcset="/img/loading.gif" lazyload alt="image-20230216114751376" style="zoom: 67%;" />
+<h3 id="googlenet"><a class="markdownIt-Anchor" href="#googlenet"></a> GoogLeNet</h3>
+<p>GoogLeNet为了实现高效性的创新: 减少参数量，存储空间和计算量.</p>
+<p><strong>Stem network</strong>：在开始阶段积极地对输入进行下采样(回想在 VGG-16: 大多数计算集中在初始阶段)</p>
+<p><strong>Inception 模块</strong>：<strong>局部单元由多个分支组成</strong>，局部结构在网络中重复出现多次，使用 1x1 “Bottleneck” 来在卷积操作前减少通道数.</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216115216699.png" srcset="/img/loading.gif" lazyload alt="image-20230216115216699" style="zoom:50%;" />
+<p><strong>Global Average Pooling（全局均值池化层）</strong>：不再在最后使用大型FC层! 改为使用 global average pooling 来进行维度压缩,并使用一个liner层计算分数.</p>
+<p><strong>Auxiliary Classifiers（辅助分类器）</strong>：使用loss没有将网络的靠后位置训练好:<u>网络太大了，梯度无法精准传播</u>，使用“auxiliary classifiers” 在网络的几个中间节点来对图片分类和接收loss. <strong>但是，使用 BatchNorm 就不需要这个技巧了</strong>.</p>
+<h3 id="resnet-残差网络"><a class="markdownIt-Anchor" href="#resnet-残差网络"></a> ResNet 残差网络</h3>
+<p><strong>Residual Networks(ResNet)</strong> 是从一个问题上发现的：更深的网络比前层网络表现差！事实上，深层网络表现的是<strong>欠拟合</strong>，因为其在训练集上的效果仍然比浅层网络差. 但是理论上深层神经网络可以通过恒等变换来模拟浅层网络，至少比浅层网络效果要好. 所以考虑加入快捷通道，直接让神经网络自动选择是否直接使用恒等变换（复制上一层的结果）.</p>
+<p><strong>问题</strong>：更深的模型更难优化，而且实际中无法得到恒等变换（identity functions）来模拟浅层网络.</p>
+<p><strong>解决</strong>：改变网络结构使多余的层能够容易的利用 identity functions!</p>
+<p><strong>残差层(Residual Block)</strong>：<strong>加入shortcut通道直接跨过卷积层.</strong> Residual network 是多个residual blocks的堆叠</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216115818769.png" srcset="/img/loading.gif" lazyload alt="image-20230216115818769" style="zoom:50%;" />
+<p><strong>瓶颈模块(Bottleneck Block)</strong>：通过 1x1 的卷积层，减少卷积计算量：</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216120216016.png" srcset="/img/loading.gif" lazyload alt="image-20230216120216016" style="zoom:50%;" />
+<p><strong>其他特点</strong>：</p>
+<ul>
+<li>类似 GoogleNet 使用同样的 aggressive stem来在residual block；</li>
+<li>类似 GoogLeNet, 没有大型全联接层: 而是在模型末端使用 global average pooling 和一个linear 层；</li>
+</ul>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>可以训练非常深的网络；</li>
+<li>更深的网络表现比浅层网络好 (同预期中一样)；</li>
+<li>在所有 ILSVRC 和 COCO 2015 比赛获得第一名；</li>
+<li>现在还是广泛应用!</li>
+</ul>
+<img src="/figures/CVPR_reviews.figure/image-20230216120324917.png" srcset="/img/loading.gif" lazyload alt="image-20230216120324917" style="zoom:50%;" />
+<p><strong>比赛总结</strong>：</p>
+<ul>
+<li>VGG: 最多的存储和计算量</li>
+<li>Inception-v4: Resnet + Inception：效果最好，利用Resnet加上Inceptio模块达到的.</li>
+<li>GoogLeNet: 非常高效!</li>
+<li>AlexNet: 低计算量, 高参数量.</li>
+<li>ResNet: 简单设计, 比较高效，高准确率.</li>
+</ul>
+<img src="/figures/CVPR_reviews.figure/image-20230216120809776.png" srcset="/img/loading.gif" lazyload alt="image-20230216120809776" style="zoom:50%;" />
+<blockquote>
+<p>年度 ImageNet在2017后不再举办，改为Kaggle.</p>
+</blockquote>
+<p><strong>CNN Architectures 总结</strong>：</p>
+<ul>
+<li>早期工作 (AlexNet -&gt; ZFNet -&gt; VGG) 表明更大的网络效果更好</li>
+<li>GoogLeNet 最开始关注于 efficiency (aggressive stem, 1x1 bottleneck convolutions, global avg pool 代替 FC layers)</li>
+<li>ResNet 告诉我们如何训练超大型网络– 被 GPU 的内存所限制!</li>
+<li>ResNet之后: Efficient networks 更加受重视: 我们应该如何在不增加复杂度的基础上提升准确率?</li>
+<li>很多tiny networks 聚焦于移动设备: MobileNet, ShuffleNet, etc</li>
+<li>Neural Architecture Search 自动实现网络设计</li>
+</ul>
+<p><strong>网络使用建议</strong>：</p>
+<ul>
+<li>如果非常在意精度，可以使用 <strong>ResNet-50</strong> 或者 <strong>ResNet-101</strong>；</li>
+<li>如果想要一个高效网络(比如要求实时，或移动端运行) 可以尝试 <strong>MobileNets</strong> 或者 <strong>ShuffleNets</strong>.</li>
+</ul>
+<p>开放性问题：根据题目条件选择网络结构.</p>
+<h2 id="人脸识别"><a class="markdownIt-Anchor" href="#人脸识别"></a> 人脸识别</h2>
+<p>Viola-Jones人脸识别算法：</p>
+<ul>
+<li>使用AdaBoost进行高效的特征选择</li>
+<li>矩形特征+积分图像可以用于快速图像分析</li>
+<li>快速分类产生级联分类器</li>
+</ul>
+<p><strong>灰度图像最快速已知人脸检测器</strong>，</p>
+<h3 id="adaboostadaptive-boosting"><a class="markdownIt-Anchor" href="#adaboostadaptive-boosting"></a> Adaboost(Adaptive Boosting)</h3>
+<p>Adaboost算法关键点：</p>
+<ul>
+<li>强(非线性)分类器是由所有弱(线性)分类器的组合构建的。</li>
+<li>前一个错误分类的样本将在以后的轮次中得到更多的强调。</li>
+</ul>
+<img src="/figures/CVPR_reviews.figure/image-20230216151554206.png" srcset="/img/loading.gif" lazyload alt="image-20230216151554206" style="zoom:50%;" />
+<p>特征，积分图像</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216152031702.png" srcset="/img/loading.gif" lazyload alt="image-20230216152031702" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216152045588.png" srcset="/img/loading.gif" lazyload alt="image-20230216152045588" style="zoom: 50%;" />
+<h3 id="级联处理"><a class="markdownIt-Anchor" href="#级联处理"></a> 级联处理</h3>
+<p>把二个以上的设备通过某种方式连接起来，能起到扩容的效果就是<strong>级联</strong>。</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216152337372.png" srcset="/img/loading.gif" lazyload alt="image-20230216152337372" style="zoom: 50%;" />
+<h2 id="语义分割"><a class="markdownIt-Anchor" href="#语义分割"></a> 语义分割</h2>
+<p>没啥想考的，理解对网络的要求</p>
+<img src="/figures/CVPR_reviews.figure/image-20230216153808894.png" srcset="/img/loading.gif" lazyload alt="image-20230216153808894" style="zoom:50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216153831448.png" srcset="/img/loading.gif" lazyload alt="image-20230216153831448" style="zoom:50%;" />
+<h2 id="目标检测"><a class="markdownIt-Anchor" href="#目标检测"></a> 目标检测</h2>
+<img src="/figures/CVPR_reviews.figure/image-20230216154101351.png" srcset="/img/loading.gif" lazyload alt="image-20230216154101351" style="zoom:50%;" />
+<p>上述算法问题在于如果图中存在多个目标时，每张图片具有不同数量的输出值，难以处理.</p>
+<h3 id="滑动窗口"><a class="markdownIt-Anchor" href="#滑动窗口"></a> 滑动窗口</h3>
+<p>将 CNN 应用于图像的许多不同裁剪（滑动窗口裁剪结果），CNN 将每个裁剪分类为对象或背景.</p>
+<p><strong>提问</strong>：考虑边界框的大小为h×w，在大小为H×W的图像中有多少个可能的边界框？</p>
+<p>位置x的可能性: W – w + ，位置y的可能性: H – h + 1，全部可能的位置: (W – w + 1) * (H – h + 1)</p>
+<p>可能的边界总数：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munderover><mo>∑</mo><mrow><mi>h</mi><mo>=</mo><mn>1</mn></mrow><mi>H</mi></munderover><munderover><mo>∑</mo><mrow><mi>w</mi><mo>=</mo><mn>1</mn></mrow><mi>W</mi></munderover><mo stretchy="false">(</mo><mi>W</mi><mo>−</mo><mi>w</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>H</mi><mo>−</mo><mi>h</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mi>H</mi><mo stretchy="false">(</mo><mi>H</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac><mfrac><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>W</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></mrow><annotation encoding="application/x-tex">\sum_{h=1}^H\sum_{w=1}^W(W-w+1)(H-h+1) = \frac{H(H+1)}{2}\frac{W(W+1)}{2}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.1304490000000005em;vertical-align:-1.302113em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.8478869999999998em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">h</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.300005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.302113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283360000000002em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">h</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.113em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>遍历所有可能的区域太慢，所以需要<strong>生成候选区域</strong>：找到一小组的候选框尽可能地覆盖所有的目标对象；基于启发式：例如寻找类似斑点的图像区域；运行速度相对较快：例如在CPU上能几秒钟地选择性搜索出 2000 个候选区域.</p>
+<h3 id="检测评估标准"><a class="markdownIt-Anchor" href="#检测评估标准"></a> 检测评估标准</h3>
+<img src="/figures/CVPR_reviews.figure/image-20230216164126309.png" srcset="/img/loading.gif" lazyload alt="image-20230216164126309" style="zoom: 50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216164203178.png" srcset="/img/loading.gif" lazyload alt="image-20230216164203178" style="zoom: 50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216164232790.png" srcset="/img/loading.gif" lazyload alt="image-20230216164232790" style="zoom: 50%;" />
+<img src="/figures/CVPR_reviews.figure/image-20230216164249470.png" srcset="/img/loading.gif" lazyload alt="image-20230216164249470" style="zoom:50%;" />
+<h3 id="r-cnn"><a class="markdownIt-Anchor" href="#r-cnn"></a> R-CNN</h3>
+<p>R-CNN(Region-based CNN)是基于区域的CNN. 分为四种：</p>
+<ul>
+<li><strong>“Slow” R-CNN</strong>: 每个区域独立通过CNN</li>
+<li><strong>Fast R-CNN</strong>: 将可区分裁剪应用于共享的图像特征</li>
+<li><strong>Faster R-CNN</strong>: 利用CNN来计算候选区域</li>
+<li><strong>Single-Stage</strong>:全卷积检测器</li>
+</ul>
+<p><img src="/figures/CVPR_reviews.figure/image-20230216164537272.png" srcset="/img/loading.gif" lazyload alt="image-20230216164537272" /></p>
+<p>深度学习：R-CNN，每个版本解决了什么问题（要非常清楚）. 细节：计算IoU，NMS，AP，mAP原理.</p>
+<h2 id="transformer"><a class="markdownIt-Anchor" href="#transformer"></a> Transformer</h2>
+<p>比较新，前沿知识，知道原理，问答题借鉴它的思路.</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/CVPR/" class="category-chain-item">CVPR</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>计算机视觉与模式识别(CVPR) 期末复习</div>
+      <div>https://wty-yy.github.io/posts/23744/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/39924/" title="CF1793 - Codeforces Round">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CF1793 - Codeforces Round</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/24285/" title="《机器学习实战》第四章 训练线性模型">
+                        <span class="hidden-mobile">《机器学习实战》第四章 训练线性模型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

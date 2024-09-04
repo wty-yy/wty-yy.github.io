@@ -1,0 +1,994 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Inside TensorFlow - tf.Keras 笔记  检查是否使用gpu tf.test.is_gpu_available() tf.test.is_built_with_cuda()  使VScode能够识别keras中的函数，在.\Anaconda3\envs\你的环境名\Lib\site-packages\tensorflow\__init__.py中的末尾加入以下代码即可（参">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow常用函数及模型写法">
+<meta property="og:url" content="https://wty-yy.github.io/posts/48334/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="Inside TensorFlow - tf.Keras 笔记  检查是否使用gpu tf.test.is_gpu_available() tf.test.is_built_with_cuda()  使VScode能够识别keras中的函数，在.\Anaconda3\envs\你的环境名\Lib\site-packages\tensorflow\__init__.py中的末尾加入以下代码即可（参">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/20/zMYHG8.png">
+<meta property="article:published_time" content="2022-11-20T02:16:38.000Z">
+<meta property="article:modified_time" content="2024-09-04T12:37:18.490Z">
+<meta property="article:author" content="wty">
+<meta property="article:tag" content="TensorFlow">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/11/20/zMYHG8.png">
+  
+  
+  
+  <title>TensorFlow常用函数及模型写法 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="TensorFlow常用函数及模型写法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-20 10:16" pubdate>
+          2022年11月20日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">TensorFlow常用函数及模型写法</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p><a href="/posts/2554/">Inside TensorFlow - tf.Keras 笔记</a></p>
+</blockquote>
+<p>检查是否使用gpu</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">tf<span class="token punctuation">.</span>test<span class="token punctuation">.</span>is_gpu_available<span class="token punctuation">(</span><span class="token punctuation">)</span>
+tf<span class="token punctuation">.</span>test<span class="token punctuation">.</span>is_built_with_cuda<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<hr />
+<p>使VScode能够识别keras中的函数，在<code>.\Anaconda3\envs\你的环境名\Lib\site-packages\tensorflow\__init__.py</code>中的末尾加入以下代码即可（参考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/68860879/vscode-keras-intellisensesuggestion-not-working-properly">stack overflow - Vscode keras intellisense(suggestion) not working properly</a>）：</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        展开/折叠代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># Explicitly import lazy-loaded modules to support autocompletion.</span>
+<span class="token comment"># pylint: disable=g-import-not-at-top</span>
+<span class="token keyword">if</span> _typing<span class="token punctuation">.</span>TYPE_CHECKING<span class="token punctuation">:</span>
+  <span class="token keyword">from</span> tensorflow_estimator<span class="token punctuation">.</span>python<span class="token punctuation">.</span>estimator<span class="token punctuation">.</span>api<span class="token punctuation">.</span>_v2 <span class="token keyword">import</span> estimator <span class="token keyword">as</span> estimator
+  <span class="token keyword">from</span> keras<span class="token punctuation">.</span>api<span class="token punctuation">.</span>_v2 <span class="token keyword">import</span> keras
+  <span class="token keyword">from</span> keras<span class="token punctuation">.</span>api<span class="token punctuation">.</span>_v2<span class="token punctuation">.</span>keras <span class="token keyword">import</span> losses
+  <span class="token keyword">from</span> keras<span class="token punctuation">.</span>api<span class="token punctuation">.</span>_v2<span class="token punctuation">.</span>keras <span class="token keyword">import</span> metrics
+  <span class="token keyword">from</span> keras<span class="token punctuation">.</span>api<span class="token punctuation">.</span>_v2<span class="token punctuation">.</span>keras <span class="token keyword">import</span> optimizers
+  <span class="token keyword">from</span> keras<span class="token punctuation">.</span>api<span class="token punctuation">.</span>_v2<span class="token punctuation">.</span>keras <span class="token keyword">import</span> initializers
+<span class="token comment"># pylint: enable=g-import-not-at-top</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<h2 id="dataset"><a class="markdownIt-Anchor" href="#dataset"></a> Dataset</h2>
+<p><a target="_blank" rel="noopener" href="https://tensorflow.google.cn/guide/data">参考文档 - tf.data创建TensorFlow输入流水线</a>，<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=VFEOskzhhbc">参考教程 - YouTube codebasics</a>.</p>
+<h3 id="数据读入与查看"><a class="markdownIt-Anchor" href="#数据读入与查看"></a> 数据读入与查看</h3>
+<p>读入方式：</p>
+<ul>
+<li>
+<p><code>tf.data.Dataset.from_tensor_slices(data)</code>：numpy型数据切片读入.</p>
+</li>
+<li>
+<p><code>tf.data.Dataset.from_tensor_slices((x, y))</code>：直接读入数据的特征与对应的标签，以tuple类型保存.</p>
+</li>
+<li>
+<p><code>tf.data.Dataset.list_files(path, shuffle=True)</code>：通过path读入文件的路径，还需后续进一步处理路径，shuffle为是否打乱数据集.</p>
+</li>
+</ul>
+<p>查看方式：</p>
+<ol>
+<li>直接使用for遍历查看</li>
+<li><code>ds.as_numpy_iterator()</code> 以numpy输出格式查看</li>
+<li><code>ds.take(n)</code> 取前 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span> 个查看</li>
+<li><code>len(ds)</code> 可查看数据集大小</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span>
+ds <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>from_tensor_slices<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+<span class="token builtin">len</span><span class="token punctuation">(</span>ds<span class="token punctuation">)</span>  <span class="token comment"># 查看数据集大小</span>
+
+<span class="token keyword">for</span> x <span class="token keyword">in</span> ds<span class="token punctuation">:</span>
+    x<span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 以numpy格式输出</span>
+    x  <span class="token comment"># 以tensor数据类型输出</span>
+
+<span class="token keyword">for</span> x <span class="token keyword">in</span> ds<span class="token punctuation">.</span>as_numpy_iterator<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    x  <span class="token comment"># 以numpy格式输出</span>
+
+<span class="token keyword">for</span> x <span class="token keyword">in</span> ds<span class="token punctuation">.</span>take<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 遍历输出前3个数据</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="处理文件路径"><a class="markdownIt-Anchor" href="#处理文件路径"></a> 处理文件路径</h4>
+<p>此处文件树如下所示</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-tree" data-language="tree"><code class="language-tree">├─data_pipeline.ipynb
+└─data
+    ├─256_ObjectCategories
+    │  ├─001.ak47
+    │  ├─002.american-flag
+    │  ├─003.backpack
+    │  ├─004.baseball-bat
+    │  ├─005.baseball-glove
+    │  ├─006.basketball-hoop
+    │  ├─...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>读入文件路径</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">ds &#x3D; tf.data.Dataset.list_files(r&#39;data&#x2F;256_ObjectCategories&#x2F;*&#x2F;*&#39;, shuffle&#x3D;False)
+# b&#39;data\\256_ObjectCategories\\001.ak47\\001_0001.jpg&#39;
+# b&#39;data\\256_ObjectCategories\\001.ak47\\001_0002.jpg&#39;
+# b&#39;data\\256_ObjectCategories\\001.ak47\\001_0003.jpg&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>获取子文件夹类别名称</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">from pathlib import Path
+path &#x3D; Path.cwd()
+path &#x3D; path.joinpath(r&#39;data&#x2F;256_ObjectCategories&#x2F;&#39;)
+class_names &#x3D; [p.name for p in path.iterdir()]
+# [&#39;001.ak47&#39;,
+#  &#39;002.american-flag&#39;,
+#  &#39;003.backpack&#39;, ... <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>划分数据集与测试集（注意不能对ds加入shuffle操作，否则可能会取到相同元素）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">train_size &#x3D; int(len(ds) * 0.8)
+train_ds &#x3D; ds.take(train_size)
+test_ds &#x3D; ds.skip(train_size)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>将路径转化为对应特征与标签，在处理字符串中，只能将字符串作为tensor类型处理，可能是因为该类型是C++类型，结合tensorflow的io操作，可以进行读取文档，速度非常快.</p>
+<p><a target="_blank" rel="noopener" href="https://tensorflow.google.cn/api_docs/python/tf/strings">参考文档 - tf.strings</a>，<a target="_blank" rel="noopener" href="https://tensorflow.google.cn/api_docs/python/tf/io">参考文档 - tf.io</a></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">import os
+def get_label(path):
+    fname &#x3D; tf.strings.split(path, os.path.sep)[-2]  # 将路径分隔出文件名称部分，用os.path.sep进行分隔，可以避免系统的问题
+    fname &#x3D; tf.strings.split(fname, &#39;.&#39;)[-1]  # 将文件名进一步分隔
+    return fname
+def process_image(path):
+    label &#x3D; get_label(path)
+    
+    img &#x3D; tf.io.read_file(path)  # 读取为16进制文件
+    img &#x3D; tf.io.decode_jpeg(img)  # 解码为jpeg文件
+    img &#x3D; tf.image.resize(img, [128, 128])  # 将图像缩放为统一大小
+    img &#x2F;&#x3D; 255  # 归一化处理
+    
+    return img, label<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="https://s1.ax1x.com/2022/11/20/zMYHG8.png" srcset="/img/loading.gif" lazyload alt="处理后效果" /></p>
+<h3 id="数据处理"><a class="markdownIt-Anchor" href="#数据处理"></a> 数据处理</h3>
+<p>数据处理一半都分为以下五步执行（<code>map</code> 和 <code>filter</code> 的顺序可能相反）.</p>
+<ul>
+<li><code>Dataset.filter(func)</code>：可将func返回为true的值留下.</li>
+<li><code>Dataset.map(func)</code>：可将数据替换为func的返回值.</li>
+<li><code>Dataset.shuffle(buffer)</code>：设定缓冲大小为buffer打乱数据集，只会在每次提取数据时随机选取数据，随机原理参考 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/53514495/what-does-batch-repeat-and-shuffle-do-with-tensorflow-dataset">StackOverflow - TensorFlow Dataset打乱原理</a>.</li>
+<li><code>Dataset.batch(batch_size)</code>：将数据以 <code>batch_size</code> 大小进行划分为batch.</li>
+</ul>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">ds <span class="token operator">=</span> ds<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> x <span class="token punctuation">:</span> x <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>  <span class="token comment"># 将x>0的元素留下</span>
+<span class="token comment"># 1 2 5 6 2 3</span>
+ds <span class="token operator">=</span> ds<span class="token punctuation">.</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> x <span class="token operator">*</span> <span class="token number">72</span><span class="token punctuation">)</span>   <span class="token comment"># 将每个元素均乘以72</span>
+<span class="token comment"># 72 144 360 432 144 216</span>
+ds <span class="token operator">=</span> ds<span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>  <span class="token comment"># 随机数据</span>
+<span class="token comment"># 72 360 144 216 144 432</span>
+ds <span class="token operator">=</span> ds<span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+<span class="token comment"># [ 72 432 360 144] [216 144]</span>
+
+<span class="token comment"># 整合为一行</span>
+ds <span class="token operator">=</span> ds<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> x <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> y<span class="token punctuation">:</span> y <span class="token operator">*</span> <span class="token number">72</span><span class="token punctuation">)</span><span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><a target="_blank" rel="noopener" href="https://github.com/codebasics/deep-learning-keras-tf-tutorial/blob/master/44_tf_data_pipeline/Exercise/tf_data_pipeline_exercise.md">一个练习 - Exercise</a></p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        练习答案
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+
+ds <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>list_files<span class="token punctuation">(</span><span class="token string">r'data/reviews/*/*'</span><span class="token punctuation">,</span> shuffle<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">get_label</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">import</span> os
+    <span class="token keyword">return</span> tf<span class="token punctuation">.</span>strings<span class="token punctuation">.</span>split<span class="token punctuation">(</span>path<span class="token punctuation">,</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>sep<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">]</span>
+<span class="token keyword">def</span> <span class="token function">process_data</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    label <span class="token operator">=</span> get_label<span class="token punctuation">(</span>path<span class="token punctuation">)</span>
+    text <span class="token operator">=</span> tf<span class="token punctuation">.</span>io<span class="token punctuation">.</span>read_file<span class="token punctuation">(</span>path<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> text<span class="token punctuation">,</span> label
+<span class="token keyword">def</span> <span class="token function">text_filter</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> tf<span class="token punctuation">.</span>strings<span class="token punctuation">.</span>length<span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span>
+
+train_ds <span class="token operator">=</span> ds<span class="token punctuation">.</span><span class="token builtin">map</span><span class="token punctuation">(</span>process_data<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">(</span>text_filter<span class="token punctuation">)</span><span class="token punctuation">.</span>shuffle<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> x<span class="token punctuation">,</span> y <span class="token keyword">in</span> train_ds<span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'data:</span><span class="token interpolation"><span class="token punctuation">&#123;</span>x<span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token format-spec">30]</span><span class="token punctuation">&#125;</span></span><span class="token string">\nlabel:</span><span class="token interpolation"><span class="token punctuation">&#123;</span>y<span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">'\n\n'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>输出结果：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">data:b&quot;Basically there&#39;s a family whe&quot;
+label:b&#39;negative&#39;
+
+data:b&#39;One of the other reviewers has&#39;
+label:b&#39;positive&#39;
+
+data:b&#39;A wonderful little production.&#39;
+label:b&#39;positive&#39;
+
+data:b&#39;This show was an amazing, fres&#39;
+label:b&#39;negative&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<h2 id="数据增强"><a class="markdownIt-Anchor" href="#数据增强"></a> 数据增强</h2>
+<p>考虑将一张图片进行旋转，平移，伸缩等操作，可以得到类似的更多的图片，tensorflow可以通过加入数据增强层，对数据进行预处理操作. 主要使用以下6种操作：</p>
+<p>下述api中大多都有一个名为 <code>factor</code> 的变量，表示该操作的比例大小，有两种输入形式：</p>
+<ol>
+<li>
+<p>单独一个浮点数 <code>x</code> ，表示该操作变化比例在 <code>[-x, x]</code> 范围内随机取值. 例如：旋转操作中是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mo>−</mo><mi>x</mi><mo>⋅</mo><mn>2</mn><mi>π</mi><mo separator="true">,</mo><mi>x</mi><mo>⋅</mo><mn>2</mn><mi>π</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[-x\cdot 2\pi, x\cdot 2\pi]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">−</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mclose">]</span></span></span></span> 范围内取旋转角度.</p>
+</li>
+<li>
+<p>一个包含两个浮点数的 tuple：<code>(x, y)</code>，表示该操作变化比例在 <code>[x, y]</code> 范围内随机取值. 例如：旋转操作是在 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mi>x</mi><mo>⋅</mo><mn>2</mn><mi>π</mi><mo separator="true">,</mo><mi>y</mi><mo>⋅</mo><mn>2</mn><mi>π</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[x\cdot 2\pi, y\cdot 2\pi]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mclose">]</span></span></span></span> 范围内取旋转角度.</p>
+</li>
+</ol>
+<p>最后两个api中包含参数 <code>fill_mode</code> 表示对空白处进行填充的方法，有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span> 种方法：</p>
+<ul>
+<li>
+<p><code>reflect</code>（反射）：通过反射最后一个像素的边缘进行填充. 如：(d c b a | a b c d | d c b a)</p>
+</li>
+<li>
+<p><code>constant</code>（常数）：使用零填充. 如：(k k k k | a b c d | k k k k)，其中 k=0</p>
+</li>
+<li>
+<p><code>wrap</code>（环绕）：通过环绕到相对边缘进行填充. 如：(a b c d | a b c d | a b c d)</p>
+</li>
+<li>
+<p><code>nearest</code>（邻近）：通过最近的像素进行填充. 如：(a a a a | a b c d | d d d d)</p>
+</li>
+</ul>
+<p>注：有一些操作 <code>factor</code> 只能取正数；下述api中还有一个 <code>seed</code> 的操作，用于设定随机种子.</p>
+<ul>
+<li>
+<p><code>tf.keras.layers.RandomRotation(factor)</code>：旋转操作，<code>factor</code> 正数为逆时针，负数为顺指针.</p>
+</li>
+<li>
+<p><code>tf.keras.layers.RandomHeight(factor)</code>：竖向压缩图片，<code>factor</code>正数为拉伸，负数为压缩，该操作会将图片的尺寸修改.</p>
+</li>
+<li>
+<p><code>tf.keras.layers.RandomWidth(factor)</code>：横向压缩图片，<code>factor</code>正数为拉伸，负数为压缩，该操作会将图片的尺寸修改.</p>
+</li>
+<li>
+<p><code>tf.keras.layers.RandomFlip(mode='horizontal_and_vertical')</code>：沿水平和竖直方向翻折图片，<code>mode</code> 为旋转模式，有三种选项：<code>horizontal</code>, <code>vertical</code>, <code>horizontal_and_vertical</code> 分别表示：只进行横向翻折，只沿竖向翻折，两者都有可能. 默认为第三个选项.</p>
+</li>
+<li>
+<p><code>tf.keras.layers.RandomZoom(height_factor, width_factor=None, fill_mode='reflect')</code>：缩放操作，<code>factor</code> 正数为缩小，负数为放大，如果只设置第一个参数 <code>height_factor</code>，则保持横纵比不变的缩放操作；若设定 <code>width_factor</code> 则进行横纵比变化的缩放操作.</p>
+</li>
+<li>
+<p><code>tf.keras.layers.RandomTranslation(height_factor, width_factor, fill_mode='reflect')</code>：平移操作，<code>factor</code> 正数为向下和向右，负数为向上和向左（分别对应 <code>height_factor</code>, <code>width_factor</code>）.</p>
+</li>
+</ul>
+<p>这里通过旋转和左右反转操作，对数据进行增强，即将一张图片进行不同的变化，从而加强数据.</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">augmentation <span class="token operator">=</span> keras<span class="token punctuation">.</span>Sequential<span class="token punctuation">(</span><span class="token punctuation">[</span>
+    layers<span class="token punctuation">.</span>RandomZoom<span class="token punctuation">(</span><span class="token number">0.3</span><span class="token punctuation">,</span> <span class="token number">0.3</span><span class="token punctuation">,</span> input_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 压缩图像</span>
+    layers<span class="token punctuation">.</span>RandomTranslation<span class="token punctuation">(</span><span class="token number">0.15</span><span class="token punctuation">,</span> <span class="token number">0.15</span><span class="token punctuation">,</span> fill_mode<span class="token operator">=</span><span class="token string">'constant'</span><span class="token punctuation">,</span> input_shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">28</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 平移图像</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+augmentation<span class="token punctuation">(</span>img<span class="token punctuation">)</span>  <span class="token comment"># 将增强操作作用在图像上</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6/" class="category-chain-item">神经网络框架</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6/TensorFlow2/" class="category-chain-item">TensorFlow2</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/TensorFlow/" class="print-no-link">#TensorFlow</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>TensorFlow常用函数及模型写法</div>
+      <div>https://wty-yy.github.io/posts/48334/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/4237/" title="TensorFlow - 使用GradientTape和重写fit训练结果不同的原因">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">TensorFlow - 使用GradientTape和重写fit训练结果不同的原因</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/10409/" title="在服务器上配置shell及神经网络框架">
+                        <span class="hidden-mobile">在服务器上配置shell及神经网络框架</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
