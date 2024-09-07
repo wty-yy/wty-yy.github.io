@@ -35,13 +35,16 @@
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-6.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-7.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-8.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/epwm_counter_compare_submodule.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/AQ_input_and_output.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/epwm_duty_control_up.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-9.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-10.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-11.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-12.jpeg">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830776-13.gif">
 <meta property="article:published_time" content="2024-08-31T05:33:43.000Z">
-<meta property="article:modified_time" content="2024-09-04T13:27:48.900Z">
+<meta property="article:modified_time" content="2024-09-05T12:44:33.339Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830780-14.png">
@@ -319,7 +322,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7k 字
+          7.4k 字
         
       </span>
     
@@ -330,7 +333,7 @@
         
         
         
-          59 分钟
+          62 分钟
         
       </span>
     
@@ -550,13 +553,14 @@ FlashRegs<span class="token punctuation">.</span>FPWR<span class="token punctuat
 FlashRegs<span class="token punctuation">.</span>FPWR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>PWR <span class="token operator">=</span> FLASH_STANDBY<span class="token punctuation">;</span>  <span class="token comment">// 将Flash设置为待机模式</span>
 EDIS<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="增强脉冲宽度调制器epwm使用方法"><a class="markdownIt-Anchor" href="#增强脉冲宽度调制器epwm使用方法"></a> 增强脉冲宽度调制器ePWM使用方法</h3>
-<p>ePWM(enhanced pulse width modulator)就是01信号脉冲, 可以通过宽度变换将数字波转换为模拟波, 是一种对波形的数模转换(DAC, digital-to-analog), ePWM功能很多, 下面对其中的计数器和中断触发机制进行介绍.</p>
+<p>ePWM(enhanced pulse width modulator)就是01信号脉冲, 可以通过宽度变换将数字波转换为模拟波, 是一种对波形的数模转换(DAC, digital-to-analog).</p>
+<p>该开发板总共包含8个ePWM接口, 但是通过针脚引出去的只有13个(ePWM1~6, ePWM7B), 每个ePWM接口分为A,B两个波形分别对应两个接口, ePWM功能很多, 下面对其中的计数器和中断触发机制进行介绍.</p>
 <p><img src="/figures/robotics/F28069M/1725081830775-6.png" srcset="/img/loading.gif" lazyload alt="PWM流程图" /></p>
-<h4 id="计数器"><a class="markdownIt-Anchor" href="#计数器"></a> 计数器</h4>
-<p>参考文档中251页3.2.2节内容, 位于开发板中的每个ePWM都自带一个计数器, 称为PWMCTR (PWM counter), 首先介绍这块重要的英文缩写: SYNC同步, O (Output), I (Input), PHS (Phase), PRD (Period), CTR (counter), CTL (control).</p>
+<h4 id="计数器-time-base-tb"><a class="markdownIt-Anchor" href="#计数器-time-base-tb"></a> 计数器 (Time-base, TB)</h4>
+<p>参考文档中251页3.2.2节内容, 位于开发板中的每个ePWM都自带一个计数器, 称为PWMCTR (PWM counter), 首先介绍这块重要的英文缩写: SYNC同步, O (Output, 输出), I (Input, 输入), PHS (Phase, 相位), PRD (Period, 周期), CTR (counter, 计数器), CTL (control, 控制器).</p>
 <p>每个计数器包含以下重要参数:</p>
 <blockquote>
-<p>下文中的计数器同步只有在启动相位PHSEN时候才有意义, 同步就是将当前的计数器重置到相位对应的值上.</p>
+<p>下文中的计数器同步只有在启动相位PHSEN时候才有意义, 同步就是当触发同步条件时, 将当前的计数器重置到相位对应的值上.</p>
 </blockquote>
 <ol>
 <li><code>SYNCI</code>: 同步输入, 从下左图中可以看出, 第n个ePWM的同步输入就是第n-1的<code>SYNCO</code>的同步状态.</li>
@@ -609,7 +613,26 @@ EPwm1Regs<span class="token punctuation">.</span>TBCTL<span class="token punctua
 EALLOW<span class="token punctuation">;</span>
 SysCtrlRegs<span class="token punctuation">.</span>PCLKCR0<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TBCLKSYNC <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 启动全局同步</span>
 EDIS<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<h4 id="中断触发-et-event-trigger"><a class="markdownIt-Anchor" href="#中断触发-et-event-trigger"></a> 中断触发 (ET, Event trigger)</h4>
+<h4 id="计数比较器-counter-compare-cc"><a class="markdownIt-Anchor" href="#计数比较器-counter-compare-cc"></a> 计数比较器 (Counter-Compare, CC)</h4>
+<p>通过与计数器当前的数字进行比较, 当数字与当前端口设定相同时, 会产生一次事件, 该事件会向下文中的AQ中传递, 用于控制PWM波生成. 每个EPWM端口可以生成A,B两种不同的波, 将第x个端口输出的波分别记为EPWMxA, EPWMxB, 处理逻辑图如下所示:<br />
+<img src="/figures/robotics/F28069M/epwm_counter_compare_submodule.png" srcset="/img/loading.gif" lazyload alt="红色框出的部分为EPWMxA波处理流程" /></p>
+<h4 id="动作限定符-action-qualifier-aq"><a class="markdownIt-Anchor" href="#动作限定符-action-qualifier-aq"></a> 动作限定符 (Action-Qualifier, AQ)</h4>
+<p>动作限定符AQ需要和上述的比较器端口相配合, 从而控制PWM波形的构造生成, AQ可以被视为一个可编程的事件开关, 它的输入为各种不同的事件, 输出为PWM波的0,1信号.</p>
+<table>
+<thead>
+<tr>
+<th><img src="/figures/robotics/F28069M/AQ_input_and_output.png" srcset="/img/loading.gif" lazyload alt="AQ输入与输出(从上到下的输入事件分为别: 计数器到达周期值(上界), 计数器归零(下界), 计数器等于CMPA, 计数器等于CMPB, 由软件产生的事件)" /></th>
+<th><img src="/figures/robotics/F28069M/epwm_duty_control_up.png" srcset="/img/loading.gif" lazyload alt="ePWM占空比控制方法1(271页)" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div align='center'>AQ输入与输出(从上到下的输入事件分为别: 计数器到达周期值(上界), 计数器归零(下界), 计数器等于CMPA, 计数器等于CMPB, 由软件产生的事件)</div></td>
+<td><div align='center'>ePWM占空比控制方法1(271页)</div></td>
+</tr>
+</tbody>
+</table>
+<h4 id="中断触发-event-trigger-et"><a class="markdownIt-Anchor" href="#中断触发-event-trigger-et"></a> 中断触发 (Event trigger, ET)</h4>
 <p>参考文档3.2.8第292页, 这个比较简单, 只需要根据计数器的状态触发中断即可, 包含以下参数:</p>
 <ol>
 <li><code>INTSEL</code>: 触发模式选择, 包含如下这几种选项
