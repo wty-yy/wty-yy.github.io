@@ -23,10 +23,12 @@
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="入门CMake  参考教程: YouTube-Simplified CMake Tutorial, Codevion vimwiki-Modern Simple CMake Tutorial  CMake可以完成复杂项目的编译任务，编译一个C++项目可能需要：  一个包含main()的主程序入口； 多个联合编译*.cpp文件（对头文件各种声明的实现）； 多个头文件*.h； 多个链接库*.so；">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/cmake_tensorboard.png">
 <meta property="article:published_time" content="2024-11-04T12:44:35.000Z">
-<meta property="article:modified_time" content="2024-11-04T14:21:47.009Z">
+<meta property="article:modified_time" content="2024-11-05T13:35:34.928Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/tools/cmake_tensorboard.png">
   
   
   
@@ -301,7 +303,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.1k 字
+          14k 字
         
       </span>
     
@@ -312,7 +314,7 @@
         
         
         
-          27 分钟
+          119 分钟
         
       </span>
     
@@ -354,7 +356,7 @@
             
               <div class="markdown-body">
                 
-                <h2 id="入门cmake"><a class="markdownIt-Anchor" href="#入门cmake"></a> 入门CMake</h2>
+                <h1 id="入门cmake"><a class="markdownIt-Anchor" href="#入门cmake"></a> 入门CMake</h1>
 <blockquote>
 <p>参考教程: <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=mKZ-i-UfGgQ&amp;t=932s">YouTube-Simplified CMake Tutorial</a>, <a target="_blank" rel="noopener" href="https://codevion.github.io/#!cpp/cmake.md">Codevion vimwiki-Modern Simple CMake Tutorial</a></p>
 </blockquote>
@@ -367,7 +369,7 @@
 <li>编译指令<code>-pthread, -O2, -O3</code>等。<br />
 下面我们将在VSCode上逐步完成这些功能，系统Ubuntu 22.04：</li>
 </ol>
-<h3 id="单个文件编译"><a class="markdownIt-Anchor" href="#单个文件编译"></a> 单个文件编译</h3>
+<h2 id="单个文件编译"><a class="markdownIt-Anchor" href="#单个文件编译"></a> 单个文件编译</h2>
 <p>首先我们创建一个空文件夹，里面写一个<code>main.cpp</code>文件：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
 
@@ -388,13 +390,13 @@
 <figure><div class="code-wrapper"><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token keyword">add_executable</span><span class="token punctuation">(</span>hi main.cpp<span class="token punctuation">)</span>  <span class="token comment"># 可执行文件名称（目标） 联合编译的文件 [文件1, 文件2, ...]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
 <p>执行CMake编译方法：</p>
 <ol>
-<li>VSCode插件：在VSCode中安装CMake, CMake Tools, CMake Highlight插件，按<code>ctrl+f5</code>就会弹出对g++编译器的选择，选择一个编译器即可，再按<code>ctrl+f5</code>即可看到CMake创建了一个<code>build</code>文件夹，在其中已经编译出了<code>hi</code>可执行文件，下方打印出了我们代码的结果。</li>
+<li>VSCode插件：在VSCode中安装CMake, CMake Tools, CMake Highlight插件，按<code>ctrl+f5</code>就会弹出对g++编译器的选择，选择一个编译器即可，再按<code>ctrl+f5</code>即可看到CMake创建了一个<code>build</code>文件夹，在其中已经编译出了<code>hi</code>可执行文件，下方打印出了我们代码的结果。（CMake会在右边打开Workbench side bar中显示输出信息，非常麻烦，我们可以把右侧边栏上方的输出图表拖到下方的panel面板中，这样就可以不用每次自动在右边显示啦）</li>
 <li>终端：首先我们创建一个新文件夹<code>mkdir my_build</code>，进入该文件夹<code>cd my_build</code>，执行<code>cmake ..</code>即可看到创建了很多缓存文件，再执行<code>make</code>开始编译，完成后会产生可执行文件<code>hi</code>，运行<code>./hi</code>即可。</li>
 </ol>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> my_build
 <span class="token builtin class-name">cd</span> my_build
 cmake <span class="token punctuation">..</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token operator">&amp;&amp;</span> ./hi  <span class="token comment"># 创建CMake缓存 编译 执行</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
-<h3 id="添加头文件"><a class="markdownIt-Anchor" href="#添加头文件"></a> 添加头文件</h3>
+<h2 id="添加头文件"><a class="markdownIt-Anchor" href="#添加头文件"></a> 添加头文件</h2>
 <p>在<code>main.cpp</code>同级目录下创建<code>include/</code>文件夹，里面创建<code>include/bar.h</code>头文件:</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression">once</span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
@@ -423,16 +425,16 @@ cmake <span class="token punctuation">..</span> <span class="token operator">&am
   <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>用<code>ctrl+f5</code>编译运行了，但是我们发现vscode还是无法找到<code>#include &quot;bar.h&quot;</code>头文件位置，需要手动添加下路径，<code>ctrl+shift+p</code>输入<code>c/c++ ui</code>进入<code>C/C++:编辑配置(UI)</code>，找到包含路径中发现已经添加了<code>$&#123;workspaceFolder&#125;/**</code>，它就会自动递归寻找工作路径下的头文件了（如果不在本工作路径下的，需要手动添加哦）</p>
-<h3 id="添加库文件"><a class="markdownIt-Anchor" href="#添加库文件"></a> 添加库文件</h3>
-<h4 id="手动创建库文件"><a class="markdownIt-Anchor" href="#手动创建库文件"></a> 手动创建库文件</h4>
+<h2 id="添加库文件"><a class="markdownIt-Anchor" href="#添加库文件"></a> 添加库文件</h2>
+<h3 id="手动创建库文件"><a class="markdownIt-Anchor" href="#手动创建库文件"></a> 手动创建库文件</h3>
 <p>我们新创建一个文件夹<code>bar/</code>，将刚才写的<code>include/bar.h</code>文件放到该文件夹下，并创建一个<code>bar/bar.cpp</code>文件用来定义其中声明的函数，文件结构如下：</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim"><span class="token operator">.</span>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">.</span>
 ├── bar
-│   ├── bar<span class="token operator">.</span>cpp
-│   ├── CMakeLists<span class="token operator">.</span>txt
-│   └── <span class="token builtin">include</span>
-│       └── bar<span class="token operator">.</span><span class="token keyword">h</span>
-└── main<span class="token operator">.</span>cpp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+│   ├── bar.cpp
+│   ├── CMakeLists.txt
+│   └── include
+│       └── bar.h
+└── main.cpp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>每个文件内容如下</p>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
@@ -494,6 +496,413 @@ cmake <span class="token punctuation">..</span> <span class="token operator">&am
 <span class="token keyword">add_executable</span><span class="token punctuation">(</span>hi main.cpp<span class="token punctuation">)</span>  <span class="token comment"># 可执行文件名称（目标） 联合编译的文件 [文件1, 文件2, ...]</span>
 <span class="token comment"># 原来用的target_include_directories加的头文件，现在头文件直接编译成库文件了，直接调库文件即可</span>
 <span class="token keyword">target_link_libraries</span><span class="token punctuation">(</span>hi <span class="token namespace">PUBLIC</span> ba<span class="token punctuation">)</span>  <span class="token comment"># (链接库文件) 目标 可见性 库名称1(注意: 库名称就是bar/CMakeLists.txt中的目标名称, 不是文件夹名称) 库名称2 ...</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>在<code>main.cpp</code>下执行<code>ctrl+f5</code>即可完成编译运行了。</p>
+<h3 id="调用外部库"><a class="markdownIt-Anchor" href="#调用外部库"></a> 调用外部库</h3>
+<p>我们将分别调用SFML, 与Python相关的matplotlib-cpp, tensorboard_looger以及torch的原生C++库libtorch</p>
+<h4 id="sfml"><a class="markdownIt-Anchor" href="#sfml"></a> SFML</h4>
+<p>以SFML可视化窗口库为例，安装SFML：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libsfml-dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>安装的SFML会在<code>/usr/include/SFML/</code>下创建所需的头文件，在<code>/usr/lib/x86_64-linux-gnu/</code>下创建链接所需的文件<code>libsfml-*.so.x.x</code>，在<code>/usr/lib/x86_64-linux-gnu/cmake/SFML/</code>创建CMake配置所需的<code>SFMLConfig.cmake</code>文件，用于<code>find_package</code>命令寻找包文件位置，在安装到<code>/usr/lib</code>中后就不用再执行<code>find_package</code>，链接库会自动查找文件位置，创建<code>sfml.cpp</code>和对应的<code>CMakeLists.cpp</code>如下</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        sfml.cpp
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;SFML/Graphics.hpp></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 创建一个窗口</span>
+    sf<span class="token double-colon punctuation">::</span>RenderWindow <span class="token function">window</span><span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span><span class="token function">VideoMode</span><span class="token punctuation">(</span><span class="token number">800</span><span class="token punctuation">,</span> <span class="token number">600</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"SFML Simple Demo"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 创建一个矩形形状</span>
+    sf<span class="token double-colon punctuation">::</span>RectangleShape <span class="token function">rectangle</span><span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span><span class="token function">Vector2f</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 宽100，高50</span>
+    rectangle<span class="token punctuation">.</span><span class="token function">setFillColor</span><span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span>Color<span class="token double-colon punctuation">::</span>Green<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置填充颜色为绿色</span>
+    rectangle<span class="token punctuation">.</span><span class="token function">setPosition</span><span class="token punctuation">(</span><span class="token number">350</span><span class="token punctuation">,</span> <span class="token number">275</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置初始位置在窗口中心</span>
+
+    <span class="token comment">// 矩形移动速度</span>
+    <span class="token keyword">float</span> speed <span class="token operator">=</span> <span class="token number">0.1f</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>window<span class="token punctuation">.</span><span class="token function">isOpen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        sf<span class="token double-colon punctuation">::</span>Event event<span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>window<span class="token punctuation">.</span><span class="token function">pollEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>event<span class="token punctuation">.</span>type <span class="token operator">==</span> sf<span class="token double-colon punctuation">::</span>Event<span class="token double-colon punctuation">::</span>Closed<span class="token punctuation">)</span>
+                window<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 关闭窗口事件</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 移动矩形</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span><span class="token class-name">Keyboard</span><span class="token double-colon punctuation">::</span><span class="token function">isKeyPressed</span><span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span>Keyboard<span class="token double-colon punctuation">::</span>Left<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>rectangle<span class="token punctuation">.</span><span class="token function">getPosition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>x <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 检查左边界</span>
+                rectangle<span class="token punctuation">.</span><span class="token function">move</span><span class="token punctuation">(</span><span class="token operator">-</span>speed<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 向左移动</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span><span class="token class-name">Keyboard</span><span class="token double-colon punctuation">::</span><span class="token function">isKeyPressed</span><span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span>Keyboard<span class="token double-colon punctuation">::</span>Right<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>rectangle<span class="token punctuation">.</span><span class="token function">getPosition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>x <span class="token operator">+</span> rectangle<span class="token punctuation">.</span><span class="token function">getSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>x <span class="token operator">&lt;</span> window<span class="token punctuation">.</span><span class="token function">getSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 检查右边界</span>
+                rectangle<span class="token punctuation">.</span><span class="token function">move</span><span class="token punctuation">(</span>speed<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 向右移动</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span><span class="token class-name">Keyboard</span><span class="token double-colon punctuation">::</span><span class="token function">isKeyPressed</span><span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span>Keyboard<span class="token double-colon punctuation">::</span>Up<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>rectangle<span class="token punctuation">.</span><span class="token function">getPosition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>y <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 检查上边界</span>
+                rectangle<span class="token punctuation">.</span><span class="token function">move</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span>speed<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 向上移动</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span><span class="token class-name">Keyboard</span><span class="token double-colon punctuation">::</span><span class="token function">isKeyPressed</span><span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span>Keyboard<span class="token double-colon punctuation">::</span>Down<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>rectangle<span class="token punctuation">.</span><span class="token function">getPosition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>y <span class="token operator">+</span> rectangle<span class="token punctuation">.</span><span class="token function">getSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>y <span class="token operator">&lt;</span> window<span class="token punctuation">.</span><span class="token function">getSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>y<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token comment">// 检查下边界</span>
+                rectangle<span class="token punctuation">.</span><span class="token function">move</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> speed<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 向下移动</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">// 清空窗口</span>
+        window<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span>sf<span class="token double-colon punctuation">::</span>Color<span class="token double-colon punctuation">::</span>Black<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 清空为黑色</span>
+        <span class="token comment">// 绘制矩形</span>
+        window<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span>rectangle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 显示窗口内容</span>
+        window<span class="token punctuation">.</span><span class="token function">display</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        CMakeLists.txt
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token keyword">cmake_minimum_required</span><span class="token punctuation">(</span><span class="token property">VERSION</span> <span class="token number">3.10</span><span class="token punctuation">)</span>  <span class="token comment"># CMAKE的最低版本要求</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD</span> <span class="token number">17</span><span class="token punctuation">)</span>  <span class="token comment"># 使用的C++标准</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="token boolean">ON</span><span class="token punctuation">)</span>
+
+<span class="token keyword">project</span><span class="token punctuation">(</span>hello <span class="token property">VERSION</span> <span class="token number">1.0</span><span class="token punctuation">)</span>  <span class="token comment"># 项目名称 版本 版本号</span>
+
+<span class="token keyword">add_executable</span><span class="token punctuation">(</span>sfml sfml.cpp<span class="token punctuation">)</span>  <span class="token comment"># 可执行文件名称（目标） 联合编译的文件 [文件1, 文件2, ...]</span>
+
+<span class="token keyword">target_link_libraries</span><span class="token punctuation">(</span>sfml <span class="token namespace">PUBLIC</span> sfml-graphics sfml-window sfml-system<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p><code>ctrl+f5</code>执行后就会弹出一个可以通过上下左右移动的绿色长方形。</p>
+<h4 id="matplotlib"><a class="markdownIt-Anchor" href="#matplotlib"></a> matplotlib</h4>
+<p>使用本用例需要我们先安装Python，并使用<code>pip install matplotlib</code>安装matplotlib，使用<a target="_blank" rel="noopener" href="https://github.com/lava/matplotlib-cpp">GitHub - matplotlib-cpp</a>可以只用一个头文件<code>matplotlibcpp.h</code>直接通过C++调用Python接口，他需要<code>python, numpy</code>的头文件和<code>python</code>的链接库，按照如下步骤进行使用：</p>
+<ol>
+<li>创建<code>matplotlib.cpp</code>源文件，下载<a target="_blank" rel="noopener" href="https://github.com/lava/matplotlib-cpp/blob/master/matplotlibcpp.h"><code>matplotlibcpp.h</code></a>，在<code>cpp</code>的同目录下创建一个<code>include</code>文件夹，将<code>matplotlibcpp.h</code>放进去；</li>
+<li><code>which python</code>找到Python的可执行文件位置，例如我的在<code>/home/wty/Programs/mambaforge/envs/yy/bin/python</code>，那么相对可以找到如下位置：</li>
+<li>Python头文件：<code>/home/wty/Programs/mambaforge/envs/yy/include/python3.11</code>，记为<code>PYTHON_INCLUDE_DIR</code>；</li>
+<li>Numpy头文件：<code>/home/wty/Programs/mambaforge/envs/yy/lib/python3.11/site-packages/numpy/core/include</code>，记为<code>NUMPY_INCLUDE_DIR</code>；</li>
+<li>Python链接库：<code>/home/wty/Programs/mambaforge/envs/yy/lib</code>，记为<code>PYTHON_LINK_DIR</code>；</li>
+</ol>
+<p>为了支持输出中文以及公式，我修改了<code>matplotlibcpp.h</code>中的<code>rcparams</code>函数：</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        matplotlibcpp.h中的rcparams函数
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">inline</span> <span class="token keyword">void</span> <span class="token function">rcparams</span><span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token double-colon punctuation">::</span>map<span class="token operator">&lt;</span>std<span class="token double-colon punctuation">::</span>string<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">></span><span class="token operator">&amp;</span> keywords <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    detail<span class="token double-colon punctuation">::</span>_interpreter<span class="token double-colon punctuation">::</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    PyObject<span class="token operator">*</span> args <span class="token operator">=</span> <span class="token function">PyTuple_New</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    PyObject<span class="token operator">*</span> kwargs <span class="token operator">=</span> <span class="token function">PyDict_New</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> it <span class="token operator">=</span> keywords<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> it <span class="token operator">!=</span> keywords<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token operator">++</span>it<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"text.usetex"</span> <span class="token operator">==</span> it<span class="token operator">-></span>first<span class="token punctuation">)</span>
+          <span class="token function">PyDict_SetItemString</span><span class="token punctuation">(</span>kwargs<span class="token punctuation">,</span> it<span class="token operator">-></span>first<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">PyLong_FromLong</span><span class="token punctuation">(</span>std<span class="token double-colon punctuation">::</span><span class="token function">stoi</span><span class="token punctuation">(</span>it<span class="token operator">-></span>second<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token function">PyDict_SetItemString</span><span class="token punctuation">(</span>kwargs<span class="token punctuation">,</span> it<span class="token operator">-></span>first<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">PyString_FromString</span><span class="token punctuation">(</span>it<span class="token operator">-></span>second<span class="token punctuation">.</span><span class="token function">c_str</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token function">PyDict_SetItemString</span><span class="token punctuation">(</span>kwargs<span class="token punctuation">,</span> <span class="token string">"font.family"</span><span class="token punctuation">,</span> <span class="token function">Py_BuildValue</span><span class="token punctuation">(</span><span class="token string">"[ss]"</span><span class="token punctuation">,</span> <span class="token string">"serif"</span><span class="token punctuation">,</span> <span class="token string">"SimSun"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">PyDict_SetItemString</span><span class="token punctuation">(</span>kwargs<span class="token punctuation">,</span> <span class="token string">"mathtext.fontset"</span><span class="token punctuation">,</span> <span class="token function">Py_BuildValue</span><span class="token punctuation">(</span><span class="token string">"s"</span><span class="token punctuation">,</span> <span class="token string">"cm"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">PyDict_SetItemString</span><span class="token punctuation">(</span>kwargs<span class="token punctuation">,</span> <span class="token string">"axes.unicode_minus"</span><span class="token punctuation">,</span> Py_False<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    PyObject <span class="token operator">*</span> update <span class="token operator">=</span> <span class="token function">PyObject_GetAttrString</span><span class="token punctuation">(</span>detail<span class="token double-colon punctuation">::</span>_interpreter<span class="token double-colon punctuation">::</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>s_python_function_rcparams<span class="token punctuation">,</span> <span class="token string">"update"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    PyObject <span class="token operator">*</span> res <span class="token operator">=</span> <span class="token function">PyObject_Call</span><span class="token punctuation">(</span>update<span class="token punctuation">,</span> args<span class="token punctuation">,</span> kwargs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>res<span class="token punctuation">)</span> <span class="token keyword">throw</span> std<span class="token double-colon punctuation">::</span><span class="token function">runtime_error</span><span class="token punctuation">(</span><span class="token string">"Call to rcParams.update() failed."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">Py_DECREF</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">Py_DECREF</span><span class="token punctuation">(</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">Py_DECREF</span><span class="token punctuation">(</span>update<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">Py_DECREF</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>然后在<code>rcparams</code>函数的下方我加入了<code>fontsize</code>函数，可以更容易的调节字体大小，并保证上文的配置会随着该函数的调用而被配置：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">inline</span> <span class="token keyword">void</span> <span class="token function">fontsize</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span> <span class="token operator">&amp;</span>x<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">rcparams</span><span class="token punctuation">(</span>std<span class="token double-colon punctuation">::</span><span class="token generic-function"><span class="token function">map</span><span class="token generic class-name"><span class="token operator">&lt;</span>std<span class="token double-colon punctuation">::</span>string<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span><span class="token string">"font.size"</span><span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span><span class="token function">to_string</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>文件架构如下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">.</span>
+├── CMakeLists.txt
+├── include
+│   └── matplotlibcpp.h
+└── matplotlib.cpp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>分别编辑文件：</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        matplotlib.cpp
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cmath></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"matplotlibcpp.h"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">kwargs</span> <span class="token expression">std<span class="token double-colon punctuation">::</span>map<span class="token operator">&lt;</span>std<span class="token double-colon punctuation">::</span>string<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">></span></span></span>
+
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+<span class="token keyword">namespace</span> plt <span class="token operator">=</span> matplotlibcpp<span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main1</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">// Prepare data.</span>
+    <span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">5000</span><span class="token punctuation">;</span> <span class="token comment">// number of data points</span>
+    vector<span class="token operator">&lt;</span><span class="token keyword">double</span><span class="token operator">></span> <span class="token function">x</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token function">y</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span>n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">double</span> t <span class="token operator">=</span> <span class="token number">2</span><span class="token operator">*</span>M_PI<span class="token operator">*</span>i<span class="token operator">/</span>n<span class="token punctuation">;</span>
+        x<span class="token punctuation">.</span><span class="token function">at</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">16</span><span class="token operator">*</span><span class="token function">sin</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token operator">*</span><span class="token function">sin</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token operator">*</span><span class="token function">sin</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        y<span class="token punctuation">.</span><span class="token function">at</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">13</span><span class="token operator">*</span><span class="token function">cos</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">5</span><span class="token operator">*</span><span class="token function">cos</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">*</span>t<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">2</span><span class="token operator">*</span><span class="token function">cos</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token operator">*</span>t<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">cos</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token operator">*</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">// plot() takes an arbitrary number of (x,y,format)-triples.</span>
+    <span class="token comment">// x must be iterable (that is, anything providing begin(x) and end(x)),</span>
+    <span class="token comment">// y must either be callable (providing operator() const) or iterable.</span>
+    plt<span class="token double-colon punctuation">::</span><span class="token function">plot</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> <span class="token string">"r-"</span><span class="token punctuation">,</span> x<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token keyword">double</span> d<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token number">12.5</span><span class="token operator">+</span><span class="token function">abs</span><span class="token punctuation">(</span><span class="token function">sin</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token string">"k-"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+    <span class="token comment">// show plots</span>
+    plt<span class="token double-colon punctuation">::</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">fontsize</span><span class="token punctuation">(</span><span class="token number">18</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">5000</span><span class="token punctuation">;</span>
+  std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">double</span><span class="token operator">></span> <span class="token function">x</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">y</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">z</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">w</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    x<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i <span class="token operator">*</span> i<span class="token punctuation">;</span>
+    y<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">sin</span><span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> M_PI <span class="token operator">*</span> i <span class="token operator">/</span> <span class="token number">360</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    z<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">log</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">figure_size</span><span class="token punctuation">(</span><span class="token number">1200</span><span class="token punctuation">,</span> <span class="token number">780</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">plot</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">plot</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> w<span class="token punctuation">,</span> <span class="token function">kwargs</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span><span class="token string">"c"</span><span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token string">"ls"</span><span class="token punctuation">,</span> <span class="token string">"--"</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token string">"label"</span><span class="token punctuation">,</span> <span class="token string">"$\\sin(2\\pi/360)$"</span><span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">named_plot</span><span class="token punctuation">(</span><span class="token string">"$\\log(x)$"</span><span class="token punctuation">,</span> x<span class="token punctuation">,</span> z<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  std<span class="token double-colon punctuation">::</span>map<span class="token operator">&lt;</span>std<span class="token double-colon punctuation">::</span>string<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span>string<span class="token operator">></span> m <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span><span class="token string">"string"</span><span class="token punctuation">,</span> <span class="token string">"123"</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token string">"a"</span><span class="token punctuation">,</span> <span class="token string">"aa"</span><span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+  std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> m<span class="token punctuation">[</span><span class="token string">"string"</span><span class="token punctuation">]</span> <span class="token operator">&lt;&lt;</span> <span class="token char">' '</span> <span class="token operator">&lt;&lt;</span> m<span class="token punctuation">[</span><span class="token string">"a"</span><span class="token punctuation">]</span> <span class="token operator">&lt;&lt;</span> <span class="token char">'\n'</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">xlim</span><span class="token punctuation">(</span><span class="token number">0.0</span><span class="token punctuation">,</span> <span class="token number">1e6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">legend</span><span class="token punctuation">(</span><span class="token function">kwargs</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token punctuation">&#123;</span><span class="token string">"loc"</span><span class="token punctuation">,</span> <span class="token string">"upper left"</span><span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">title</span><span class="token punctuation">(</span><span class="token string">"标题"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">fontsize</span><span class="token punctuation">(</span><span class="token number">18</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">figure_size</span><span class="token punctuation">(</span><span class="token number">600</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> n <span class="token operator">=</span> <span class="token number">5e3</span><span class="token punctuation">;</span>
+  vector<span class="token operator">&lt;</span><span class="token keyword">double</span><span class="token operator">></span> <span class="token function">x</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">y</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> <span class="token operator">++</span>i<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">double</span> t <span class="token operator">=</span> <span class="token number">2</span> <span class="token operator">*</span> M_PI <span class="token operator">*</span> i <span class="token operator">/</span> n<span class="token punctuation">;</span>
+    x<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">16</span> <span class="token operator">*</span> <span class="token function">pow</span><span class="token punctuation">(</span><span class="token function">sin</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    y<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">13</span> <span class="token operator">*</span> <span class="token function">cos</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">5</span> <span class="token operator">*</span> <span class="token function">cos</span><span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> t<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">2</span> <span class="token operator">*</span> <span class="token function">cos</span><span class="token punctuation">(</span><span class="token number">3</span> <span class="token operator">*</span> t<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token function">cos</span><span class="token punctuation">(</span><span class="token number">4</span> <span class="token operator">*</span> t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">auto</span> y_func <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token keyword">double</span> d<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token keyword">return</span> <span class="token number">3.5</span> <span class="token operator">+</span> <span class="token function">abs</span><span class="token punctuation">(</span><span class="token function">sin</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token string">"Tom"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token string">"Jerry"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">fontsize</span><span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">plot</span><span class="token punctuation">(</span><span class="token generic-function"><span class="token function">vector</span><span class="token generic class-name"><span class="token operator">&lt;</span><span class="token keyword">double</span><span class="token operator">></span></span></span><span class="token punctuation">(</span>x<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token number">1200</span><span class="token punctuation">,</span> x<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">1200</span><span class="token punctuation">)</span><span class="token punctuation">,</span> y_func<span class="token punctuation">,</span> <span class="token string">"k-"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">plot</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> <span class="token string">"r-"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">text</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">11.0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2.0</span><span class="token punctuation">,</span> <span class="token string">"$x=16\\sin(t)^3,$\n$y=13\\cos(t)-5\\cos(2t)-2\\cos(3t)-\\cos(4t))$"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// plt::plot(x, y, "r-", x, [](double d) &#123; return 12.5+abs(sin(d)); &#125;, "k-");</span>
+  <span class="token comment">// plt::legend();</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">save</span><span class="token punctuation">(</span><span class="token string">"love.png"</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">tight_layout</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  plt<span class="token double-colon punctuation">::</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        CMakeLists.txt
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token keyword">cmake_minimum_required</span><span class="token punctuation">(</span><span class="token property">VERSION</span> <span class="token number">3.10</span><span class="token punctuation">)</span>  <span class="token comment"># CMAKE的最低版本要求</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD</span> <span class="token number">17</span><span class="token punctuation">)</span>  <span class="token comment"># 使用的C++标准</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="token boolean">ON</span><span class="token punctuation">)</span>
+
+<span class="token keyword">project</span><span class="token punctuation">(</span>hello <span class="token property">VERSION</span> <span class="token number">1.0</span><span class="token punctuation">)</span>  <span class="token comment"># 项目名称 版本 版本号</span>
+
+<span class="token keyword">add_executable</span><span class="token punctuation">(</span>matplotlib matplotlib.cpp<span class="token punctuation">)</span>  <span class="token comment"># 可执行文件名称（目标） 联合编译的文件 [文件1, 文件2, ...]</span>
+
+<span class="token keyword">target_include_directories</span><span class="token punctuation">(</span>matplotlib <span class="token namespace">PUBLIC</span> <span class="token punctuation">$&#123;</span><span class="token variable">CMAKE_CURRENT_SOURCE_DIR</span><span class="token punctuation">&#125;</span>/include<span class="token punctuation">)</span>
+
+<span class="token keyword">set</span><span class="token punctuation">(</span>PYTHON_INCLUDE_DIR /home/wty/Programs/mambaforge/envs/yy/include/python3.<span class="token number">11</span><span class="token punctuation">)</span>  <span class="token comment"># change</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span>NUMPY_INCLUDE_DIR /home/wty/Programs/mambaforge/envs/yy/lib/python3.<span class="token number">11</span>/site-packages/numpy/core/include<span class="token punctuation">)</span>  <span class="token comment"># change</span>
+<span class="token keyword">target_include_directories</span><span class="token punctuation">(</span>matplotlib <span class="token namespace">PUBLIC</span> <span class="token punctuation">$&#123;</span>PYTHON_INCLUDE_DIR<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">target_include_directories</span><span class="token punctuation">(</span>matplotlib <span class="token namespace">PUBLIC</span> <span class="token punctuation">$&#123;</span>NUMPY_INCLUDE_DIR<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span>PYTHON_LINK_DIR /home/wty/Programs/mambaforge/envs/yy/lib<span class="token punctuation">)</span>  <span class="token comment"># change</span>
+<span class="token keyword">target_link_directories</span><span class="token punctuation">(</span>matplotlib <span class="token namespace">PUBLIC</span> <span class="token punctuation">$&#123;</span>PYTHON_LINK_DIR<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+<span class="token keyword">target_link_libraries</span><span class="token punctuation">(</span>matplotlib <span class="token namespace">PUBLIC</span> python3.<span class="token number">11</span><span class="token punctuation">)</span>  <span class="token comment"># 换成你的python版本, 在PYTHON_LINK_DIR下可以找到对应的libpython3.xx.so文件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>执行上述<code>matplotlib.cpp</code>文件会生成<code>./build/love.png</code>图像，绘制效果如下（和Python完全一致，就是调用Python嘛😂）</p>
+<div align="center">
+<img src=/figures/tools/cmake_matplotlib_love.png alt="matplotlib.cpp love.png" width=50%/>
+</div>
+<h4 id="tensorboard"><a class="markdownIt-Anchor" href="#tensorboard"></a> tensorboard</h4>
+<p>这里我们使用<a target="_blank" rel="noopener" href="https://github.com/RustingSword/tensorboard_logger">GitHub - tensorboard_logger</a>，这是一个独立的可执行文件，我们只需编译安装后就可以直接使用，步骤如下：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> protobuf-compiler  <span class="token comment"># 安装protobuf</span>
+<span class="token function">git</span> clone https://github.com/RustingSword/tensorboard_logger.git
+<span class="token builtin class-name">cd</span> tensorboard_logger
+<span class="token function">mkdir</span> build
+<span class="token builtin class-name">cd</span> build
+cmake <span class="token punctuation">..</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span>
+<span class="token function">sudo</span> cmake <span class="token parameter variable">--install</span>  <span class="token comment"># 安装到根目录下</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>安装完成后，可以用官方仓库中给的测试用例<a target="_blank" rel="noopener" href="https://github.com/RustingSword/tensorboard_logger/blob/master/tests/test_tensorboard_logger.cc"><code>test_tensorboard_logger.cc</code></a>测试各种绘制方法（注意：测试图像时，需要将仓库中<code>assets/</code>文件夹拷贝到当前项目的<code>./build/</code>文件夹下，否则找不到文件），文件结构如下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">.</span>
+├── build
+│   └── assets  <span class="token comment"># 把官方仓库中的/asssets/拷贝过来</span>
+├── CMakeLists.txt
+├── tensorboard.cpp
+└── test_tensorboard_logger.cc  <span class="token comment"># 官方仓库中的/tests/文件夹下</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>编辑文件如下：</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        tensorboard.cpp仅使用add_scalar绘制曲线测试
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;tensorboard_logger.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;cmath></span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  TensorBoardLogger <span class="token function">logger</span><span class="token punctuation">(</span><span class="token string">"./demo/tfevents_scale.pb"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> <span class="token keyword">int</span> N <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> N<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">double</span> x <span class="token operator">=</span> <span class="token number">2.0</span> <span class="token operator">*</span> M_PI <span class="token operator">*</span> i <span class="token operator">/</span> N<span class="token punctuation">;</span>
+    logger<span class="token punctuation">.</span><span class="token function">add_scalar</span><span class="token punctuation">(</span><span class="token string">"test/sin"</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span><span class="token function">sin</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    logger<span class="token punctuation">.</span><span class="token function">add_scalar</span><span class="token punctuation">(</span><span class="token string">"test/cos"</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> std<span class="token double-colon punctuation">::</span><span class="token function">cos</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  google<span class="token double-colon punctuation">::</span>protobuf<span class="token double-colon punctuation">::</span><span class="token function">ShutdownProtobufLibrary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"draw scaler, finished!\n"</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        CMakeLists.txt
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token keyword">cmake_minimum_required</span><span class="token punctuation">(</span><span class="token property">VERSION</span> <span class="token number">3.10</span><span class="token punctuation">)</span>  <span class="token comment"># CMAKE的最低版本要求</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD</span> <span class="token number">17</span><span class="token punctuation">)</span>  <span class="token comment"># 使用的C++标准</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="token boolean">ON</span><span class="token punctuation">)</span>
+
+<span class="token keyword">project</span><span class="token punctuation">(</span>hello <span class="token property">VERSION</span> <span class="token number">1.0</span><span class="token punctuation">)</span>  <span class="token comment"># 项目名称 版本 版本号</span>
+
+<span class="token comment"># add_executable(tensorboard tensorboard.cpp)  # 执行自定义demo</span>
+<span class="token keyword">add_executable</span><span class="token punctuation">(</span>tensorboard test_tensorboard_logger.cc<span class="token punctuation">)</span>  <span class="token comment"># 执行官方demo</span>
+
+<span class="token keyword">find_package</span><span class="token punctuation">(</span>tensorboard_logger REQUIRED<span class="token punctuation">)</span>
+<span class="token keyword">target_link_libraries</span><span class="token punctuation">(</span>tensorboard <span class="token namespace">PUBLIC</span> tensorboard_logger protobuf<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>通过修改<code>CMakeLists.txt</code>可以分别对<code>tensorboard.cpp</code>和<code>test_tensorboard_logger.cc</code>进行编译&amp;执行，在<code>./build/demo/</code>文件夹下创建日志文件，我们在Python中安装<code>pip install tensorboard</code>，执行<code>tensorboard --logdir ./build/demo</code>进入<code>localhost:6006</code>即可看到绘制的日志内容：</p>
+<p><img src="/figures/tools/cmake_tensorboard.png" srcset="/img/loading.gif" lazyload alt="tensorboard中的scalars" /></p>
+<h4 id="libtorch"><a class="markdownIt-Anchor" href="#libtorch"></a> libtorch</h4>
+<p>最后我们来尝试下libtorch的效果，这就是PyTorch的底层库，有两种安装方法（这里先以CPU版本为例，后续添加CUDA版本）：</p>
+<ol>
+<li>Python安装：<code>conda install pytorch</code>（如果是用<code>conda</code>安装的，否则用<code>pip</code>安装），进入环境终端里面执行<code>python -c 'import torch; print(torch.utils.cmake_prefix_path)'</code>，即可看到输出的<code>cmake</code>路径，例如我的是<code>/home/wty/Programs/mambaforge/envs/jax/lib/python3.11/site-packages/torch/share/cmake</code>；</li>
+<li>直接下载<a target="_blank" rel="noopener" href="https://pytorch.org/get-started/locally/">PyTorch官网</a>中选择<code>LibTorch</code>以及对应的<code>cuda</code>或<code>cpu</code>版本，下载完成后找到<code>.../libtorch/</code>对应的目录即可。</li>
+</ol>
+<p>把包含<code>TorchConfig.cmake</code>的路径记录下来称为<code>TORCH_PATH</code>，只需包含两个文件<code>troch_tensor.cpp</code>和<code>CMakeLists.txt</code>，编辑文件如下：</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        torch_tensor.cpp
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;torch/torch.h></span></span>
+
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> torch<span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">double</span> avg_time <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    Tensor a <span class="token operator">=</span> torch<span class="token double-colon punctuation">::</span><span class="token function">rand</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token number">1024</span><span class="token punctuation">,</span> <span class="token number">4096</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Tensor b <span class="token operator">=</span> torch<span class="token double-colon punctuation">::</span><span class="token function">rand</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token number">4096</span><span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">auto</span> t1 <span class="token operator">=</span> std<span class="token double-colon punctuation">::</span>chrono<span class="token double-colon punctuation">::</span>high_resolution_clock<span class="token double-colon punctuation">::</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Tensor c <span class="token operator">=</span> a<span class="token punctuation">.</span><span class="token function">mm</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">auto</span> t2 <span class="token operator">=</span> std<span class="token double-colon punctuation">::</span>chrono<span class="token double-colon punctuation">::</span>high_resolution_clock<span class="token double-colon punctuation">::</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">auto</span> duration_milli <span class="token operator">=</span> std<span class="token double-colon punctuation">::</span>chrono<span class="token double-colon punctuation">::</span><span class="token generic-function"><span class="token function">duration_cast</span><span class="token generic class-name"><span class="token operator">&lt;</span>std<span class="token double-colon punctuation">::</span>chrono<span class="token double-colon punctuation">::</span>milliseconds<span class="token operator">></span></span></span><span class="token punctuation">(</span>t2<span class="token operator">-</span>t1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    avg_time <span class="token operator">+=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">double</span><span class="token punctuation">)</span>duration_milli<span class="token punctuation">.</span><span class="token function">count</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> avg_time<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> c<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">&lt;&lt;</span> <span class="token char">'\n'</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> avg_time <span class="token operator">&lt;&lt;</span> <span class="token string">"ms\n"</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        CMakeLists.txt
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token keyword">cmake_minimum_required</span><span class="token punctuation">(</span><span class="token property">VERSION</span> <span class="token number">3.10</span><span class="token punctuation">)</span>  <span class="token comment"># CMAKE的最低版本要求</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD</span> <span class="token number">17</span><span class="token punctuation">)</span>  <span class="token comment"># 使用的C++标准</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span><span class="token variable">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="token boolean">ON</span><span class="token punctuation">)</span>
+
+<span class="token keyword">project</span><span class="token punctuation">(</span>hello <span class="token property">VERSION</span> <span class="token number">1.0</span><span class="token punctuation">)</span>  <span class="token comment"># 项目名称 版本 版本号</span>
+<span class="token comment"># 替换这个路径需要包含TorchConfig.cmake</span>
+<span class="token keyword">set</span><span class="token punctuation">(</span>TORCH_PATH /home/wty/Programs/mambaforge/envs/jax/lib/python3.<span class="token number">11</span>/site-packages/torch/share/cmake<span class="token punctuation">)</span>
+<span class="token keyword">find_package</span><span class="token punctuation">(</span>Torch REQUIRED PATHS <span class="token punctuation">$&#123;</span>TORCH_PATH<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+<span class="token keyword">add_executable</span><span class="token punctuation">(</span>torch_tensor torch_tensor.cpp<span class="token punctuation">)</span>  <span class="token comment"># 可执行文件名称（目标） 联合编译的文件 [文件1, 文件2, ...]</span>
+<span class="token keyword">target_link_libraries</span><span class="token punctuation">(</span>torch_tensor <span class="token punctuation">$&#123;</span>TORCH_LIBRARIES<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>相应的如果VsCode没有找到libtorch相关的头文件位置，我们只需在<code>C/C++:编辑配置(UI)</code>中包含路径里面加入如下两个即可（相对你的libtorch文件夹，肯定也能找到的）：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim"><span class="token operator">/</span>home<span class="token operator">/</span>wty<span class="token operator">/</span>Programs<span class="token operator">/</span>mambaforge<span class="token operator">/</span>envs<span class="token operator">/</span>jax<span class="token operator">/</span>lib<span class="token operator">/</span>python3<span class="token operator">.</span><span class="token number">11</span><span class="token operator">/</span>site<span class="token operator">-</span>packages<span class="token operator">/</span>torch<span class="token operator">/</span><span class="token builtin">include</span><span class="token operator">/</span>torch<span class="token operator">/</span>csrc<span class="token operator">/</span>api<span class="token operator">/</span><span class="token builtin">include</span>
+<span class="token operator">/</span>home<span class="token operator">/</span>wty<span class="token operator">/</span>Programs<span class="token operator">/</span>mambaforge<span class="token operator">/</span>envs<span class="token operator">/</span>jax<span class="token operator">/</span>lib<span class="token operator">/</span>python3<span class="token operator">.</span><span class="token number">11</span><span class="token operator">/</span>site<span class="token operator">-</span>packages<span class="token operator">/</span>torch<span class="token operator">/</span><span class="token builtin">include</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>上面跑的<code>torch_tensor.cpp</code>是一段测速代码<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1024</mn><mo>×</mo><mn>4096</mn></mrow><annotation encoding="application/x-tex">1024\times4096</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span></span></span></span>和<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4096</mn><mo>×</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">4096\times 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span></span></span></span>矩阵乘法计算100次所需的平均时间（我的CPU为4800U）：</p>
+<ol>
+<li>libtorch(C++): 用时<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>44.7</mn><mi>m</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">44.7ms</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">4</span><span class="mord">.</span><span class="mord">7</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></li>
+<li>pytorch(Python): 用时<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>84.29</mn><mi>m</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">84.29ms</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">8</span><span class="mord">4</span><span class="mord">.</span><span class="mord">2</span><span class="mord">9</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></li>
+<li>numpy(Python): 用时<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>134.83</mn><mi>m</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">134.83ms</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">3</span><span class="mord">4</span><span class="mord">.</span><span class="mord">8</span><span class="mord">3</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></li>
+</ol>
+<blockquote>
+<p>GPU测速待补充</p>
+</blockquote>
+<p>可以看出C++不是一般的快，Python所用的测速代码如下：</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        torch_tensor.py PyTorch测速代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> torch
+<span class="token keyword">from</span> time <span class="token keyword">import</span> time
+
+avg_time <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  start_time <span class="token operator">=</span> time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  a <span class="token operator">=</span> torch<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> <span class="token number">4096</span><span class="token punctuation">)</span>
+  b <span class="token operator">=</span> torch<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">4096</span><span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">)</span>
+  c <span class="token operator">=</span> a @ b
+  duration <span class="token operator">=</span> time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> start_time
+  avg_time <span class="token operator">+=</span> <span class="token punctuation">(</span>duration <span class="token operator">-</span> avg_time<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"avg time used: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>avg_time<span class="token operator">*</span><span class="token number">1000</span><span class="token punctuation">&#125;</span></span><span class="token string">ms"</span></span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        numpy.py Numpy测速代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">from</span> time <span class="token keyword">import</span> time
+
+avg_time <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  start_time <span class="token operator">=</span> time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  a <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">,</span> <span class="token number">4096</span><span class="token punctuation">)</span>
+  b <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token number">4096</span><span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">)</span>
+  c <span class="token operator">=</span> a @ b
+  duration <span class="token operator">=</span> time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> start_time
+  avg_time <span class="token operator">+=</span> <span class="token punctuation">(</span>duration <span class="token operator">-</span> avg_time<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span>c<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"avg time used: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>avg_time<span class="token operator">*</span><span class="token number">1000</span><span class="token punctuation">:</span><span class="token format-spec">.2f</span><span class="token punctuation">&#125;</span></span><span class="token string">ms"</span></span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
