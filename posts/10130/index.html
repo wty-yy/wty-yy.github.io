@@ -1,0 +1,1349 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="所需的相关程序及代码库（头文件、样例）：  CCSTUDIO(CCS)：代码编写及程序烧录。 C2000WARE：代码与硬件关联所需的各种头文件及样例。 MOTORWARE：用于电机控制的开发板的头文件及样例。   F28069M开发板 ti官网-LAUNCHXL-F28069M 包含如下信息：  Software development：上述代码库都可以在其中找到 Technical docum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="F28069M开发板笔记">
+<meta property="og:url" content="https://wty-yy.github.io/posts/10130/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="所需的相关程序及代码库（头文件、样例）：  CCSTUDIO(CCS)：代码编写及程序烧录。 C2000WARE：代码与硬件关联所需的各种头文件及样例。 MOTORWARE：用于电机控制的开发板的头文件及样例。   F28069M开发板 ti官网-LAUNCHXL-F28069M 包含如下信息：  Software development：上述代码库都可以在其中找到 Technical docum">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830780-14.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-1.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-2.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-3.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-4.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-5.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-6.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-7.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-8.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/epwm_counter_compare_submodule.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/AQ_input_and_output.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/epwm_duty_control_up.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-9.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-10.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-11.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830775-12.jpeg">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830776-13.gif">
+<meta property="article:published_time" content="2024-08-31T05:33:43.000Z">
+<meta property="article:modified_time" content="2024-11-19T05:49:01.255Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/F28069M/1725081830780-14.png">
+  
+  
+  
+  <title>F28069M开发板笔记 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="F28069M开发板笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-08-31 13:33" pubdate>
+          2024年8月31日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          62 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">F28069M开发板笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>所需的相关程序及代码库（头文件、样例）：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.ti.com/tool/CCSTUDIO">CCSTUDIO(CCS)</a>：代码编写及程序烧录。</li>
+<li><a target="_blank" rel="noopener" href="https://www.ti.com/tool/C2000WARE">C2000WARE</a>：代码与硬件关联所需的各种头文件及样例。</li>
+<li><a target="_blank" rel="noopener" href="https://www.ti.com/tool/MOTORWARE">MOTORWARE</a>：用于电机控制的开发板的头文件及样例。</li>
+</ol>
+<h2 id="f28069m开发板"><a class="markdownIt-Anchor" href="#f28069m开发板"></a> F28069M开发板</h2>
+<p><a target="_blank" rel="noopener" href="https://www.ti.com/tool/LAUNCHXL-F28069M">ti官网-LAUNCHXL-F28069M</a> 包含如下信息：</p>
+<ul>
+<li>Software development：上述代码库都可以在其中找到</li>
+<li>Technical documentation：中能看到板子的<a target="_blank" rel="noopener" href="https://www.ti.com/lit/ug/sprui11b/sprui11b.pdf">参考文档 - LAUNCHXL-F28069M overview (Rev. B)</a>，参考文档中可以看到板子的线路图及一些注意事项。</li>
+</ul>
+<p>这些信息对于代码开发细节完全不够，还需要找到处理器的相关文档，找到<a target="_blank" rel="noopener" href="https://www.ti.com/product/TMS320F28069">ti官网-TMS320F28069</a>中的User guide文档<a target="_blank" rel="noopener" href="https://www.ti.com/lit/pdf/spruh18">TMS320x2806x Microcontrollers Technical Reference Manual (Rev. I)</a>包含了所有的寄存器的定义的赋值含义，对后续看样程非常重要，如果有不理解的变量全部能在里面搜索到。</p>
+<h3 id="样程使用方法"><a class="markdownIt-Anchor" href="#样程使用方法"></a> 样程使用方法</h3>
+<p>进入到 <code>C2000</code> 的安装目录下，<code>&#123;C2000路径&#125;/device_support/f2806x/</code> 就是开发板对应的项目位置，我们将其记为 <code>&lt;base&gt;</code>，下面分析其中每个文件的作用：</p>
+<ul>
+<li><code>&lt;base&gt;/docs/</code> ：参考文档，<code>USER_GUIDE</code> 为开发者手册，包含对本项目架构的介绍及使用方法。</li>
+<li><code>&lt;base&gt;/headers/</code>：底层外设头文件 (Peripheral header files)，包含对开发板中各项内存参数位置的定义，要集成到项目中需要使用其中一部分的定义，项目中更多地使用 <code>common/</code> 下的头文件定义（也是间接调用此头文件）</li>
+<li><code>&lt;base&gt;/common/</code>：样例中的常用头文件定义，样例中调用的头文件通常来自于此
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="https://ecnhf41t16x1.feishu.cn/sync/TzS3d9wocsLU6XbTWrKcNqYNnAe">https://ecnhf41t16x1.feishu.cn/sync/TzS3d9wocsLU6XbTWrKcNqYNnAe</a></p>
+</li>
+<li>
+<p><code>source/</code>：常用的 <code>*.c</code> 文件</p>
+</li>
+<li>
+<p><code>cmd/</code>：包含一些 <code>.cmd</code> 文件，他们都是<strong>指定如何将编译后的代码和数据映射到处理及的内存或闪存中</strong>，二者的区别在于，<code>*RAM*</code> 不将编译后的代码烧录进闪存，断电后就会清空编译的代码；<code>不带RAM</code> 则是将代码烧录进闪存中，从而可以断电后，启动即使执行之前的代码（XIP, Execute in place）</p>
+</li>
+</ul>
+</li>
+<li><code>&lt;base&gt;/examples/</code>：样例文件
+<ul>
+<li><code>c28/</code>：CCS中的项目文件</li>
+<li><code>cla</code>：基于CLA中的C编译器（Control Law Accelerator, CLA 控制律加速器，TI板的功能，一个完全可编程的独立32位浮点硬件加速器），主要用于加速一些数学密集型计算</li>
+</ul>
+</li>
+</ul>
+<h3 id="外设中断pie处理流程"><a class="markdownIt-Anchor" href="#外设中断pie处理流程"></a> 外设中断PIE处理流程</h3>
+<p>参考寄存器文档中的1.6节 Peripheral Interrupt Expansion(PIE), 有如下几个重要的流程图:</p>
+<table>
+<thead>
+<tr>
+<th><img src="/figures/robotics/F28069M/1725081830780-14.png" srcset="/img/loading.gif" lazyload alt="img1" /></th>
+<th><img src="/figures/robotics/F28069M/1725081830775-1.png" srcset="/img/loading.gif" lazyload alt="img2" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div align='center'>中断生成流程图1</div></td>
+<td><div align='center'>中断生成流程图2</div></td>
+</tr>
+</tbody>
+</table>
+<p>首先开发板将所有的外设中断信息划分为了12组每个组最多可处理8个中断, 简记为 <code>x.y</code>, x表示从属的组号, y表示每组中的编号, 中断是否被启用看IFR(Interrupt Flag Register)是否被激活, 中断是否可以被接受看IER(Interrupt Enable Register), 前面带有PIE的就是在PIE部分处理的, 没有PIE的就是直接写在CPU内核中的寄存器. 左图展示了中断信号到达CPU的流程, 主要分为两大块:</p>
+<ol>
+<li>PIE部分: 中断首先激活PIEIFR, 判断是否启用了对应的PIEIER, 如果启用则通过MUX(multiplexer, 多路复用)转为按照组别转化为INTx (如果组x里面有一个中断被激活, 则对应的INTx就会被激活), 判断当前的信号是否正在被处理中PIEACK=1, 如果没被处理, 则自动置PIEACK=0, 进入CPU处理部分</li>
+<li>CPU部分: 获取到PIE处理后的INTx变量后, 类似的逻辑, 首先激活对应的IFR, 判断是否启用了对应的IER, 如果启用则通过MUX转化为统一中断指令, 判断INTM (全局中断激活)是否为0, 如果是0则处理中断, 中断的处理顺序为: 按照(x,y)二元组从小到大的顺序进行, 对于每个中断处理, 从PIEVecTable (这里Vector表示的就是C语言中的函数句柄)找到对应的函数所处内存中的位置, 对其进行执行.</li>
+</ol>
+<p>综上, 处理中断的思路就是:</p>
+<ol>
+<li>初始化CPU中断, 包括:
+<ol>
+<li><code>DINT;</code> 关闭全局中断;</li>
+<li><code>IER, IFR</code> 清空CPU中断信息;</li>
+</ol>
+</li>
+<li>初始化PIE中断, 包括:
+<ol>
+<li><code>InitPieCtrl();</code> 清空PIE控制中断, 包括PIEIER, PIEIFR;</li>
+<li><code>InitPieVectTable();</code> 清空PIEVecTable;</li>
+</ol>
+</li>
+<li>用户在自定义中断, 包括:
+<ol>
+<li>实现中断函数<code>PieVectTable.[中断名称] = &amp;func</code>(中断函数细节: 函数类型为<code>interrupt void</code>; 在函数结束时, 记得将对应的中断处理寄存器进行更新<code>PieCtrlRegs.PIEACK.bit.ACKx = 1;</code>, 否则会一直等待当前处理, 不会触发下一个中断啦), 将中断函数配置到<code>PieVectTable</code>中的对应位置;</li>
+<li>初始化各种所需的外设参数;</li>
+</ol>
+</li>
+<li>启动中断检测:
+<ol>
+<li>CPU: <code>IER |= M_INTx;</code> 启动IER中对应的Group x检测;</li>
+<li>PIE: <code>PieCtrlRegs.PIEIERx.bit.INTy = 1;</code> 启动x.y对应的PIE中断检测;</li>
+<li><code>EINT;</code> 启动全局中断检测.</li>
+<li><code>ERTM;</code> 允许对中断进行DEBUG.</li>
+</ol>
+</li>
+</ol>
+<p>外设与中断的关系图如下 (更详细的外设与中断的关系表请见177面的Table 1-119, PIE Vec关系请见178面的Table 1-120):</p>
+<p><img src="/figures/robotics/F28069M/1725081830775-2.png" srcset="/img/loading.gif" lazyload alt="中断关系" /></p>
+<h3 id="通用输入输出接口gpio使用方法"><a class="markdownIt-Anchor" href="#通用输入输出接口gpio使用方法"></a> 通用输入输出接口GPIO使用方法</h3>
+<p>GPIO(General-Purpose Input/Output)就是板子上的各种针脚, 它们功能包含</p>
+<ol>
+<li>作为输入/输出(默认全部都是input状态, 输入指的是测量电压变化, 输出指的是能够发出相对低/高电平), 对于用于输入的接口, 当我们加入一个采样窗口(sample window)对信号进行采样就可以对信号进行接收.</li>
+<li>每个GPIO还具有多路复用的功能, 通过MUX可以选择三种不同的外设信号, 不同接口具有不同的外设功能, 功能包含:产生中断(PIE), 做联合测试JTAG(Joint Test Action Group), 接收ePWM, 每个接口的外设功能请见122面的表1-64.</li>
+</ol>
+<p>GPIO接口被分为三大块GPIO0~31属于接口A, GPIO32~58属于接口B, 还有一个分析接口AIO0~15, 它们分别简称为GPIOA (GPA), GPIOB (GPB), AIOx, 前两个又能统称为GPX(X=A或B), 下面我们不考虑AIO接口, 用<code>X.y</code>的格式表示从属第X组的接口y.</p>
+<h4 id="gpio作为数字输出接口"><a class="markdownIt-Anchor" href="#gpio作为数字输出接口"></a> GPIO作为数字输出接口</h4>
+<p>由于默认是输入接口, 下面介绍输出接口的配置方法以及操作输出信号的方法:</p>
+<ol>
+<li>配置接口模式, 通过<code>GpioCtrlRegs.GPXDIR.bit.GPIOy = 1</code>将该接口设置为输出.</li>
+<li>输出模式包含如下操作:
+<ol>
+<li><code>GpioDataRegs.GPXDAT.bit.GPIOy</code>直接对当前接口值进行修改, 0表示低电平, 1表示高电平. 当设置为输出时, 默认为低电平状态, 不建议直接对这个寄存器进行修改, 而是使用下面这些代表操作的寄存器 (因为多次直接对其修改, 可能会导致上下文状态变化产生延迟).</li>
+<li>下述寄存器只有赋值为1时才有作用, 在执行完成后会重新置为0, 并且操作不会干扰其他寄存器状态的延迟:
+<ul>
+<li><code>GpioDataRegs.GPXSET.bit.GPIOy = 1</code> 将接口设置为高电平;</li>
+<li><code>GpioDataRegs.GPXCLEAR.bit.GPIOy = 1</code>将接口设置为低电平;</li>
+<li><code>GpioDataRegs.GPXTOGGLE.bit.GPIOy = 1</code>将接口状态进行变化, 做一次异或操作.</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="闪存flash使用方法"><a class="markdownIt-Anchor" href="#闪存flash使用方法"></a> 闪存Flash使用方法</h3>
+<p>烧到flash在代码上非常简单(如果不追求速度), 首先要了解烧录板子的逻辑, 编译逻辑:</p>
+<ol>
+<li>CCS中的C语言编译器将我们写的代码编译完成后, 得到<code>.obj</code>文件, 该文件包含了逻辑处理, 但还没有分配内存位置;</li>
+<li>通过TI版中的链接文件(<code>*.cmd</code>), 将所有的目标文件分配对应的位置, 得到可执行文件<code>.out</code>, 对板子进行烧录.</li>
+</ol>
+<blockquote>
+<p>Cmd文件简单理解可以参考<a target="_blank" rel="noopener" href="https://software-dl.ti.com/ccs/esd/documents/sdto_cgt_Linker-Command-File-Primer_cn.html">TI 链接器命令文件入门</a></p>
+</blockquote>
+<p>DSP开发板执行逻辑:</p>
+<ol>
+<li>在DSP上电或者复位后, 处理器会跳转到启动地址<code>.reset</code>位置(在<code>*.cmd</code>中进行了定义)</li>
+<li>启动<code>main</code>函数, <code>main</code>函数的执行位置取决于<code>.reset</code>定义的位置, 也就是说函数可以在Flash中运行的, 只是相对于RAM读取速度会降低, 后面就是正常执行函数了.</li>
+</ol>
+<p>因此我们要将程序烧录到Flash只需修改<code>*.cmd</code>文件, 将内存分配设置为Flash就行, 如果我们还想将某些重复调用的函数(通常是interrupt函数)从Flash转移到RAM中, 就需要加一些额外的内存转移和声明代码了.</p>
+<h4 id="flash与ram烧录方法"><a class="markdownIt-Anchor" href="#flash与ram烧录方法"></a> Flash与RAM烧录方法</h4>
+<p>在例程的工程项目中一定可以找到<code>F28069.cmd</code>或者<code>28069_RAM_lnk.cmd</code>, 它们分别是烧录到Flash和RAM中的, RAM代码可以直接通过修改<code>*.cmd</code>文件转为Flash, 反之, 在你的代码中没有Flash转移到RAM的前提下, 也是可以直接修改<code>*.cmd</code>文件达到的.</p>
+<p>首先我们找到这两个文件的所处文件夹: <code>&lt;base&gt;\device_support\f2806x\common\cmd</code>, 修改<code>*.cmd</code>方法很简单, <code>右键项目名称 -&gt; Properties -&gt; [Linker command file] Browse... (这里一定要选Browse, 不要点下三角选择, 因为CCS自带的cmd文件不正确, 要选择C2000中的cmd) -&gt; 进入&lt;base&gt;\device_support\f2806x\common\cmd文件夹 -&gt; 选择你想要的.cmd文件打开</code>, 就可以看到左侧原来的cmd文件被Exclude掉了, 新的cmd文件被加进去.</p>
+<p>如果我们想重新启动之前的cmd, 只需把不用的cmd文件右键<code>Exclude from Build</code>, 再将要用的cmd解除exclude就行了.</p>
+<style>
+    .image-container {
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        align-items: center; /* 垂直居中 */
+        height: 200px; /* 设置父容器的高度 */
+    }
+    .image-container img {
+        height: 170px; /* 设置图片的高度 */
+        object-fit: cover; /* 保持图片的比例，填满高度 */
+        margin: 0 10px; /* 设置图片之间的间距 */
+    }
+</style>
+<div class='image-container'>
+    <img src='/figures/robotics/F28069M/1725081830775-3.png'>
+    <img src='/figures/robotics/F28069M/1725081830775-4.png'>
+    <img src='/figures/robotics/F28069M/1725081830775-5.png'>
+</div>
+<p>完成上述cmd文件修改后, 直接烧录程序就可以将文件烧录到RAM或Flash了, 检测是否烧到Flash只需要把数据线拔掉重插, DSP就会自动执行Flash中的程序, 看看是否和你烧录的一致.</p>
+<blockquote>
+<p>注意: 如果使用<code>DELAY_US(delay)</code>对程序加入延迟, 就必须使用下面的<code>memcpy</code>将该延迟函数转移到RAM中去.</p>
+</blockquote>
+<h4 id="将函数从flash转移到ram提高读取速度"><a class="markdownIt-Anchor" href="#将函数从flash转移到ram提高读取速度"></a> 将函数从Flash转移到RAM提高读取速度</h4>
+<p>代码在Flash中运行速度不及RAM的, 但我们可以手动将某些反复调用的函数(main函数不能通过这个方法放)从Flash放到RAM中, 方法如下:</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 假设我们定义的函数名为 myfunc</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">pragma</span> <span class="token expression"><span class="token function">CODE_SECTION</span><span class="token punctuation">(</span>myfunc<span class="token punctuation">,</span> </span><span class="token string">"ramfuncs"</span><span class="token expression"><span class="token punctuation">)</span><span class="token punctuation">;</span>  </span><span class="token comment">// 将函数设置到ramfuncs section中 (这个ramfuncs定义在F28069.cmd文件中)</span></span>
+<span class="token comment">// 从F28069.cmd文件中导入这几个共用变量</span>
+<span class="token keyword">extern</span> Uint16 RamfuncsLoadStart<span class="token punctuation">;</span>
+<span class="token keyword">extern</span> Uint16 RamfuncsRunStart<span class="token punctuation">;</span>
+<span class="token keyword">extern</span> Uint16 RamfuncsLoadSize<span class="token punctuation">;</span>
+
+<span class="token comment">// 在调用myfunc之前执行如下内存拷贝, 如果是中断函数, 就在EINT之前就行</span>
+<span class="token comment">// 这个拷贝能将定义在ramfuncs section中的函数, 全部从Flash拷贝到RAM中去</span>
+<span class="token function">memcpy</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>RamfuncsRunStart<span class="token punctuation">,</span> <span class="token operator">&amp;</span>RamfuncsLoadStart<span class="token punctuation">,</span> <span class="token punctuation">(</span>Uint32<span class="token punctuation">)</span><span class="token operator">&amp;</span>RamfuncsLoadSize<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>这样程序在调用定义在<code>ramfuncs</code>中的函数时, 就会直接去RAM中找, 而非Flash了, 因此必须在调用前执行<code>memcpy</code>, 才能避免函数无法执行的问题.</p>
+<h4 id="flash状态变换降低功率"><a class="markdownIt-Anchor" href="#flash状态变换降低功率"></a> Flash状态变换(降低功率)</h4>
+<p>通过如下代码可以控制Flash的开关:</p>
+<blockquote>
+<p>注意: 如果是在子函数中进行的状态设置, 该函数必须在RAM中, 否则会报错. 这几种状态没看出来有什么区别, 文档中说是可以降低功率. 如果将Flash设置为待机, 下次从Flash中读取函数时候又会重启Flash, 但看不出什么延迟.</p>
+</blockquote>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c">EALLOW<span class="token punctuation">;</span>
+FlashRegs<span class="token punctuation">.</span>FPWR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>PWR <span class="token operator">=</span> FLASH_SLEEP<span class="token punctuation">;</span>  <span class="token comment">// 将Flash设置为休眠模式</span>
+FlashRegs<span class="token punctuation">.</span>FPWR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>PWR <span class="token operator">=</span> FLASH_STANDBY<span class="token punctuation">;</span>  <span class="token comment">// 将Flash设置为待机模式</span>
+EDIS<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="增强脉冲宽度调制器epwm使用方法"><a class="markdownIt-Anchor" href="#增强脉冲宽度调制器epwm使用方法"></a> 增强脉冲宽度调制器ePWM使用方法</h3>
+<p>ePWM(enhanced pulse width modulator)就是01信号脉冲, 可以通过宽度变换将数字波转换为模拟波, 是一种对波形的数模转换(DAC, digital-to-analog).</p>
+<p>该开发板总共包含8个ePWM接口, 但是通过针脚引出去的只有13个(ePWM1~6, ePWM7B), 每个ePWM接口分为A,B两个波形分别对应两个接口, ePWM功能很多, 下面对其中的计数器和中断触发机制进行介绍.</p>
+<p><img src="/figures/robotics/F28069M/1725081830775-6.png" srcset="/img/loading.gif" lazyload alt="PWM流程图" /></p>
+<h4 id="计数器-time-base-tb"><a class="markdownIt-Anchor" href="#计数器-time-base-tb"></a> 计数器 (Time-base, TB)</h4>
+<p>参考文档中251页3.2.2节内容, 位于开发板中的每个ePWM都自带一个计数器, 称为PWMCTR (PWM counter), 首先介绍这块重要的英文缩写: SYNC同步, O (Output, 输出), I (Input, 输入), PHS (Phase, 相位), PRD (Period, 周期), CTR (counter, 计数器), CTL (control, 控制器).</p>
+<p>每个计数器包含以下重要参数:</p>
+<blockquote>
+<p>下文中的计数器同步只有在启动相位PHSEN时候才有意义, 同步就是当触发同步条件时, 将当前的计数器重置到相位对应的值上.</p>
+</blockquote>
+<ol>
+<li><code>SYNCI</code>: 同步输入, 从下左图中可以看出, 第n个ePWM的同步输入就是第n-1的<code>SYNCO</code>的同步状态.</li>
+<li><code>SYNCO</code>: 同步输出, 有四种选择:
+<ol>
+<li><code>TB_SYNC_INTB_SYNC_IN</code>: 跳过当前计数器, 也就是直接将同步输入的信息继续往后面的ePWM传递;</li>
+<li><code>TB_CTR_ZERO</code>: 如果当前计数器为0时, 则产生同步信息;</li>
+<li><code>TB_CTR_CMPB</code>: 这个和计数器比较 (coutner-compare) 部分有关, 还不清楚具体是什么;</li>
+<li><code>TB_SYNC_DISABLE</code>: 直接关闭输出同步.</li>
+</ol>
+</li>
+<li><code>PHSEN</code>: 是否启动相位, 如上文所述, 只有启动相位计数器的同步才有作用.</li>
+<li><code>TBPHS</code>: 相位设置范围是uint16.</li>
+<li><code>TBPRD</code>: 计数器周期, 也就是计数器的上界, 范围也是uint16.</li>
+<li><code>CTRMODE</code>: 计数器模型, 有三种可选 (见下右图):
+<ol>
+<li><code>TB_COUNT_UP</code>: 向上计数模式, 一直增加当前计数器, 当到达到上界(周期)时, 直接重置为0.</li>
+<li><code>TB_COUNT_DOWN</code>: 向下计数模式, 一直减少当前计数器, 当到达到0时, 直接重置为上界(周期).</li>
+<li><code>TB_COUNT_UPDOWN</code>: 向上后向下计数模式, 一直增加当前计数器, 当到达到上界时, 变为向下计数模式, 当到达0时, 再变为向上计数模式, 以此往复.</li>
+</ol>
+</li>
+<li><code>SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC</code>: ePWM的全局时间同步, 当开启时候, 则将全部的ePWM同步到上边缘, 在设置上文内容前需要先关闭全局时间同步, 配置完成后, 再打开.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th><img src="/figures/robotics/F28069M/1725081830775-7.png" srcset="/img/loading.gif" lazyload alt="img1" /></th>
+<th><img src="/figures/robotics/F28069M/1725081830775-8.png" srcset="/img/loading.gif" lazyload alt="img2" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div align='center'>ePWM同步链逻辑</div></td>
+<td><div align='center'>计数器三种模式对应的波形图</div></td>
+</tr>
+</tbody>
+</table>
+<p>一个简单例子:</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c">EALLOW<span class="token punctuation">;</span>
+SysCtrlRegs<span class="token punctuation">.</span>PCLKCR0<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TBCLKSYNC <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 停止全局同步</span>
+EDIS<span class="token punctuation">;</span>
+
+<span class="token function">InitEPwm1Gpio</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 将Gpio接口初始化为EPWM信号</span>
+EPwm1Regs<span class="token punctuation">.</span>TBCTL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>SYNCOSEL <span class="token operator">=</span> TB_CTR_ZERO<span class="token punctuation">;</span>  <span class="token comment">// 设置EPWM输出</span>
+EPwm1Regs<span class="token punctuation">.</span>TBCTL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>PHSEN <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 启用相位</span>
+EPwm1Regs<span class="token punctuation">.</span>TBPHS<span class="token punctuation">.</span>half<span class="token punctuation">.</span>TBPHS <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 设置相位大小</span>
+EPwm1Regs<span class="token punctuation">.</span>TBPRD <span class="token operator">=</span> <span class="token number">0x1000</span><span class="token punctuation">;</span> <span class="token comment">// 设置周期(计数器上界)大小</span>
+EPwm1Regs<span class="token punctuation">.</span>TBCTL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>CTRMODE <span class="token operator">=</span> TB_COUNT_UP<span class="token punctuation">;</span>  <span class="token comment">// 设置计数器模式</span>
+
+EALLOW<span class="token punctuation">;</span>
+SysCtrlRegs<span class="token punctuation">.</span>PCLKCR0<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TBCLKSYNC <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 启动全局同步</span>
+EDIS<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="计数比较器-counter-compare-cc"><a class="markdownIt-Anchor" href="#计数比较器-counter-compare-cc"></a> 计数比较器 (Counter-Compare, CC)</h4>
+<p>通过与计数器当前的数字进行比较, 当数字与当前端口设定相同时, 会产生一次事件, 该事件会向下文中的AQ中传递, 用于控制PWM波生成. 每个EPWM端口可以生成A,B两种不同的波, 将第x个端口输出的波分别记为EPWMxA, EPWMxB, 处理逻辑图如下所示:<br />
+<img src="/figures/robotics/F28069M/epwm_counter_compare_submodule.png" srcset="/img/loading.gif" lazyload alt="红色框出的部分为EPWMxA波处理流程" /></p>
+<h4 id="动作限定符-action-qualifier-aq"><a class="markdownIt-Anchor" href="#动作限定符-action-qualifier-aq"></a> 动作限定符 (Action-Qualifier, AQ)</h4>
+<p>动作限定符AQ需要和上述的比较器端口相配合, 从而控制PWM波形的构造生成, AQ可以被视为一个可编程的事件开关, 它的输入为各种不同的事件, 输出为PWM波的0,1信号.</p>
+<table>
+<thead>
+<tr>
+<th><img src="/figures/robotics/F28069M/AQ_input_and_output.png" srcset="/img/loading.gif" lazyload alt="AQ输入与输出(从上到下的输入事件分为别: 计数器到达周期值(上界), 计数器归零(下界), 计数器等于CMPA, 计数器等于CMPB, 由软件产生的事件)" /></th>
+<th><img src="/figures/robotics/F28069M/epwm_duty_control_up.png" srcset="/img/loading.gif" lazyload alt="ePWM占空比控制方法1(271页)" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div align='center'>AQ输入与输出(从上到下的输入事件分为别: 计数器到达周期值(上界), 计数器归零(下界), 计数器等于CMPA, 计数器等于CMPB, 由软件产生的事件)</div></td>
+<td><div align='center'>ePWM占空比控制方法1(271页)</div></td>
+</tr>
+</tbody>
+</table>
+<h4 id="中断触发-event-trigger-et"><a class="markdownIt-Anchor" href="#中断触发-event-trigger-et"></a> 中断触发 (Event trigger, ET)</h4>
+<p>参考文档3.2.8第292页, 这个比较简单, 只需要根据计数器的状态触发中断即可, 包含以下参数:</p>
+<ol>
+<li><code>INTSEL</code>: 触发模式选择, 包含如下这几种选项
+<ol>
+<li><code>ET_CTR_ZERO</code>: 当计数器为0时;</li>
+<li><code>ET_CTR_PRD</code>: 当计数器达到上界(周期)时;</li>
+<li><code>ET_CTR_PRDZERO</code>: 当计时器为0或达到上界(周期)时;</li>
+<li><code>ET_CTR(U/D)_CMP(A/B)</code>: 与计数器比较相关的, 暂不清楚.</li>
+</ol>
+</li>
+<li><code>INTEN</code>: 启用中断.</li>
+<li><code>INTPRD</code>: 中断产生周期, 包含如下这几种选项
+<ol>
+<li><code>ET_DISABLE</code>: 不产生(默认);</li>
+<li><code>ET_1ST</code>, <code>ET_2ND</code>, <code>ET_3RD</code>: 遇到一/二/三个触发就产生一次中断;</li>
+</ol>
+</li>
+</ol>
+<p>一个简单例子:</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c">EPwm1Regs<span class="token punctuation">.</span>ETSEL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>INTSEL <span class="token operator">=</span> ET_CTR_PRD<span class="token punctuation">;</span>  <span class="token comment">// 当达到上界时产生中断</span>
+EPwm1Regs<span class="token punctuation">.</span>ETSEL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>INTEN <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 启动中断</span>
+EPwm1Regs<span class="token punctuation">.</span>ETPS<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>INTPRD <span class="token operator">=</span> ET_1ST<span class="token punctuation">;</span>  <span class="token comment">// 发送周期为1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="控制器区域网络can使用方法"><a class="markdownIt-Anchor" href="#控制器区域网络can使用方法"></a> 控制器区域网络CAN使用方法</h3>
+<p>该开发板包含32个mailbox, 一个mailbox可以定义消息的收或发, 每个消息的长度为8byte也就是64bit, 每个消息均定义在mailbox中, 这里就讨论基础的ecan消息, 这部分划分的内存如下</p>
+<table>
+<thead>
+<tr>
+<th><img src="/figures/robotics/F28069M/1725081830775-9.png" srcset="/img/loading.gif" lazyload alt="img1" /></th>
+<th><img src="/figures/robotics/F28069M/1725081830775-10.png" srcset="/img/loading.gif" lazyload alt="img2" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div align='center'>ECAN参数内存位置分布</div></td>
+<td><div align='center'>中断逻辑</div></td>
+</tr>
+</tbody>
+</table>
+<p>比较重要的参数包含, 以下参数每个mailbox都有其各自的对应位:</p>
+<ol>
+<li>Mailbox Enable, CANME: 使能位;</li>
+<li>Mailbox Direction, CANMD: 发送1/接收0, 默认为接收;</li>
+<li>Transmission Request Set, CANTRS: 发送请求位, 1表示启动一次信息发送, 默认为0;</li>
+<li>Transmission Acknowledgement, TA: 发送成功位, 如果是0则表示发送成功, 通过while死循环可以判断消息是否发送成功;</li>
+<li>Received Message Pending, CANRMP: 收到消息等待位, 此位需要手动判断赋值为1 (一般在can接收中断中赋值), 表示收到一次消息, 读取改值没有意义;</li>
+<li>Master Control, CANMC: CAN模式控制, 可以切换为self-test-mode;</li>
+<li>Mailbox Interrupt Mask, CANGIM: CAN中断使能位;</li>
+<li>Mailbox Interrupt Mask, CANMIM: 1表示启动该mailbox的中断, 当收发消息会触发中断 (默认为0);</li>
+<li>Mailbox Interrupt Level, CANMIL: can相关的中断仅有两个, 默认为INT0CAN, 当设置为1时, 触发INT1CAN;</li>
+</ol>
+<p>每个mailbox的信息:</p>
+<ol>
+<li>Message Identifier, MSGID: 消息对应的id编号, 对于接收的mailbox, 只会接收对应ID的信息;</li>
+<li>Message Control, MSGCTRL: 对于当前mailbox的配置, 修改当前信息长度data length code(DLC)等;</li>
+<li>Message Data Low: mailbox信息的前4bytes;</li>
+<li>Message Data High: mailbox信息的后4bytes.</li>
+</ol>
+<p>这里不再演示样例中的<code>2806xECanBack2Back</code>自我测试模式, 假设我们有一个CAN交换器, 通过两根导线链接到dsp板子的can通讯针脚上, 通过如下代码实现一个简单的信息交换(用到的依赖文件与<code>ECanBack2Back</code>相同):</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"DSP28x_Project.h"</span></span>
+
+Uint32 count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 记录收到多少次消息, 可以DEBUG中查看</span>
+
+<span class="token keyword">void</span> <span class="token function">ecan_transmit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 信息发送</span>
+    ECanaRegs<span class="token punctuation">.</span>CANTRS<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TRS0 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 启动消息发送</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>ECanaRegs<span class="token punctuation">.</span>CANTA<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TA0 <span class="token operator">!=</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 判断消息是否发送</span>
+    GpioDataRegs<span class="token punctuation">.</span>GPBTOGGLE<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO34 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 将LED灯切换一次亮灭</span>
+<span class="token punctuation">&#125;</span>
+
+interrupt <span class="token keyword">void</span> <span class="token function">ecan_receive</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// CAN中断信息接收</span>
+    count <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token function">ecan_transmit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ECanaRegs<span class="token punctuation">.</span>CANRMP<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x00000002</span><span class="token punctuation">;</span>  <span class="token comment">// 确认信息已接收 (才会启动下一次接收)</span>
+    PieCtrlRegs<span class="token punctuation">.</span>PIEACK<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>ACK9 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 确认中断已处理 (才会产生下一次中断)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// Initialization</span>
+    <span class="token function">InitSysCtrl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    DINT<span class="token punctuation">;</span>
+    IER <span class="token operator">=</span> <span class="token number">0x0000</span><span class="token punctuation">;</span>
+    IFR <span class="token operator">=</span> <span class="token number">0x0000</span><span class="token punctuation">;</span>
+    <span class="token function">InitPieCtrl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">InitPieVectTable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">InitECanGpio</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">InitECana</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// ECanA, 这里总共就设置了两个mailbox, mailbox0为发送, mailbox1为接收</span>
+    <span class="token comment">// transmit</span>
+    ECanaMboxes<span class="token punctuation">.</span>MBOX0<span class="token punctuation">.</span>MSGID<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x12345678</span><span class="token punctuation">;</span>  <span class="token comment">// 设置发送ID</span>
+    ECanaMboxes<span class="token punctuation">.</span>MBOX0<span class="token punctuation">.</span>MSGCTRL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>DLC <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span>  <span class="token comment">// data length code</span>
+    ECanaMboxes<span class="token punctuation">.</span>MBOX0<span class="token punctuation">.</span>MDL<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x12345678</span><span class="token punctuation">;</span>  <span class="token comment">// 设置发送信息(前8bytes)</span>
+    ECanaMboxes<span class="token punctuation">.</span>MBOX0<span class="token punctuation">.</span>MDH<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x87654321</span><span class="token punctuation">;</span>  <span class="token comment">// 设置发送信息(后8bytes)</span>
+    <span class="token comment">// receive</span>
+    ECanaMboxes<span class="token punctuation">.</span>MBOX1<span class="token punctuation">.</span>MSGID<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x00000000</span><span class="token punctuation">;</span>  <span class="token comment">// 设置接收ID</span>
+    <span class="token comment">// configure</span>
+    ECanaRegs<span class="token punctuation">.</span>CANMD<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x00000002</span><span class="token punctuation">;</span>  <span class="token comment">// 配置发送/接收</span>
+    ECanaRegs<span class="token punctuation">.</span>CANME<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x00000003</span><span class="token punctuation">;</span>  <span class="token comment">// 启动使能</span>
+    <span class="token comment">// LED</span>
+    EALLOW<span class="token punctuation">;</span>
+    GpioCtrlRegs<span class="token punctuation">.</span>GPBDIR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO34 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 启动红色LED灯的GPIO接口(默认为关闭)</span>
+    EDIS<span class="token punctuation">;</span>
+    <span class="token comment">// Interrupt</span>
+    EALLOW<span class="token punctuation">;</span>
+    ECanaRegs<span class="token punctuation">.</span>CANMIM<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x00000002</span><span class="token punctuation">;</span>  <span class="token comment">// 启动接收CAN的中断</span>
+    PieVectTable<span class="token punctuation">.</span>ECAN0INTA <span class="token operator">=</span> <span class="token operator">&amp;</span>ecan_receive<span class="token punctuation">;</span>  <span class="token comment">// 设置中断函数</span>
+    ECanaRegs<span class="token punctuation">.</span>CANGIM<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>I0EN <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 启动INT0CAN中断</span>
+    EDIS<span class="token punctuation">;</span>
+
+    IER <span class="token operator">|=</span> M_INT9<span class="token punctuation">;</span>  <span class="token comment">// 启动CPU中断</span>
+    PieCtrlRegs<span class="token punctuation">.</span>PIEIER9<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>INTx5 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 启动PIE终端</span>
+    EINT<span class="token punctuation">;</span>  <span class="token comment">// 启动全局中断</span>
+    ERTM<span class="token punctuation">;</span>  <span class="token comment">// 允许DEBUG中断</span>
+
+    <span class="token function">ecan_transmit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 先发送一次信息</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>单个DSP板: 中断函数处于RAM中, 收发延迟1000us, 处于Flash中, 收发延迟1600us. 因此还是推荐将函数转移到RAM中.</p>
+<h3 id="ledblink"><a class="markdownIt-Anchor" href="#ledblink"></a> LEDBlink</h3>
+<p>参考开发手册中p177页的Interrupt Vector Table 和 p106页CPU Timer相关的TCR (Time Counter)配置.</p>
+<h4 id="初始化"><a class="markdownIt-Anchor" href="#初始化"></a> 初始化</h4>
+<p>样例位于 <code>&lt;base&gt;/examples/c28/timed_led_blink</code>，开发板程序一般需要如下的配置：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">"DSP28x_Project.h"</span>  <span class="token comment">// 引入相关定义的头文件，此文件位于 &lt;base>/common/include/ 下</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>在 <code>main</code> 函数中需要初始化以下信息：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// Step1. 初始化系统控制, in F2806x_SysCtrl.c</span>
+<span class="token function">InitSysCtrl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Step2. 将GPIO进行初始化GPIO(General Purpose Input/Output)为通用输入输出, in F2806x_Gpio.c</span>
+<span class="token function">InitGpio</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 好像不是必要的，因为都是默认初始化为0了</span>
+<span class="token comment">// Step3. 初始化PIE向量表，加入所需的中断触发函数</span>
+DINT<span class="token punctuation">;</span>  <span class="token comment">// 停止(Disable)中断检测(INT为Interrupt缩写)</span>
+<span class="token function">InitPieCtrl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 初始化PIE(Peripheral interrupt expansion)外设终端扩展，用于管理终端信息的</span>
+IER <span class="token operator">=</span> <span class="token number">0x0000</span><span class="token punctuation">;</span>  <span class="token comment">// Interrupt Enable Register 禁用所有CPU中断并清空中断标志</span>
+IFR <span class="token operator">=</span> <span class="token number">0x0000</span><span class="token punctuation">;</span>  <span class="token comment">// 同上，这两个定义在&lt;base>/headers/include/F2806x_Device.h，都是CPU的内参</span>
+<span class="token function">InitPieVectTable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 初始化PIE向量表，向量表指向中断服务程序</span>
+<span class="token comment">// 加入中断程序，修改带保护的寄存器流程如下</span>
+EALLOW<span class="token punctuation">;</span>  <span class="token comment">// 对受保护的寄存器设置为可写状态</span>
+PieVectTable<span class="token punctuation">.</span>TINT0 <span class="token operator">=</span> <span class="token operator">&amp;</span>func<span class="token punctuation">;</span>  <span class="token comment">// 将中断服务与自定义的函数地址进行绑定，中断服务的类型可以在F2806x_PieVect.h中PIE_VECT_TABLE查看</span>
+EDIS<span class="token punctuation">;</span>  <span class="token comment">// 关闭可写状态</span>
+<span class="token comment">// Step4. 初始化所有需要用到的驱动外设(本例中只用到CPU计时器)</span>
+<span class="token function">InitCpuTimers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 初始化当前的CPU计时器，来自 F2806x_CpuTimers.c</span>
+<span class="token function">ConfigCpuTimer</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>CpuTimer0<span class="token punctuation">,</span> <span class="token number">80</span><span class="token punctuation">,</span> <span class="token number">100000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 设定CPU计时器中断的触发频率，80MHz的CPU频率，100ms触发周期</span>
+CpuTimer0Regs<span class="token punctuation">.</span>TCR<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x4000</span><span class="token punctuation">;</span>  <span class="token comment">// 这里本质上就是仅将TIE设置为1，表示启动中断，并将TSS状态重置</span>
+
+CpuTimer0Regs<span class="token punctuation">.</span>TCR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TSS <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 将TSS状态重置</span>
+CpuTimer0Regs<span class="token punctuation">.</span>TCR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TIE <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 这两行和上面写法等价，启动中断功能（CPU-Timer Interrupt Enable）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>这里查看<code>InitCpuTimers()</code>的源代码可以发现，其将<code>CpuTimer0Regs.TCR.TSS</code>设置为1，暂停了CPU计时功能，地18行则是将其置为0重新启动了计时功能，并将TIE设置为1。</p>
+<h4 id="自定义内容"><a class="markdownIt-Anchor" href="#自定义内容"></a> 自定义内容</h4>
+<p>经过上面4步的初始化设置后，下面就是用户自定义的各种功能，比如我们这想控制LED灯开关，我们从板子的<a target="_blank" rel="noopener" href="https://www.ti.com/lit/ug/sprui11b/sprui11b.pdf">参考文档</a>的第14页可以发现下图：</p>
+<table>
+<thead>
+<tr>
+<th><img src="/figures/robotics/F28069M/1725081830775-11.png" srcset="/img/loading.gif" lazyload alt="img1" /></th>
+<th><img src="/figures/robotics/F28069M/1725081830775-12.jpeg" srcset="/img/loading.gif" lazyload alt="img2" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div align='center'>LED相关的电路图</div></td>
+<td><div align='center'>LED灯的位置</div></td>
+</tr>
+</tbody>
+</table>
+<p>上图中LED灯为D9和D10(红色中间和蓝色上面)，如果我们想通过CPU控制其亮灭，那么就要找到对应的GPIO编号，通过调整其电压高低，从而控制亮灭，默认情况下GPIO应该是Input模式，应该相当于一个通路，想要产生电势差就需要改为Output模型：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c">EALLOW<span class="token punctuation">;</span>  <span class="token comment">// 修改寄存器的固定流程，关闭写保护</span>
+GpioCtrlRegs<span class="token punctuation">.</span>GPBDIR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO34 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// GPBDIR表示GPIO中B组的Direction Register，将其打开相当于进入Output模式，进入Output模型默认就输出了低电平(因为debug灯亮了)</span>
+GpioDataRegs<span class="token punctuation">.</span>GPBSET<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO34 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// high voltage (light off)</span>
+GpioDataRegs<span class="token punctuation">.</span>GPBCLEAR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO34 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// low voltage (light on)</span>
+GpioDataRegs<span class="token punctuation">.</span>GPBTOGGLE<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO34 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// high/low voltage (off/on)</span>
+EDIS<span class="token punctuation">;</span>  <span class="token comment">// 打开写保护</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>控制GPIO电平高低方法是通过修改寄存器<code>GPBSET, GPBCLEAR, GPBTOGGLE</code>这三个均为<code>1bit</code>变量(从属于<code>GpioCtrlRegs</code>)，含义分别为启动高电平、启动低电平、切换当前电平，因此如果我们想要灯光闪烁那么就只需要将<code>GPBTOGGLE</code>设置为<code>1</code>即可，因此我们只需要把中断触发函数（上文中step3中的<code>func</code>）写成如下形式即可：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c">__interrupt <span class="token keyword">void</span> <span class="token function">cpu_timer0_isr</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 有趣的是，这里面的寄存器修改就不需要加EALLOW和EDIS了</span>
+    CpuTimer0<span class="token punctuation">.</span>InterruptCount<span class="token operator">++</span><span class="token punctuation">;</span>  <span class="token comment">// 可有可无的计数器</span>
+    GpioDataRegs<span class="token punctuation">.</span>GPBTOGGLE<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO34 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 切换电平</span>
+    PieCtrlRegs<span class="token punctuation">.</span>PIEACK<span class="token punctuation">.</span>all <span class="token operator">=</span> PIEACK_GROUP1<span class="token punctuation">;</span>  <span class="token comment">// 为了接受更多的中断信号，需要将当前信号进行确认，由于TINT0从属于GROUP1，因此我们需对GROUP1进行确认(这里用或操作应该好些)</span>
+    PieCtrlRegs<span class="token punctuation">.</span>PIEACK<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>ACK1 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 与上行结果相同</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>上述代码中，我们还需要确认<code>TINT0</code>从属的组别，进入到<code>F2806x_PieVect.h</code>下，找到<code>TINT0</code>，不难发现其在Group1第7个，因此上文信号确认中对Group1进行确认。</p>
+<p>最后将全部的中断检测重新打开，并进入死循环：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c">IER <span class="token operator">|=</span> M_INT1<span class="token punctuation">;</span>  <span class="token comment">// 这是在CPU中配置相应的中断处理，由于启用的中断属于PIE Group1因此我们需要将CPU中INT1中断启用</span>
+PieCtrlRegs<span class="token punctuation">.</span>PIEIER1<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>INTx7 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// 由于CPU-Timer 0属于外设，所以需要对其进行中断控制启动，上文找到了其所在的位置是Group1第7个</span>
+EINT<span class="token punctuation">;</span>   <span class="token comment">// 启动全局中断</span>
+ERTM<span class="token punctuation">;</span>   <span class="token comment">// 启动实时中断，允许DEBUG代码</span>
+<span class="token keyword">for</span><span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 进入死循环，通过CPU的100ms触发一次中断处理函数，实现闪灯</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="代码简化"><a class="markdownIt-Anchor" href="#代码简化"></a> 代码简化</h4>
+<p>综上我们可以将跑马灯代码简化如下，效果如下图所示：</p>
+<div align='center'>
+<img src='/figures/robotics/F28069M/1725081830776-13.gif' width='33%'>
+</div>
+<p>创建新项目后，有一个空白的<code>main.c</code>文件把下面代码拷贝进去，然后还需要把相关的<code>.c</code>文件（直接从<code>Example_2806xCpuTimer</code>里面拷贝）和头文件加载进来，头文件加载方式<code>右键项目名-&gt;Properties-&gt;Build-&gt;C2000 Compiler-&gt;Include Options-&gt;Add dir to #include右边的加号-&gt;Browse-&gt;将``上文中提到的头文件``都加载一遍一共4个</code>）:</p>
+<blockquote>
+<p>下面代码只要按照<a target="_blank" rel="noopener" href="https://ecnhf41t16x1.feishu.cn/docx/WaMxdUNYNoOZ3pxv6AJc0t1jnwc#share-OUJSdYlvEoNmQoxIfAocdK0XnPc">Flash与RAM烧录方法</a>中将cmd文件替换为<code>F28069.cmd</code>就可以直接烧录到Flash中了, 在断电后也可以继续执行跑马灯代码.</p>
+</blockquote>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;DSP28x_Project.h></span></span>
+
+interrupt <span class="token keyword">void</span> <span class="token function">led_flash</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// don't forget interrupt keywork</span>
+    <span class="token comment">// Use toggle to change GPIO output level</span>
+    GpioDataRegs<span class="token punctuation">.</span>GPBTOGGLE<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO34 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    GpioDataRegs<span class="token punctuation">.</span>GPBTOGGLE<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO39 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token comment">// reference p178, TINT0 belongs to INT1.7 (group 1, no.7)</span>
+    PieCtrlRegs<span class="token punctuation">.</span>PIEACK<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>ACK1 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">/* Initialization */</span>
+    <span class="token function">InitSysCtrl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    DINT<span class="token punctuation">;</span>
+    IER <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    IFR <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token function">InitPieCtrl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">InitPieVectTable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/* Vector Configure */</span>
+    EALLOW<span class="token punctuation">;</span>
+    PieVectTable<span class="token punctuation">.</span>TINT0 <span class="token operator">=</span> <span class="token operator">&amp;</span>led_flash<span class="token punctuation">;</span>
+    EDIS<span class="token punctuation">;</span>
+
+    <span class="token comment">/* Configure Peripheral */</span>
+    <span class="token function">InitCpuTimers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// CPU freq = 90hz, Period = 1e5us = 0.1s</span>
+    <span class="token function">ConfigCpuTimer</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>CpuTimer0<span class="token punctuation">,</span> <span class="token number">90</span><span class="token punctuation">,</span> <span class="token number">1e5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">/* Start CPU interrupter */</span>
+    <span class="token comment">// Reference p106, Table 1-52 TIMERXTCR Descriptions</span>
+    CpuTimer0Regs<span class="token punctuation">.</span>TCR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TSS <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// stop status</span>
+    CpuTimer0Regs<span class="token punctuation">.</span>TCR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TIE <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// interrupt enable</span>
+
+    <span class="token comment">/* Initialize LED */</span>
+    EALLOW<span class="token punctuation">;</span>
+    GpioCtrlRegs<span class="token punctuation">.</span>GPBDIR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO34 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// output mode</span>
+    GpioCtrlRegs<span class="token punctuation">.</span>GPBDIR<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO39 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// output mode</span>
+    GpioDataRegs<span class="token punctuation">.</span>GPBSET<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>GPIO39 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>  <span class="token comment">// high level</span>
+    EDIS<span class="token punctuation">;</span>
+
+    <span class="token comment">/* Start Global Interrupt */</span>
+    IER <span class="token operator">|=</span> M_INT1<span class="token punctuation">;</span>  <span class="token comment">// TINT0 belongs to INT1.7</span>
+    PieCtrlRegs<span class="token punctuation">.</span>PIEIER1<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>INTx7 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    EINT<span class="token punctuation">;</span>  <span class="token comment">// enable global interrupt</span>
+    ERTM<span class="token punctuation">;</span>  <span class="token comment">// enable interrupt debug</span>
+
+    <span class="token comment">/* LOOP forever */</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="epwm-timer-from-flash"><a class="markdownIt-Anchor" href="#epwm-timer-from-flash"></a> ePWM Timer from Flash</h3>
+<p>样例位于<code>&lt;base&gt;\examples\c28\flash_f28069</code>, 这是一个将代码烧录到Flash中的程序，其还使用了ePWN(enhanced pulse width modulator 增强脉宽调制).</p>
+<p>使用方法: 这个程序给出了通过ePWM的计时器产生中断的方法, 但是这个产生的频率非常高, 我们只能通过三个计数器的数值大小来看相对的关系. 使用debug模型运行代码, 启动代码后过一会, 按暂停按钮, 在变量列表中查看<code>EPwm1TimerIntCount</code>,<code>EPwm2TimerIntCount</code>,<code>EPwm3TimerIntCount</code>的数值大小, 可以看到它们是3:2:1的关系, 主要是学习了将程序烧到Flash中的方法.</p>
+<h4 id="初始化-2"><a class="markdownIt-Anchor" href="#初始化-2"></a> 初始化</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">InitSysCtrl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 系统初始化</span>
+DINT<span class="token punctuation">;</span>  <span class="token comment">// 停止CPU中断处理</span>
+InitPieCtrl<span class="token punctuation">;</span>  <span class="token comment">// 初始化PIE(peripheral interrupt expansion)控制</span>
+IEF <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 清空CPU中断</span>
+IFR <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token function">InitPieVectTable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 初始化PIE中断服务表</span>
+EALLOW<span class="token punctuation">;</span>  <span class="token comment">// 关闭写保护</span>
+PieVectTable<span class="token punctuation">.</span>EPWM1_INT <span class="token operator">=</span> <span class="token operator">&amp;</span>func  <span class="token comment">// 设置ePWM脉宽调制1的中断服务</span>
+EDIS<span class="token punctuation">;</span>  <span class="token comment">// 启动写保护</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="epwm计数器以及中断产生的初始化"><a class="markdownIt-Anchor" href="#epwm计数器以及中断产生的初始化"></a> ePWM计数器以及中断产生的初始化</h4>
+<p>他将初始化函数定义为<code>InitEPwmTimer</code>，对ePWM的初始化非常复杂，我们以一个ePWM初始化为例，主要工作就是初始化与外围模块的时钟信息，即TB(time base) 时钟的各种参数：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c">EALLOW<span class="token punctuation">;</span>
+SysCtrlRegs<span class="token punctuation">.</span>PCLKCR0<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>TBCLKSYNC <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 停止所有TB时钟, PCLKCR (peripheral clock control), TBCLKSYNC (time base clock sync)</span>
+EDIS<span class="token punctuation">;</span>
+<span class="token comment">// 这里没用到输出的A,B波, 所以也没必要加下面这句话</span>
+<span class="token function">InitEPwm1Gpio</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 调用F2806x_EPwm.c文件中的初始化函数，每个EPWM由A和B两个输出端口组成，我们需要通过GPIO来输出ePWM信号，因此首先要将将GPIO的上拉电阻关闭，GpioCtrlRegs.GPAPUD.bit.GPIO0 = 1，然后在将GPIO的端口复用MUX(multiplexing)设置为EPWM1A即可</span>
+<span class="token comment">// ePWM同步设置如下</span>
+EPwm1Regs<span class="token punctuation">.</span>TBCTL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>SYNCOSEL <span class="token operator">=</span> TB_SYNC_IN<span class="token punctuation">;</span>  <span class="token comment">// 配置TB控制的同步输出SYNCOSEL(sync output select)选择为EPWM同步模式，保持不同的EPWM模块的同步性</span>
+<span class="token comment">// 这里不启用同步都可以 (注释掉下面这两句话)</span>
+EPwm1Regs<span class="token punctuation">.</span>TBCTL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>PHSEN <span class="token operator">=</span> TB_ENABLE<span class="token punctuation">;</span>  <span class="token comment">// 将ePWM的计数寄存器设置从相位寄存器PHSEN (phase register enable)中读取</span>
+EPwm1Regs<span class="token punctuation">.</span>TBPHS<span class="token punctuation">.</span>half<span class="token punctuation">.</span>TBPHS <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>  <span class="token comment">// TB Phase 时基相位寄存器, 这里全部改成0都可以</span>
+EPwm1Regs<span class="token punctuation">.</span>TBPRD <span class="token operator">=</span> PWM1_TIMER_TBPRD<span class="token punctuation">;</span>  <span class="token comment">// TB Period 时基周期寄存器，也确定了频率</span>
+EPwm1Regs<span class="token punctuation">.</span>TBCTL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>CTRMODE <span class="token operator">=</span> TB_COUNT_UP<span class="token punctuation">;</span>  <span class="token comment">//  Counter Mode 脉冲计数的模式，设置为向上增加计数器的方式</span>
+EPwm1Regs<span class="token punctuation">.</span>ETSEL<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>INTSEL <span class="token operator">=</span> ET_CTR_ZERO<span class="token punctuation">;</span>  <span class="token comment">// Event-Trigger Selection ePWM中断触发选项, 当计数器归0时候产生一次中断</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h1 id="cc源码理解"><a class="markdownIt-Anchor" href="#cc源码理解"></a> C/C++源码理解</h1>
+<blockquote>
+<p>简单看了下头文件的写法，记录一些有意思的东西</p>
+</blockquote>
+<h2 id="宏定义"><a class="markdownIt-Anchor" href="#宏定义"></a> 宏定义</h2>
+<p>在头文件 <code>*.h</code> 中主要就是进行各种内存、变量的位置定义，常见的一种写法</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">// 例如当前头文件名为 filename.h，通过下述方法能够避免在两次调用该头文件时出现重复定义</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifndef</span> <span class="token expression">FILENAME_H  </span><span class="token comment">// if not define，和当前文件名相同（易于判断）</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">FILENAME_H</span>  <span class="token comment">// 对 FILENAME_H 进行一次宏的存在定义，不包含具体值</span></span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>  <span class="token comment">// 进行各种有含义的宏定义</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span>  <span class="token comment">// 用于结束 #ifndef</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="union数据结构"><a class="markdownIt-Anchor" href="#union数据结构"></a> Union数据结构</h2>
+<p>在<code>F2806x_Cputimers.h, F2806x_Gpio.h</code>可以看到一种通过<code>struct</code>和<code>union</code>结合的方式，这种<code>union</code>数据类型通常包含两个共享内存的变量<code>all, bit</code>它们分别表示整个分配的内存和对内存的划分，通过<code>:位数</code>来对内存按位进行划分的方法，其使用方法如下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdint.h></span></span>
+
+<span class="token keyword">struct</span> <span class="token class-name">Bit</span> <span class="token punctuation">&#123;</span>  <span class="token comment">// 总共使用了36位，除以16向上取整为3，因此其分配的内存大小为3*2=6 Bytes</span>
+  <span class="token class-name">uint16_t</span> a<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span>
+  <span class="token class-name">uint16_t</span> b<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span>
+  <span class="token class-name">uint16_t</span> c<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span>
+  <span class="token class-name">uint16_t</span> d<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span>
+  <span class="token class-name">uint16_t</span> e<span class="token operator">:</span><span class="token number">4</span><span class="token punctuation">;</span>
+  <span class="token class-name">uint16_t</span> f<span class="token operator">:</span><span class="token number">16</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">union</span> Foo <span class="token punctuation">&#123;</span>  <span class="token comment">// union中的变量全部共享一块内存，分配的内存为其中所有变量所需的最大内存</span>
+  <span class="token class-name">uint16_t</span> all<span class="token punctuation">;</span>  <span class="token comment">// 分配前16位，从低到高分别对应a,b,c,d</span>
+  <span class="token keyword">struct</span> <span class="token class-name">Bit</span> bit<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">union</span> Foo foo<span class="token punctuation">;</span>
+  foo<span class="token punctuation">.</span>all <span class="token operator">=</span> <span class="token number">0x142A</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"size of Bit %zu bytes\n"</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">Bit</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 6 Bytes</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"size of Foo %zu bytes\n"</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">union</span> Foo<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 6 Bytes</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%u %u %u %u %u\n"</span><span class="token punctuation">,</span> foo<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>a<span class="token punctuation">,</span> foo<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>b<span class="token punctuation">,</span> foo<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>c<span class="token punctuation">,</span> foo<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>d<span class="token punctuation">,</span> foo<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  foo<span class="token punctuation">.</span>bit<span class="token punctuation">.</span>d <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%hX\n"</span><span class="token punctuation">,</span> foo<span class="token punctuation">.</span>all<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Robotics/" class="category-chain-item">Robotics</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>F28069M开发板笔记</div>
+      <div>https://wty-yy.github.io/posts/10130/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年8月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/33143/" title="2024开悟智能体比赛（海选赛）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">2024开悟智能体比赛（海选赛）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/13703/" title="2024开悟智能体比赛（学习期）">
+                        <span class="hidden-mobile">2024开悟智能体比赛（学习期）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
