@@ -1,0 +1,1236 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="As accelerated Numpy 首先Jax有类似 numpy 的函数库，API使用基本一致： import jax.numpy as jnp x &#x3D; jnp.aranga(int(1e8)) %timeit jnp.dot(x, x)  # 比 np.dot() 要快, gpu上更快  First Transformation grad 和数学中求导一致，Jax可以自动对Python中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jax+Flax+Optax 学习笔记">
+<meta property="og:url" content="https://wty-yy.github.io/posts/8349/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="As accelerated Numpy 首先Jax有类似 numpy 的函数库，API使用基本一致： import jax.numpy as jnp x &#x3D; jnp.aranga(int(1e8)) %timeit jnp.dot(x, x)  # 比 np.dot() 要快, gpu上更快  First Transformation grad 和数学中求导一致，Jax可以自动对Python中">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-21T15:38:24.000Z">
+<meta property="article:modified_time" content="2024-12-29T05:55:54.497Z">
+<meta property="article:author" content="wty">
+<meta property="article:tag" content="Jax">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Jax+Flax+Optax 学习笔记 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Jax+Flax+Optax 学习笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-21 23:38" pubdate>
+          2023年8月21日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          38 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Jax+Flax+Optax 学习笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="as-accelerated-numpy"><a class="markdownIt-Anchor" href="#as-accelerated-numpy"></a> As accelerated Numpy</h2>
+<p>首先Jax有类似 <code>numpy</code> 的函数库，API使用基本一致：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> jax<span class="token punctuation">.</span>numpy <span class="token keyword">as</span> jnp
+x <span class="token operator">=</span> jnp<span class="token punctuation">.</span>aranga<span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">1e8</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token operator">%</span>timeit jnp<span class="token punctuation">.</span>dot<span class="token punctuation">(</span>x<span class="token punctuation">,</span> x<span class="token punctuation">)</span>  <span class="token comment"># 比 np.dot() 要快, gpu上更快</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="first-transformation-grad"><a class="markdownIt-Anchor" href="#first-transformation-grad"></a> First Transformation <code>grad</code></h3>
+<p>和数学中求导一致，Jax可以自动对Python中的<strong>标量</strong>纯函数进行求导计算，默认对函数传入中的第一个变量求导，还可以指定求导对象<code>jax.grad(func, argnums=(0,1,...))</code>：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">mse</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> jnp<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">(</span>x<span class="token operator">-</span>y<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> jnp<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>  <span class="token comment"># [0, 1, 2, 3, 4]</span>
+y <span class="token operator">=</span> x <span class="token operator">+</span> jnp<span class="token punctuation">.</span>full<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">)</span>  <span class="token comment"># x + 0.1</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>jax<span class="token punctuation">.</span>grad<span class="token punctuation">(</span>mse<span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>  <span class="token comment"># 对x求导得到2*(x-y)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>jax<span class="token punctuation">.</span>grad<span class="token punctuation">(</span>mse<span class="token punctuation">,</span> argnums<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 分别对x, y进行求导得到2-tuple</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>求导函数要求输出为标量（scalar）不能是向量，也就是只能对以下可微函数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span> 求导：</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mo>:</mo><msup><mi mathvariant="double-struck">R</mi><mi>n</mi></msup><mo>→</mo><mi mathvariant="double-struck">R</mi><mo separator="true">,</mo><mspace width="1em"/><mo stretchy="false">(</mo><mi mathvariant="normal">∇</mi><mi>f</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>x</mi><msub><mo stretchy="false">)</mo><mi>i</mi></msub><mo>=</mo><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>f</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>x</mi><mi>i</mi></msub></mrow></mfrac><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mspace width="1em"/><mo stretchy="false">(</mo><mi>i</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mo>⋯</mo><mtext> </mtext><mo separator="true">,</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f:\mathbb{R}^n\to \mathbb{R},\quad (\nabla f)(x)_i = \frac{\partial{f}}{\partial{x_i}}(x), \quad (i=1,2,\cdots,n)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.7143919999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathbb">R</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">(</span><span class="mord">∇</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mclose">)</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.20744em;vertical-align:-0.8360000000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714399999999998em;"><span style="top:-2.3139999999999996em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord" style="margin-right:0.05556em;">∂</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8360000000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></span></p>
+<p>不能是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo>:</mo><msup><mi mathvariant="double-struck">R</mi><mi>n</mi></msup><mo>→</mo><msup><mi mathvariant="double-struck">R</mi><mi>m</mi></msup></mrow><annotation encoding="application/x-tex">f:\mathbb{R}^n\to \mathbb{R}^m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68889em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68889em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span></span></span></span></span></span></span></span>，这样的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∇</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">\nabla f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">∇</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span> 是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">m\times n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">m</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span> 的Jacobii矩阵。</p>
+<p>所以对于机器学习中的损失函数，我们只用想下面这样写就行：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">loss_fn</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+grads <span class="token operator">=</span> jax<span class="token punctuation">.</span>grad<span class="token punctuation">(</span>loss_fn<span class="token punctuation">)</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> data_batch<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>这里直接调用 <code>jax.grad(...)</code> 不会重复编译函数，如果之前编译过相同输入的函数则直接从缓存中读取。</p>
+<h4 id="一个例子"><a class="markdownIt-Anchor" href="#一个例子"></a> 一个例子</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">loss_fn</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  output <span class="token operator">=</span> jnp<span class="token punctuation">.</span>matmul<span class="token punctuation">(</span>X<span class="token punctuation">,</span> params<span class="token punctuation">[</span><span class="token string">'w'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">+</span> params<span class="token punctuation">[</span><span class="token string">'b'</span><span class="token punctuation">]</span>
+  <span class="token keyword">return</span> jnp<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">(</span>output <span class="token operator">-</span> y<span class="token punctuation">)</span> <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span>
+key <span class="token operator">=</span> jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>key<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+X <span class="token operator">=</span> jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>normal<span class="token punctuation">(</span>key<span class="token punctuation">,</span> shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">,</span> <span class="token number">764</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> jnp<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+params <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">'w'</span><span class="token punctuation">:</span> jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>normal<span class="token punctuation">(</span>key<span class="token punctuation">,</span> shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">764</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">:</span> jnp<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"loss:"</span><span class="token punctuation">,</span> loss_fn<span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"loss_dw_db:"</span><span class="token punctuation">,</span> jax<span class="token punctuation">.</span>grad<span class="token punctuation">(</span>loss_fn<span class="token punctuation">)</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="带额外参数的-grad-求导"><a class="markdownIt-Anchor" href="#带额外参数的-grad-求导"></a> 带额外参数的 <code>grad</code> 求导</h4>
+<p>上述的求导要求只能有一个标量输出，如果我们期望在求解过程中将过程量（例如，loss值）返回出来，那么可以使用参数 <code>has_aux</code>，使用方法如下：</p>
+<ul>
+<li><code>jax.grad(func, has_aux=True)</code>：要求输出为2-tuples，其中第一个为函数的输出（标量），第二个可以是函数计算中的过程量（Auxiliary data, 任意类型，例如，字典）</li>
+</ul>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">mse_aux</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">return</span> mse<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token string">'add'</span><span class="token punctuation">:</span> x<span class="token operator">+</span>y<span class="token punctuation">,</span> <span class="token string">'del'</span><span class="token punctuation">:</span> x<span class="token operator">-</span>y<span class="token punctuation">&#125;</span>
+x <span class="token operator">=</span> jnp<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token number">5.</span><span class="token punctuation">)</span>                 <span class="token comment"># [0. 1. 2. 3. 4.]</span>
+y <span class="token operator">=</span> x <span class="token operator">+</span> jnp<span class="token punctuation">.</span>ones<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">0.1</span>  <span class="token comment"># [0.1 1.1 2.1 3.1 4.1]</span>
+jax<span class="token punctuation">.</span>grad<span class="token punctuation">(</span>mse_aux<span class="token punctuation">,</span> has_aux<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span>  <span class="token comment"># (grad, aux: &#123;...&#125;)  2-tuple</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="与numpy的区别"><a class="markdownIt-Anchor" href="#与numpy的区别"></a> 与Numpy的区别</h4>
+<p>Jax特点就是函数式编程（Functional programming），也就是不要在函数中使用带有<strong>副作用 (side-effect)<strong>的代码，即</strong>与当前函数输出无关的任何代码</strong>。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">x <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">in_place_modify</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  x<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">123</span>  <span class="token comment"># side-effect</span>
+  <span class="token keyword">return</span> <span class="token boolean">None</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>在Jax对数组进行修改的方法是 <code>x.at[0].set(new_value)</code> 但这样会生成一个新的数组，原先的并不会进行修改：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">jax_in_place_modify</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">return</span> x<span class="token punctuation">.</span>at<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">)</span>
+
+y <span class="token operator">=</span> jnp<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>jax_in_place_modify<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># [123   2   3]</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span>                       <span class="token comment"># [1 2 3]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>由于Jax先编译后运行的特点，如果一个函数中的旧数组被修改后，没有再被使用到，则编译器就会进行原地修改，而非创建一个新的数组，验证如下，使用colab的免费GPU显存大小有11Gb，于是我创建了三个数组，大小合起来正好11Gb（如果前面两次修改创建了新的数组，则会导致显存溢出）：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> jax
+<span class="token keyword">import</span> jax<span class="token punctuation">.</span>numpy <span class="token keyword">as</span> jnp
+n <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">984263338</span><span class="token punctuation">)</span>  <span class="token comment"># 984263338 × 4 ÷ 1024^3 × 3 = 10.99 Gb</span>
+key <span class="token operator">=</span> jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>key<span class="token punctuation">(</span>seed<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">memory_func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  a <span class="token operator">=</span> jnp<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  b <span class="token operator">=</span> a<span class="token punctuation">.</span>at<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span>jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>normal<span class="token punctuation">(</span>key<span class="token punctuation">,</span> shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># inplace</span>
+  c <span class="token operator">=</span> a<span class="token punctuation">.</span>at<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># inplace</span>
+  d <span class="token operator">=</span> jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>normal<span class="token punctuation">(</span>key<span class="token punctuation">,</span> shape<span class="token operator">=</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> jnp<span class="token punctuation">.</span>dot<span class="token punctuation">(</span>c<span class="token punctuation">,</span> d<span class="token punctuation">)</span>  <span class="token comment"># OK, use 11GiB</span>
+  <span class="token comment"># return jnp.dot(jnp.dot(c, d), b)  # wrong, need 12.83GiB</span>
+jit_func <span class="token operator">=</span> jax<span class="token punctuation">.</span>jit<span class="token punctuation">(</span>memory_func<span class="token punctuation">)</span>
+<span class="token keyword">import</span> timeit
+<span class="token operator">%</span>timeit <span class="token operator">-</span>r <span class="token number">1</span> <span class="token operator">-</span>n <span class="token number">1</span> jit_func<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 163 ms</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="线性回归"><a class="markdownIt-Anchor" href="#线性回归"></a> 线性回归</h4>
+<p>尝试用Jax实现简单的线性回归，设数据集大小为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>1</mn><msup><mn>0</mn><mn>6</mn></msup></mrow><annotation encoding="application/x-tex">N=10^6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span>。</p>
+<ol>
+<li>构建数据：</li>
+</ol>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>y</mi><mo>=</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi><mo>+</mo><mi>ε</mi><mo separator="true">,</mo><mspace width="1em"/><mi>ε</mi><mo>∼</mo><mi mathvariant="script">N</mi><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">y = wx + b + \varepsilon,\quad \varepsilon \sim \mathcal{N}(0,1)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">ε</span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">ε</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∼</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.14736em;">N</span></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span></p>
+<ol start="2">
+<li>定义模型和损失函数：</li>
+</ol>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">;</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo>:</mo><mi>w</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">)</mo><mo>=</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi><mspace linebreak="newline"></mspace><mi mathvariant="script">L</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo separator="true">;</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="normal">∣</mi><mi>y</mi><mo>−</mo><mover accent="true"><mi>y</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">;</mo><mi>θ</mi><mo stretchy="false">)</mo><msup><mi mathvariant="normal">∣</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\hat{y}(x;\theta) = \hat{y}(x:w,b) = wx+b\\
+\mathcal{L}(x, y;\theta) = |y - \hat{y}(x;\theta)|^2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">b</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathcal">L</span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.19444em;"><span class="mord">^</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mord"><span class="mord">∣</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<ol start="3">
+<li>更新参数：</li>
+</ol>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>θ</mi><mo>←</mo><mi>θ</mi><mo>−</mo><mi>α</mi><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi mathvariant="script">L</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\theta\gets \theta - \alpha \nabla_\theta \mathcal{L}(\theta)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">←</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mord"><span class="mord">∇</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathcal">L</span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span></span></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token operator">%</span><span class="token operator">%</span>timeit <span class="token operator">-</span>r <span class="token number">5</span> <span class="token operator">-</span>n <span class="token number">1</span>  <span class="token comment"># 测试5次计算平均用时</span>
+<span class="token keyword">import</span> jax
+<span class="token keyword">import</span> jax<span class="token punctuation">.</span>numpy <span class="token keyword">as</span> jnp
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+N <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">1e6</span><span class="token punctuation">)</span>
+key <span class="token operator">=</span> jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>key<span class="token punctuation">(</span>seed<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 数据生成</span>
+X <span class="token operator">=</span> jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>uniform<span class="token punctuation">(</span>key<span class="token punctuation">,</span> shape<span class="token operator">=</span><span class="token punctuation">(</span>N<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> <span class="token number">4</span> <span class="token operator">*</span> X <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">+</span> jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>normal<span class="token punctuation">(</span>key<span class="token punctuation">,</span> shape<span class="token operator">=</span><span class="token punctuation">(</span>N<span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+theta <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">'w'</span><span class="token punctuation">:</span> jnp<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token number">1.</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">:</span> jnp<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span>  <span class="token comment"># 初始化参数</span>
+lr <span class="token operator">=</span> <span class="token number">0.01</span>
+
+<span class="token keyword">def</span> <span class="token function">model</span><span class="token punctuation">(</span>theta<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">return</span> X <span class="token operator">*</span> theta<span class="token punctuation">[</span><span class="token string">'w'</span><span class="token punctuation">]</span> <span class="token operator">+</span> theta<span class="token punctuation">[</span><span class="token string">'b'</span><span class="token punctuation">]</span>
+
+<span class="token keyword">def</span> <span class="token function">loss_fn</span><span class="token punctuation">(</span>theta<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">return</span> jnp<span class="token punctuation">.</span>mean<span class="token punctuation">(</span><span class="token punctuation">(</span>model<span class="token punctuation">(</span>theta<span class="token punctuation">)</span> <span class="token operator">-</span> y<span class="token punctuation">)</span> <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">update</span><span class="token punctuation">(</span>theta<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  grads <span class="token operator">=</span> jax<span class="token punctuation">.</span>grad<span class="token punctuation">(</span>loss_fn<span class="token punctuation">)</span><span class="token punctuation">(</span>theta<span class="token punctuation">)</span>
+  <span class="token keyword">for</span> key <span class="token keyword">in</span> theta<span class="token punctuation">.</span>keys<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    theta<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> theta<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">-</span> lr <span class="token operator">*</span> grads<span class="token punctuation">[</span>key<span class="token punctuation">]</span>
+  <span class="token keyword">return</span> theta
+
+<span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token comment"># theta = update(theta)  # 9.95 s, with out jax.jit, too slow!</span>
+  theta <span class="token operator">=</span> jax<span class="token punctuation">.</span>jit<span class="token punctuation">(</span>update<span class="token punctuation">)</span><span class="token punctuation">(</span>theta<span class="token punctuation">)</span>  <span class="token comment"># 468 ms</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="jit"><a class="markdownIt-Anchor" href="#jit"></a> JIT</h2>
+<h4 id="jaxpr语法转化"><a class="markdownIt-Anchor" href="#jaxpr语法转化"></a> jaxpr语法转化</h4>
+<p>Jax的底层和TF是相同的，均使用XLA对数据进行并行计算加速，并且有类似 <code>@tf.function</code> 的图执行功能，在Jax中就是 <code>@jit</code> (just in time)，他将函数中不包含side-effect的部分先转化为 <code>jaxpr</code> 再用XLA编译，从而可以将编译后的函数部署在CPU、GPU或TPU上。</p>
+<blockquote>
+<p>注意：只有在一次调用函数时才会根据传入的参数进行转化。</p>
+</blockquote>
+<p>使用 <code>jax.make_jaxpr()</code> 先转化为显示 <code>jaxpr</code> 代码的函数，然后传入参数，查看转化后的 <code>jaxpr</code> 代码：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">log2_with_print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"printed x:"</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span>  <span class="token comment"># side-effect</span>
+  ln_x <span class="token operator">=</span> jnp<span class="token punctuation">.</span>log<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+  ln_2 <span class="token operator">=</span> jnp<span class="token punctuation">.</span>log<span class="token punctuation">(</span><span class="token number">2.0</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> ln_x <span class="token operator">/</span> ln_2
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>jax<span class="token punctuation">.</span>make_jaxpr<span class="token punctuation">(</span>log2_with_print<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">3.</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token triple-quoted-string string">"""
+printed x: Traced&lt;ShapedArray(float32[], weak_type=True)>with&lt;DynamicJaxprTrace(level=1/0)>
+&#123; lambda ; a:f32[]. let
+    b:f32[] = log a
+    c:f32[] = log 2.0
+    d:f32[] = div b c
+  in (d,) &#125;
+"""</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>输出 <code>jaxpr</code> 可以用于调试代码，函数中side-effect部分的代码虽然不会被编译到XLA中，但是在生成 <code>jaxpr</code> 过程中会执行其一次，所以可以认为所有的side-effect在编译函数的过程中只会被执行一次。</p>
+<p>Jax是通过对每个参数用 <code>tracer</code> 类进行包装（跟踪），然后重建生成 <code>jaxpr</code> 代码，所以上述输出中可以看到 <code>x</code> 被 <code>Traced</code> 类包装。</p>
+<blockquote>
+<p>这篇文章讲解了如何理解 <code>jaxpr</code>：<a target="_blank" rel="noopener" href="https://jax.readthedocs.io/en/latest/jaxpr.html">Understanding Jaxprs</a></p>
+</blockquote>
+<h4 id="jit无法使用的情况"><a class="markdownIt-Anchor" href="#jit无法使用的情况"></a> jit无法使用的情况</h4>
+<p>在函数中包含和输入的具体值相关而函数都是无法使用 <code>jit</code> 的，因为 <code>jaxpr</code> 的需要依赖于输入的具体值生成对应的代码，如果输入的具体值有限，则可以将其设为常量</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> functools <span class="token keyword">import</span> partial
+
+<span class="token decorator annotation punctuation">@partial</span><span class="token punctuation">(</span>jax<span class="token punctuation">.</span>jit<span class="token punctuation">,</span> static_argnames<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'normal'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 例如normal是传入的常量</span>
+<span class="token keyword">def</span> <span class="token function">f</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> normal<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">if</span> normal<span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>x <span class="token operator">-</span> jnp<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">/</span> jnp<span class="token punctuation">.</span>std<span class="token punctuation">(</span>x<span class="token punctuation">)</span>  <span class="token comment"># 默认只编译改行</span>
+  <span class="token keyword">return</span> x  <span class="token comment"># 只有将normal设置为常量，才能编译改行</span>
+f<span class="token punctuation">(</span>jnp<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">False</span><span class="token punctuation">)</span>
+<span class="token comment"># 如果没有static_argnames，那么上面代码就会报错，因为normal换了一个参数，需要重新编译</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>在 <code>jit</code> 中执行任何和输入值相关的条件 <code>if, while</code> 都会报错，只有将条件中的变量设置常量，或者在输入的时候能确定下来，然后就能编译出来，Jax 的默认输入是 <code>ShapedArray</code> 类型，也就是默认其是数组，所以和维度相关的信息是可以作为条件的：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@jax<span class="token punctuation">.</span>jit</span>
+<span class="token keyword">def</span> <span class="token function">func</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># .shape and .ndim is OK</span>
+  <span class="token keyword">return</span> <span class="token number">1</span> <span class="token keyword">if</span> x<span class="token punctuation">.</span>shape <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token keyword">else</span> <span class="token number">2</span> <span class="token keyword">if</span> x<span class="token punctuation">.</span>ndim <span class="token operator">==</span> <span class="token number">1</span> <span class="token keyword">else</span> x
+<span class="token keyword">print</span><span class="token punctuation">(</span>func<span class="token punctuation">(</span>jnp<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> func<span class="token punctuation">(</span>jnp<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> func<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 1 2 10</span>
+<span class="token comment"># 这样就会根据输入的不同，编译三次</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="pytree"><a class="markdownIt-Anchor" href="#pytree"></a> Pytree</h2>
+<p>Jax将Python中的字典或者递归式构造的数据结构统称为Pytree，每个字典中的 <code>key</code> 或者 <code>list</code> 中的一个索引对应树上的一个分支，例如：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">example_trees <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span><span class="token string">'biases'</span><span class="token punctuation">:</span> jnp<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token number">64</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'weights'</span><span class="token punctuation">,</span> jnp<span class="token punctuation">.</span>ones<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span><span class="token string">'biases'</span><span class="token punctuation">:</span> jnp<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'weights'</span><span class="token punctuation">,</span> jnp<span class="token punctuation">.</span>ones<span class="token punctuation">(</span><span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span><span class="token string">'biases'</span><span class="token punctuation">:</span> jnp<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'weights'</span><span class="token punctuation">,</span> jnp<span class="token punctuation">.</span>ones<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>就是一个包含6个叶子节点的树，jax中常用的树上操作有：</p>
+<ol>
+<li><code>jax.tree_map(func, pytree1, pytree2, ...)</code>：对 <code>pytree</code> 中每个叶子节点作用函数 <code>func</code>，并且可以对多颗结构相同的 <code>pytree</code> 的对应元素作用 <code>func</code> 函数，<code>func</code> 函数包含多个输入参数即可。</li>
+<li><code>jax.tree_util.tree_leavs(pytree)</code>：显示 <code>pytree</code> 的所有叶子节点。</li>
+</ol>
+<p><code>jax.tree_map</code> 常用于更新梯度：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">grads <span class="token operator">=</span> jax<span class="token punctuation">.</span>grad<span class="token punctuation">(</span>loss_fn<span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 求出梯度</span>
+params <span class="token operator">=</span> jax<span class="token punctuation">.</span>tree_map<span class="token punctuation">(</span><span class="token keyword">lambda</span> p<span class="token punctuation">,</span> g<span class="token punctuation">:</span> p <span class="token operator">-</span> learning_rate <span class="token operator">*</span> g<span class="token punctuation">,</span> params<span class="token punctuation">,</span> grads<span class="token punctuation">)</span>  <span class="token comment"># 梯度下降</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<h2 id="vectorization"><a class="markdownIt-Anchor" href="#vectorization"></a> Vectorization</h2>
+<p>在Jax如果要对Batch中每个样本执行某个函数，例如将样本的特征由类别标签转化为one-hot向量，直接执行 <code>for</code> 循环效率太低，Jax提供了一个效率很高且易于使用的构造函数 <code>jax.vmap</code> （Vector map）解决该问题，在 <code>jax.vmap</code> 外部套上 <code>jax.jit</code> 就可以并行执行向量化操作：</p>
+<p><code>jax.vmap(func, in_axes=0 | Sequence[int], out_axes=0)</code>：返回一个函数向量化执行函数，函数的输入按照 <code>in_axes</code> 给定的维度进行展开，第 <code>i</code> 个 <code>in_axes</code> 值对应的第 <code>i</code> 个入参的展开维度，如果对应展开维度为 <code>None</code>，则不进行展开，直接传入；<code>out_axes</code> 表示 <code>func</code> 函数的输出结果按照第 <code>out_axes</code> 维度进行堆叠，默认为 <code>0</code>。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">one_hot</span><span class="token punctuation">(</span>y<span class="token punctuation">,</span> deep<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 将单个样本的特征转化为one-hot向量</span>
+  ret <span class="token operator">=</span> jnp<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>deep<span class="token punctuation">,</span> dtype<span class="token operator">=</span><span class="token string">'float32'</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> ret<span class="token punctuation">.</span>at<span class="token punctuation">[</span>y<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+batch_one_hot <span class="token operator">=</span> jax<span class="token punctuation">.</span>jit<span class="token punctuation">(</span><span class="token keyword">lambda</span> y<span class="token punctuation">:</span> jax<span class="token punctuation">.</span>vmap<span class="token punctuation">(</span>one_hot<span class="token punctuation">,</span> in_axes<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">(</span>y<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># 这里in_axes=[0,None]表示第一个输入y按照第0个维度展开，第二个输入10不进行展开，直接传入到deep中</span>
+y_train<span class="token punctuation">,</span> y_test <span class="token operator">=</span> batch_one_hot<span class="token punctuation">(</span>y_train<span class="token punctuation">)</span><span class="token punctuation">,</span> batch_one_hot<span class="token punctuation">(</span>y_test<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="prngkeypseudo-random-number-generator-key"><a class="markdownIt-Anchor" href="#prngkeypseudo-random-number-generator-key"></a> PRNGKey(pseudo-random number generator key)</h2>
+<p>在Jax中所有的伪随机数（pseudo random number, PRN）都是基于key的二元组生成的，key的生成方法如下：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">key <span class="token operator">=</span> jax<span class="token punctuation">.</span>random<span class="token punctuation">.</span>PRNGKey<span class="token punctuation">(</span>seed<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span>  <span class="token comment"># 给定随机种子</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>所有使用随机数相关的函数均需要消耗一个key，所以为了保证实验的可重复性，每次消耗key前需要对其进行分解（至少分解成俩）我们保留其中一个，另一个用于生成随机数，使用过的key就不用再被使用了，下次再分解就去用新的key：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 注意以下这两种方法都可以保证随机结果固定的，但两种方法的数值是不一样的</span>
+key <span class="token operator">=</span> random<span class="token punctuation">.</span>PRNGKey<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span>
+key<span class="token punctuation">,</span> subkey <span class="token operator">=</span> random<span class="token punctuation">.</span>split<span class="token punctuation">(</span>key<span class="token punctuation">,</span> num<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> random<span class="token punctuation">.</span>normal<span class="token punctuation">(</span>subkey<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+key<span class="token punctuation">,</span> subkey <span class="token operator">=</span> random<span class="token punctuation">.</span>split<span class="token punctuation">(</span>key<span class="token punctuation">,</span> num<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> random<span class="token punctuation">.</span>normal<span class="token punctuation">(</span>subkey<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token triple-quoted-string string">"""
+x = Array([-0.55338794,  0.944283  , -0.74176395, -0.5769758 ,  1.1251862 ],
+y = Array([-0.32761317, -0.4066346 ,  1.2469071 ,  1.1900425 ,  1.100263  ],
+"""</span>
+key<span class="token punctuation">,</span> x_key<span class="token punctuation">,</span> y_key <span class="token operator">=</span> random<span class="token punctuation">.</span>split<span class="token punctuation">(</span>key<span class="token punctuation">,</span> num<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> random<span class="token punctuation">.</span>normal<span class="token punctuation">(</span>x_key<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> random<span class="token punctuation">.</span>normal<span class="token punctuation">(</span>y_key<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token triple-quoted-string string">"""
+x = Array([-1.8231415, -0.472541 ,  0.7561724, -1.598711 ,  1.1073328],
+y = Array([ 0.25185442,  0.8842529 ,  1.6303467 ,  0.01147595, -1.1791474 ],
+"""</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="mnist数据集训练"><a class="markdownIt-Anchor" href="#mnist数据集训练"></a> MNIST数据集训练</h2>
+<h3 id="jax-flax-optax"><a class="markdownIt-Anchor" href="#jax-flax-optax"></a> Jax + Flax + Optax</h3>
+<h4 id="模型搭建"><a class="markdownIt-Anchor" href="#模型搭建"></a> 模型搭建</h4>
+<p>Flax主要负责深度网络模型搭建，通过继承父类 <code>nn.Module</code> 实现，具体有两种搭建方式 <a target="_blank" rel="noopener" href="https://flax.readthedocs.io/en/latest/guides/setup_or_nncompact.html">官方解释 - setup vs compact</a>：</p>
+<ol>
+<li><code>@nn.compact</code>：类似TF2的函数式构建方法，只需重构 <code>__call__(self, inputs)</code>，其余只需通过调用函数（<code>nn.Dense</code>, <code>nn.relu</code>）即可，这些层都是 <code>nn.Module</code> 的子类</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> flax<span class="token punctuation">.</span>linen <span class="token keyword">as</span> nn
+<span class="token keyword">class</span> <span class="token class-name">Model</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+  <span class="token decorator annotation punctuation">@nn<span class="token punctuation">.</span>compact</span>
+  <span class="token keyword">def</span> <span class="token function">__call__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> inputs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    inputs <span class="token operator">=</span> inputs<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>inputs<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">255.</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense1'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>inputs<span class="token punctuation">)</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>relu<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense2'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>relu<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    outputs <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Output'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> outputs<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<ol start="2">
+<li><code>setup</code>：类似Pytorch的构建方法，需要重构 <code>setup(self)</code>，并在其中先初始化好模型中带参数的层，例如全链接层，然后在 <code>__call__(self, inputs)</code> 中建立层之间的计算关系</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Model_setup</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+  <span class="token keyword">def</span> <span class="token function">setup</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    self<span class="token punctuation">.</span>dense1 <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense1'</span><span class="token punctuation">)</span>
+    self<span class="token punctuation">.</span>dense2 <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense2'</span><span class="token punctuation">)</span>
+    self<span class="token punctuation">.</span>output <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Output'</span><span class="token punctuation">)</span>
+  
+  <span class="token keyword">def</span> <span class="token function">__call__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> inputs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    inputs <span class="token operator">=</span> inputs<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>inputs<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">255.</span>
+    x <span class="token operator">=</span> self<span class="token punctuation">.</span>dense1<span class="token punctuation">(</span>inputs<span class="token punctuation">)</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>relu<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    x <span class="token operator">=</span> self<span class="token punctuation">.</span>dense2<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>relu<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    outputs <span class="token operator">=</span> self<span class="token punctuation">.</span>output<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> outputs<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="模型初始化及结构显示"><a class="markdownIt-Anchor" href="#模型初始化及结构显示"></a> 模型初始化及结构显示</h4>
+<p>在搭建完模型之后通过给定初始化 <code>key</code> 完成参数构建，并且可以通过 <a target="_blank" rel="noopener" href="https://github.com/google/CommonLoopUtils">clu</a> 中 <code>clu.parameter_overview</code></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">model <span class="token operator">=</span> Model<span class="token punctuation">(</span><span class="token punctuation">)</span>
+key<span class="token punctuation">,</span> m_key <span class="token operator">=</span> random<span class="token punctuation">.</span>split<span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+params <span class="token operator">=</span> model<span class="token punctuation">.</span>init<span class="token punctuation">(</span>m_key<span class="token punctuation">,</span> X_train<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 初始化模型参数</span>
+<span class="token keyword">from</span> clu<span class="token punctuation">.</span>parameter_overview <span class="token keyword">import</span> get_parameter_overview
+<span class="token keyword">print</span><span class="token punctuation">(</span>get_parameter_overview<span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token triple-quoted-string string">""" 效果如下
++----------------------+------------+---------+-----------+--------+
+| Name                 | Shape      | Size    | Mean      | Std    |
++----------------------+------------+---------+-----------+--------+
+| params/Dense1/bias   | (128,)     | 128     | 0.0       | 0.0    |
+| params/Dense1/kernel | (784, 128) | 100,352 | -3.18e-05 | 0.0357 |
+| params/Dense2/bias   | (128,)     | 128     | 0.0       | 0.0    |
+| params/Dense2/kernel | (128, 128) | 16,384  | -3.94e-06 | 0.0894 |
+| params/Output/bias   | (10,)      | 10      | 0.0       | 0.0    |
+| params/Output/kernel | (128, 10)  | 1,280   | -0.000669 | 0.0911 |
++----------------------+------------+---------+-----------+--------+
+Total: 118,282
+"""</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="优化器"><a class="markdownIt-Anchor" href="#优化器"></a> 优化器</h4>
+<p><code>optax</code> 包提供了很多<a target="_blank" rel="noopener" href="https://optax.readthedocs.io/en/latest/api.html">常用优化器</a>（当然基于 <code>jax</code> 这些优化器都可以自己实现，只需要记录下每个权重对应的动量一阶矩和二阶矩还有当前更新的次数，就可以计算 <code>Adam</code> 优化器的结果了），创建一个优化器及其直接更新梯度方法如下：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> optax
+tx <span class="token operator">=</span> optax<span class="token punctuation">.</span>adam<span class="token punctuation">(</span>learning_rate<span class="token operator">=</span><span class="token number">1e-3</span><span class="token punctuation">)</span>  <span class="token comment"># 创建优化器</span>
+opt_state <span class="token operator">=</span> tx<span class="token punctuation">.</span>init<span class="token punctuation">(</span>params<span class="token punctuation">)</span>  <span class="token comment"># 初始化优化器，这里无需随机种子，因为动量全部初始化为0</span>
+
+<span class="token decorator annotation punctuation">@jax<span class="token punctuation">.</span>jit</span>
+<span class="token keyword">def</span> <span class="token function">train_step</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> opt_state<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> idxs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  X<span class="token punctuation">,</span> y <span class="token operator">=</span> X<span class="token punctuation">[</span>idxs<span class="token punctuation">]</span><span class="token punctuation">,</span> y<span class="token punctuation">[</span>idxs<span class="token punctuation">]</span>
+  <span class="token keyword">def</span> <span class="token function">loss_fn</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    logits <span class="token operator">=</span> model<span class="token punctuation">.</span><span class="token builtin">apply</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> x<span class="token punctuation">)</span>
+    loss_val <span class="token operator">=</span> <span class="token operator">-</span>jnp<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span>y <span class="token operator">*</span> jax<span class="token punctuation">.</span>nn<span class="token punctuation">.</span>log_softmax<span class="token punctuation">(</span>logits<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 交叉熵</span>
+    <span class="token keyword">return</span> jnp<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>loss_val<span class="token punctuation">)</span>
+  loss_grad_fn <span class="token operator">=</span> jax<span class="token punctuation">.</span>value_and_grad<span class="token punctuation">(</span>loss_fn<span class="token punctuation">)</span>
+
+  loss_val<span class="token punctuation">,</span> grads <span class="token operator">=</span> loss_grad_fn<span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span>  <span class="token comment"># 计算梯度 grads</span>
+  updates<span class="token punctuation">,</span> opt_state <span class="token operator">=</span> tx<span class="token punctuation">.</span>update<span class="token punctuation">(</span>grads<span class="token punctuation">,</span> opt_state<span class="token punctuation">)</span>  <span class="token comment"># 通过 tx.update 求出用于梯度更新的updates</span>
+  params <span class="token operator">=</span> optax<span class="token punctuation">.</span>apply_updates<span class="token punctuation">(</span>params<span class="token punctuation">,</span> updates<span class="token punctuation">)</span>  <span class="token comment"># 等价于 jax.tree_map(lambda p, u: p+u, params, updates) 更新梯度</span>
+  <span class="token keyword">return</span> params<span class="token punctuation">,</span> opt_state<span class="token punctuation">,</span> loss_val<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>然而有胡 <code>tx.update()</code> 和 <code>optax.apply_updates()</code> 这两个操作是在给定 <code>grads</code> 和 <code>params</code> 后就可以直接更新，所以  <code>flax.training.train_state</code> 中类 <code>TrainState</code> 就是通过给定参数，直接一步更新梯度：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> flax<span class="token punctuation">.</span>training<span class="token punctuation">.</span>train_state <span class="token keyword">import</span> TrainState
+state <span class="token operator">=</span> TrainState<span class="token punctuation">.</span>create<span class="token punctuation">(</span>  <span class="token comment"># 通过 create 方法初始化训练状态</span>
+    apply_fn<span class="token operator">=</span>model<span class="token punctuation">.</span><span class="token builtin">apply</span><span class="token punctuation">,</span>  <span class="token comment"># 这个并不重要，也可以为None，只要能够计算出loss即可</span>
+    params<span class="token operator">=</span>model<span class="token punctuation">.</span>init<span class="token punctuation">(</span>m_key<span class="token punctuation">,</span> X_train<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 只需params和tx就可以一步求梯度了</span>
+    tx<span class="token operator">=</span>optax<span class="token punctuation">.</span>adam<span class="token punctuation">(</span>learning_rate<span class="token operator">=</span><span class="token number">1e-3</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>想要再将 <code>TrainState</code> 中加入其他参数，例如 <code>metrics</code> 那就有点复杂了，可以参考 <a target="_blank" rel="noopener" href="https://flax.readthedocs.io/en/latest/getting_started.html#create-a-trainstate">Flax - quick start</a>，其实 <code>metrics</code> 可以自行通过函数的输出结果自行计算，无需使用 <code>clu.metrics</code> 中的度量器进行更新（较为复杂）。</p>
+<p><code>TrainState</code> 这个类包含的参数有：</p>
+<ol>
+<li>step：模型更新次数。</li>
+<li><code>apply_fn</code>：一般存储模型的预测函数，例如 <code>model.apply(params, X)</code>，也可以不存储。</li>
+<li><code>params</code>：模型的权重，是一种 <code>pytree</code>。</li>
+<li><code>tx</code>：模型所用的优化器，是 <code>optax.GradientTransformation</code> 的子类。</li>
+<li><code>opt_state</code>：优化器的状态，再确定 <code>tx</code> 后会进行创建。</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">train_step</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">loss_fn</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 构建损失函数</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token keyword">return</span> loss
+   	grad_fn <span class="token operator">=</span> jax<span class="token punctuation">.</span>grad<span class="token punctuation">(</span>loss_fn<span class="token punctuation">)</span>  <span class="token comment"># 梯度函数</span>
+    grads <span class="token operator">=</span> grad_fn<span class="token punctuation">(</span>state<span class="token punctuation">.</span>params<span class="token punctuation">)</span>  <span class="token comment"># 计算梯度</span>
+    state <span class="token operator">=</span> state<span class="token punctuation">.</span>apply_gradient<span class="token punctuation">(</span>grads<span class="token operator">=</span>grads<span class="token punctuation">)</span>  <span class="token comment"># 更新状态，注意这里一定要写明 grads=...（这是python中函数传入参数是以*开头的要求，必须通过关键字传递参数，称之为"星号参数"或"解包参数"）</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>以 <code>Adam</code> 为例，可以通过 <code>opt_state[0].mu['params']</code> 查看一阶矩的参数，同理 <code>opt_state[0].nu['params']</code> 是二阶矩参数：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">jax<span class="token punctuation">.</span>tree_map<span class="token punctuation">(</span><span class="token keyword">lambda</span> x<span class="token punctuation">,</span> y<span class="token punctuation">:</span> <span class="token punctuation">(</span>x<span class="token punctuation">.</span>shape<span class="token punctuation">,</span> y<span class="token punctuation">.</span>shape<span class="token punctuation">)</span><span class="token punctuation">,</span> state<span class="token punctuation">.</span>opt_state<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>mu<span class="token punctuation">[</span><span class="token string">'params'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> state<span class="token punctuation">.</span>opt_state<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>nu<span class="token punctuation">[</span><span class="token string">'params'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token triple-quoted-string string">"""
+&#123;'Dense1': &#123;'bias': ((128,), (128,)), 'kernel': ((784, 128), (784, 128))&#125;,
+ 'Dense2': &#123;'bias': ((128,), (128,)), 'kernel': ((128, 128), (128, 128))&#125;,
+ 'Output': &#123;'bias': ((10,), (10,)), 'kernel': ((128, 10), (128, 10))&#125;&#125;
+"""</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="速度测试"><a class="markdownIt-Anchor" href="#速度测试"></a> 速度测试</h3>
+<p>这里比较了Jax和TF的训练速度（使用CPU计算，锐龙R7 4800U），每个epoch，Jax用时2~3s，TF用时5s。</p>
+<h4 id="jax"><a class="markdownIt-Anchor" href="#jax"></a> Jax</h4>
+<p>在MNIST数据集上进行训练的方法如下：</p>
+<ol>
+<li>首先通过 <code>(X_train, y_train), (X_test, y_test) = keras.datasets.mnist.load_data()</code> 获取数据集。</li>
+<li>利用 <code>jax.vmap</code> 将标签构建为 <code>one_hot</code> 向量。</li>
+<li>使用 <code>flax</code> 搭建自定义模型 <code>nn.Module</code>，并定义 <code>TrainState</code> 类用于纪录参数。</li>
+<li>定义 <code>train_step</code> 函数，每次将划分好的 <code>batch_idxs</code> 传入（数据集），并在其中定义损失函数 <code>loss_fn</code>，利用 <code>jax.value_and_grad()</code> 计算损失值及其导数，最后用 <code>state.apply_gradient(grads=grads)</code> 更新状态。</li>
+<li>实现主函数中的 <code>epoch</code> 循环和 <code>batch</code> 索引通过排列随机生成。</li>
+</ol>
+<p>这里我还额外加上了准确率计算函数 <code>accuracy(params, X, y)</code> 用于计算训练集和测试集上模型的准确率，完整代码：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+<span class="token keyword">from</span> tensorflow <span class="token keyword">import</span> keras
+<span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>X_test<span class="token punctuation">,</span> y_test<span class="token punctuation">)</span> <span class="token operator">=</span> keras<span class="token punctuation">.</span>datasets<span class="token punctuation">.</span>mnist<span class="token punctuation">.</span>load_data<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">import</span> jax
+<span class="token keyword">import</span> jax<span class="token punctuation">.</span>numpy <span class="token keyword">as</span> jnp
+<span class="token keyword">from</span> jax <span class="token keyword">import</span> random
+<span class="token keyword">import</span> optax
+<span class="token keyword">import</span> flax<span class="token punctuation">.</span>linen <span class="token keyword">as</span> nn
+<span class="token keyword">from</span> flax<span class="token punctuation">.</span>training<span class="token punctuation">.</span>train_state <span class="token keyword">import</span> TrainState
+<span class="token keyword">from</span> tqdm <span class="token keyword">import</span> tqdm
+
+<span class="token keyword">def</span> <span class="token function">one_hot</span><span class="token punctuation">(</span>y<span class="token punctuation">,</span> deep<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  ret <span class="token operator">=</span> jnp<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>deep<span class="token punctuation">,</span> dtype<span class="token operator">=</span><span class="token string">'float32'</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> ret<span class="token punctuation">.</span>at<span class="token punctuation">[</span>y<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+batch_one_hot <span class="token operator">=</span> jax<span class="token punctuation">.</span>jit<span class="token punctuation">(</span><span class="token keyword">lambda</span> y<span class="token punctuation">:</span> jax<span class="token punctuation">.</span>vmap<span class="token punctuation">(</span>one_hot<span class="token punctuation">,</span> in_axes<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">(</span>y<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+X_train<span class="token punctuation">,</span> X_test <span class="token operator">=</span> jnp<span class="token punctuation">.</span>array<span class="token punctuation">(</span>X_train<span class="token punctuation">)</span><span class="token punctuation">,</span> jnp<span class="token punctuation">.</span>array<span class="token punctuation">(</span>X_test<span class="token punctuation">)</span>
+y_train<span class="token punctuation">,</span> y_test <span class="token operator">=</span> batch_one_hot<span class="token punctuation">(</span>y_train<span class="token punctuation">)</span><span class="token punctuation">,</span> batch_one_hot<span class="token punctuation">(</span>y_test<span class="token punctuation">)</span>
+
+N <span class="token operator">=</span> X_train<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+epochs <span class="token operator">=</span> <span class="token number">3</span>
+batch_size <span class="token operator">=</span> <span class="token number">32</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Model</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+  <span class="token decorator annotation punctuation">@nn<span class="token punctuation">.</span>compact</span>
+  <span class="token keyword">def</span> <span class="token function">__call__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> inputs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    inputs <span class="token operator">=</span> inputs<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>inputs<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">255.</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense1'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>inputs<span class="token punctuation">)</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>relu<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense2'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    x <span class="token operator">=</span> nn<span class="token punctuation">.</span>relu<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    outputs <span class="token operator">=</span> nn<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Output'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> outputs
+
+model <span class="token operator">=</span> Model<span class="token punctuation">(</span><span class="token punctuation">)</span>
+key<span class="token punctuation">,</span> m_key <span class="token operator">=</span> random<span class="token punctuation">.</span>split<span class="token punctuation">(</span>random<span class="token punctuation">.</span>PRNGKey<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+
+state <span class="token operator">=</span> TrainState<span class="token punctuation">.</span>create<span class="token punctuation">(</span>
+    apply_fn<span class="token operator">=</span>model<span class="token punctuation">.</span><span class="token builtin">apply</span><span class="token punctuation">,</span>
+    params<span class="token operator">=</span>model<span class="token punctuation">.</span>init<span class="token punctuation">(</span>m_key<span class="token punctuation">,</span> X_train<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    tx<span class="token operator">=</span>optax<span class="token punctuation">.</span>adam<span class="token punctuation">(</span>learning_rate<span class="token operator">=</span><span class="token number">1e-3</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># not need opt_state</span>
+<span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@jax<span class="token punctuation">.</span>jit</span>
+<span class="token keyword">def</span> <span class="token function">train_step</span><span class="token punctuation">(</span>state<span class="token punctuation">,</span> idxs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+  <span class="token keyword">def</span> <span class="token function">loss_fn</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    logits <span class="token operator">=</span> state<span class="token punctuation">.</span>apply_fn<span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">)</span>
+    loss_val <span class="token operator">=</span> <span class="token operator">-</span>jnp<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span>y <span class="token operator">*</span> jax<span class="token punctuation">.</span>nn<span class="token punctuation">.</span>log_softmax<span class="token punctuation">(</span>logits<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">return</span> jnp<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>loss_val<span class="token punctuation">)</span>
+  
+  loss_grad_fn <span class="token operator">=</span> jax<span class="token punctuation">.</span>value_and_grad<span class="token punctuation">(</span>loss_fn<span class="token punctuation">)</span>
+  
+  X_batch<span class="token punctuation">,</span> y_batch <span class="token operator">=</span> X_train<span class="token punctuation">[</span>idxs<span class="token punctuation">]</span><span class="token punctuation">,</span> y_train<span class="token punctuation">[</span>idxs<span class="token punctuation">]</span>
+  loss_val<span class="token punctuation">,</span> grads <span class="token operator">=</span> loss_grad_fn<span class="token punctuation">(</span>state<span class="token punctuation">.</span>params<span class="token punctuation">,</span> X_batch<span class="token punctuation">,</span> y_batch<span class="token punctuation">)</span>
+  state <span class="token operator">=</span> state<span class="token punctuation">.</span>apply_gradients<span class="token punctuation">(</span>grads<span class="token operator">=</span>grads<span class="token punctuation">)</span>
+  
+  <span class="token keyword">return</span> state<span class="token punctuation">,</span> loss_val
+
+<span class="token decorator annotation punctuation">@jax<span class="token punctuation">.</span>jit</span>
+<span class="token keyword">def</span> <span class="token function">accuracy</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  logits <span class="token operator">=</span> model<span class="token punctuation">.</span><span class="token builtin">apply</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">)</span>
+  y_pred <span class="token operator">=</span> jnp<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>logits<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+  y_true <span class="token operator">=</span> jnp<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>y<span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> jnp<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>y_pred <span class="token operator">==</span> y_true<span class="token punctuation">)</span>
+show_acc <span class="token operator">=</span> <span class="token keyword">lambda</span> params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">:</span> <span class="token builtin">round</span><span class="token punctuation">(</span><span class="token builtin">float</span><span class="token punctuation">(</span>accuracy<span class="token punctuation">(</span>params<span class="token punctuation">,</span> X<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> epoch <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  key<span class="token punctuation">,</span> p_key <span class="token operator">=</span> random<span class="token punctuation">.</span>split<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+  idxs <span class="token operator">=</span> random<span class="token punctuation">.</span>permutation<span class="token punctuation">(</span>p_key<span class="token punctuation">,</span> N<span class="token punctuation">)</span>
+  loss_mean <span class="token operator">=</span> <span class="token number">0.</span>
+  <span class="token keyword">for</span> i <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> N<span class="token punctuation">,</span> batch_size<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    batch_idxs <span class="token operator">=</span> idxs<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span>batch_size<span class="token punctuation">]</span>
+    state<span class="token punctuation">,</span> loss_val <span class="token operator">=</span> train_step<span class="token punctuation">(</span>state<span class="token punctuation">,</span> batch_idxs<span class="token punctuation">)</span>
+    loss_mean <span class="token operator">+=</span> <span class="token punctuation">(</span>loss_val <span class="token operator">-</span> loss_mean<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Epoch </span><span class="token interpolation"><span class="token punctuation">&#123;</span>epoch<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">&#125;</span></span><span class="token string">/</span><span class="token interpolation"><span class="token punctuation">&#123;</span>epochs<span class="token punctuation">&#125;</span></span><span class="token string"> loss"</span></span><span class="token punctuation">,</span> loss_mean<span class="token punctuation">,</span> <span class="token string">"acc train/test:"</span><span class="token punctuation">,</span>
+        <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>show_acc<span class="token punctuation">(</span>state<span class="token punctuation">.</span>params<span class="token punctuation">,</span> X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">/</span><span class="token interpolation"><span class="token punctuation">&#123;</span>show_acc<span class="token punctuation">(</span>state<span class="token punctuation">.</span>params<span class="token punctuation">,</span> X_test<span class="token punctuation">,</span> y_test<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>训练结果</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">100%|██████████████████████████████████████| 1875/1875 [00:03&lt;00:00, 514.70it/s]
+Epoch 1/3 loss 2.0387044 acc train/test: 0.97/0.96
+100%|██████████████████████████████████████| 1875/1875 [00:02&lt;00:00, 762.39it/s]
+Epoch 2/3 loss 0.057492483 acc train/test: 0.98/0.97
+100%|██████████████████████████████████████| 1875/1875 [00:02&lt;00:00, 780.67it/s]
+Epoch 3/3 loss 0.17737485 acc train/test: 0.98/0.97<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="tf"><a class="markdownIt-Anchor" href="#tf"></a> TF</h4>
+<p>实现上明显更简单，但是速度不如Jax。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+<span class="token keyword">from</span> tensorflow <span class="token keyword">import</span> keras
+layers <span class="token operator">=</span> keras<span class="token punctuation">.</span>layers
+
+<span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>X_test<span class="token punctuation">,</span> y_test<span class="token punctuation">)</span> <span class="token operator">=</span> keras<span class="token punctuation">.</span>datasets<span class="token punctuation">.</span>mnist<span class="token punctuation">.</span>load_data<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">convert_sample</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> tf<span class="token punctuation">.</span>cast<span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token string">'float32'</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> x <span class="token operator">/</span> <span class="token number">255.</span><span class="token punctuation">,</span> tf<span class="token punctuation">.</span>one_hot<span class="token punctuation">(</span>y<span class="token punctuation">,</span> depth<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>
+ds_train <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>from_tensor_slices<span class="token punctuation">(</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">map</span><span class="token punctuation">(</span>convert_sample<span class="token punctuation">)</span><span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span>
+ds_test <span class="token operator">=</span> tf<span class="token punctuation">.</span>data<span class="token punctuation">.</span>Dataset<span class="token punctuation">.</span>from_tensor_slices<span class="token punctuation">(</span><span class="token punctuation">(</span>X_test<span class="token punctuation">,</span> y_test<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">map</span><span class="token punctuation">(</span>convert_sample<span class="token punctuation">)</span><span class="token punctuation">.</span>batch<span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">build_model</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  inputs <span class="token operator">=</span> layers<span class="token punctuation">.</span>Input<span class="token punctuation">(</span>shape<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">,</span><span class="token number">28</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+  x <span class="token operator">=</span> layers<span class="token punctuation">.</span>Reshape<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">784</span><span class="token punctuation">,</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">(</span>inputs<span class="token punctuation">)</span>
+  x <span class="token operator">=</span> layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense1'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+  x <span class="token operator">=</span> layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">,</span> activation<span class="token operator">=</span><span class="token string">'relu'</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Dense2'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+  outputs <span class="token operator">=</span> layers<span class="token punctuation">.</span>Dense<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> keras<span class="token punctuation">.</span>Model<span class="token punctuation">(</span>inputs<span class="token punctuation">,</span> outputs<span class="token punctuation">)</span>
+model <span class="token operator">=</span> build_model<span class="token punctuation">(</span><span class="token punctuation">)</span>
+model<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span>
+    loss<span class="token operator">=</span>keras<span class="token punctuation">.</span>losses<span class="token punctuation">.</span>CategoricalCrossentropy<span class="token punctuation">(</span>from_logits<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    optimizer<span class="token operator">=</span>keras<span class="token punctuation">.</span>optimizers<span class="token punctuation">.</span>Adam<span class="token punctuation">(</span>learning_rate<span class="token operator">=</span><span class="token number">1e-3</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    metrics<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'acc'</span><span class="token punctuation">]</span>
+<span class="token punctuation">)</span>
+model<span class="token punctuation">.</span>fit<span class="token punctuation">(</span>ds_train<span class="token punctuation">,</span> validation_data<span class="token operator">=</span>ds_test<span class="token punctuation">,</span> epochs<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>训练结果</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">1875/1875 [==============================] - 5s 3ms/step - loss: 0.2367 - acc: 0.9311 - val_loss: 0.1358 - val_acc: 0.9568
+Epoch 2/3
+1875/1875 [==============================] - 5s 3ms/step - loss: 0.1009 - acc: 0.9696 - val_loss: 0.1117 - val_acc: 0.9654
+Epoch 3/3
+1875/1875 [==============================] - 5s 3ms/step - loss: 0.0667 - acc: 0.9793 - val_loss: 0.1513 - val_acc: 0.9543<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="利用tensorboar和wandb可视化训练过程"><a class="markdownIt-Anchor" href="#利用tensorboar和wandb可视化训练过程"></a> 利用tensorboar和wandb可视化训练过程</h2>
+<p>这里利用 <code>tensorboardX</code> 在 <code>tensorboard</code> 上进行图像绘制，并利用 <code>wandb</code> 的云存储功能记录训练结果，并且有更好的效果图，<code>tensorboardX</code> 和 <code>wandb</code> 配合的使用方法如下：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> tensorboardX <span class="token keyword">import</span> SummaryWriter
+<span class="token keyword">import</span> wandb
+
+wandb<span class="token punctuation">.</span>init<span class="token punctuation">(</span>
+    project<span class="token operator">=</span><span class="token string">"project_name"</span><span class="token punctuation">,</span>  <span class="token comment"># 项目名称</span>
+    sync_tensorboard<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>  <span class="token comment"># 同步当前tenorboard</span>
+    config<span class="token operator">=</span><span class="token builtin">dict</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># args为当前参数字典，记录当前训练的全部参数配置（会显示在info界面上）</span>
+    name<span class="token operator">=</span><span class="token string">"run_name"</span><span class="token punctuation">,</span>  <span class="token comment"># 当前实验名称</span>
+    save_code<span class="token operator">=</span><span class="token boolean">True</span>  <span class="token comment"># 保存当前代码，可以在网页中查看</span>
+<span class="token punctuation">)</span>
+writer <span class="token operator">=</span> SummaryWriter<span class="token punctuation">(</span><span class="token string">"log_save_path"</span><span class="token punctuation">)</span>  <span class="token comment"># 用SummaryWriter创建实例，并确定日志保存目录</span>
+writer<span class="token punctuation">.</span>add_text<span class="token punctuation">(</span><span class="token string">"text_name"</span><span class="token punctuation">,</span> <span class="token string">"text_content"</span><span class="token punctuation">)</span>  <span class="token comment"># 添加文本</span>
+<span class="token keyword">for</span> epoch <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span>total_epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># training... 完成后记录参数</span>
+	writer<span class="token punctuation">.</span>add_scalar<span class="token punctuation">(</span><span class="token string">"metrics/loss"</span><span class="token punctuation">,</span> value<span class="token punctuation">,</span> global_step<span class="token punctuation">)</span>  <span class="token comment"># 在metrics分类中的名称为loss图像中设置第global_step对应的值为value</span>
+writer<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 完成全部记录后关闭</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>训练曲线图：<a target="_blank" rel="noopener" href="https://wandb.ai/wty-yy/wandb_test/runs/nists3jd/workspace">wanb - mnist_test__42__20230822_175254</a>，<a target="_blank" rel="noopener" href="https://wandb.ai/wty-yy/wandb_test/runs/nists3jd/code">完整代码</a></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6/" class="category-chain-item">神经网络框架</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6/Jax/" class="category-chain-item">Jax</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Jax/" class="print-no-link">#Jax</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Jax+Flax+Optax 学习笔记</div>
+      <div>https://wty-yy.github.io/posts/8349/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/56847/" title="Jax+Flax+Optax 常用API">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Jax+Flax+Optax 常用API</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/529/" title="PPO (Proximal Policy Optimization) 算法">
+                        <span class="hidden-mobile">PPO (Proximal Policy Optimization) 算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

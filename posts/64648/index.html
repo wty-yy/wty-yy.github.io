@@ -1,0 +1,1448 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Linux 下述简写分别表示：CMD 命令，PATH 路径，FILE 文件，FOLD 文件夹.  通用命令 man CMD         # 显示CMD的帮助文档  路径处理 pwd             # 显示当前路径 cd PATH         # 进入到PATH中 ls              # 显示当前目录下的所有文件 ls -al          # 显示当前目录下所有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用命令及函数">
+<meta property="og:url" content="https://wty-yy.github.io/posts/64648/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="Linux 下述简写分别表示：CMD 命令，PATH 路径，FILE 文件，FOLD 文件夹.  通用命令 man CMD         # 显示CMD的帮助文档  路径处理 pwd             # 显示当前路径 cd PATH         # 进入到PATH中 ls              # 显示当前目录下的所有文件 ls -al          # 显示当前目录下所有">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2022/11/18/zuZvz8.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/essay/normal_plot.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/essay/many_number_plot.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/essay/bivariate_normal_plot.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/essay/subplot_and_merge_handles.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/RL/PPO/PPO_clip_loss_fix.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/29/pSpKzi6.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/30/pSpwBo8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2023/01/22/pSJtI3V.png">
+<meta property="og:image" content="https://s1.ax1x.com/2022/12/07/zglsr8.png">
+<meta property="article:published_time" content="2022-11-18T11:03:38.000Z">
+<meta property="article:modified_time" content="2024-12-29T05:55:54.616Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s1.ax1x.com/2022/11/18/zuZvz8.png">
+  
+  
+  
+  <title>常用命令及函数 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="常用命令及函数"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-18 19:03" pubdate>
+          2022年11月18日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          65 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">常用命令及函数</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="linux"><a class="markdownIt-Anchor" href="#linux"></a> Linux</h2>
+<p>下述简写分别表示：<code>CMD</code> 命令，<code>PATH</code> 路径，<code>FILE</code> 文件，<code>FOLD</code> 文件夹.</p>
+<h3 id="通用命令"><a class="markdownIt-Anchor" href="#通用命令"></a> 通用命令</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">man</span> CMD         <span class="token comment"># 显示CMD的帮助文档</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<h3 id="路径处理"><a class="markdownIt-Anchor" href="#路径处理"></a> 路径处理</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">pwd</span>             <span class="token comment"># 显示当前路径</span>
+<span class="token builtin class-name">cd</span> <span class="token environment constant">PATH</span>         <span class="token comment"># 进入到PATH中</span>
+<span class="token function">ls</span>              <span class="token comment"># 显示当前目录下的所有文件</span>
+<span class="token function">ls</span> <span class="token parameter variable">-al</span>          <span class="token comment"># 显示当前目录下所有文件的详细信息</span>
+<span class="token function">mkdir</span> FOLD      <span class="token comment"># 在当前目录下创建名为'目录名'的文件夹</span>
+<span class="token function">vim</span> FILE        <span class="token comment"># 如果存在文件名的文件，则会使用vim编辑器打开，若不存在则会创建该文件</span>
+<span class="token function">cp</span> FILE1 FILE2  <span class="token comment"># 复制文件1到文件2，可以在文件名前面加上路径，则会复制到指定路径当中</span>
+<span class="token function">rm</span> FOLD1        <span class="token comment"># 删除文件1</span>
+<span class="token function">mv</span> FILE1 FILE2  <span class="token comment"># 剪切文件1到文件2</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="文件下载压缩解压"><a class="markdownIt-Anchor" href="#文件下载压缩解压"></a> 文件下载压缩解压</h3>
+<p><code>.tar.gz</code> 结尾的一般程序安装包，<code>.zip</code> 为一般压缩包.</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> <span class="token parameter variable">-cO</span> FILE <span class="token string">'URL'</span>         <span class="token comment"># 下载URL中文件，命名为FILE</span>
+<span class="token function">zip</span> <span class="token parameter variable">-r</span> FILE.zip /FOLD       <span class="token comment"># 压缩/FOLD到FILE.zip</span>
+<span class="token function">unzip</span> FILE.zip              <span class="token comment"># 解压FILE.zip</span>
+<span class="token function">unzip</span> <span class="token parameter variable">-d</span> /FOLD FILE.zip     <span class="token comment"># 解压FILE.zip到FOLD目录下</span>
+<span class="token function">tar</span> <span class="token parameter variable">-xf</span> FILE.tar.gz         <span class="token comment"># 解压.tar.gz压缩包</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="使用编译安装"><a class="markdownIt-Anchor" href="#使用编译安装"></a> 使用编译安装</h3>
+<p>如果安装的文件是github上的项目，一般有后缀为 <code>.tar.gz</code> 的安装包，使用 <code>weget 下载路径</code> 或者在本机上下载下来后再使用WinSCP上传上去也行，这里以安装 <code>ncurses</code> 为例：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> http://ftp.gnu.org/gnu/ncurses/ncurses-6.3.tar.gz  <span class="token string">" 下载安装包
+tar -xf ncurses-6.3.tar.gz  "</span> 解压压缩包
+<span class="token builtin class-name">cd</span> ncurses-6.3/  <span class="token string">" 进入到刚刚解压出的目录中
+./configure --prefix=<span class="token environment constant">$HOME</span>/apps/  "</span> 设置安装目录为 <span class="token environment constant">$HOME</span>/apps/ 文件夹下
+<span class="token function">make</span> <span class="token parameter variable">-j</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span>  " 编译并安装程序<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="一键tmux分屏脚本"><a class="markdownIt-Anchor" href="#一键tmux分屏脚本"></a> 一键Tmux分屏脚本</h3>
+<p>服务器上的tmux脚本，创建三个窗口，效果如下图所示，并且每个窗口初始化bash <code>source ~/.bashrc</code>.</p>
+<p>由于服务器上一般要用后台运行神经网络训练程序，而且每次新的界面要重新 <code>scoure ~/.bashrc</code>，所以我创建了一个一键创建tmux分屏窗口并运行 <code>source</code> 指令，可大幅提高效率.</p>
+<p>使用方法，在用户目录（随便一个方便的目录）下创建 <code>run.sh</code> 文件，将下面代码贴进去，然后使用 <code>chmod 777 run.sh</code> 修改权限，以后启动服务器后，输入下面代码就能直接启动tmux进行分屏</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./run.sh  <span class="token comment"># 想启动新的tmux窗口</span>
+
+<span class="token comment"># 若已有tmux后台</span>
+<span class="token builtin class-name">source</span> .bashrc  <span class="token comment"># 先加载bash配置</span>
+tmux a  <span class="token comment"># 即可启动tmux窗口</span>
+
+<span class="token comment"># 将tmux放到后台</span>
+<span class="token comment"># 快捷键 tmux组合键+d，tmux组合键默认为 Ctrl+b</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        run.sh完整代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token builtin class-name">source</span> ~/.bashrc
+
+<span class="token comment"># 创建seesion名称为mywork，默认创建第一个pane名称也为mywork</span>
+tmux new <span class="token parameter variable">-d</span> <span class="token parameter variable">-s</span> mywork
+
+tmux split-window <span class="token parameter variable">-h</span> <span class="token parameter variable">-t</span> mywork  <span class="token comment"># 横向分割，mywork到右侧</span>
+tmux split-window <span class="token parameter variable">-v</span> <span class="token parameter variable">-t</span> mywork  <span class="token comment"># 竖向分割，mywork到底部</span>
+
+tmux send <span class="token parameter variable">-t</span> mywork <span class="token string">"source ~/.bashrc"</span> ENTER  <span class="token comment"># 向mywork窗口发送source命令</span>
+tmux send <span class="token parameter variable">-t</span> <span class="token string">"1"</span> <span class="token string">"source ~/.bashrc"</span> ENTER
+tmux send <span class="token parameter variable">-t</span> <span class="token string">"2"</span> <span class="token string">"source ~/.bashrc"</span> ENTER
+
+<span class="token comment"># 连接上tmux会话，显示界面</span>
+tmux a <span class="token parameter variable">-t</span> mywork<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p><img src="https://s1.ax1x.com/2022/11/18/zuZvz8.png" srcset="/img/loading.gif" lazyload alt="Tmux分屏效果" /></p>
+<h2 id="python-常用函数"><a class="markdownIt-Anchor" href="#python-常用函数"></a> Python 常用函数</h2>
+<h3 id="re-和-fnmatch"><a class="markdownIt-Anchor" href="#re-和-fnmatch"></a> re 和 fnmatch</h3>
+<p>re是用于表示正则表达式，而fnmatch是用于处理shell样式通配符. 更多正则表达式内容可以参考 <a target="_blank" rel="noopener" href="https://regex101.com/">regex101</a>，该网页还能解释给出的正则表达式非常智能.</p>
+<ul>
+<li><code>pattern = re.compile(pattern)</code>：编译正则表达式 <code>pattern</code>.</li>
+<li><code>pattern.search(string)</code>：在 <code>string</code> 中搜索 <code>pattern</code> 所包含的第一个正则表达位置及长度.</li>
+<li><code>pattern.findall(string)</code>: 在 <code>string</code> 中搜索每一个 <code>pattern</code> 匹配得到的串.</li>
+</ul>
+<hr />
+<ul>
+<li><code>fnmatch.translate(pattern)</code>：将shell样式通配符转化为正则表达式.</li>
+<li><code>fnmatch.fnmatch(string, pattern)</code>：判断 <code>pattern</code> 是否匹配字符串 <code>string</code>.</li>
+</ul>
+<p>shell样式通配符比较简单常用：</p>
+<ul>
+<li>‘*’: 匹配任意数量的字符，包括零字符.</li>
+<li>‘?’: 匹配任何单个字符.</li>
+<li>‘[sequence]’: 匹配任意字符序列.</li>
+<li>‘[!sequence]’: 匹配任何非顺序的字符.</li>
+</ul>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 一些ChatGPT举的例子</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>fnmatch<span class="token punctuation">.</span>fnmatch<span class="token punctuation">(</span><span class="token string">"test.txt"</span><span class="token punctuation">,</span> <span class="token string">"*.txt"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># prints True</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>fnmatch<span class="token punctuation">.</span>fnmatch<span class="token punctuation">(</span><span class="token string">"test.txt"</span><span class="token punctuation">,</span> <span class="token string">"test*"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># prints True</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>fnmatch<span class="token punctuation">.</span>fnmatch<span class="token punctuation">(</span><span class="token string">"test.txt"</span><span class="token punctuation">,</span> <span class="token string">"*.doc"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># prints False</span>
+<span class="token comment"># *[0-9]* 匹配包含数字的字符串</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        正则表达式(regular expression)与shell类型通配符(shell-style wildcard)区别
+    </div>
+    <div class='spoiler-content'>
+        <p>下述内容来自ChatGPT：</p>
+<p>shell样式的通配符模式是一种用于匹配文件名或路径名的模式，它可以包含特殊字符，如<code>'*', '?', '[sequence]'</code>. 这些特殊字符在shell样式通配符模式中具有特定的含义，它们分别用于匹配任意数量的字符、任意单个字符或给定序列中的任意字符. 另一方面，正则表达式是一种用于匹配字符串的模式，它可以包含广泛的特殊字符和语法元素，允许您指定用于匹配字符串的复杂模式. 正则表达式比shell样式的通配符模式更强大、更灵活，但它们也更难以阅读和理解。</p>
+<p>另一方面，正则表达式是一种用于匹配字符串的模式，它可以包含广泛的特殊字符和语法元素，允许您指定用于匹配字符串的复杂模式。正则表达式比shell样式的通配符模式更强大、更灵活，但它们也更难以阅读和理解。</p>
+<p>下面是一些shell样式通配符模式和等价正则表达式模式的例子:</p>
+<table>
+<thead>
+<tr>
+<th>Shell-style wildcard pattern</th>
+<th>Regular expression pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>*.txt</code></td>
+<td><code>.*\.txt</code></td>
+</tr>
+<tr>
+<td><code>test*</code></td>
+<td><code>test.*</code></td>
+</tr>
+<tr>
+<td><code>[0-9]*</code></td>
+<td><code>[0-9].*</code></td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+</div>
+<h3 id="warning"><a class="markdownIt-Anchor" href="#warning"></a> warning</h3>
+<p>自定义 <code>warning</code> 信息，用于给出警告，但是默认的 <code>warning</code> 输出信息非常丑陋，难以识别，在文件开头处加上以下代码</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> warnings
+<span class="token keyword">def</span> <span class="token function">custom_warning_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span> category<span class="token punctuation">,</span> filename<span class="token punctuation">,</span> lineno<span class="token punctuation">,</span> <span class="token builtin">file</span><span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> line<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">'%s, line %s,\n%s\n\n'</span> <span class="token operator">%</span> <span class="token punctuation">(</span>filename<span class="token punctuation">,</span> lineno<span class="token punctuation">,</span> message<span class="token punctuation">)</span>
+warnings<span class="token punctuation">.</span>formatwarning <span class="token operator">=</span> custom_warning_message<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>使用方法 <code>warnings.warn('警号信息')</code>，一个例子：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">warnings<span class="token punctuation">.</span>warn<span class="token punctuation">(</span>f"\
+Warning<span class="token punctuation">:</span> <span class="token punctuation">&#123;</span>self<span class="token punctuation">.</span>model_name<span class="token punctuation">&#125;</span>'s <span class="token punctuation">&#123;</span>self<span class="token punctuation">.</span>data_name<span class="token punctuation">&#125;</span> \
+dataset don<span class="token string">'t have '</span>epoch_sizes<span class="token punctuation">.</span>json' <span class="token builtin">file</span><span class="token punctuation">,</span> \
+default by <span class="token number">1</span>"<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>效果：（可以给出warning的文件路径、行号、warning信息）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/home/wty/Coding/GitHub/RL-framework/utils/logs_manager.py, line <span class="token number">366</span>,
+Warning: /home/wty/Coding/GitHub/RL-framework/logs/DQN-1<span class="token string">'s history-0002 dataset don'</span>t have <span class="token string">'epoch_sizes.json'</span> file, default by <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<h3 id="pathlib"><a class="markdownIt-Anchor" href="#pathlib"></a> pathlib</h3>
+<ul>
+<li>
+<p><code>pathlib.Path(directory)</code>：<code>directory</code> 为文件的路径，返回 <code>pathlib.Path</code> 对象，该对象存储的为 <code>directory</code> 这条路径.</p>
+</li>
+<li>
+<p><code>pathlib.Path.cwd()</code>：cwd为Current working directory的缩写，即返回当前运行程序所在的目录.</p>
+</li>
+<li>
+<p><code>pathlib.Path.glob(pattern)</code>：<code>pattern</code> 是一个shell类型的通配符(shell-style wildcard pattern)，则该函数会返回该路径下所有符合该 <code>pattern</code> 的文件路径. 如 <code>*.py</code> 就会返回全体以 <code>.py</code> 为后缀的文件，<code>*</code> 可以理解为任一的一个前缀（文件名）.</p>
+</li>
+<li>
+<p><code>path.mkdir(parents=True, exist_ok)</code>：<code>path</code> 为 <code>pathlib.Path</code> 对象即当前创建目录的路径，<code>parents=True</code> 若父目录不存在，则创建父目录；<code>exist_ok=True</code> 若当前目录不存在时才会进行创建，不会抛出异常.</p>
+</li>
+<li>
+<p><code>path.is_file()</code>：判断 <code>path</code> 是否是文件.</p>
+</li>
+<li>
+<p><code>path.is_dir()</code>：判断 <code>path</code> 是否是文件夹.</p>
+</li>
+</ul>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
+
+Path<span class="token punctuation">.</span>cwd<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 当前工作路径</span>
+Path<span class="token punctuation">.</span>home<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># home路径</span>
+
+fname <span class="token operator">=</span> <span class="token string">r'D:\fold1\fold2'</span>
+path <span class="token operator">=</span> Path<span class="token punctuation">(</span>fname<span class="token punctuation">)</span>
+folds <span class="token operator">=</span> <span class="token punctuation">[</span>f <span class="token keyword">for</span> f <span class="token keyword">in</span> path<span class="token punctuation">.</span>iterdir<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">if</span> f<span class="token punctuation">.</span>is_dir<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>  <span class="token comment"># 获取path下的全部文件夹路径</span>
+files <span class="token operator">=</span> <span class="token punctuation">[</span>f <span class="token keyword">for</span> f <span class="token keyword">in</span> path<span class="token punctuation">.</span>iterdir<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">if</span> f<span class="token punctuation">.</span>is_file<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token comment"># 获取path下的全部文件路径</span>
+
+files<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>name  <span class="token comment"># 返回文件的名称(前缀)</span>
+files<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>suffix  <span class="token comment"># 返回文件的名称(后缀)</span>
+path<span class="token punctuation">.</span>parent  <span class="token comment"># 父级目录</span>
+path<span class="token punctuation">.</span>joinpath<span class="token punctuation">(</span>fold<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>  <span class="token comment"># 进入子文件夹路径</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="urllib"><a class="markdownIt-Anchor" href="#urllib"></a> urllib</h3>
+<p>用于文件下载，主要使用 <code>urllib.request.urlretrieve(url, path)</code> 对url链接进行下载，下载到 <code>path</code> 路径下. 一般与 <a href="./#tarfile"><code>tarfile</code></a> 一同使用.</p>
+<h3 id="tarfile"><a class="markdownIt-Anchor" href="#tarfile"></a> tarfile</h3>
+<p>用于解压 <code>.tgz</code>, <code>.tar.bz2</code> 文件.</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">path <span class="token operator">=</span> <span class="token string">'文件路径'</span>
+tgz <span class="token operator">=</span> tarfile<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span>  <span class="token comment"># 创建文件路径</span>
+tgz<span class="token punctuation">.</span>extractall<span class="token punctuation">(</span>path<span class="token operator">=</span>path<span class="token punctuation">)</span>  <span class="token comment"># 将文件解压到path</span>
+tgz<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        同时下载并解压两个文件的例子
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
+<span class="token keyword">import</span> tarfile
+<span class="token keyword">import</span> urllib<span class="token punctuation">.</span>request
+
+DOWNLOAD_ROOT <span class="token operator">=</span> <span class="token string">"https://spamassassin.apache.org/old/publiccorpus/"</span>  <span class="token comment"># 下载源的根路径</span>
+HAM_URL <span class="token operator">=</span> DOWNLOAD_ROOT <span class="token operator">+</span> <span class="token string">"20030228_easy_ham.tar.bz2"</span>  <span class="token comment"># 下载文件的url链接</span>
+SPAM_URL <span class="token operator">=</span> DOWNLOAD_ROOT <span class="token operator">+</span> <span class="token string">"20030228_spam.tar.bz2"</span>
+SPAM_PATH <span class="token operator">=</span> Path<span class="token punctuation">.</span>cwd<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>joinpath<span class="token punctuation">(</span><span class="token string">"datasets/spam"</span><span class="token punctuation">)</span>  <span class="token comment"># 本地保存路径</span>
+
+<span class="token keyword">def</span> <span class="token function">fetch_spam_data</span><span class="token punctuation">(</span>ham_url<span class="token operator">=</span>HAM_URL<span class="token punctuation">,</span> spam_url<span class="token operator">=</span>SPAM_URL<span class="token punctuation">,</span> spam_path<span class="token operator">=</span>SPAM_PATH<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 自义下载函数</span>
+    spam_path<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>  <span class="token comment"># 若文件夹不存在，创建文件夹</span>
+    <span class="token keyword">for</span> filename<span class="token punctuation">,</span> url <span class="token keyword">in</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">"ham.tar.bz2"</span><span class="token punctuation">,</span> ham_url<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token string">"spam.tar.bz2"</span><span class="token punctuation">,</span> spam_url<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 设定保存的文件名和对应的url</span>
+        path <span class="token operator">=</span> spam_path<span class="token punctuation">.</span>joinpath<span class="token punctuation">(</span>filename<span class="token punctuation">)</span>  <span class="token comment"># 文件保存的位置</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> path<span class="token punctuation">.</span>exists<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 若文件以存在，则不重复下载</span>
+            urllib<span class="token punctuation">.</span>request<span class="token punctuation">.</span>urlretrieve<span class="token punctuation">(</span>url<span class="token punctuation">,</span> path<span class="token punctuation">)</span>  <span class="token comment"># 文件下载</span>
+        tar_bz2_file <span class="token operator">=</span> tarfile<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span>  <span class="token comment"># 创建解压tarfile实例</span>
+        tar_bz2_file<span class="token punctuation">.</span>extractall<span class="token punctuation">(</span>path<span class="token operator">=</span>spam_path<span class="token punctuation">)</span>  <span class="token comment"># 解压文件到指定目录下</span>
+        tar_bz2_file<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 关闭解压实例</span>
+
+fetch_spam_data<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<h3 id="datatime"><a class="markdownIt-Anchor" href="#datatime"></a> datatime</h3>
+<p>主要是处理时间字符串所用.</p>
+<ul>
+<li>时间字符串读入：<code>data = datetime.strptime(string, time_format)</code>，将格式化时间信息字符串 <code>string</code> 根据格式 <code>time_format</code> 转化为 <code>datatime</code> 时间格式.<br />
+例如 <code>time_format = '%Y-%m-%d %H:%M:%S'</code>，则可以读入类似 <code>2157-11-21 03:16:00</code> 的年份. 具体 <code>time_format</code> 格式请见下面折叠内容.</li>
+<li>获取两个时间的相对天数：<code>relative_days = (data1 - data2).days</code></li>
+<li>获取两个时间的相对秒数：<code>relative_seconds = (data1 - data2).seconds</code>（不足一天的则化为秒计算）<br />
+通过 <code>24 * relative_days + relative_seconds / 3600</code> 即可求出相对小时数.</li>
+</ul>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        time_format格式
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">%y 两位数的年份表示（00-99）
+%Y 四位数的年份表示（000-9999）
+%m 月份（01-12）
+%d 月内中的一天（0-31）
+%H 24小时制小时数（0-23）
+%I 12小时制小时数（01-12）
+%M 分钟数（00&#x3D;59）
+%S 秒（00-59）
+%a 本地简化星期名称
+%A 本地完整星期名称
+%b 本地简化的月份名称
+%B 本地完整的月份名称
+%c 本地相应的日期表示和时间表示
+%j 年内的一天（001-366）
+%p 本地A.M.或P.M.的等价符
+%U 一年中的星期数（00-53）星期天为星期的开始
+%w 星期（0-6），星期天为星期的开始
+%W 一年中的星期数（00-53）星期一为星期的开始
+%x 本地相应的日期表示
+%X 本地相应的时间表示
+%Z 当前时区的名称
+%% %号本身<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<h3 id="matplotlib"><a class="markdownIt-Anchor" href="#matplotlib"></a> matplotlib</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> matplotlib <span class="token keyword">as</span> mpl
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<h4 id="显示中文"><a class="markdownIt-Anchor" href="#显示中文"></a> 显示中文</h4>
+<p>只需将下述配置放置在包导入之后即可，有以下两种配置方案，第一个使用的是宋体，更加正规；第二个使用的是黑体，也很清晰好用，推荐第二种。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">config <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">"font.family"</span><span class="token punctuation">:</span> <span class="token string">'serif'</span><span class="token punctuation">,</span> <span class="token comment"># 衬线字体</span>
+    <span class="token string">"figure.figsize"</span><span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 图像大小</span>
+    <span class="token string">"font.size"</span><span class="token punctuation">:</span> <span class="token number">14</span><span class="token punctuation">,</span> <span class="token comment"># 字号大小</span>
+    <span class="token string">"font.serif"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'SimSun'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment"># 宋体</span>
+    <span class="token string">"mathtext.fontset"</span><span class="token punctuation">:</span> <span class="token string">'cm'</span><span class="token punctuation">,</span> <span class="token comment"># 渲染数学公式字体</span>
+    <span class="token string">'axes.unicode_minus'</span><span class="token punctuation">:</span> <span class="token boolean">False</span> <span class="token comment"># 显示负号</span>
+<span class="token punctuation">&#125;</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">.</span>update<span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+
+config <span class="token operator">=</span> <span class="token punctuation">&#123;</span>  <span class="token comment"># 另一种配置</span>
+    <span class="token string">"figure.figsize"</span><span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 图像大小</span>
+    <span class="token string">"font.size"</span><span class="token punctuation">:</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token comment"># 字号大小</span>
+    <span class="token string">"mathtext.fontset"</span><span class="token punctuation">:</span> <span class="token string">'cm'</span><span class="token punctuation">,</span> <span class="token comment"># 渲染数学公式字体</span>
+    <span class="token string">"font.sans-serif"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'SimHei'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>   <span class="token comment"># 用黑体显示中文</span>
+    <span class="token string">'axes.unicode_minus'</span><span class="token punctuation">:</span> <span class="token boolean">False</span> <span class="token comment"># 显示负号</span>
+<span class="token punctuation">&#125;</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">.</span>update<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="绘图参数"><a class="markdownIt-Anchor" href="#绘图参数"></a> 绘图参数</h4>
+<p>绘图一般以以下顺序逐步进行，多次使用 <code>plt.plot</code> 后绘制的图像会覆盖之前绘制的图像.</p>
+<ul>
+<li><code>plt.figure(figsize=(6, 4), dpi)</code>：创建长宽为6x4大小的幕布，在此基础上乘上单位分辨率 <code>dpi</code>，即为图像分辨率.</li>
+<li><code>plt.plot(X, y, 'r-s', markersize=8, lw=2, label='SGD')</code>：依 <code>(X, y)</code> 绘制二维图像，第三个参数用于控制图像属性，<code>r</code> 表示红色，<code>-</code> 表示直线，<code>s</code> 表示方块点，<code>markersize</code> 表示描点所用图形的大小(即方块的大小)，<code>lw</code> 是 <code>linewidth</code> 的缩写，用于调整线的宽度，<code>label</code> 表示该图形的标签，需要使用 <code>plt.legend()</code> 显示标签. 以下为几种常用图像属性：
+<ol>
+<li><code>'r-s'</code> 红色，直线，方块描点.</li>
+<li><code>'g--^'</code> 绿色，虚线，上三角描点.</li>
+<li><code>b.</code> 蓝色，散点图.</li>
+<li><code>r:</code> 红色，虚线.</li>
+</ol>
+</li>
+<li><code>plt.legend(loc=None)</code>：显示图例，<code>loc</code> 表示固定图例位置，默认为自动选择适合的位置，常用位置有：<code>upper left, lower right, center left ...</code></li>
+<li><code>plt.axis([x1, x2, y1, y2])</code>：用于控制显示坐标系范围，横坐标限制在 <code>[x1, x2]</code> 范围内，纵坐标限制在 <code>[y1, y2]</code> 范围内.</li>
+<li><code>plt.xlabel(&quot;Xname&quot;), plt.ylabel(&quot;Yname&quot;, rotation=0)</code>：设定x,y轴坐标名称，<code>rotation</code> 表示逆时针旋转角度，由于y轴标签默认旋转90度，如果标签内容较少，建议不要旋转.</li>
+<li><code>plt.axhline(y=0, color='k')</code>：以 <code>y=0</code> 绘制黑色竖线，表示y轴.</li>
+<li><code>plt.axvline(x=0, color='k')</code>：以 <code>x=0</code> 绘制黑色竖线，表示x轴.</li>
+<li><code>plt.text(x, y, text, fontsize=16, ha='center', color='k')</code>：在 <code>(x,y)</code> 点处以 <code>16</code> 号字体居中绘制黑色字符串 <code>text</code>，<code>ha</code> 表示字符串位置，默认为 <code>left</code>.</li>
+<li><code>plt.tight_layout()</code>：在保存图像前，建议使用该api，可以将多余边界去除，使图像更美观，其具有参数 <code>w_pad, h_pad</code> 用于子图的宽度和高度的填充.</li>
+<li><code>plt.savefig(&quot;figure/fname.png&quot;, dpi=300)</code>：将图像保存到 <code>./figure/fname.png</code> 文件中，单位分辨率为 <code>dpi=300</code>，如果 <code>figsize=(3,2)</code> 则输出图像的分辨率为 <code>900x600</code>. 支持图片类型还有 <code>.jpg .pdf .svg</code>.</li>
+<li><code>plt.show()</code>：显示图像，并关闭当前幕布，完成全部绘图.</li>
+</ul>
+<p>结合以上方法进行绘图的例子：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
+PATH_FIGURES <span class="token operator">=</span> <span class="token string">"./figures"</span>
+Path<span class="token punctuation">(</span>PATH_FIGURES<span class="token punctuation">)</span><span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>  <span class="token comment"># 若存储图片的文件夹不存在，则进行创建</span>
+
+np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>seed<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span>
+m <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">1e5</span><span class="token punctuation">)</span>
+X_normal <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>randn<span class="token punctuation">(</span>m<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+hists<span class="token punctuation">,</span> bins <span class="token operator">=</span> np<span class="token punctuation">.</span>histogram<span class="token punctuation">(</span>X_normal<span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">50</span><span class="token punctuation">,</span> density<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+bins <span class="token operator">=</span> bins<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token punctuation">(</span>bins<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">-</span> bins<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">2</span>  <span class="token comment"># 取每个小区间的中位数</span>
+
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>hist<span class="token punctuation">(</span>X_normal<span class="token punctuation">,</span> bins<span class="token operator">=</span><span class="token number">50</span><span class="token punctuation">,</span> density<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.8</span><span class="token punctuation">)</span>  <span class="token comment"># 绘制直方图，alpha为透明度</span>
+plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>bins<span class="token punctuation">,</span> hists<span class="token punctuation">,</span> <span class="token string">'r--o'</span><span class="token punctuation">,</span> markersize<span class="token operator">=</span><span class="token number">6</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token string">"高斯采样"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>text<span class="token punctuation">(</span><span class="token number">2.5</span><span class="token punctuation">,</span> <span class="token number">0.3</span><span class="token punctuation">,</span> <span class="token string">r"$f(x) = \frac&#123;exp\left(\frac&#123;-x^2&#125;&#123;2&#125;\right)&#125;&#123;\sqrt&#123;2\pi&#125;&#125;$"</span><span class="token punctuation">,</span>
+         fontsize<span class="token operator">=</span><span class="token number">25</span><span class="token punctuation">,</span> ha<span class="token operator">=</span><span class="token string">'center'</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'w'</span><span class="token punctuation">,</span> math_fontfamily<span class="token operator">=</span><span class="token string">'cm'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>axhline<span class="token punctuation">(</span>y<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'k'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>axvline<span class="token punctuation">(</span>x<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'k'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>axis<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.02</span><span class="token punctuation">,</span> <span class="token number">0.42</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>xlabel<span class="token punctuation">(</span><span class="token string">"$x$"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>ylabel<span class="token punctuation">(</span><span class="token string">"$P$"</span><span class="token punctuation">,</span> rotation<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>legend<span class="token punctuation">(</span>loc<span class="token operator">=</span><span class="token string">'upper left'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>title<span class="token punctuation">(</span><span class="token string">"$10^5$个来自标准正态分布的样本"</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>savefig<span class="token punctuation">(</span>PATH_FIGURES <span class="token operator">+</span> <span class="token string">"normal_distribution_density_plot.png"</span><span class="token punctuation">,</span> dpi<span class="token operator">=</span><span class="token number">300</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"曲线下近似面积:"</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>trapz<span class="token punctuation">(</span>hists<span class="token punctuation">,</span> bins<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 0.9999800000000001</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="/figures/essay/normal_plot.png" srcset="/img/loading.gif" lazyload alt="normal distribution density plot" /></p>
+<h4 id="同时绘制多个图像"><a class="markdownIt-Anchor" href="#同时绘制多个图像"></a> 同时绘制多个图像</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 同时绘制多个图像</span>
+<span class="token keyword">def</span> <span class="token function">plot_figures</span><span class="token punctuation">(</span>instances<span class="token punctuation">,</span> images_per_row<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token operator">**</span>options<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 图像大小</span>
+    size <span class="token operator">=</span> <span class="token number">28</span>
+    <span class="token comment"># 每行显示的图像，取图像总数和每行预设值的较小值</span>
+    images_per_row <span class="token operator">=</span> <span class="token builtin">min</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>instances<span class="token punctuation">)</span><span class="token punctuation">,</span> images_per_row<span class="token punctuation">)</span>
+    <span class="token comment"># 总共的行数，下行等价于 ceil(len(instances) / image_per_row)</span>
+    n_rows <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>instances<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">//</span> images_per_row <span class="token operator">+</span> <span class="token number">1</span>
+    <span class="token comment"># 如果有空余位置没有填充，用空白进行填充</span>
+    n_empty <span class="token operator">=</span> n_rows <span class="token operator">*</span> images_per_row <span class="token operator">-</span> <span class="token builtin">len</span><span class="token punctuation">(</span>instances<span class="token punctuation">)</span>
+    padded_instances <span class="token operator">=</span> np<span class="token punctuation">.</span>concatenate<span class="token punctuation">(</span><span class="token punctuation">[</span>instances<span class="token punctuation">,</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span><span class="token punctuation">[</span>n_empty<span class="token punctuation">,</span> size <span class="token operator">*</span> size<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token comment"># 将图像排列成网格</span>
+    image_grid <span class="token operator">=</span> padded_instances<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">[</span>n_rows<span class="token punctuation">,</span> images_per_row<span class="token punctuation">,</span> size<span class="token punctuation">,</span> size<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token comment"># 使用np.transpose对图像网格进行重新排序，并拉伸成一张大图像用于绘制</span>
+    big_image <span class="token operator">=</span> image_grid<span class="token punctuation">.</span>transpose<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">[</span>n_rows <span class="token operator">*</span> size<span class="token punctuation">,</span> images_per_row <span class="token operator">*</span> size<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    plt<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>big_image<span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'binary'</span><span class="token punctuation">,</span> <span class="token operator">**</span>options<span class="token punctuation">)</span>
+    plt<span class="token punctuation">.</span>axis<span class="token punctuation">(</span><span class="token string">'off'</span><span class="token punctuation">)</span>
+    plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+plot_figures<span class="token punctuation">(</span>train_x<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">100</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>savefig<span class="token punctuation">(</span><span class="token string">'figure/MNIST前100张图像'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="/figures/essay/many_number_plot.png" srcset="/img/loading.gif" lazyload alt="MNIST前100张图像" /></p>
+<h4 id="绘制等高线"><a class="markdownIt-Anchor" href="#绘制等高线"></a> 绘制等高线</h4>
+<p>等高线图主要有两种：</p>
+<ol>
+<li>等高线填充背景：
+<ul>
+<li><code>plt.contourf(x1, x2, z, levels=levelz, cmap='viridis')</code>：<code>x1, x2</code> 为网格划分后的对应坐标，<code>z</code> 对应网格点的高度值，<code>levels</code> 表示等高线的划分点，在两个等高线之间的区域用同种颜色填充，<code>cmap</code> 表示填充使用的颜色带.</li>
+<li><code>plt.colorbar(label)</code>：通过绘制颜色柱为等高线提供每种颜色对应的高度值.</li>
+</ul>
+</li>
+<li>绘制等高线：
+<ul>
+<li><code>contour = plt.contour(x1, x2, z, levels=levelz, cmap='viridis')</code>：用法与 <code>plt.contourf</code> 类似，只不过是在对应 <code>levels</code> 处绘制等高线.</li>
+<li><code>plt.clabel(contour, fontsize=14, inline=True)</code>：使用 <code>plt.contour</code> 返回值，使用 <code>fontsize</code> 字号在等高线内绘制对应的高度.（<code>inline</code> 默认为 <code>True</code>，一般无需添加）</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>常用的 <code>cmap</code> 选项：<code>viridis, jet, rainbow, summer, autumn</code> 等.</p>
+</blockquote>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+x1<span class="token punctuation">,</span> x2 <span class="token operator">=</span> np<span class="token punctuation">.</span>meshgrid<span class="token punctuation">(</span>  <span class="token comment"># 创建离散网格点</span>
+    np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">3.5</span><span class="token punctuation">,</span> <span class="token number">3.5</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token comment"># 计算高度值</span>
+z <span class="token operator">=</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span><span class="token punctuation">(</span><span class="token punctuation">(</span>x1<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span> <span class="token operator">+</span> x2<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">)</span> <span class="token operator">-</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span><span class="token punctuation">(</span><span class="token punctuation">(</span>x1<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span> <span class="token operator">+</span> x2<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">)</span>
+<span class="token comment"># 设置等高线划分点，会根据情况绘制等高线，若没有相应的数据点，则不会进行绘制</span>
+levelz <span class="token operator">=</span> <span class="token punctuation">(</span>np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token number">1.1</span><span class="token punctuation">,</span> <span class="token number">17</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token punctuation">(</span>z<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> z<span class="token punctuation">.</span><span class="token builtin">min</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> z<span class="token punctuation">.</span><span class="token builtin">min</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">round</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>contourf<span class="token punctuation">(</span>x1<span class="token punctuation">,</span> x2<span class="token punctuation">,</span> z<span class="token punctuation">,</span> levels<span class="token operator">=</span>levelz<span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'viridis'</span><span class="token punctuation">)</span>  <span class="token comment"># 向由等高线划分的区域填充颜色</span>
+plt<span class="token punctuation">.</span>colorbar<span class="token punctuation">(</span>label<span class="token operator">=</span><span class="token string">'概率'</span><span class="token punctuation">)</span>  <span class="token comment"># 制作右侧颜色柱，表示每种颜色对应的值</span>
+
+contour <span class="token operator">=</span> plt<span class="token punctuation">.</span>contour<span class="token punctuation">(</span>x1<span class="token punctuation">,</span> x2<span class="token punctuation">,</span> z<span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'jet'</span><span class="token punctuation">,</span> levels<span class="token operator">=</span>levelz<span class="token punctuation">)</span>  <span class="token comment"># 绘制等高线</span>
+plt<span class="token punctuation">.</span>clabel<span class="token punctuation">(</span>contour<span class="token punctuation">,</span> fontsize<span class="token operator">=</span><span class="token number">14</span><span class="token punctuation">)</span>  <span class="token comment"># 在等高线上绘制对应高度值</span>
+
+plt<span class="token punctuation">.</span>xlabel<span class="token punctuation">(</span><span class="token string">'$x_1$'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>ylabel<span class="token punctuation">(</span><span class="token string">'$x_2$'</span><span class="token punctuation">,</span> rotation<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>savefig<span class="token punctuation">(</span><span class="token string">"figure/bivariate_normal_distribution_density_plot.png"</span><span class="token punctuation">,</span> dpi<span class="token operator">=</span><span class="token number">300</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="/figures/essay/bivariate_normal_plot.png" srcset="/img/loading.gif" lazyload alt="bivariate normal distribution density plot" /></p>
+<blockquote>
+<p>更多等高线的例子请见：<a href="/posts/24285/#%E5%BC%B9%E6%80%A7%E7%BD%91%E7%BB%9C-2">训练线性模型 - 代码实现</a></p>
+</blockquote>
+<h4 id="多个子图共享图例绘制均值方差"><a class="markdownIt-Anchor" href="#多个子图共享图例绘制均值方差"></a> 多个子图共享图例，绘制均值+方差</h4>
+<p>子图绘制方法主要使用 <code>fig, axs = plt.subplots(nrows, ncols, figsize=(w,h))</code> 进行图初始化，其中 <code>fig</code> 表示整幅图的实例化句柄，<code>axs</code> 是一个 <code>np.ndarray</code> 坐标系数组的实例化数组，满足 <code>axs.shape=(nrows, ncols)</code>，<code>ax=axs[i,j]</code> 表示图中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathnormal">i</span></span></span></span> 行 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span></span> 列的子图对应的坐标系，本质上使用 <code>plt.func</code> 都是间接地调用 <code>fig.func1</code> 或 <code>ax.func2</code> 中的函数，<code>func1, func2</code> 的名称可能和 <code>func</code> 函数名有小部分差异，例如：</p>
+<ul>
+<li><code>fig.tight_layout(...)</code>：等价于 <code>plt.tight_layout(...)</code></li>
+<li><code>fig.savefig(...)</code>：等价于 <code>plt.savefig(...)</code></li>
+<li><code>fig.legend(...)</code>：等价于 <code>plt.legend(...)</code></li>
+<li><code>ax.plot(...)</code>：等价于 <code>plt.plot(...)</code></li>
+<li><code>ax.set_xlabel(...)</code>：等价于 <code>plt.xlabel(...)</code></li>
+<li><code>ax.set_ylabel(...)</code>：等价于 <code>plt.ylabel(...)</code></li>
+<li><code>ax.set_xlim(...)</code>：等价于 <code>plt.xlim(...)</code></li>
+<li><code>ax.set_ylim(...)</code>：等价于 <code>plt.ylim(...)</code></li>
+<li><code>ax.set_xticks(...)</code>：等价于 <code>plt.xticks(...)</code></li>
+<li><code>ax.set_yticks(...)</code>：等价于 <code>plt.yticks(...)</code></li>
+</ul>
+<p>想要制定图像绘制的子图，只需使用 <code>axs[i,j].plot(...)</code> 对曲线进行绘制（<code>hist, bar</code> 类似）；图例的合并方法如下：</p>
+<ol>
+<li>绘制均值曲线：<code>line, = ax.plot(x, y, label=label, c=color, lw=3)</code>，<code>line</code> 能够将当前绘制的曲线记录下来，<code>line.get_color()</code> 可获取其对应的颜色；</li>
+<li>绘制方差曲线范围：<code>ax.fill_between(x, y-stds, y+stds, color=line.get_color(), alpha=0.2)</code> ，<code>y-stds, y+stds</code> 分别为曲线范围的下边界与上边界，并保持颜色和中间绘制的均值曲线相同的，再加上 <code>0.2</code> 的透明度；</li>
+<li><code>handles, labels = ax.get_legend_handles_labels()</code> 可以从当前坐标系中绘制的曲线对应图例的句柄 <code>handles</code> 和句柄对应的图例名称 <code>labels</code>（二者都是列表）；</li>
+<li>图例共享：<code>fig.legend(handles, labels, loc='lower center', ncols=3, frameon=False)</code>，<code>handles</code> 表示共享图例对应的句柄，<code>labels</code> 表示图例句柄所对应的标签，<code>loc</code> 表示图例的放置位置，<code>ncols</code> 表示图例的列数（默认为 <code>1</code>），<code>frameon</code> 表示是否启用图例的边界框；</li>
+<li>由于直接绘制图例会导致和子图的下半部分重叠的问题，需要将子图向上进行平移，使用 <code>fig.subplots_adjust(bottom=0.20)</code> 可以将底部向上扩展 20%（注意 <code>plt.tight_layout()</code> 要在其前调用）。</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">'font.family'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'serif'</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">'font.size'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">20</span>
+np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>seed<span class="token punctuation">(</span><span class="token number">42</span><span class="token punctuation">)</span>
+fig<span class="token punctuation">,</span> axs <span class="token operator">=</span> plt<span class="token punctuation">.</span>subplots<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token operator">-</span>np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> np<span class="token punctuation">.</span>pi<span class="token operator">+</span><span class="token number">0.01</span><span class="token punctuation">,</span> <span class="token number">0.01</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+std_interval <span class="token operator">=</span> <span class="token number">30</span>
+<span class="token keyword">assert</span> x<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">%</span> std_interval <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>x<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">&#125;</span></span><span class="token string"> should be </span><span class="token interpolation"><span class="token punctuation">&#123;</span>std_interval<span class="token punctuation">&#125;</span></span><span class="token string"> times."</span></span>
+gauss_fn <span class="token operator">=</span> <span class="token keyword">lambda</span> mu<span class="token punctuation">,</span> sigma<span class="token punctuation">,</span> x<span class="token punctuation">:</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">0.5</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>x<span class="token operator">-</span>mu<span class="token punctuation">)</span><span class="token operator">/</span>sigma<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>sigma <span class="token operator">*</span> np<span class="token punctuation">.</span>sqrt<span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">)</span><span class="token punctuation">)</span>
+handles<span class="token punctuation">,</span> labels <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> i<span class="token punctuation">,</span> fn<span class="token punctuation">,</span> label<span class="token punctuation">,</span> color <span class="token keyword">in</span> <span class="token builtin">zip</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>np<span class="token punctuation">.</span>sin<span class="token punctuation">,</span> np<span class="token punctuation">.</span>cos<span class="token punctuation">,</span> np<span class="token punctuation">.</span>tanh<span class="token punctuation">]</span><span class="token punctuation">,</span>
+                               <span class="token punctuation">[</span><span class="token string">'sin'</span><span class="token punctuation">,</span> <span class="token string">'cos'</span><span class="token punctuation">,</span> <span class="token string">'tanh'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'tab:red'</span><span class="token punctuation">,</span> <span class="token string">'tab:green'</span><span class="token punctuation">,</span> <span class="token string">'tab:blue'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  ax <span class="token operator">=</span> axs<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+  y <span class="token operator">=</span> fn<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+  std <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>randn<span class="token punctuation">(</span>x<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">100</span>
+  stds <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros_like<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+  <span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>x<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    stds <span class="token operator">+=</span> gauss_fn<span class="token punctuation">(</span>x<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> std<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span>
+  line<span class="token punctuation">,</span> <span class="token operator">=</span> ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> label<span class="token operator">=</span>label<span class="token punctuation">,</span> c<span class="token operator">=</span>color<span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span>
+  ax<span class="token punctuation">.</span>fill_between<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token operator">-</span>stds<span class="token punctuation">,</span> y<span class="token operator">+</span>stds<span class="token punctuation">,</span> color<span class="token operator">=</span>line<span class="token punctuation">.</span>get_color<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">)</span>
+  ax<span class="token punctuation">.</span>set_xlim<span class="token punctuation">(</span><span class="token operator">-</span>np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">)</span>
+  ax<span class="token punctuation">.</span>set_xticks<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">-</span>np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> <span class="token operator">-</span>np<span class="token punctuation">.</span>pi<span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>pi<span class="token operator">/</span><span class="token number">2</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'$-\pi$'</span><span class="token punctuation">,</span> <span class="token string">'$-\pi/2$'</span><span class="token punctuation">,</span> <span class="token string">'$0$'</span><span class="token punctuation">,</span> <span class="token string">'$\pi/2$'</span><span class="token punctuation">,</span> <span class="token string">'$\pi$'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> ax <span class="token keyword">in</span> axs<span class="token punctuation">:</span>
+  hs<span class="token punctuation">,</span> ls <span class="token operator">=</span> ax<span class="token punctuation">.</span>get_legend_handles_labels<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  handles <span class="token operator">+=</span> hs<span class="token punctuation">;</span> labels <span class="token operator">+=</span> ls
+fig<span class="token punctuation">.</span>legend<span class="token punctuation">(</span>handles<span class="token punctuation">,</span> labels<span class="token punctuation">,</span> loc<span class="token operator">=</span><span class="token string">'lower center'</span><span class="token punctuation">,</span> ncols<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> frameon<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
+fig<span class="token punctuation">.</span>subplots_adjust<span class="token punctuation">(</span>bottom<span class="token operator">=</span><span class="token number">0.20</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>savefig<span class="token punctuation">(</span><span class="token string">"subplot_and_merge_handles.png"</span><span class="token punctuation">,</span> dpi<span class="token operator">=</span><span class="token number">300</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="/figures/essay/subplot_and_merge_handles.png" srcset="/img/loading.gif" lazyload alt="子图图例合并及均值+方差绘制" /></p>
+<h4 id="在坐标系上绘制箭头"><a class="markdownIt-Anchor" href="#在坐标系上绘制箭头"></a> 在坐标系上绘制箭头</h4>
+<p>通过<code>ax.spines</code>修改坐标轴的相关参数，用<code>marker</code>方式绘制箭头的头部。</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+config <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token string">"font.family"</span><span class="token punctuation">:</span> <span class="token string">'serif'</span><span class="token punctuation">,</span> <span class="token comment"># 衬线字体</span>
+    <span class="token string">"figure.figsize"</span><span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 图像大小</span>
+    <span class="token string">"font.size"</span><span class="token punctuation">:</span> <span class="token number">14</span><span class="token punctuation">,</span> <span class="token comment"># 字号大小</span>
+    <span class="token string">"font.serif"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'SimSun'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token comment"># 宋体</span>
+    <span class="token string">"mathtext.fontset"</span><span class="token punctuation">:</span> <span class="token string">'cm'</span><span class="token punctuation">,</span> <span class="token comment"># 渲染数学公式字体</span>
+    <span class="token string">'axes.unicode_minus'</span><span class="token punctuation">:</span> <span class="token boolean">False</span> <span class="token comment"># 显示负号</span>
+<span class="token punctuation">&#125;</span>
+plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">.</span>update<span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+
+fig<span class="token punctuation">,</span> ax <span class="token operator">=</span> plt<span class="token punctuation">.</span>subplots<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment"># 关闭默认坐标轴右侧和上侧的边框</span>
+ax<span class="token punctuation">.</span>spines<span class="token punctuation">[</span><span class="token string">'right'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_visible<span class="token punctuation">(</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>spines<span class="token punctuation">[</span><span class="token string">'top'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_visible<span class="token punctuation">(</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+<span class="token comment"># 将左侧和底侧的边框固定在零上, 设置线宽度为2</span>
+ax<span class="token punctuation">.</span>spines<span class="token punctuation">[</span><span class="token string">'left'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_position<span class="token punctuation">(</span><span class="token string">'zero'</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>spines<span class="token punctuation">[</span><span class="token string">'left'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_linewidth<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>spines<span class="token punctuation">[</span><span class="token string">'bottom'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_position<span class="token punctuation">(</span><span class="token string">'zero'</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>spines<span class="token punctuation">[</span><span class="token string">'bottom'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>set_linewidth<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>xaxis<span class="token punctuation">.</span>set_ticks_position<span class="token punctuation">(</span><span class="token string">'bottom'</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>yaxis<span class="token punctuation">.</span>set_ticks_position<span class="token punctuation">(</span><span class="token string">'left'</span><span class="token punctuation">)</span>
+<span class="token comment"># 关闭刻度</span>
+ax<span class="token punctuation">.</span>set_xticks<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>set_yticks<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token comment"># 设置显示(x_min, x_max, y_min, y_max)范围</span>
+ax<span class="token punctuation">.</span>axis<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token comment"># 设置箭头符号</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> ls<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">,</span> marker<span class="token operator">=</span><span class="token string">">"</span><span class="token punctuation">,</span> ms<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">"k"</span><span class="token punctuation">,</span> clip_on<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span> ls<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">,</span> marker<span class="token operator">=</span><span class="token string">"v"</span><span class="token punctuation">,</span> ms<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">"k"</span><span class="token punctuation">,</span> clip_on<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+
+eps <span class="token operator">=</span> <span class="token number">0.2</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token string">r"$\mathcal&#123;L&#125;^&#123;CLIP&#125;$"</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'b-.'</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token string">r"$\mathcal&#123;L&#125;^&#123;CLP&#125;$"</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'g*-'</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token string">r"$\text&#123;clip&#125;(\cdot)D$"</span><span class="token punctuation">,</span> clip_on<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> zorder<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> ms<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">,</span> <span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'g*-'</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> ms<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'g*-'</span><span class="token punctuation">,</span> clip_on<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> ms<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">,</span> <span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'k--'</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">1.5</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'k--'</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">1.5</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">,</span> <span class="token number">1</span><span class="token operator">+</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token operator">-</span>eps<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'k--'</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">1.5</span><span class="token punctuation">)</span>
+
+ax<span class="token punctuation">.</span>text<span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span>eps<span class="token operator">-</span><span class="token number">0.08</span><span class="token punctuation">,</span> <span class="token number">0.03</span><span class="token punctuation">,</span> <span class="token string">r"$1-\varepsilon$"</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>text<span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">-</span><span class="token number">0.02</span><span class="token punctuation">,</span> <span class="token number">0.03</span><span class="token punctuation">,</span> <span class="token string">r"$1$"</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>text<span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">+</span>eps<span class="token operator">-</span><span class="token number">0.08</span><span class="token punctuation">,</span> <span class="token number">0.03</span><span class="token punctuation">,</span> <span class="token string">r"$1+\varepsilon$"</span><span class="token punctuation">)</span>
+ax<span class="token punctuation">.</span>text<span class="token punctuation">(</span><span class="token number">2</span><span class="token operator">-</span><span class="token number">0.02</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">0.12</span><span class="token punctuation">,</span> <span class="token string">r"$\xi$"</span><span class="token punctuation">)</span>
+fig<span class="token punctuation">.</span>suptitle<span class="token punctuation">(</span><span class="token string">"$D&lt;0$"</span><span class="token punctuation">)</span>
+fig<span class="token punctuation">.</span>legend<span class="token punctuation">(</span>loc<span class="token operator">=</span><span class="token string">"lower center"</span><span class="token punctuation">)</span>
+fig<span class="token punctuation">.</span>tight_layout<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>savefig<span class="token punctuation">(</span><span class="token string">"ppo_D_neg.png"</span><span class="token punctuation">,</span> dpi<span class="token operator">=</span><span class="token number">300</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="/figures/RL/PPO/PPO_clip_loss_fix.png" srcset="/img/loading.gif" lazyload alt="ppo clip loss" /></p>
+<h3 id="numpy"><a class="markdownIt-Anchor" href="#numpy"></a> numpy</h3>
+<h4 id="随机"><a class="markdownIt-Anchor" href="#随机"></a> 随机</h4>
+<ol>
+<li><code>np.random.permutation(n)</code>：生成 <code>1,...,n</code> 的随机排列.</li>
+</ol>
+<h3 id="pandas"><a class="markdownIt-Anchor" href="#pandas"></a> pandas</h3>
+<p>pandas读取的文件类型为 <code>pandas.core.frame.DataFrame</code> 一般记为 <code>df</code>. 空单元格记为 <code>None</code>，是一种二维数组的形式，只不过可以通过<strong>索引</strong>获取元素值，索引分为两种，行与列：</p>
+<ul>
+<li><strong>行索引</strong>默认从0开始顺次编号，一般为数字；</li>
+<li><strong>列索引</strong>默认为原表格中的第0行的列名称，一般为字符串.</li>
+</ul>
+<p><strong>实参与形参</strong>：如果是单行单列的切片，则返回的数据类型为 <code>pandas.core.series.Series</code>，大部分api和 <code>DataFrame</code> 类似，而且是形参，做多行多列的切片返回的仍然是 <code>DataFrame</code> 数据类型，也是形参. 如果直接将 <code>DataFrame</code> 传入到函数中则是实参则是实参.</p>
+<h4 id="读取查找操作及修改行列索引"><a class="markdownIt-Anchor" href="#读取查找操作及修改行列索引"></a> 读取查找操作及修改行列索引</h4>
+<p>以下为读入 <code>.csv</code> 文件为例，若为 <code>excel</code> 表格（文件后缀为 <code>.xls</code> 或 <code>xlsx</code>）只需将 <code>read_csv()</code> 改为 <code>read_excel()</code>.</p>
+<ol>
+<li>
+<p><code>df = pd.read_csv(path, header=0)</code>：从 <code>path</code> 路径中读取 <code>.csv</code> 文件，<code>header=0</code> 表示以第0行作为列索引，若 <code>header=None</code> 则默认以序号作为列索引，数据内容从表格的第一行开始.</p>
+</li>
+<li>
+<p>获取列表元素有如下两种方式：</p>
+</li>
+</ol>
+<ul>
+<li>
+<p>根据<strong>行索引</strong>与<strong>列索引</strong>进行查找，例如查找列索引为 <code>col1</code> 索引为 <code>i</code> 对应的元素：<code>df.loc[i, col1]</code>.</p>
+</li>
+<li>
+<p>根据表格的相对位置进行查找（即将原表格视为二维数组进行查找），例如查找第 <code>i</code> 行第 <code>j</code> 列的元素：<code>df.iloc[i, j]</code>.</p>
+<p>切片的方法和通常做法相同，例如取出前100行：<code>df.iloc[:100]</code>，取出50到99行：<code>df.iloc[50:100]</code>.</p>
+</li>
+</ul>
+<blockquote>
+<p>注：使用 <code>iloc</code> 速度会比 <code>loc</code> 速度快非常多，处理较大表格时建议使用 <code>iloc</code>.</p>
+</blockquote>
+<ol start="3">
+<li>修改行列的方法：</li>
+</ol>
+<ul>
+<li>
+<p>修改列名称有两种方法：</p>
+<ol>
+<li>通过 <code>df.columns = ['rename_col1', 'rename_col2', ...]</code> 直接修改列名称，此方法一般在对全部列名进行修改时使用.</li>
+<li>通过 <code>df.rename(columns=&#123;'col1': 'rename_col1'&#125;)</code> 通过字典映射修改列名，此方法一般对部分列名进行修改时使用.</li>
+</ol>
+</li>
+<li>
+<p>设定行索引的方法：<code>df.set_index('col')</code> 以 <code>col</code> 列作为新的索引列.</p>
+</li>
+<li>
+<p>删除某个行或列的方法：<code>df.drop(['col1, col2', ...], axis=1)</code> 删除掉 <code>'col1', 'col2', ...</code> 列；<code>df.drop([index1, index2, ...], axis=0)</code> 删除掉行索引为 <code>index1, index2, ...</code> 的行. 如果加上 <code>replace=True</code> 的参数，则会在原表格上进行操作，无需重新赋值.</p>
+</li>
+</ul>
+<p>可以使用 <code>len(df)</code> 获取行数，或者 <code>df.shape</code> 获取行与列数，使用 <code>list(df)</code> 可以方便地获得列索引.</p>
+<p>如果想直接将DataFrame转化为numpy数组格式，则可以通过 <code>df.values</code> 获得.</p>
+<blockquote>
+<p>但需要注意的是，如果 <code>df</code> 中存在字符串，则 <code>df.values</code> 会转化为字符数组，需要自行转化数据格式.</p>
+</blockquote>
+<h4 id="查看数据结构"><a class="markdownIt-Anchor" href="#查看数据结构"></a> 查看数据结构</h4>
+<ol>
+<li>
+<p><code>df.head(n=5)</code>：显示前n行内容，默认显示5行.</p>
+</li>
+<li>
+<p><code>df.info()</code>：显示文件相关信息，包括：列索引，每列Non-Null的个数，每列的数据类型.</p>
+</li>
+<li>
+<p><code>df.describe()</code>：显示数字列的相关信息，包括：行数，中位数，标准差，最小最大值，1/4,1/2,3/4分位数.</p>
+</li>
+<li>
+<p><code>df['col1'].value_counts()</code>：对第 <code>col1</code> 求去重后的元素个数（一般用于处理字符串数据）.</p>
+</li>
+<li>
+<p><code>df.hist(bins=50, figsize=(18, 12)</code>：显示每一列的直方图结果，使用 <code>matplotlib.pyplot</code> 进行绘制成多个子图形式，使用 <code>plt.show()</code> 显示.</p>
+</li>
+</ol>
+<h4 id="数据可视化"><a class="markdownIt-Anchor" href="#数据可视化"></a> 数据可视化</h4>
+<p>主要使用 <a target="_blank" rel="noopener" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.html"><code>df.plot</code></a> 函数，以下为散点图使用方法.</p>
+<ol>
+<li><code>df.plot(kind='scatter', x='col1', y='col2', alpha=0.1, s=df['col3'], c=df['col4'], cmap='jet', colorbar=False, xlabel=, ylabel=)</code>：<code>kind='scatter'</code> 表示使用散点图进行绘制，以 <code>col1</code> 列作为x轴，<code>col2</code> 列作为y轴，绘制散点图，每个点的透明度为 <code>alpha</code>，每个点的大小为 <code>df['col3']</code> 控制，每个点的颜色由 <code>df['col4']</code> 控制，色彩分布使用 <code>jet</code> 类型，不显示色彩带 <code>colorbar=False</code>，后面的参数为 <code>plt</code> 的常用参数配置，例如 <code>xlabel</code> 为x轴标签，等等.</li>
+</ol>
+<p><img src="https://s1.ax1x.com/2022/12/29/pSpKzi6.png" srcset="/img/loading.gif" lazyload alt="数据可视化效果" /></p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        数据可视化完整代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">df<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>kind<span class="token operator">=</span><span class="token string">'scatter'</span><span class="token punctuation">,</span> x<span class="token operator">=</span><span class="token string">'longitude'</span><span class="token punctuation">,</span> y<span class="token operator">=</span><span class="token string">'latitude'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">,</span> xlabel<span class="token operator">=</span><span class="token string">'经度'</span><span class="token punctuation">,</span> ylabel<span class="token operator">=</span><span class="token string">'纬度'</span><span class="token punctuation">,</span> figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 左图</span>
+
+<span class="token keyword">import</span> matplotlib <span class="token keyword">as</span> mpl
+ax <span class="token operator">=</span> df<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>kind<span class="token operator">=</span><span class="token string">'scatter'</span><span class="token punctuation">,</span> x<span class="token operator">=</span><span class="token string">'longitude'</span><span class="token punctuation">,</span> y<span class="token operator">=</span><span class="token string">'latitude'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.4</span><span class="token punctuation">,</span>
+        s<span class="token operator">=</span>df<span class="token punctuation">[</span><span class="token string">'population'</span><span class="token punctuation">]</span><span class="token operator">/</span><span class="token number">100</span><span class="token punctuation">,</span> label<span class="token operator">=</span><span class="token string">'人口数'</span><span class="token punctuation">,</span> figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        c<span class="token operator">=</span><span class="token string">'median_house_value'</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span>plt<span class="token punctuation">.</span>get_cmap<span class="token punctuation">(</span><span class="token string">'jet'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> colorbar<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span>
+        xlabel<span class="token operator">=</span><span class="token string">'经度'</span><span class="token punctuation">,</span> ylabel<span class="token operator">=</span><span class="token string">'纬度'</span><span class="token punctuation">)</span>  <span class="token comment"># 这里不使用pandas自带的colorbar显示，因为有bug，显示后x轴标签无法显示</span>
+ax<span class="token punctuation">.</span>figure<span class="token punctuation">.</span>colorbar<span class="token punctuation">(</span>plt<span class="token punctuation">.</span>cm<span class="token punctuation">.</span>ScalarMappable<span class="token punctuation">(</span>  <span class="token comment"># 自定义colorbar的显示效果</span>
+    norm<span class="token operator">=</span>mpl<span class="token punctuation">.</span>colors<span class="token punctuation">.</span>Normalize<span class="token punctuation">(</span>vmin<span class="token operator">=</span>df<span class="token punctuation">[</span><span class="token string">'median_house_value'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">min</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> vmax<span class="token operator">=</span>df<span class="token punctuation">[</span><span class="token string">'median_house_value'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cmap<span class="token operator">=</span><span class="token string">'jet'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 设定色彩范围</span>
+    label<span class="token operator">=</span><span class="token string">'房价中位数'</span><span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.4</span><span class="token punctuation">)</span>  <span class="token comment"># 设定colorbar的标签和透明度，保持和pandas绘制时相同即可</span>
+plt<span class="token punctuation">.</span>legend<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 右图</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<hr />
+<p><strong>相关性分析</strong></p>
+<ol>
+<li>
+<p>计算相关系数矩阵：<code>df.corr()</code>，返回每个数值列与数值列之间的相关系数值.(<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Correlation">wikipedia上相关性介绍</a>)</p>
+</li>
+<li>
+<p>绘制散点图矩阵 <code>scatter_matrix(df[attributes])</code>，其中<code>attributes</code> 为要显示的列索引，将每列与每列之间绘制散点图，可视化两两数据之间的相关性.</p>
+</li>
+</ol>
+<p><img src="https://s1.ax1x.com/2022/12/30/pSpwBo8.png" srcset="/img/loading.gif" lazyload alt="散点图矩阵" /></p>
+<h4 id="数据处理"><a class="markdownIt-Anchor" href="#数据处理"></a> 数据处理</h4>
+<ol>
+<li>
+<p><code>df.reset_index(drop=False)</code>：重新对列表的索引值进行设置，从 <code>0</code> 开始一次递增，若 <code>drop=False</code> 则保留原索引为 <code>index</code> 列，默认保留，若为 <code>drop=True</code> 则不保留.（该api也可用于创建索引列）</p>
+</li>
+<li>
+<p><code>df.value_counts()</code>：统计每种值出现的个数.</p>
+</li>
+<li>
+<p><code>pd.cut(df['col1'], bins=[a1,a2,...,a9], labels=[1,2,...,8])</code>：对 <code>df['col1']</code> 列按照 <code>(a1,a2], (a2,a3], ..., (a8, a9]</code> 划分为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn></mrow><annotation encoding="application/x-tex">8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">8</span></span></span></span> 段，每一段均为左开右闭，第 <code>i</code> 段的标签记为 <code>i</code>（默认标签为这一段的数值范围）.</p>
+</li>
+<li>
+<p><code>df.apply(function, args=(arg1, ...), **kargs, axis=0)</code>：对表格 <code>df</code> 中的每一行切片提取出来，传入到 <code>function</code> 函数中进行处理，如果 <code>function</code> 函数有其他参数，则切片为第一个传入参数，后面的无初始化值的参数可以通过 <code>args</code> 传入，而有初始化参数可以直接传入参数及其对应的值，默认放到 <code>function</code> 函数中. 可以参考下图：</p>
+</li>
+</ol>
+<p><img src="https://s1.ax1x.com/2023/01/22/pSJtI3V.png" srcset="/img/loading.gif" lazyload alt="DataFrame中apply传入参数" /></p>
+<blockquote>
+<p>注：apply处理每行的信息速度要比逐个遍历每行做切片速度快得多.</p>
+</blockquote>
+<ol start="5">
+<li>
+<p><code>df.grouby('col').apply(function)</code>：对表格 <code>df</code> 中的 <code>'col'</code> 列相同元素进行提取，然后传入到 <code>function</code> 函数中进行处理. 适用于具有连续性数据处理，满足某种性质的数据均具有某个相同的属性值.</p>
+</li>
+<li>
+<p><code>df.drop_duplicates()</code>：对行进行去重，完全相同的行会只保留一个.</p>
+</li>
+<li>
+<p><code>df1.merge(df2, how='outer', on=['col1'])</code>：将表格 <code>df1, df2</code> 进行外合并，<code>on=['col1']</code> 表示以 <code>col1</code> 列作为每行的基准值（可以有多个基准值，例如 <code>['col1', 'col2']</code>，默认以行索引作为基准值）逐行进行合并，<code>how='outer'</code> 时为外合并，即对于两个表格中的全部基准值，相同基准值则会进行合并，不同基准值会用None填补，如果有多个相同基准值，则会添加额外的列显示；<code>how='inner'</code> 时为内合并，即只对两个表格中同时具有的基准值进行合并，如果某个基准值仅在一个表格中出现，则会将其丢弃.</p>
+</li>
+<li>
+<p><code>df.sort_values('col', ascending=True)</code>：表示将表格中的每行按照 <code>'col'</code> 列的元素递增形式进行排序，若 <code>ascending=False</code> 则以递降形式进行排序.</p>
+</li>
+</ol>
+<h5 id="数据清理"><a class="markdownIt-Anchor" href="#数据清理"></a> 数据清理</h5>
+<p>处理缺失的特征，有如下三种选择：</p>
+<ol>
+<li>
+<p>丢弃缺失值对应的整行：<code>df.dropna(axis=0, subset=None)</code>，<code>axis=0</code> 表示清除规则为按行清除，<code>subset</code> 可以指定清除某一列的缺失值，默认为行清除，清除整个表格中的全部缺失值.</p>
+</li>
+<li>
+<p>丢弃缺失值对应的整列：<code>df.dropna(axis=1)</code>.</p>
+</li>
+<li>
+<p>将缺失值补全为某个值（0、平均数或中位数等）：例如，按0补全 <code>df['col1'].fillna(0)</code></p>
+</li>
+</ol>
+<p>如此操作可能对于新数据处理不方便，因为可能出现新的列有缺失值，而上述补全方式不适用于对于新的一列进行补全，所以使用Scikit-Learn中的SimpleImputer方式可以更好的进行数据补全，参见另一篇文章<a href="./65380/#%E7%AE%80%E6%98%93%E5%A4%84%E7%90%86%E7%BC%BA%E5%A4%B1%E5%80%BC">Scikit-Learn SimpleImputer类</a></p>
+<h3 id="dask"><a class="markdownIt-Anchor" href="#dask"></a> dask</h3>
+<p>dask是一个支持对numpy，pandas高效并行处理的包，常用于处理超大文件，可以分块处理超大表格.</p>
+<p>由于dask的使用方法和numpy，pandas类似，只需将 <code>np.array</code> 改为 <code>dask.Array</code>，<code>pd.DataFrame</code> 改为 <code>dask.DataFrame</code>，而且在操作命令上都基本相同，只不过并不会根据命令立刻执行操作，而是会产生一个延迟包 <code>dask.delayed</code>，会将操作的结果的框架返回，而不会计算出具体的数值，只有在操作的最后加上 <code>.compute()</code> 命令才会执行计算.</p>
+<p>使用 <code>dask.diagnostics.ProgressBar</code> 包裹计算的命令即可显示处理的进度条：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> dask<span class="token punctuation">.</span>diagnostics <span class="token keyword">import</span> ProgressBar
+<span class="token keyword">with</span> ProgressBar<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    out <span class="token operator">=</span> delayed<span class="token punctuation">.</span>compute<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="dataframe"><a class="markdownIt-Anchor" href="#dataframe"></a> DataFrame</h4>
+<p><code>import dask.dataframe as dd</code> 读入包，读入到 <code>dask.dataframe</code> 之后的处理，与pandas基本完全一致，只需最后在计算时加上 <code>.compute()</code> 即可.</p>
+<ul>
+<li>
+<p>文件读取：<code>ddf = dd.read_csv(file_path, dtype=None)</code>，dask会根据每列的第一个数据对一整列的数据类型进行猜测，如果后续出现不同的数据类型，则会报出错误，会给出推荐的 <code>dtype</code> 类型指定，只需将其给出的建议加入到 <code>dtype</code> 参数位置即可.</p>
+</li>
+<li>
+<p>通过 <code>pd.DataFrame</code> 转化：<code>ddf = dd.from_pandas(df, npartitions=32)</code>，从 <code>df</code> 转化为 <code>dask.DataFrame</code> 文件，划分为 <code>npartitions</code> 个块.</p>
+</li>
+<li>
+<p>文件保存：<code>ddf.to_csv(save_path, single_file=True)</code>，保存也和pandas类似，但是如果直接调用保存api，则会根据划分的块，保存出多个文件，如果希望单个文件保存，可使用 <code>single_file=True</code>.</p>
+</li>
+</ul>
+<h3 id="cv2"><a class="markdownIt-Anchor" href="#cv2"></a> cv2</h3>
+<h4 id="绘制滑动窗口"><a class="markdownIt-Anchor" href="#绘制滑动窗口"></a> 绘制滑动窗口</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> skimage <span class="token keyword">import</span> transform
+<span class="token keyword">import</span> cv2
+
+im <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">r'mini_fox.jpg'</span><span class="token punctuation">)</span>
+downscale<span class="token operator">=</span><span class="token number">1.5</span> <span class="token comment"># Guass金字塔以1.5倍进行缩放</span>
+<span class="token keyword">def</span> <span class="token function">sliding_window</span><span class="token punctuation">(</span>im<span class="token punctuation">,</span> window_size<span class="token punctuation">,</span> step_size<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> x <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> im<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> step_size<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> y <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> im<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> step_size<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">yield</span> x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> im<span class="token punctuation">[</span>x<span class="token punctuation">:</span>x<span class="token operator">+</span>window_size<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> y<span class="token punctuation">:</span>y<span class="token operator">+</span>window_size<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
+
+<span class="token comment"># Gauss金字塔</span>
+<span class="token keyword">for</span> i<span class="token punctuation">,</span> im_scaled <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>transform<span class="token punctuation">.</span>pyramid_gaussian<span class="token punctuation">(</span>im<span class="token punctuation">,</span> downscale<span class="token operator">=</span>downscale<span class="token punctuation">,</span> channel_axis<span class="token operator">=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 滑动窗口</span>
+    <span class="token keyword">for</span> x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> im_window <span class="token keyword">in</span> sliding_window<span class="token punctuation">(</span>im_scaled<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> im_window<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">30</span> <span class="token keyword">or</span> im_window<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">100</span><span class="token punctuation">:</span>
+            <span class="token keyword">continue</span>
+        clone <span class="token operator">=</span> im_scaled<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 在原图上重新绘制</span>
+        cv2<span class="token punctuation">.</span>rectangle<span class="token punctuation">(</span>clone<span class="token punctuation">,</span> <span class="token punctuation">(</span>y<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>y <span class="token operator">+</span> <span class="token number">100</span><span class="token punctuation">,</span> x <span class="token operator">+</span> <span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">,</span> thickness<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># 绘制窗口</span>
+        cv2<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Sliding Window </span><span class="token interpolation"><span class="token punctuation">&#123;</span>im_scaled<span class="token punctuation">.</span>shape<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">,</span> clone<span class="token punctuation">)</span>  <span class="token comment"># 显示窗口</span>
+        cv2<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span>  <span class="token comment"># 控制每帧长度</span>
+cv2<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="https://s1.ax1x.com/2022/12/07/zglsr8.png" srcset="/img/loading.gif" lazyload alt="Gauss金字塔下的滑动窗口效果" /></p>
+<h3 id="nvidia显卡信息查看"><a class="markdownIt-Anchor" href="#nvidia显卡信息查看"></a> Nvidia显卡信息查看</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">nvidia-smi  <span class="token comment"># 显示显卡相关信息</span>
+<span class="token function">watch</span> <span class="token parameter variable">-n</span> <span class="token number">1</span> nvidia-smi  <span class="token comment"># 以1s刷新显卡使用情况，持续观察显卡使用情况</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<h3 id="scikit-learn"><a class="markdownIt-Anchor" href="#scikit-learn"></a> Scikit-Learn</h3>
+<p>请见 <a href="/posts/65380/">Scikit-Learn 常用函数及模型写法</a></p>
+<h3 id="tensorflow"><a class="markdownIt-Anchor" href="#tensorflow"></a> TensorFLow</h3>
+<p>请见 <a href="/posts/48334/">TensorFlow 常用函数及模型写法</a></p>
+<h3 id="jaxflaxoptax"><a class="markdownIt-Anchor" href="#jaxflaxoptax"></a> Jax+Flax+Optax</h3>
+<p>请见 <a href="/posts/8349/">Jax+Flax+Optax 学习笔记</a>，<a href="/posts/56847/">Jax+Flax+Optax 常用API</a></p>
+<h3 id="tensorboard-和-wandb-使用方法"><a class="markdownIt-Anchor" href="#tensorboard-和-wandb-使用方法"></a> tensorboard 和 wandb 使用方法</h3>
+<p>请见 <a href="/posts/8349/#%E5%88%A9%E7%94%A8tensorboar%E5%92%8Cwandb%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AE%AD%E7%BB%83%E8%BF%87%E7%A8%8B">Jax+Flax+Optax 学习笔记 - 利用tensorboar和wandb可视化训练过程</a></p>
+<h3 id="ffmpeg"><a class="markdownIt-Anchor" href="#ffmpeg"></a> ffmpeg</h3>
+<p>请见 <a href="/posts/50944/">ffmpeg常用命令</a></p>
+<h3 id="adb-waydroid"><a class="markdownIt-Anchor" href="#adb-waydroid"></a> ADB &amp; Waydroid</h3>
+<p>请见 <a href="/posts/65181/">ADB&amp;Waydroid常用命令</a></p>
+<h3 id="docker"><a class="markdownIt-Anchor" href="#docker"></a> Docker</h3>
+<p>请见 <a href="/post/51856/">Docker 安装与常用命令</a></p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>常用命令及函数</div>
+      <div>https://wty-yy.github.io/posts/64648/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
