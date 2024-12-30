@@ -19,23 +19,28 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack 5.1.4版本(因为要用D435i只能装5.x版本的不然无法识别)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供电，还需要另一台带有Docker的电">
+    <meta name="description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jetson AGX Orin 配置">
 <meta property="og:url" content="https://wty-yy.github.io/posts/25605/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack 5.1.4版本(因为要用D435i只能装5.x版本的不然无法识别)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供电，还需要另一台带有Docker的电">
+<meta property="og:description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash_real1.jpg">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash_real2.jpg">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_GUI_flash1.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_GUI_flash2.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_GUI_flash3.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash1.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash2.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash3.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash4.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash5.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash6.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_JetPack6.1_UVC_D435i_realsense-viewer.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_D435i_ROS2_view.png">
 <meta property="article:published_time" content="2024-12-29T06:47:35.000Z">
-<meta property="article:modified_time" content="2024-12-30T09:50:28.649Z">
+<meta property="article:modified_time" content="2024-12-30T15:38:58.897Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash_real1.jpg">
@@ -313,7 +318,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          460 字
+          1.4k 字
         
       </span>
     
@@ -324,7 +329,7 @@
         
         
         
-          4 分钟
+          12 分钟
         
       </span>
     
@@ -368,7 +373,7 @@
                 
                 <p>记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：</p>
 <ol>
-<li>使用SDKManager docker镜像刷JetPack 5.1.4版本(因为要用D435i只能装5.x版本的不然无法识别)</li>
+<li>使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)</li>
 </ol>
 <h2 id="sdkmanager刷机"><a class="markdownIt-Anchor" href="#sdkmanager刷机"></a> SDKManager刷机</h2>
 <blockquote>
@@ -388,11 +393,38 @@
 <td><img src="/figures/robotics/Jetson/AGX_flash_real2.jpg" srcset="/img/loading.gif" lazyload alt="img1" /></td>
 </tr>
 <tr>
-<td>如果进入了显示界面说明没成功进入刷机，关机后拔掉DC电源线，按住<strong>中间的按钮</strong>，插上中间的电源线，如果屏幕没有亮松开按钮，在电脑上输入<code>lsusb</code>可以看到AGX的信息，说明成功进入恢复模式。</td>
-<td></td>
+<td>如果进入了显示界面说明没成功进入刷机，关机后拔掉DC电源线，按住<strong>中间的按钮</strong>，插上中间的电源线，如果屏幕没有亮松开按钮，在电脑上输入<code>lsusb</code>可以看到一行<code>NVIDIA Corp. APX</code>信息，说明成功进入恢复模式。</td>
+<td>如果没有12V DC直流电源线，使用type-C电源线插到DC插口上方的type-C接口上也是可以的。</td>
 </tr>
 </tbody>
 </table>
+<h3 id="可视化窗口安装"><a class="markdownIt-Anchor" href="#可视化窗口安装"></a> 可视化窗口安装</h3>
+<p>进入<a target="_blank" rel="noopener" href="https://developer.nvidia.com/sdk-manager">skd-manager下载界面</a>点击<code>.deb Ubuntu</code>下载并安装在主机上，安装完成后，终端输入<code>sdkmanager</code>即可打开可视化窗口（如果打不开尝试<code>sdkmanager --no-sandbox</code>）</p>
+<table>
+<thead>
+<tr>
+<th>STEP01</th>
+<th>STEP02</th>
+<th>STEP03</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/figures/robotics/Jetson/AGX_GUI_flash1.png" srcset="/img/loading.gif" lazyload alt="img1" /></td>
+<td><img src="/figures/robotics/Jetson/AGX_GUI_flash2.png" srcset="/img/loading.gif" lazyload alt="img2" /></td>
+<td><img src="/figures/robotics/Jetson/AGX_GUI_flash3.png" srcset="/img/loading.gif" lazyload alt="img3" /></td>
+</tr>
+<tr>
+<td>连接上AXG，选择要刷的版本</td>
+<td>选择要安装的程序</td>
+<td>设置用户名与密码开始刷机</td>
+</tr>
+</tbody>
+</table>
+<h3 id="docker-cli-安装514"><a class="markdownIt-Anchor" href="#docker-cli-安装514"></a> Docker CLI 安装5.1.4</h3>
+<blockquote>
+<p>由于我的host主机是Ubuntu24.02，无法安装5.1.4，必须用镜像，推荐用可视化窗口安装</p>
+</blockquote>
 <p>进入<a target="_blank" rel="noopener" href="https://developer.nvidia.com/sdk-manager">skd-manager下载界面</a>，下载Docker Image Ubuntu18.04 (20.04)也可以安装JetPack 5.x，下载完成后加载镜像，并重新命名为sdkmanager:</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> load <span class="token parameter variable">-i</span> sdkmanager-<span class="token punctuation">[</span>版本号<span class="token punctuation">]</span>-Ubuntu_18.04_docker.tar.gz
 <span class="token function">docker</span> tag sdkmanager:<span class="token punctuation">[</span>版本号<span class="token punctuation">]</span>-Ubuntu_18.04 sdkmanager:latest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
@@ -438,6 +470,55 @@
 </tr>
 </tbody>
 </table>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        保存容器为镜像(不推荐, 镜像高达78.1GB)
+    </div>
+    <div class='spoiler-content'>
+        <p>完成安装后我们可以保存本次下载的容器为镜像</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> commit JetPack_AGX_Orin_Devkit  jetpack_agx_orin_devkit:5.1.4_flash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>下次如果还要刷机直接启动本次镜像即可</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> run <span class="token parameter variable">-it</span> <span class="token parameter variable">--rm</span> <span class="token parameter variable">--privileged</span> <span class="token parameter variable">-v</span> /dev/bus/usb:/dev/bus/usb/ jetpack_agx_orin_devkit:5.1.4_flash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<h2 id="realsense-sdk-ros-安装"><a class="markdownIt-Anchor" href="#realsense-sdk-ros-安装"></a> RealSense SDK &amp; ROS 安装</h2>
+<h3 id="jetpack-5x"><a class="markdownIt-Anchor" href="#jetpack-5x"></a> JetPack 5.x</h3>
+<p>直接按照官网的安装方法安装即可: <a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/blob/master/doc/installation_jetson.md#4-install-with-debian-packages"><code>4. Install with Debian Packages</code></a><br />
+安装完成后执行<code>realsense-viewer</code>插上摄像头即可看到图像(IMU也可以识别)</p>
+<h3 id="jetpack-6x"><a class="markdownIt-Anchor" href="#jetpack-6x"></a> JetPack 6.x</h3>
+<p>参考realsense官方人员给出的回复(<a target="_blank" rel="noopener" href="https://support.intelrealsense.com/hc/en-us/community/posts/31576776977427-cannot-connect-D455-on-jetson-agx-orin">帖子</a>)，因为包含IMU摄像头为HID设备，需要MIPI驱动，安装这个驱动非常麻烦，参考<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/realsense_mipi_platform_driver">realsense_mipi_platform_driver</a>，基本没有仍和参考文档，根本装不上。</p>
+<p>帖子下方给出了另一个<a target="_blank" rel="noopener" href="https://support.intelrealsense.com/hc/en-us/community/posts/31576776977427/comments/31683171974419">很好的方法</a>，基于<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/blob/master/doc/libuvc_installation.md">libuvc_installation.md</a>安装UVC后端的realsense即可，三行即可解决</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://github.com/IntelRealSense/librealsense/raw/master/scripts/libuvc_installation.sh
+<span class="token function">chmod</span> +x ./libuvc_installation.sh
+<span class="token comment"># 执行安装前推荐使用全cpu编译cmake效率更高</span>
+gnome-text-editor libuvc_installation.sh
+<span class="token comment"># 找到倒数第3行, make -j2 改为</span>
+<span class="token function">make</span> -j<span class="token variable">$&#123;nproc&#125;</span>
+<span class="token comment"># 保存退出</span>
+<span class="token comment"># 开始安装</span>
+./libuvc_installation.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><strong>D435i</strong>的IMU读取方法，如果直接打开<code>realsense-viewer</code>还是无法读取IMU数据，一读取就会报错，解决方法就是将相机的Firmware降级到适配你相机的最低版本，参考<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/issues/13130#issuecomment-2225099648">D455 Errors when activating imu stream in rs-viewer中的一条回复</a>，方法很简单，先在<a target="_blank" rel="noopener" href="https://dev.intelrealsense.com/docs/firmware-releases-d400">Firmware releases D400</a>找到你相继对应的最低驱动版本，例如我的D435i就是<a target="_blank" rel="noopener" href="https://www.intelrealsense.com/wp-content/uploads/2020/08/D400_Series_Production_FW_5_12_7_100.zip?_ga=2.41355745.2140590151.1735553428-1109731474.1735553428">Version-5_12_7_100</a>，下载解压得到<code>*.bin</code>文件，通过<a target="_blank" rel="noopener" href="https://dev.intelrealsense.com/docs/firmware-update-tool">Firmware Update Tool</a>安装教程(安装librealsense时候就附带安装了)安装</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">rs-fw-update  <span class="token comment"># 查看当前连接的相机驱动版本</span>
+rs-fw-update <span class="token parameter variable">-f</span> Signed_Image_UVC_5_12_7_100.bin  <span class="token comment"># 安装驱动</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>安装完成后执行<code>realsense-viewer</code>插上摄像头即可看到图像🥰(还可以看到IMU哦)<br />
+<img src="/figures/robotics/Jetson/AGX_JetPack6.1_UVC_D435i_realsense-viewer.png" srcset="/img/loading.gif" lazyload alt="JetPack 6.1安装UVC后端显示realsense-viewer连接D435i" /></p>
+<h3 id="ros2中启动realsense相机节点"><a class="markdownIt-Anchor" href="#ros2中启动realsense相机节点"></a> ROS2中启动realsense相机节点</h3>
+<p>我安装的ROS2版本为humble，直接按照官方给出的教程<a target="_blank" rel="noopener" href="https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html">Ubuntu-Install-Debs</a>即可轻松安装</p>
+<p>完成ROS2安装后，参考<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/realsense-ros/issues/3075#issuecomment-2082810453">No RealSense devices were found! 中的评论</a>，必须使用源码编译方式安装才能检测到相机，参考官方<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/realsense-ros?tab=readme-ov-file#installation-on-ubuntu">realsense-ros installation-on-ubuntu Step3 Option2</a>安装</p>
+<blockquote>
+<p>安装colcon: <code>sudo apt install python3-colcon-common-extensions</code><br />
+如果执行<code>sudo rosdep init</code>报错，参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/wohu1104/article/details/126337787">CSDN - rosdep update — The read operation timed out 解决方法</a> (将所有<code>raw.githubusercontent.com</code>前面都加上代理)</p>
+</blockquote>
+<p>完成全部安装后，以后就不要使用<code>source /opt/ros/humble/setup.sh</code>了，直接使用<code>source /home/$&#123;USER&#125;/ros2_ws/install/setup.sh</code>加载ROS2环境即可</p>
+<blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://www.reddit.com/r/ROS/comments/mp6fe8/if_i_use_ros2_built_from_source_can_i_use_sudo/">reddit - If I use ros2 built from source, can I use “sudo apt install ros-distro-package” to install packages??</a>发现ROS2貌似不支持将自己编译的包，安装到root环境下，通过<code>ros2_ws/install/setup.sh</code>即可初始化整个ROS2环境+自定义包了</p>
+</blockquote>
+<p>开三个终端分别启动如下指令</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ros2 run realsense2_camera realsense2_camera_node  <span class="token comment"># 启动相机节点</span>
+rviz2  <span class="token comment"># 启动rviz2查看camera和DeepCloud</span>
+ros2 topic <span class="token builtin class-name">echo</span> /camera/camera/accel/sample  <span class="token comment"># 查看IMU加速度信息节点</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>在rviz2中加入下图中左侧的窗口(点击Add按钮加入窗口)，选择对应的topic节点，就可以看到效果啦🥳</p>
+<p><img src="/figures/robotics/Jetson/AGX_D435i_ROS2_view.png" srcset="/img/loading.gif" lazyload alt="使用rviz2查看ROS2启动的D435i相机相关节点" /></p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
