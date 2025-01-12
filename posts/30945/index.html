@@ -1,0 +1,934 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="初始化项目  构建机器人的初始化环境模板可以参考GitHub - joshnewans&#x2F;my_bot, 基于该模板构建的带有差速控制的机器人和gazebo仿真环境的例子GitHub - joshnewans&#x2F;articubot_one  初始化Python项目: ros2 pkg create --build-type ament_python my_python_package 初始化cmak">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROS2速查表">
+<meta property="og:url" content="https://wty-yy.github.io/posts/30945/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="初始化项目  构建机器人的初始化环境模板可以参考GitHub - joshnewans&#x2F;my_bot, 基于该模板构建的带有差速控制的机器人和gazebo仿真环境的例子GitHub - joshnewans&#x2F;articubot_one  初始化Python项目: ros2 pkg create --build-type ament_python my_python_package 初始化cmak">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/sw2urdf_sw_links.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/sw2urdf_sw_axises.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/rviz2_cubot_urdf.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/gazebo_cubot_urdf.png">
+<meta property="article:published_time" content="2025-01-12T02:07:41.000Z">
+<meta property="article:modified_time" content="2025-01-12T13:17:02.410Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/ros2/sw2urdf_sw_links.png">
+  
+  
+  
+  <title>ROS2速查表 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ROS2速查表"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-12 10:07" pubdate>
+          2025年1月12日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">ROS2速查表</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="初始化项目"><a class="markdownIt-Anchor" href="#初始化项目"></a> 初始化项目</h2>
+<blockquote>
+<p>构建机器人的初始化环境模板可以参考<a target="_blank" rel="noopener" href="https://github.com/joshnewans/my_bot">GitHub - joshnewans/my_bot</a>, 基于该模板构建的带有差速控制的机器人和gazebo仿真环境的例子<a target="_blank" rel="noopener" href="https://github.com/joshnewans/articubot_one/tree/420dc2b4d1a14274d38e3e3c76f7aa0ee7842427">GitHub - joshnewans/articubot_one</a></p>
+</blockquote>
+<p>初始化Python项目:</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ros2 pkg create --build-type ament_python my_python_package<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>初始化cmake项目:</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ros2 pkg create my_cmake_package<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>在cmake中也可以写Python程序，只需要在<code>CMakeLists.txt</code>中加入</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-cmake" data-language="cmake"><code class="language-cmake"><span class="token keyword">install</span><span class="token punctuation">(</span>
+  DIRECTORY directory1 directory2 directory3 ...
+  DESTINATION share/<span class="token punctuation">$&#123;</span><span class="token variable">PROJECT_NAME</span><span class="token punctuation">&#125;</span>
+<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>使用colcon构建项目(安装colcon<code>sudo apt install python3-colcon-common-extensions</code>):</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /ros2_ws
+colcon build --symlink-install  <span class="token comment"># 编译所有包</span>
+colcon build --symlink-install --packages-select <span class="token operator">&lt;</span>package<span class="token operator"><span class="token file-descriptor important">1</span>></span> <span class="token punctuation">..</span>.  <span class="token comment"># 编译指定包</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><code>--symlink-install</code>使用虚拟连接python代码，URDF，yaml配置文件（无需编译的文件），当项目中文件修改后，运行即是最新更新的文件。</p>
+<h2 id="launch文件"><a class="markdownIt-Anchor" href="#launch文件"></a> Launch文件</h2>
+<h3 id="按包名称获取绝对路径"><a class="markdownIt-Anchor" href="#按包名称获取绝对路径"></a> 按包名称获取绝对路径</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> ament_index_python<span class="token punctuation">.</span>packages <span class="token keyword">import</span> get_package_share_directory<span class="token punctuation">,</span> get_package_prefix
+<span class="token comment"># /ros2_ws/install/&lt;package_name>/share/&lt;package_name></span>
+path_install_pkg <span class="token operator">=</span> get_package_share_directory<span class="token punctuation">(</span><span class="token string">'package_name'</span><span class="token punctuation">)</span>
+<span class="token comment"># /ros2_ws/install/&lt;package_name></span>
+path_prefix_pkg <span class="token operator">=</span> get_package_prefix<span class="token punctuation">(</span><span class="token string">'package_name'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="获取urdf"><a class="markdownIt-Anchor" href="#获取urdf"></a> 获取URDF</h3>
+<h4 id="解析xacro文件"><a class="markdownIt-Anchor" href="#解析xacro文件"></a> 解析xacro文件</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> xacro
+path_xacro_file <span class="token operator">=</span> <span class="token string">".../xx.xacro"</span>
+robot_xacro <span class="token operator">=</span> xacro<span class="token punctuation">.</span>process_file<span class="token punctuation">(</span>path_xacro_file<span class="token punctuation">)</span>
+robot_description <span class="token operator">=</span> robot_xacro<span class="token punctuation">.</span>toxml<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 转为URDF的xml格式</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="读取urdf"><a class="markdownIt-Anchor" href="#读取urdf"></a> 读取URDF</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>path_urdf_file<span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> urdf_file<span class="token punctuation">:</span>
+  robot_description <span class="token operator">=</span> urdf_file<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 直接读取即可</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<h2 id="solidworks模型转换为urdf"><a class="markdownIt-Anchor" href="#solidworks模型转换为urdf"></a> SolidWorks模型转换为URDF</h2>
+<h3 id="solidworks转ros1的urdf文件"><a class="markdownIt-Anchor" href="#solidworks转ros1的urdf文件"></a> SolidWorks转ROS1的URDF文件</h3>
+<blockquote>
+<p>先安装sw插件<a target="_blank" rel="noopener" href="https://github.com/ros/solidworks_urdf_exporter">ros/solidworks_urdf_exporter</a>，用插件导出为ROS1的urdf，详细请参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42899627/article/details/141901240">CSDN - solidworks模型导出urdf（超详细）配合视频观看</a></p>
+</blockquote>
+<p>此处需要注意的就是尽可能简化link的数量，并且对每个link都要加上各自的坐标系（通过先加入参考点，再定义xyz三个方向），在URDF导出时候每个links选择对应的坐标系即可</p>
+<blockquote>
+<p>如果有的选了坐标系有的没选，就会报错哦</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>links</th>
+<th>对应坐标系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/figures/robotics/ros2/sw2urdf_sw_links.png" srcset="/img/loading.gif" lazyload alt="links" /></td>
+<td><img src="/figures/robotics/ros2/sw2urdf_sw_axises.png" srcset="/img/loading.gif" lazyload alt="axises" /></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ros1的urdf转ros2的urdf"><a class="markdownIt-Anchor" href="#ros1的urdf转ros2的urdf"></a> ROS1的URDF转ROS2的URDF</h3>
+<p>这里使用fish1sheep的转换代码<a target="_blank" rel="noopener" href="https://github.com/fish1sheep/sw2urdf_ROS2">GitHub - sw2urdf_ROS2</a>，我加入了一些简单的功能<a target="_blank" rel="noopener" href="https://github.com/wty-yy/sw2urdf_ROS2">GitHub - wty-yy/sw2urdf_ROS2</a>，使用方法（可参考项目的<code>README.md</code>）</p>
+<ol>
+<li>使用<a target="_blank" rel="noopener" href="https://github.com/ros/solidworks_urdf_exporter">ros/solidworks_urdf_exporter</a>插件导出为ROS1的URDF项目文件夹，记为<code>urdf_proj</code> <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 用solidworks_urdf_exporter到处的格式应该如下</span>
+path/to/urdf_proj
+├── CMakeLists.txt
+├── config
+├── export.log
+├── launch
+├── meshes
+├── package.xml
+├── textures  <span class="token comment"># 可能没有也没关系</span>
+└── urdf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+</li>
+<li>修改<code>insert_urdf.py</code>中的<code>base_link</code>为你机器人基准link的名称（第一个设置的link，默认叫<code>base_link</code>，因为需要创建base_footprint作为基准，<code>base_footprint_joint</code>所需的<code>xyz</code>偏移量根据机器人需要设定）</li>
+<li>在ROS2的工作空间下，执行<code>python3 dir_ros2.py</code>，<strong>进入到</strong><code>urdf_proj</code>文件夹，点击确认，返回如下信息则说明成功： <div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        成功导出输出的信息
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Selected directory: path/to/urdf_proj
+Successfully deleted the <span class="token string">'launch'</span> folder.
+Successfully deleted the <span class="token string">'CMakeLists.txt'</span> file.
+Successfully deleted the <span class="token string">'package.xml'</span> file.
+Successfully created an empty <span class="token string">'launch'</span> folder.
+Successfully saved <span class="token string">'display.launch.py'</span> as: path/to/urdf_proj/launch/display.launch.py
+Successfully saved <span class="token string">'CMakeLists.txt'</span> as: path/to/urdf_proj/CMakeLists.txt
+Successfully saved <span class="token string">'package.xml'</span> as: path/to/urdf_proj/package.xml
+Content successfully inserted into path/to/urdf_proj/urdf/urdf_proj.urdf at line <span class="token number">7</span>
+Content successfully inserted into path/to/urdf_proj/urdf/model.sdf at line <span class="token number">1</span>
+Directory /root/.gazebo/models/urdf_proj already exists.
+File path/to/urdf_proj/urdf/model.sdf successfully copied to /root/.gazebo/models/urdf_proj.
+Successfully saved <span class="token string">'sdf.config'</span> as: /root/.gazebo/models/urdf_proj
+Target directory /root/.gazebo/models/urdf_proj/meshes already exists<span class="token operator">!</span>
+Target directory /root/.gazebo/models/urdf_proj/materials/textures already exists<span class="token operator">!</span>
+File path/to/urdf_proj/urdf/model.sdf successfully deleted.
+Successfully saved <span class="token string">'gazebo.launch.py'</span> as: path/to/urdf_proj/launch/gazebo.launch.py<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+</li>
+<li>将转换完毕的ROS2的URDF项目文件夹<code>urdf_proj</code>复制到ROS2的工作路径下（例如<code>/ros2_ws/src</code>），执行</li>
+</ol>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cp</span> <span class="token parameter variable">-r</span> path/to/urdf_proj /ros2_ws/src
+<span class="token builtin class-name">cd</span> /ros2_ws
+colcon build --symlink-install
+<span class="token builtin class-name">source</span> ./install/setup.sh
+
+ros2 launch urdf_proj display.launch.py  <span class="token comment"># 启动RVIZ2显示机器人</span>
+<span class="token comment"># 或者</span>
+ros2 launch urdf_proj gazebo.launch.py  <span class="token comment"># 启动GAZEBO仿真</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<table>
+<thead>
+<tr>
+<th>rviz2</th>
+<th>gazebo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/figures/robotics/ros2/rviz2_cubot_urdf.png" srcset="/img/loading.gif" lazyload alt="rviz2" /></td>
+<td><img src="/figures/robotics/ros2/gazebo_cubot_urdf.png" srcset="/img/loading.gif" lazyload alt="gazebo" /></td>
+</tr>
+</tbody>
+</table>
+<h3 id="urdf无法在gazebo中打开"><a class="markdownIt-Anchor" href="#urdf无法在gazebo中打开"></a> URDF无法在Gazebo中打开</h3>
+<blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://robotics.stackexchange.com/questions/1170/where-does-gazebo-set-the-gazebo-model-path-environment-variable">Robotics Stack Exchange - Where does Gazebo set the GAZEBO_MODEL_PATH environment variable?</a>, <a target="_blank" rel="noopener" href="https://github.com/justagist/panda_simulator/issues/58">GitHub panda_simulator issues - How do I add an .stl to the gazebo simulation?</a></p>
+</blockquote>
+<p>执行上述<code>ros2 launch urdf_proj gazebo.launch.py</code>可能遇到<strong>Gazebo一直卡在启动界面</strong>的问题，这是因为<code>STL</code>文件无法找到，也就是<code>package://.../*.STL</code>中的<code>package</code>不在环境变量<code>GAZEBO_MODEL_PATH</code>中。</p>
+<p>由于<code>echo $GAZEBO_MODEL_PATH</code>是空的（我的Gazebo11就没有这个环境变量），如果直接赋路径会导致不包含默认路径，直接无法打开gazebo，所以先要将默认的路径添加进去（可以在<code>~/.bashrc</code>中加入<code>export GAZEBO_MODEL_PATH=/usr/share/gazebo-11/models:$&#123;HOME&#125;/.gazebo/models </code>，<code>gazebo-11</code>填写你的gazebo版本），再在launch文件中加入我们所需的路径</p>
+<p>修改<code>launch.py</code>文件方法如下，打开<code>launch/gazebo.launch.py</code>文件（用sw转urdf插件自动就会生成），加入如下内容：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> ament_index_python<span class="token punctuation">.</span>packages <span class="token keyword">import</span> get_package_prefix
+
+package_name <span class="token operator">=</span> <span class="token string">'cubot_v2_sw2urdf'</span>
+pkg_share <span class="token operator">=</span> os<span class="token punctuation">.</span>pathsep <span class="token operator">+</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>get_package_prefix<span class="token punctuation">(</span>package_name<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'share'</span><span class="token punctuation">)</span>
+<span class="token keyword">if</span> <span class="token string">'GAZEBO_MODEL_PATH'</span> <span class="token keyword">in</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">:</span>  <span class="token comment"># 如果你修改了~/.bashrc, 就会执行这个</span>
+    os<span class="token punctuation">.</span>environ<span class="token punctuation">[</span><span class="token string">'GAZEBO_MODEL_PATH'</span><span class="token punctuation">]</span> <span class="token operator">+=</span> pkg_share
+<span class="token keyword">else</span><span class="token punctuation">:</span>  <span class="token comment"># 注意此处gazebo-11修改为你的gazebo版本</span>
+    os<span class="token punctuation">.</span>environ<span class="token punctuation">[</span><span class="token string">'GAZEBO_MODEL_PATH'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"/usr/share/gazebo-11/models"</span> <span class="token operator">+</span> pkg_share<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        完整gazebo.launch.py文件如下
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> launch
+<span class="token keyword">import</span> launch_ros
+<span class="token keyword">from</span> ament_index_python<span class="token punctuation">.</span>packages <span class="token keyword">import</span> get_package_share_directory<span class="token punctuation">,</span> get_package_prefix
+<span class="token keyword">from</span> launch<span class="token punctuation">.</span>launch_description_sources <span class="token keyword">import</span> PythonLaunchDescriptionSource
+<span class="token keyword">import</span> os
+
+
+<span class="token keyword">def</span> <span class="token function">generate_launch_description</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># Get default path</span>
+    robot_name_in_model <span class="token operator">=</span> <span class="token string">"cubot_v2_sw2urdf"</span>
+    urdf_tutorial_path <span class="token operator">=</span> get_package_share_directory<span class="token punctuation">(</span><span class="token string">'cubot_v2_sw2urdf'</span><span class="token punctuation">)</span>
+    default_model_path <span class="token operator">=</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>
+        urdf_tutorial_path<span class="token punctuation">,</span> <span class="token string">'urdf'</span><span class="token punctuation">,</span> <span class="token string">'cubot_v2_sw2urdf.urdf'</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># Read URDF file content</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>default_model_path<span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> urdf_file<span class="token punctuation">:</span>
+        robot_description <span class="token operator">=</span> urdf_file<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    robot_state_publisher_node <span class="token operator">=</span> launch_ros<span class="token punctuation">.</span>actions<span class="token punctuation">.</span>Node<span class="token punctuation">(</span>
+        package<span class="token operator">=</span><span class="token string">'robot_state_publisher'</span><span class="token punctuation">,</span>
+        executable<span class="token operator">=</span><span class="token string">'robot_state_publisher'</span><span class="token punctuation">,</span>
+        parameters<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">&#123;</span><span class="token string">'robot_description'</span><span class="token punctuation">:</span> robot_description<span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
+    <span class="token punctuation">)</span>
+
+    <span class="token comment"># Include another launch file for Gazebo</span>
+    launch_gazebo <span class="token operator">=</span> launch<span class="token punctuation">.</span>actions<span class="token punctuation">.</span>IncludeLaunchDescription<span class="token punctuation">(</span>
+        PythonLaunchDescriptionSource<span class="token punctuation">(</span><span class="token punctuation">[</span>get_package_share_directory<span class="token punctuation">(</span>
+            <span class="token string">'gazebo_ros'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'/launch'</span><span class="token punctuation">,</span> <span class="token string">'/gazebo.launch.py'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span>
+
+    <span class="token comment"># Request Gazebo to spawn the robot</span>
+    spawn_entity_node <span class="token operator">=</span> launch_ros<span class="token punctuation">.</span>actions<span class="token punctuation">.</span>Node<span class="token punctuation">(</span>
+        package<span class="token operator">=</span><span class="token string">'gazebo_ros'</span><span class="token punctuation">,</span>
+        executable<span class="token operator">=</span><span class="token string">'spawn_entity.py'</span><span class="token punctuation">,</span>
+        arguments<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'-topic'</span><span class="token punctuation">,</span> <span class="token string">'/robot_description'</span><span class="token punctuation">,</span>
+                   <span class="token string">'-entity'</span><span class="token punctuation">,</span> robot_name_in_model<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+    package_name <span class="token operator">=</span> <span class="token string">'cubot_v2_sw2urdf'</span>
+    pkg_share <span class="token operator">=</span> os<span class="token punctuation">.</span>pathsep <span class="token operator">+</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>get_package_prefix<span class="token punctuation">(</span>package_name<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'share'</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token string">'GAZEBO_MODEL_PATH'</span> <span class="token keyword">in</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">:</span>
+        os<span class="token punctuation">.</span>environ<span class="token punctuation">[</span><span class="token string">'GAZEBO_MODEL_PATH'</span><span class="token punctuation">]</span> <span class="token operator">+=</span> pkg_share
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        os<span class="token punctuation">.</span>environ<span class="token punctuation">[</span><span class="token string">'GAZEBO_MODEL_PATH'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"/usr/share/gazebo-11/models"</span> <span class="token operator">+</span> pkg_share
+
+    <span class="token keyword">return</span> launch<span class="token punctuation">.</span>LaunchDescription<span class="token punctuation">(</span><span class="token punctuation">[</span>
+        robot_state_publisher_node<span class="token punctuation">,</span>
+        launch_gazebo<span class="token punctuation">,</span>
+        spawn_entity_node
+    <span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>再执行<code>ros2 launch urdf_proj gazebo.launch.py</code>就OK啦</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ROS2速查表</div>
+      <div>https://wty-yy.github.io/posts/30945/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月12日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/55771/" title="Arduino学习笔记">
+                        <span class="hidden-mobile">Arduino学习笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
