@@ -19,26 +19,33 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="初始化项目  构建机器人的初始化环境模板可以参考GitHub - joshnewans&#x2F;my_bot, 基于该模板构建的带有差速控制的机器人和gazebo仿真环境的例子GitHub - joshnewans&#x2F;articubot_one  初始化Python项目: ros2 pkg create --build-type ament_python my_python_package 初始化cmak">
+    <meta name="description" content="本文大部分topic逻辑图片来自于YouTube - Articulated Robotics的视频，ROS2学习和制作小车可以参考他的视频，非常详细！   初始化项目  构建机器人的初始化环境模板可以参考GitHub - joshnewans&#x2F;my_bot, 基于该模板构建的带有差速控制的机器人和gazebo仿真环境的例子GitHub - joshnewans&#x2F;articubot_one  初">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ROS2速查表">
+<meta property="og:title" content="ROS2笔记">
 <meta property="og:url" content="https://wty-yy.github.io/posts/30945/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="初始化项目  构建机器人的初始化环境模板可以参考GitHub - joshnewans&#x2F;my_bot, 基于该模板构建的带有差速控制的机器人和gazebo仿真环境的例子GitHub - joshnewans&#x2F;articubot_one  初始化Python项目: ros2 pkg create --build-type ament_python my_python_package 初始化cmak">
+<meta property="og:description" content="本文大部分topic逻辑图片来自于YouTube - Articulated Robotics的视频，ROS2学习和制作小车可以参考他的视频，非常详细！   初始化项目  构建机器人的初始化环境模板可以参考GitHub - joshnewans&#x2F;my_bot, 基于该模板构建的带有差速控制的机器人和gazebo仿真环境的例子GitHub - joshnewans&#x2F;articubot_one  初">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/urdf_joint_and_link.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/urdf_common_joint_types.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/urdf_rsp_struct.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/rsp_no_joint_state.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/rsp_with_joint_state.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/sw2urdf_sw_links.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/sw2urdf_sw_axises.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/rviz2_cubot_urdf.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/gazebo_cubot_urdf.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/gazebo_control_plugin_part_struct.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/gazebo_control_plugin_full_struct.png">
 <meta property="article:published_time" content="2025-01-12T02:07:41.000Z">
-<meta property="article:modified_time" content="2025-01-12T13:17:02.410Z">
+<meta property="article:modified_time" content="2025-01-13T12:47:13.427Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/ros2/sw2urdf_sw_links.png">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/ros2/urdf_joint_and_link.png">
   
   
   
-  <title>ROS2速查表 - wty&#39;s blog</title>
+  <title>ROS2笔记 - wty&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -286,7 +293,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="ROS2速查表"></span>
+            <span id="subtitle" data-typed-text="ROS2笔记"></span>
           
         </div>
 
@@ -309,7 +316,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          2.6k 字
         
       </span>
     
@@ -320,7 +327,7 @@
         
         
         
-          9 分钟
+          22 分钟
         
       </span>
     
@@ -357,12 +364,15 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">ROS2速查表</h1>
+            <h1 id="seo-header">ROS2笔记</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="初始化项目"><a class="markdownIt-Anchor" href="#初始化项目"></a> 初始化项目</h2>
+                <blockquote>
+<p>本文大部分topic逻辑图片来自于<a target="_blank" rel="noopener" href="https://www.youtube.com/@ArticulatedRobotics">YouTube - Articulated Robotics</a>的视频，ROS2学习和制作小车可以参考他的视频，非常详细！</p>
+</blockquote>
+<h2 id="初始化项目"><a class="markdownIt-Anchor" href="#初始化项目"></a> 初始化项目</h2>
 <blockquote>
 <p>构建机器人的初始化环境模板可以参考<a target="_blank" rel="noopener" href="https://github.com/joshnewans/my_bot">GitHub - joshnewans/my_bot</a>, 基于该模板构建的带有差速控制的机器人和gazebo仿真环境的例子<a target="_blank" rel="noopener" href="https://github.com/joshnewans/articubot_one/tree/420dc2b4d1a14274d38e3e3c76f7aa0ee7842427">GitHub - joshnewans/articubot_one</a></p>
 </blockquote>
@@ -380,24 +390,99 @@
 colcon build --symlink-install  <span class="token comment"># 编译所有包</span>
 colcon build --symlink-install --packages-select <span class="token operator">&lt;</span>package<span class="token operator"><span class="token file-descriptor important">1</span>></span> <span class="token punctuation">..</span>.  <span class="token comment"># 编译指定包</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
 <p><code>--symlink-install</code>使用虚拟连接python代码，URDF，yaml配置文件（无需编译的文件），当项目中文件修改后，运行即是最新更新的文件。</p>
-<h2 id="launch文件"><a class="markdownIt-Anchor" href="#launch文件"></a> Launch文件</h2>
-<h3 id="按包名称获取绝对路径"><a class="markdownIt-Anchor" href="#按包名称获取绝对路径"></a> 按包名称获取绝对路径</h3>
+<h3 id="launch文件"><a class="markdownIt-Anchor" href="#launch文件"></a> Launch文件</h3>
+<h4 id="按包名称获取绝对路径"><a class="markdownIt-Anchor" href="#按包名称获取绝对路径"></a> 按包名称获取绝对路径</h4>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> ament_index_python<span class="token punctuation">.</span>packages <span class="token keyword">import</span> get_package_share_directory<span class="token punctuation">,</span> get_package_prefix
 <span class="token comment"># /ros2_ws/install/&lt;package_name>/share/&lt;package_name></span>
 path_install_pkg <span class="token operator">=</span> get_package_share_directory<span class="token punctuation">(</span><span class="token string">'package_name'</span><span class="token punctuation">)</span>
 <span class="token comment"># /ros2_ws/install/&lt;package_name></span>
 path_prefix_pkg <span class="token operator">=</span> get_package_prefix<span class="token punctuation">(</span><span class="token string">'package_name'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<h3 id="获取urdf"><a class="markdownIt-Anchor" href="#获取urdf"></a> 获取URDF</h3>
-<h4 id="解析xacro文件"><a class="markdownIt-Anchor" href="#解析xacro文件"></a> 解析xacro文件</h4>
+<h4 id="获取urdf"><a class="markdownIt-Anchor" href="#获取urdf"></a> 获取URDF</h4>
+<h5 id="解析xacro文件"><a class="markdownIt-Anchor" href="#解析xacro文件"></a> 解析xacro文件</h5>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> xacro
 path_xacro_file <span class="token operator">=</span> <span class="token string">".../xx.xacro"</span>
 robot_xacro <span class="token operator">=</span> xacro<span class="token punctuation">.</span>process_file<span class="token punctuation">(</span>path_xacro_file<span class="token punctuation">)</span>
 robot_description <span class="token operator">=</span> robot_xacro<span class="token punctuation">.</span>toxml<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 转为URDF的xml格式</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<h4 id="读取urdf"><a class="markdownIt-Anchor" href="#读取urdf"></a> 读取URDF</h4>
+<h5 id="读取urdf"><a class="markdownIt-Anchor" href="#读取urdf"></a> 读取URDF</h5>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>path_urdf_file<span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> urdf_file<span class="token punctuation">:</span>
   robot_description <span class="token operator">=</span> urdf_file<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 直接读取即可</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
-<h2 id="solidworks模型转换为urdf"><a class="markdownIt-Anchor" href="#solidworks模型转换为urdf"></a> SolidWorks模型转换为URDF</h2>
-<h3 id="solidworks转ros1的urdf文件"><a class="markdownIt-Anchor" href="#solidworks转ros1的urdf文件"></a> SolidWorks转ROS1的URDF文件</h3>
+<h2 id="urdf相关"><a class="markdownIt-Anchor" href="#urdf相关"></a> URDF相关</h2>
+<h3 id="urdf文件格式简述"><a class="markdownIt-Anchor" href="#urdf文件格式简述"></a> URDF文件格式简述</h3>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=CwdbsvcpOHM">YouTube -  How do we describe a robot? With URDF! | Getting Ready to build Robots with ROS #7 </a>讲解的非常好，URDF本质上就是描述的两两连接处（link）之间的变换（joint），如下图所示。</p>
+<p>这个机器包含4个links：<code>Base, Slider, Arm, Camera</code>，两两link之间存在相对位置关系，我们用欧拉角（三维旋转平移变换）来表述从父类到子类的变换，分别为：<code>Slider Joint</code>（从Base到Slider，后面同理），<code>Arm Joint, Cam Joint</code>，不难发现整个机器人仅存在一个link没有joint，通常称之为<code>Base</code>或<code>base_link</code>，它将作为我们机器人的原点。<br />
+<img src="/figures/robotics/ros2/urdf_joint_and_link.png" srcset="/img/loading.gif" lazyload alt="urdf joint and link example" /></p>
+<blockquote>
+<p>两个URDF样例，可以参考：xacro手动编写的简易小车<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ros-car-cubot/blob/v2-cubot-sim-demo/description/demo/robot_main.xacro">GitHub - demo/robot_main.xacro</a>，sw2urdf转化的包含mesh的详细小车<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ros-car-cubot/blob/v2-cubot-sim-demo/description/cubot_v2/urdf/cubot_v2_sw2urdf.urdf">GitHub - cubot_v2/urdf/cubot_v2_sw2urdf.urdf</a></p>
+</blockquote>
+<p>一个URDF就是xml文件，其中应包含如下的tag信息：</p>
+<ol>
+<li>
+<p>开头第一行为<code>&lt;?xml version=&quot;1.0&quot; ?&gt;</code></p>
+</li>
+<li>
+<p>所有内容需包含在<code>&lt;robot name=&quot;your_robot_name&quot;&gt; ... &lt;/robot&gt;</code>这个tag中</p>
+<p>URDF中仅需包含两种tag内容（不包含插件等）：</p>
+</li>
+<li>
+<p><code>&lt;link name=&quot;**_link&quot;&gt;</code>: 物体的实体定义，需要包含以下三个tag：</p>
+<ul>
+<li><code>&lt;visual&gt;</code>: 视觉渲染，包含以下几种tag：
+<ul>
+<li><code>&lt;geometry&gt;</code>：几何体（包含<code>cylinder, sphere, box</code>三种常用tag形状）</li>
+<li><code>&lt;origin xyz=&quot;* * *&quot; rpy=&quot;* * *&quot;&gt;</code>：<code>&lt;geometry&gt;</code>的中心原点，相对于<code>joint</code>给出的坐标系</li>
+<li><code>&lt;material&gt;</code>：颜色</li>
+</ul>
+</li>
+<li><code>&lt;collision&gt;</code>：碰撞箱
+<ul>
+<li><code>&lt;geometry&gt;</code>：几何体（可以和<code>&lt;visual&gt;&lt;geometry&gt;</code>保持一致，也可以进行简化）</li>
+<li><code>&lt;origin xyz=&quot;* * *&quot; rpy=&quot;* * *&quot;&gt;</code>：<code>&lt;geometry&gt;</code>的中心原点，相对于<code>joint</code>给出的坐标系</li>
+</ul>
+</li>
+<li><code>&lt;inertial&gt;</code>：惯性矩阵
+<ul>
+<li><code>&lt;mass&gt;</code>：质量大小（单位kg）</li>
+<li><code>&lt;origin xyz=&quot;* * *&quot; rpy=&quot;* * *&quot;&gt;</code>：质心位置，相对于<code>joint</code>给出的坐标系</li>
+<li><code>&lt;inertial&gt;</code>：3x3惯性矩阵定义，在<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/List_of_moments_of_inertia">wikipedia - List of moments of inertia</a>中可以找到简单几何体的惯性矩阵（如果是复杂的，可以通过现在solidworks中建模，直接导出为URDF文件，参考上文<a href="./#solidworks%E6%A8%A1%E5%9E%8B%E8%BD%AC%E6%8D%A2%E4%B8%BAurdf">SolidWorks模型转换为URDF</a>）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>&lt;joint name=&quot;**_joint&quot; type=&quot;...&quot;&gt;</code>：两个link对应坐标系之间的欧拉角变换，以及变换的<code>type</code>，其中<code>type</code>包含常用的四种：<code>revolute, prismatic, continuous, fixed</code>如下图所示，可以包含以下5中tag：</p>
+<ul>
+<li><code>&lt;parent link=&quot;**_link&quot;&gt;</code>：父级link</li>
+<li><code>&lt;child link=&quot;**_link&quot;&gt;</code>：子级link</li>
+<li><code>&lt;origin xyz=&quot;* * *&quot; rpy=&quot;* * *&quot;&gt;</code>：子级link相对于父级link的坐标系变换</li>
+<li><code>&lt;axis xyz=&quot;1 0 0&quot;&gt;</code>：定义type的变换轴，例如<code>revolute</code>将axis作为旋转轴（对于<code>fixed</code>可以没有）</li>
+<li><code>&lt;limit lower=* upper=* velocity=* effort=*&gt;</code>：对关节变换进行限制（可以没有）</li>
+</ul>
+</li>
+</ol>
+<p><img src="/figures/robotics/ros2/urdf_common_joint_types.png" srcset="/img/loading.gif" lazyload alt="urdf常用的Joint类型" /></p>
+<h3 id="urdf模型显示"><a class="markdownIt-Anchor" href="#urdf模型显示"></a> URDF模型显示</h3>
+<p>这里以<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ros-car-cubot/tree/v2-cubot-sim-demo">GitHub - wty-yy/ros-car-cubot tag:v2-cubot-sim-demo</a>为例，<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ros-car-cubot/blob/v2-cubot-sim-demo/launch/rsp.launch.py"><code>launch/rsp.launch.py</code></a>文件能够将xacro转为URDF配置，并通过robot state publisher将URDF发布到<code>/tf</code>和<code>/robot_description</code>两个topic上，并且会创建<code>/robot_state_publisher robot_description</code>全局变量（该变量存储的就是URDF文件信息）:<br />
+<img src="/figures/robotics/ros2/urdf_rsp_struct.png" srcset="/img/loading.gif" lazyload alt="URDF robot state publisher struct )" /></p>
+<blockquote>
+<p>上图来自<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=BcjHyhV0kIs&amp;t=208s">YouTube - Creating a rough 3D model of our robot with URDF 208s</a></p>
+</blockquote>
+<p>如果我们此时打开<code>rviz2</code>查看小车的模型会发现两个轮子无法正常显示，这是因为两者存在一个可变的TF(transform)，也就是joint为<code>continue</code>关系，TF在一个可选的范围内变换，模型并不知道当前变换的具体值，因此无法显示，这就需要一个<code>joint_state_publisher</code>来产生一个虚拟的<code>/joint_states</code>节点，告诉<code>robot_state_publisher</code>当前TF具体是多少（如果是真机上使用，则需要用真机的<code>/joint_states</code>了），执行<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ros-car-cubot/blob/v2-cubot-sim-demo/launch/display.launch.py"><code>launch/display.launch.py</code></a>即可看到完成的小车了。完整显示小车的节点关系图如上图所示，效果对比图如下所示。</p>
+<table>
+<thead>
+<tr>
+<th>no joint state</th>
+<th>with joint state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/figures/robotics/ros2/rsp_no_joint_state.png" srcset="/img/loading.gif" lazyload alt="no joint state" /></td>
+<td><img src="/figures/robotics/ros2/rsp_with_joint_state.png" srcset="/img/loading.gif" lazyload alt="with joint state" /></td>
+</tr>
+</tbody>
+</table>
+<h3 id="solidworks模型转换为urdf"><a class="markdownIt-Anchor" href="#solidworks模型转换为urdf"></a> SolidWorks模型转换为URDF</h3>
+<h4 id="solidworks转ros1的urdf文件"><a class="markdownIt-Anchor" href="#solidworks转ros1的urdf文件"></a> SolidWorks转ROS1的URDF文件</h4>
 <blockquote>
 <p>先安装sw插件<a target="_blank" rel="noopener" href="https://github.com/ros/solidworks_urdf_exporter">ros/solidworks_urdf_exporter</a>，用插件导出为ROS1的urdf，详细请参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42899627/article/details/141901240">CSDN - solidworks模型导出urdf（超详细）配合视频观看</a></p>
 </blockquote>
@@ -419,7 +504,7 @@ robot_description <span class="token operator">=</span> robot_xacro<span class="
 </tr>
 </tbody>
 </table>
-<h3 id="ros1的urdf转ros2的urdf"><a class="markdownIt-Anchor" href="#ros1的urdf转ros2的urdf"></a> ROS1的URDF转ROS2的URDF</h3>
+<h4 id="ros1的urdf转ros2的urdf"><a class="markdownIt-Anchor" href="#ros1的urdf转ros2的urdf"></a> ROS1的URDF转ROS2的URDF</h4>
 <p>这里使用fish1sheep的转换代码<a target="_blank" rel="noopener" href="https://github.com/fish1sheep/sw2urdf_ROS2">GitHub - sw2urdf_ROS2</a>，我加入了一些简单的功能<a target="_blank" rel="noopener" href="https://github.com/wty-yy/sw2urdf_ROS2">GitHub - wty-yy/sw2urdf_ROS2</a>，使用方法（可参考项目的<code>README.md</code>）</p>
 <ol>
 <li>使用<a target="_blank" rel="noopener" href="https://github.com/ros/solidworks_urdf_exporter">ros/solidworks_urdf_exporter</a>插件导出为ROS1的URDF项目文件夹，记为<code>urdf_proj</code> <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 用solidworks_urdf_exporter到处的格式应该如下</span>
@@ -483,7 +568,7 @@ ros2 launch urdf_proj gazebo.launch.py  <span class="token comment"># 启动GAZE
 </tr>
 </tbody>
 </table>
-<h3 id="urdf无法在gazebo中打开"><a class="markdownIt-Anchor" href="#urdf无法在gazebo中打开"></a> URDF无法在Gazebo中打开</h3>
+<h4 id="urdf无法在gazebo中打开"><a class="markdownIt-Anchor" href="#urdf无法在gazebo中打开"></a> URDF无法在Gazebo中打开</h4>
 <blockquote>
 <p>参考<a target="_blank" rel="noopener" href="https://robotics.stackexchange.com/questions/1170/where-does-gazebo-set-the-gazebo-model-path-environment-variable">Robotics Stack Exchange - Where does Gazebo set the GAZEBO_MODEL_PATH environment variable?</a>, <a target="_blank" rel="noopener" href="https://github.com/justagist/panda_simulator/issues/58">GitHub panda_simulator issues - How do I add an .stl to the gazebo simulation?</a></p>
 </blockquote>
@@ -555,6 +640,85 @@ pkg_share <span class="token operator">=</span> os<span class="token punctuation
     </div>
 </div>
 <p>再执行<code>ros2 launch urdf_proj gazebo.launch.py</code>就OK啦</p>
+<h2 id="gazebo相关"><a class="markdownIt-Anchor" href="#gazebo相关"></a> Gazebo相关</h2>
+<h3 id="使用gazebo控制器插件控制仿真模型"><a class="markdownIt-Anchor" href="#使用gazebo控制器插件控制仿真模型"></a> 使用Gazebo控制器插件控制仿真模型</h3>
+<p>将模型直接导入到Gazebo非常简单（不带任何控制方法），参考<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ros-car-cubot/blob/v2-cubot-sim-demo/launch/launch_sim.launch.py">launch/launch_sim.launch.py</a>，只需三步：</p>
+<ol>
+<li>使用<code>robot_state_publisher</code>先初始化<code>/robot_discruiption</code>和<code>/tf</code>节点</li>
+<li>打开一个gazebo空场景<code>ros2 launch gazebo_ros gazebo.launch.py</code></li>
+<li>将模型导入进去<code>ros2 run gazebo_ros spawn_entity.py -topic robot_description -entity &lt;your_robot_name&gt;</code></li>
+</ol>
+<p>打开<code>rviz2</code>可以看到我们小车的模型，如果没有加上控制器，则无法显示小车轮子的状态，有两种控制器：</p>
+<ol>
+<li><code>ros2_controller</code>：能够同时对真机和gazebo进行控制，配置较为复杂，后文会进行介绍</li>
+<li><code>gazebo_controller</code>：通过gazebo插件，能够直接对gazebo中的模型进行控制，这里先用这种方法</li>
+</ol>
+<p>在urdf文件中加入gazebo controller插件，插入到URDF中全文可参考<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ros-car-cubot/blob/v2-cubot-sim-demo/description/cubot_v2/urdf/cubot_v2_sw2urdf.urdf#L215C2-L215C9">cubot_v2_sw2urdf.urdf #215</a>，插件的使用说明参考<a target="_blank" rel="noopener" href="https://docs.ros.org/en/rolling/p/gazebo_plugins/generated/classgazebo__plugins_1_1GazeboRosDiffDrive.html">gazebo_plugins.doc - GazeboRosDiffDrive</a>，就可以通过gazebo生成虚拟的<code>/tf</code>来显示轮子joint的状态（不再通过<code>/joint_states</code>）。</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        差分运动控制插件
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gazebo</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>diff_drive<span class="token punctuation">"</span></span> <span class="token attr-name">filename</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>libgazebo_ros_diff_drive.so<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token comment">&lt;!-- 插件参考文档 https://docs.ros.org/en/rolling/p/gazebo_plugins/generated/classgazebo__plugins_1_1GazeboRosDiffDrive.html --></span>
+    <span class="token comment">&lt;!-- Wheel Information 两轮子joint设置 --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>left_joint</span><span class="token punctuation">></span></span>left_wheel_joint<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>left_joint</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>right_joint</span><span class="token punctuation">></span></span>right_wheel_joint<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>right_joint</span><span class="token punctuation">></span></span>
+    <span class="token comment">&lt;!-- wheel separation 两轮中点(frame)间距, 根据robot_main定义中0.175*2得到 --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wheel_separation</span><span class="token punctuation">></span></span>0.35<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>wheel_separation</span><span class="token punctuation">></span></span>
+    <span class="token comment">&lt;!-- wheel diameter 两轮直径0.5*2得到 --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>wheel_diameter</span><span class="token punctuation">></span></span>0.1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>wheel_diameter</span><span class="token punctuation">></span></span>
+
+    <span class="token comment">&lt;!-- Limits --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>max_wheel_torque</span><span class="token punctuation">></span></span>200<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>max_wheel_torque</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>max_wheel_acceleration</span><span class="token punctuation">></span></span>10.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>max_wheel_acceleration</span><span class="token punctuation">></span></span>
+
+    <span class="token comment">&lt;!-- Output odom是gazebo对模型的虚拟基础点, base_link会相对其进行tf --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>odometry_frame</span><span class="token punctuation">></span></span>odom<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>odometry_frame</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>robot_base_frame</span><span class="token punctuation">></span></span>base_footprint<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>robot_base_frame</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>publish_odom</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>publish_odom</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>publish_odom_tf</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>publish_odom_tf</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>publish_wheel_tf</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>publish_wheel_tf</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>plugin</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>gazebo</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p><strong>注意</strong>：使用gazebo control时，由于小车的原点会发生变化（这样小车才能运动起来），需要重新设置一个世界原点坐标系，在gazebo中称为<strong>odometry_frame</strong>（里程计），我们将其对应的节点记为<code>odom</code>，那么我们原来的小车原点<code>base_link</code>或者<code>base_footprint</code>就要相对<code>odom</code>进行变化了，这些需要在插件中进行配置。</p>
+<table>
+<thead>
+<tr>
+<th>Gazebo Controller插件逻辑</th>
+<th>Gazebo和rsp逻辑关系</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/figures/robotics/ros2/gazebo_control_plugin_part_struct.png" srcset="/img/loading.gif" lazyload alt="gazebo control插件逻辑" /></td>
+<td><img src="/figures/robotics/ros2/gazebo_control_plugin_full_struct.png" srcset="/img/loading.gif" lazyload alt="gazebo和rsp逻辑关系" /></td>
+</tr>
+</tbody>
+</table>
+<h3 id="gazebo中摩擦力颜色配置"><a class="markdownIt-Anchor" href="#gazebo中摩擦力颜色配置"></a> Gazebo中摩擦力/颜色配置</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gazebo</span> <span class="token attr-name">reference</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>**_link<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token comment">&lt;!-- link对应的颜色设置, 在URDF中设置的颜色无效 --></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>material</span><span class="token punctuation">></span></span>Gazebo/Blue<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>material</span><span class="token punctuation">></span></span>
+  <span class="token comment">&lt;!-- link对应的摩擦, mu1,mu2一起配置 --></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mu1</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>0.001<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mu2</span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>0.001<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>gazebo</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="ros2控制器"><a class="markdownIt-Anchor" href="#ros2控制器"></a> ROS2控制器</h2>
+<h3 id="控制器输入"><a class="markdownIt-Anchor" href="#控制器输入"></a> 控制器输入</h3>
+<p>当我们启动了<code>/cmd_vel</code> topic后，需要向其发送``（<a href="./#%E4%BD%BF%E7%94%A8gazebo%E6%8E%A7%E5%88%B6%E5%99%A8%E6%8F%92%E4%BB%B6%E6%8E%A7%E5%88%B6%E4%BB%BF%E7%9C%9F%E6%A8%A1%E5%9E%8B">Gazebo仿真中启动</a>）就可以通过键盘或者手柄来输入控制指令了。</p>
+<h4 id="键盘控制器输入"><a class="markdownIt-Anchor" href="#键盘控制器输入"></a> 键盘控制器输入</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> ros-<span class="token variable">$&#123;ROS_DISTRO&#125;</span>-teleop-twist-keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>可以通过如下9个按键来控制小车了</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Moving around:
+   u    i    o
+   j    k    l
+   m    ,    <span class="token builtin class-name">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
@@ -572,7 +736,7 @@ pkg_share <span class="token operator">=</span> os<span class="token punctuation
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>ROS2速查表</div>
+      <div>ROS2笔记</div>
       <div>https://wty-yy.github.io/posts/30945/</div>
     </div>
     <div class="license-meta">
