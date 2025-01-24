@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://wty-yy.github.io/figures/about/%E5%A4%A9%E9%80%894%E9%85%8D%E7%BD%AE.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/isaac_sim_install/Omniverse_Launcher%E4%B8%8B%E8%BD%BD%E8%BF%9E%E6%8E%A5.png">
 <meta property="article:published_time" content="2024-06-18T02:16:06.000Z">
-<meta property="article:modified_time" content="2024-09-04T12:37:18.674Z">
+<meta property="article:modified_time" content="2025-01-16T10:11:44.719Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/about/%E5%A4%A9%E9%80%894%E9%85%8D%E7%BD%AE.png">
@@ -307,7 +307,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          1.4k 字
         
       </span>
     
@@ -318,7 +318,7 @@
         
         
         
-          9 分钟
+          12 分钟
         
       </span>
     
@@ -387,6 +387,7 @@
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">chmod</span> +x omniverse-launcher-linux.AppImage
 <span class="token comment"># 如果你有 Clash 代理的话可以加上 --proxy-server=&#123;IP&#125;:&#123;PORT&#125;</span>
 ./omniverse-launcher-linux.AppImage --no-sandbox --proxy-server<span class="token operator">=</span><span class="token number">127.0</span>.0.1:7890<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>安装完成omniverse后，第一次打开会让你选择Pkg和Cache的安装位置，默认位置即可，后续IsaacSim中会用到pkg位置。</p>
 <h2 id="安装-isaac-sim"><a class="markdownIt-Anchor" href="#安装-isaac-sim"></a> 安装 Isaac Sim</h2>
 <p>首先按照 <a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/isaacsim/latest/installation/requirements.html#isaac-sim-compatibility-checker">Isaac Sim Compatibility Checker</a> 给出的步骤安装 Compatibility Checker 对电脑的兼容性进行检查，只要显卡那一栏不是红的应该就没有问题（我的电脑检查结果如下左图所示）。</p>
 <p>按照 <a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/isaacsim/latest/installation/install_workstation.html">Workstation Installation</a> 在 Omniverse Launcher 中顺次安装 <code>Cache, Nucleus</code> 中的内容。</p>
@@ -396,11 +397,9 @@
 <img src=/figures/robotics/isaac_sim_install/isaacsim版本选择1.png width=39%>
 <img src=/figures/robotics/isaac_sim_install/isaacsim版本选择2.png width=39%>
 </div>
-<h2 id="isaaclab-安装"><a class="markdownIt-Anchor" href="#isaaclab-安装"></a> IsaacLab 安装</h2>
-<p>这里推荐使用 <a target="_blank" rel="noopener" href="https://github.com/isaac-sim/IsaacLab">IsaacLab</a>，这个是对 <a target="_blank" rel="noopener" href="https://github.com/isaac-sim/OmniIsaacGymEnvs">OmniIsaacGymEnvs</a> 的改进版本，有详细的<a target="_blank" rel="noopener" href="https://isaac-sim.github.io/IsaacLab/">参考文档以及教学</a>，可以直接参考 <a target="_blank" rel="noopener" href="https://isaac-sim.github.io/IsaacLab/source/setup/installation/binaries_installation.html">Installation using Isaac Sim Binaries</a> 进行安装。</p>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
-        zsh 终端需要修改的位置
+        zsh 终端需要修改的位置，否则Python无法找到正确的IsaacSim路径
     </div>
     <div class='spoiler-content'>
         <p>需要注意的是如果你使用的是 <code>zsh</code> 代替了原始的 <code>bash</code> 终端，则需要按照 <a target="_blank" rel="noopener" href="https://github.com/isaac-sim/IsaacLab/issues/103">No module named ‘omni.isaac’ when using zshell instead of bash</a> 中的方法，对 <code>${HOME}/.local/share/ov/pkg/isaac_sim-*</code> 下的两个文件分别进行修改，<code>setup_conda_env.sh</code> 中的修改为：</p>
@@ -415,14 +414,26 @@
 <span class="token assign-left variable">SCRIPT_DIR</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">dirname</span> <span class="token string">"<span class="token variable">$&#123;(<span class="token operator">%</span>)<span class="token operator">:-</span><span class="token operator">%</span>x&#125;</span>"</span><span class="token variable">)</span></span>  <span class="token comment"># 还是因为原来的方法找不到当前文件位置</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
     </div>
 </div>
-<p>环境测试，我们直接执行训练样例代码，来自 <a target="_blank" rel="noopener" href="https://isaac-sim.github.io/IsaacLab/source/setup/sample.html#reinforcement-learning">IsaacSim - sample - Reinforcement Learning</a>，我们使用第三个（因为它是可以使用GPU加速的），训练 cartpole 用时 45s，其他还有两个环境可以测试自带的环境<a target="_blank" rel="noopener" href="https://isaac-sim.github.io/IsaacLab/source/features/environments.html">请见 - Environments</a>，训练 Ant 用时 2:42，下面以训练 Cartpole 为例：</p>
+<h2 id="isaaclab-安装"><a class="markdownIt-Anchor" href="#isaaclab-安装"></a> IsaacLab 安装</h2>
+<p>这里推荐使用 <a target="_blank" rel="noopener" href="https://github.com/isaac-sim/IsaacLab">IsaacLab</a>，这个是对 <a target="_blank" rel="noopener" href="https://github.com/isaac-sim/OmniIsaacGymEnvs">OmniIsaacGymEnvs</a> 的改进版本，有详细的<a target="_blank" rel="noopener" href="https://isaac-sim.github.io/IsaacLab/">参考文档以及教学</a>，可以直接参考 <a target="_blank" rel="noopener" href="https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html">Installation using Isaac Sim Binaries</a> 进行安装，不要使用Pip installation，因为这会重新下载Isaac Sim而且不完整，安装IsaacLab流程如下：</p>
+<ol>
+<li>设置虚拟链接<code>ln -s $&#123;HOME&#125;/.local/share/ov/pkg/isaac-sim-4.2.0 _isaac_sim</code> （确定左侧路径就是你的isaac-sim安装位置，注意版本号）</li>
+<li>创建conda中的新环境<code>./isaaclab.sh --conda</code>（如果是zsh终端，需要先修改isaaclab.sh文件中19行附近的<code>export ISAACLAB_PATH=&quot;$( cd &quot;$( dirname &quot;$&#123;BASH_SOURCE[0]&#125;&quot; )&quot; &amp;&gt; /dev/null &amp;&amp; pwd )&quot;</code>为<code>export ISAACLAB_PATH=&quot;$( cd &quot;$( dirname &quot;$0&quot; )&quot; &amp;&amp; pwd )&quot;</code>因为前面那个指令是bash中的，可能无法找到正确的路径）
+<blockquote>
+<p>创建完成后，我们进入isaaclab环境后，使用isaaclab指令就相当于执行了./isaaclab.sh脚本了</p>
+</blockquote>
+</li>
+<li><code>conda activate isaaclab</code>安装训练框架<code>isaaclab -i rl_games</code>，安装后可能还需要再装一次<code>pip install rl_games</code>，可能是bug</li>
+<li>环境测试，我们直接执行训练样例代码，来自 <a target="_blank" rel="noopener" href="https://isaac-sim.github.io/IsaacLab/main/source/overview/reinforcement-learning/rl_existing_scripts.html#rl-games">IsaacSim - sample - Reinforcement Learning</a>，我们使用第三个（因为它是可以使用GPU加速的），训练 cartpole 用时 45s，其他还有两个环境可以测试自带的环境<a target="_blank" rel="noopener" href="https://isaac-sim.github.io/IsaacLab/main/source/overview/environments.html">请见 - Environments</a>，训练 Ant 用时 2:42，下面以训练 Cartpole 为例：</li>
+</ol>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># install python module (for rl-games)，安装 rl-games</span>
 ./isaaclab.sh <span class="token parameter variable">-i</span> rl_games
+conda activate isaaclab
 <span class="token comment"># run script for training（如果使用的是 conda 进行的安装，使用 python 和 ./isaaclab.sh -p 是一样的）</span>
 python source/standalone/workflows/rl_games/train.py <span class="token parameter variable">--task</span> Isaac-Cartpole-v0 <span class="token parameter variable">--headless</span>
-./isaaclab.sh <span class="token parameter variable">-p</span> source/standalone/workflows/rl_games/train.py <span class="token parameter variable">--task</span> Isaac-Cartpole-v0 <span class="token parameter variable">--headless</span>
+python source/standalone/workflows/rl_games/train.py <span class="token parameter variable">--task</span> Isaac-Cartpole-v0 <span class="token parameter variable">--headless</span>
 <span class="token comment"># run script for playing with 32 environments，模型权重保存在 /IsaacLab/logs/rl_games 下，例如我的就是如下位置</span>
-./isaaclab.sh <span class="token parameter variable">-p</span> source/standalone/workflows/rl_games/play.py <span class="token parameter variable">--task</span> Isaac-Cartpole-v0 <span class="token parameter variable">--num_envs</span> <span class="token number">32</span> <span class="token parameter variable">--checkpoint</span> /home/yy/Coding/GitHub/IsaacLab/logs/rl_games/cartpole/2024-06-18_22-12-56/nn/last_cartpole_ep_150_rew__4.6873245_.pth<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+python source/standalone/workflows/rl_games/play.py <span class="token parameter variable">--task</span> Isaac-Cartpole-v0 <span class="token parameter variable">--num_envs</span> <span class="token number">32</span> <span class="token parameter variable">--checkpoint</span> /home/yy/Coding/GitHub/IsaacLab/logs/rl_games/cartpole/2024-06-18_22-12-56/nn/last_cartpole_ep_150_rew__4.6873245_.pth<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <div align='center'>
 <img src=/figures/robotics/isaac_sim_install/isaacsim_train.png width=49%>
 <img src=/figures/robotics/isaac_sim_install/isaacsim_eval.gif width=49%>
@@ -440,6 +451,18 @@ python source/standalone/workflows/rl_games/train.py <span class="token paramete
     <span class="token parameter variable">-v</span> ~/docker/isaac-sim/documents:/root/Documents:rw <span class="token punctuation">\</span>
     wtyyy/isaacsim:latest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>即可启动容器。</p>
+<p>如果报错<code>docker: Error response from daemon: unknown or invalid runtime name: nvidia.</code>，则需要安装<code>nvidia-container-toolkit</code>，参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt">Install with apt</a>，如果安装完成后还是报错，参考<a target="_blank" rel="noopener" href="https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_visual_slam/issues/132#issuecomment-2134831510">GitHub issus - Docker Error - Unknown or Invalid Runtime Name: Nvidia</a>，修改<code>/etc/docker/daemon.json</code>文件包含如下内容：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"runtimes"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">"nvidia"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+            <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"nvidia-container-runtime"</span><span class="token punctuation">,</span>
+            <span class="token property">"runtimeArgs"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>重启docker：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl daemon-reload
+<span class="token function">sudo</span> systemctl restart <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>

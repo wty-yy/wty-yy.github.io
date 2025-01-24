@@ -1,0 +1,956 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="我使用的Arduino版本为Arduino Mega 2560，本文按照官方样例学习基础，编程环境为VSCode + Arduino Community Edition插件 + Arduino v1.8.19(插件和v2.x不兼容)  环境安装 安装VSCode，Arduino Community Edition插件，Arduino编辑器（向下翻找到1.8.19版本） 完成安装后，先打开Ardui">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Arduino学习笔记">
+<meta property="og:url" content="https://wty-yy.github.io/posts/55771/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="我使用的Arduino版本为Arduino Mega 2560，本文按照官方样例学习基础，编程环境为VSCode + Arduino Community Edition插件 + Arduino v1.8.19(插件和v2.x不兼容)  环境安装 安装VSCode，Arduino Community Edition插件，Arduino编辑器（向下翻找到1.8.19版本） 完成安装后，先打开Ardui">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Arduino/VSCode%E9%85%8D%E7%BD%AE%E7%83%A7%E5%BD%95.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Arduino/serial_plotter.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Arduino/voltage_divider_circuit.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Arduino/analog_input_pwm.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Arduino/interrupt_control_led_circuit.png">
+<meta property="article:published_time" content="2025-01-02T02:00:52.000Z">
+<meta property="article:modified_time" content="2025-01-16T10:11:44.719Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/Arduino/VSCode%E9%85%8D%E7%BD%AE%E7%83%A7%E5%BD%95.png">
+  
+  
+  
+  <title>Arduino学习笔记 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Arduino学习笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-01-02 10:00" pubdate>
+          2025年1月2日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Arduino学习笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>我使用的Arduino版本为<a target="_blank" rel="noopener" href="https://docs.arduino.cc/hardware/mega-2560/">Arduino Mega 2560</a>，本文按照<a target="_blank" rel="noopener" href="https://docs.arduino.cc/built-in-examples/">官方样例</a>学习基础，编程环境为VSCode + Arduino Community Edition插件 + Arduino v1.8.19(插件和v2.x不兼容)</p>
+<h2 id="环境安装"><a class="markdownIt-Anchor" href="#环境安装"></a> 环境安装</h2>
+<p>安装<a target="_blank" rel="noopener" href="https://code.visualstudio.com/download">VSCode</a>，<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=vscode-arduino.vscode-arduino-community">Arduino Community Edition插件</a>，<a target="_blank" rel="noopener" href="https://www.arduino.cc/en/software/">Arduino编辑器</a>（向下翻找到1.8.19版本）</p>
+<p>完成安装后，先打开Arduino界面，点击左上角第二各按钮Upload试一下能否烧录，如果报错<code>can't open device &quot;/dev/**&quot;: Permission denied</code>，执行<code>sudo usermod -a -G dialout $USER</code>，登出重进一下即可，再测试能否烧录</p>
+<p>VSCode打开设置搜索<code>arduino path</code>，将Arduino的安装路径添上，打开工作空间（最好是默认路径<code>~/Arduino</code>(Linux)，<code>C:/user/&lt;usr_name&gt;/Arduino</code>(Windows)），<code>ctrl+shift+p</code>输入<code>arduino initialize</code>回车，创建空白项目，选择开发板类型，右下角Serial Port点击选择对应的USB接口，如下图所示<br />
+<img src="/figures/robotics/Arduino/VSCode%E9%85%8D%E7%BD%AE%E7%83%A7%E5%BD%95.png" srcset="/img/loading.gif" lazyload alt="VSCode配置端口+烧录" /></p>
+<h2 id="样例学习"><a class="markdownIt-Anchor" href="#样例学习"></a> 样例学习</h2>
+<p>官方样例详细解释<a target="_blank" rel="noopener" href="https://docs.arduino.cc/built-in-examples/">Arduino - Built-in Examples</a>，每一个样例都有对应的电路图和示意图</p>
+<p><code>ctrl+shift+p</code>输入<code>arduino example</code>回车，弹出新窗口中选择我们想要的样例，会打开一个新窗口，如果进入了默认路径，就会在其下生成<code>generated_examples/&lt;ex_name&gt;</code>，<code>ctrl+shift+p</code>输入<code>arduino select sketch</code>回车，选择我们想执行的样例，这样就可以在一个工作空间下执行不同的样例啦7</p>
+<h3 id="basics"><a class="markdownIt-Anchor" href="#basics"></a> Basics</h3>
+<h4 id="analogreadserial"><a class="markdownIt-Anchor" href="#analogreadserial"></a> AnalogReadSerial</h4>
+<p>通过串口（USB）读取A0口的模拟电压大小，通过模拟<code>1024</code>，通过变压器（类似滑动变阻器）调节电压大小：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-arduino" data-language="arduino"><code class="language-arduino"><span class="token comment">// 初始化dsp的各种信息, 例如GPIO模式设定PWM, INPUT, OUTPUT配置(仅运行一次)</span>
+<span class="token keyword">void</span> <span class="token keyword">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 设置串口通讯的比特流大小9600bit/s, 只有几种常用的大小, 默认这个</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token number">9600</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 死循环重复执行代码</span>
+<span class="token keyword">void</span> <span class="token keyword">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 读取转换得到的感知值</span>
+  <span class="token keyword">int</span> sensor_value <span class="token operator">=</span> <span class="token function">analogRead</span><span class="token punctuation">(</span>A0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">">sensor_value:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 使用serial plotter插件需要加的输出</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>sensor_value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  float voltage <span class="token operator">=</span> sensor_value <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">5.0</span> <span class="token operator">/</span> <span class="token number">1024.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 转化为真实电压大小</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">">voltage:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 使用serial plotter插件需要加的输出</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>voltage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">delay</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">// delay in between reads for stability</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>在VSCode中再安装一个<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=badlogicgames.serial-plotter">Serial Plotter插件</a>可以绘制端口数据的图像，<code>ctrl+shift+p</code>输入<code>serial plotter</code>回车，在新窗口中选择对应的端口，比特率选择9600，点击Start即可看到曲线图：<br />
+<img src="/figures/robotics/Arduino/serial_plotter.png" srcset="/img/loading.gif" lazyload alt="逻辑电压读取" /><br />
+<strong>注意</strong>: 每次烧录前，需要点击Serial Plotter中的Stop按钮，暂停端口数据的读取，否则被占用无法烧录程序</p>
+<h4 id="blink"><a class="markdownIt-Anchor" href="#blink"></a> Blink</h4>
+<p>在Mega 2560官网介绍上可以找到<a target="_blank" rel="noopener" href="https://docs.arduino.cc/resources/pinouts/A000067-full-pinout.pdf">Pinout.pdf</a>对每个针脚功能和编号进行了介绍，如果我们要用哪个针脚可以直接输入对应名称（已进行宏定义声明了）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-arduino" data-language="arduino"><code class="language-arduino"><span class="token keyword">void</span> <span class="token keyword">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 将LEB_BUILTIN GPIO设置为输出模式</span>
+  <span class="token function">pinMode</span><span class="token punctuation">(</span><span class="token constant">LED_BUILTIN</span><span class="token punctuation">,</span> <span class="token constant">OUTPUT</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token keyword">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 数字信号写入, 设置为HIGH高电压, LOW低电压</span>
+  <span class="token function">digitalWrite</span><span class="token punctuation">(</span><span class="token constant">LED_BUILTIN</span><span class="token punctuation">,</span> <span class="token constant">HIGH</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">// turn the LED on (HIGH is the voltage level)</span>
+  <span class="token function">delay</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                       <span class="token comment">// wait for a second</span>
+  <span class="token function">digitalWrite</span><span class="token punctuation">(</span><span class="token constant">LED_BUILTIN</span><span class="token punctuation">,</span> <span class="token constant">LOW</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// turn the LED off by making the voltage LOW</span>
+  <span class="token function">delay</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                       <span class="token comment">// wait for a second</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="digitalreadserial"><a class="markdownIt-Anchor" href="#digitalreadserial"></a> DigitalReadSerial</h4>
+<p>数字信号(0或1)读取，这里直接通过手动按开关来模拟高低信号，这里电路图中要求的电阻只要是1k以上的都可以（电阻色环<a target="_blank" rel="noopener" href="https://www.digikey.sg/zh/resources/conversion-calculators/conversion-calculator-resistor-color-code">在线读取网页</a>方法），只需要避免正负极连接导致短路</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-arduino" data-language="arduino"><code class="language-arduino"><span class="token comment">// 直接写端口2, 默认为PIN2</span>
+<span class="token keyword">int</span> pushButton <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token keyword">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token number">9600</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// 设置GPIO为输入模式</span>
+  <span class="token function">pinMode</span><span class="token punctuation">(</span>pushButton<span class="token punctuation">,</span> <span class="token constant">INPUT</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token keyword">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 读取数字信号信息 0或1</span>
+  <span class="token keyword">int</span> buttonState <span class="token operator">=</span> <span class="token function">digitalRead</span><span class="token punctuation">(</span>pushButton<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">">var1:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>buttonState<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">delay</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">// delay in between reads for stability</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="fading-a-led"><a class="markdownIt-Anchor" href="#fading-a-led"></a> Fading a LED</h4>
+<p>用PWM(Pulse Width Modulation)脉冲宽度调制来控制LED灯的亮度，就是通过控制信号（电压）的占空比（高电平“非空”的所占比例），例如高电平为5V，当占空比为30%时，输出电压就相当于是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>×</mo><mn>0.3</mn><mo>=</mo><mn>1.5</mn><mtext>V</mtext></mrow><annotation encoding="application/x-tex">5\times 0.3=1.5\text{V}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">.</span><span class="mord">5</span><span class="mord text"><span class="mord">V</span></span></span></span></span>，由于Arduino无需指定PWM波的频率，使用非常简单直接用<code>analogWriter</code>就可以输出指定占空比的PWM波:</p>
+<blockquote>
+<p>在<a target="_blank" rel="noopener" href="https://docs.arduino.cc/resources/pinouts/A000067-full-pinout.pdf">pinout.pdf</a>中的所有带有<code>~</code>开头的针脚表示支持PWM模式，MEGA2560就是PIN 2~13都支持</p>
+</blockquote>
+<figure><div class="code-wrapper"><pre class="line-numbers language-arduino" data-language="arduino"><code class="language-arduino"><span class="token keyword">int</span> led_pin <span class="token operator">=</span> <span class="token number">9</span><span class="token punctuation">;</span>  <span class="token comment">// 设置PWM波输出引脚</span>
+<span class="token keyword">int</span> current_brightness <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  <span class="token comment">// 当前占空比</span>
+<span class="token keyword">int</span> fade_amount <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>  <span class="token comment">// 渐变量</span>
+
+<span class="token keyword">void</span> <span class="token keyword">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 不设置pinMode也可以使用PWD，查看analogWrite源码可以看到他会先设置针脚为OUTPUT模式</span>
+  <span class="token function">pinMode</span><span class="token punctuation">(</span>led_pin<span class="token punctuation">,</span> <span class="token constant">OUTPUT</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token keyword">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">analogWrite</span><span class="token punctuation">(</span>led_pin<span class="token punctuation">,</span> current_brightness<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 设置占空比</span>
+  current_brightness <span class="token operator">+=</span> fade_amount<span class="token punctuation">;</span>  <span class="token comment">// 更新占空比</span>
+
+  <span class="token comment">// 占空比范围0~255</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>current_brightness <span class="token operator">&lt;=</span> <span class="token number">0</span> <span class="token operator">||</span> current_brightness <span class="token operator">>=</span> <span class="token number">255</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    fade_amount <span class="token operator">=</span> <span class="token operator">-</span>fade_amount<span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">delay</span><span class="token punctuation">(</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>有趣的是<code>analogWrite(pin, val)</code>当<code>val==0,255</code>时，等价于<code>digitalWrite(pin, LOW), digitalWrite(pin, HIGH)</code>（源码中可以看到），在输出时也是默认为数字输出，当<code>val!=0,255</code>时，使用PWM进行模拟输出（这里的模拟，指的是模拟信号输出，介于低电平和高电平之间的电平）</p>
+<ul>
+<li>数字信号: 离散，一般只有0,1取值，一般用于二进制数据传输</li>
+<li>模拟信号: 连续，在这里就是0~255之间的正整数，用占空比来表示，一般用于模拟物理量</li>
+</ul>
+<h3 id="自行设计"><a class="markdownIt-Anchor" href="#自行设计"></a> 自行设计</h3>
+<h4 id="inputpwm-output"><a class="markdownIt-Anchor" href="#inputpwm-output"></a> Input&amp;PWM Output</h4>
+<p>简单总结上上述四个例子所用到的针脚与函数:</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>针脚</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DigitalRead(pin_id)</code></td>
+<td><strong>D</strong>开头</td>
+<td>数字信号读入，只能获取0或1的读入信息，分别表示高电平5V与低电平0V</td>
+</tr>
+<tr>
+<td><code>DigitalWrite(pin_id)</code></td>
+<td><strong>D</strong>开头</td>
+<td>数字信号输出，只能输出高电平5V或低电平0V</td>
+</tr>
+<tr>
+<td><code>AnalogRead(pin_id)</code></td>
+<td><strong>A</strong>开头</td>
+<td>模拟信号读入，能将读取到的0<sub>5V电压等比例转换为10bit正整数(0</sub>1023)</td>
+</tr>
+<tr>
+<td><code>AnalogWrite(pin_id, val)</code></td>
+<td><strong>D</strong>开头</td>
+<td>模拟信号输出，通过PWM波形式，将<code>val</code>(0<sub>255)等比例转换为0</sub>5V模拟电压</td>
+</tr>
+</tbody>
+</table>
+<p>同时，通过加入分压电阻，我们可以计算出在读入模拟信号时，Arduino中内置的上拉电阻阻值为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>11.67</mn><mo>×</mo><mn>1</mn><msup><mn>0</mn><mn>3</mn></msup><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">11.67\times 10^3\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">1</span><span class="mord">.</span><span class="mord">6</span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mord">Ω</span></span></span></span>，可选的上拉电阻阻值为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>162</mn><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">162\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">6</span><span class="mord">2</span><span class="mord">Ω</span></span></span></span>，测量模拟输出与分压电路电路图如下:<br />
+<img src="/figures/robotics/Arduino/voltage_divider_circuit.png" srcset="/img/loading.gif" lazyload alt="分压电路" /><br />
+其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">R_{in}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>为Arduino的内置电阻，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">R_3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>为分压电阻，可以将<strong>红色部分</strong>理解为模拟输入部分的电路图。因为如果我们直接连接A0和2号针脚时，模拟输入为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1023</mn></mrow><annotation encoding="application/x-tex">1023</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">3</span></span></span></span>，而串联一个<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>3</mn></msub><mo>=</mo><mn>1</mn><msup><mn>0</mn><mn>3</mn></msup><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">R_3=10^3\Omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mord">Ω</span></span></span></span>的分压电阻时，模拟输入为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>922</mn></mrow><annotation encoding="application/x-tex">922</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mord">2</span><span class="mord">2</span></span></span></span>，简单计算</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><msub><mi>R</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub><mrow><msub><mi>R</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub><mo>+</mo><msub><mi>R</mi><mn>3</mn></msub></mrow></mfrac><mo>=</mo><mfrac><mn>922</mn><mn>1023</mn></mfrac><mo>⇒</mo><msub><mi>R</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub><mo>=</mo><mfrac><mn>922</mn><mrow><mn>1024</mn><mo>−</mo><mn>922</mn></mrow></mfrac><mo>×</mo><mn>1</mn><msup><mn>0</mn><mn>3</mn></msup><mo>≈</mo><mn>9</mn><mo>×</mo><mn>1</mn><msup><mn>0</mn><mn>3</mn></msup><mi mathvariant="normal">Ω</mi></mrow><annotation encoding="application/x-tex">\frac{R_{in}}{R_{in}+R_3}=\frac{922}{1023}\Rightarrow R_{in}=\frac{922}{1024-922}\times 10^3\approx 9\times 10^3\Omega
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.19633em;vertical-align:-0.8360000000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.36033em;"><span style="top:-2.3139999999999996em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8360000000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.00744em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">3</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">9</span><span class="mord">2</span><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⇒</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.09077em;vertical-align:-0.7693300000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mord">0</span><span class="mord">2</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">9</span><span class="mord">2</span><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">9</span><span class="mord">2</span><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693300000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8641079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">9</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8641079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mord">Ω</span></span></span></span></span></p>
+<p>为了验证上述正确性，可以简单写一个PWM波输出，模拟信号读入的代码:</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-arduino" data-language="arduino"><code class="language-arduino"><span class="token keyword">int</span> analog_pin <span class="token operator">=</span> A0<span class="token punctuation">;</span>
+<span class="token keyword">int</span> pwm_pin <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token keyword">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token number">9600</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">pinMode</span><span class="token punctuation">(</span>analog_pin<span class="token punctuation">,</span> <span class="token constant">INPUT</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 默认上拉9K Ohm</span>
+  <span class="token function">pinMode</span><span class="token punctuation">(</span>pwm_pin<span class="token punctuation">,</span> <span class="token constant">OUTPUT</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">void</span> <span class="token keyword">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  y <span class="token operator">=</span> <span class="token function">sin</span><span class="token punctuation">(</span>x<span class="token operator">++</span> <span class="token operator">/</span> <span class="token number">255.0</span> <span class="token operator">*</span> PI <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">128</span> <span class="token operator">+</span> <span class="token number">128</span><span class="token punctuation">;</span>  <span class="token comment">// 生成正弦波信号(0~255)</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">></span> <span class="token number">255</span><span class="token punctuation">)</span> x <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token function">analogWrite</span><span class="token punctuation">(</span>pwm_pin<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">">pwm:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">int</span> p1 <span class="token operator">=</span> <span class="token function">analogRead</span><span class="token punctuation">(</span>analog_pin<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">">p1:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>p1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  float voltage <span class="token operator">=</span> p1 <span class="token operator">*</span> <span class="token number">5.0</span> <span class="token operator">/</span> <span class="token number">1024</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">">voltage:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>voltage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">delay</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>同时绘制<code>pwm</code>和<code>p1</code>得到如下图像，可以看出PWM波就是通过调整占空比来模拟不同的电压输出，左侧低电压，占空比更小（更多为0V），右侧高电压，占空比更大<br />
+<img src="/figures/robotics/Arduino/analog_input_pwm.png" srcset="/img/loading.gif" lazyload alt="模拟输入PWM波" /></p>
+<h4 id="中断控制led"><a class="markdownIt-Anchor" href="#中断控制led"></a> 中断控制LED</h4>
+<p>Arduino还支持终端信号，例如可以将数字输入信号作为中断触发条件，从而作为LED开关，电路图如下:<br />
+<img src="/figures/robotics/Arduino/interrupt_control_led_circuit.png" srcset="/img/loading.gif" lazyload alt="中断控制LED" /></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-arduino" data-language="arduino"><code class="language-arduino">const <span class="token keyword">byte</span> interrupt_pin <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>  <span class="token comment">// 中断引脚</span>
+volatile <span class="token keyword">byte</span> state <span class="token operator">=</span> <span class="token constant">LOW</span><span class="token punctuation">;</span>    <span class="token comment">// 用于存储LED状态的变量</span>
+
+<span class="token keyword">void</span> <span class="token keyword">setup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token number">9600</span><span class="token punctuation">)</span><span class="token punctuation">;</span>         <span class="token comment">// 初始化串口通信</span>
+  <span class="token function">pinMode</span><span class="token punctuation">(</span><span class="token number">13</span><span class="token punctuation">,</span> <span class="token constant">OUTPUT</span><span class="token punctuation">)</span><span class="token punctuation">;</span>         <span class="token comment">// 设置LED引脚为输出模式</span>
+  <span class="token function">pinMode</span><span class="token punctuation">(</span>interrupt_pin<span class="token punctuation">,</span> <span class="token constant">INPUT_PULLUP</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 设置中断引脚为输入模式，并启用内部上拉电阻</span>
+  <span class="token function">attachInterrupt</span><span class="token punctuation">(</span><span class="token function">digitalPinToInterrupt</span><span class="token punctuation">(</span>interrupt_pin<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">blink</span><span class="token punctuation">,</span> CHANGE<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 当引脚电平变化时调用blink函数</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token keyword">loop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">digitalWrite</span><span class="token punctuation">(</span><span class="token number">13</span><span class="token punctuation">,</span> state<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// 设置LED状态</span>
+  <span class="token keyword">int</span> p2 <span class="token operator">=</span> <span class="token function">digitalRead</span><span class="token punctuation">(</span>interrupt_pin<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">">LED_state:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">">interrupt_pin:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">Serial</span><span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>p2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">void</span> <span class="token function">blink</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  state <span class="token operator">=</span> <span class="token operator">!</span>state<span class="token punctuation">;</span>  <span class="token comment">// 反转LED状态</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Robotics/" class="category-chain-item">Robotics</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Arduino学习笔记</div>
+      <div>https://wty-yy.github.io/posts/55771/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年1月2日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/30945/" title="ROS2笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ROS2笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/23047/" title="Hexo Fluid 显示视频文件">
+                        <span class="hidden-mobile">Hexo Fluid 显示视频文件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

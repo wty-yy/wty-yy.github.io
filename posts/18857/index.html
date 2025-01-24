@@ -28,8 +28,12 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1.ax1x.com/2023/01/01/pSCGYfs.png">
 <meta property="og:image" content="https://s1.ax1x.com/2023/01/01/pSCGJYj.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/essay/bivariate_normal_plot.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/essay/many_number_plot.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/essay/bivariate_normal_plot.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/essay/many_number_plot.png">
 <meta property="article:published_time" content="2022-03-31T14:54:03.000Z">
-<meta property="article:modified_time" content="2024-09-04T12:37:18.657Z">
+<meta property="article:modified_time" content="2025-01-16T10:11:44.719Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s1.ax1x.com/2023/01/01/pSCGYfs.png">
@@ -307,7 +311,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4k 字
+          4.3k 字
         
       </span>
     
@@ -318,7 +322,7 @@
         
         
         
-          34 分钟
+          36 分钟
         
       </span>
     
@@ -764,6 +768,28 @@ config <span class="token operator">=</span> <span class="token punctuation">&#1
     <span class="token string">'axes.unicode_minus'</span><span class="token punctuation">:</span> <span class="token boolean">False</span> <span class="token comment"># 显示负号</span>
 <span class="token punctuation">&#125;</span>
 plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">.</span>update<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="重定向输出到文本和文件"><a class="markdownIt-Anchor" href="#重定向输出到文本和文件"></a> 重定向输出到文本和文件</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> sys
+<span class="token keyword">class</span> <span class="token class-name">Logger</span><span class="token punctuation">:</span>
+  <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    self<span class="token punctuation">.</span>terminal <span class="token operator">=</span> sys<span class="token punctuation">.</span>stdout
+    self<span class="token punctuation">.</span>log <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span>filename<span class="token punctuation">,</span> <span class="token string">'a'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
+  
+  <span class="token keyword">def</span> <span class="token function">write</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> message<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    self<span class="token punctuation">.</span>terminal<span class="token punctuation">.</span>write<span class="token punctuation">(</span>message<span class="token punctuation">)</span>
+    self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>write<span class="token punctuation">(</span>message<span class="token punctuation">)</span>
+  
+  <span class="token keyword">def</span> <span class="token function">flush</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    self<span class="token punctuation">.</span>terminal<span class="token punctuation">.</span>flush<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>flush<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  
+<span class="token keyword">def</span> <span class="token function">redirect_std_to_file</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  sys<span class="token punctuation">.</span>stderr <span class="token operator">=</span> sys<span class="token punctuation">.</span>stdout <span class="token operator">=</span> Logger<span class="token punctuation">(</span>filename<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+  redirect_std_to_file<span class="token punctuation">(</span><span class="token string">'test.log'</span><span class="token punctuation">)</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"hi"</span><span class="token punctuation">)</span>
+  <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">"GG"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h2 id="jupyter-notebook"><a class="markdownIt-Anchor" href="#jupyter-notebook"></a> Jupyter Notebook</h2>
 <h3 id="vim安装"><a class="markdownIt-Anchor" href="#vim安装"></a> Vim安装</h3>
 <p>主要使用Vim-Binding插件，具体安装方法可以参考我写的这个 <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/384989800/answer/2433089568">Zhihu - 在Jupyter Notebook中使用Vim</a>.</p>
@@ -810,6 +836,70 @@ jtplot<span class="token punctuation">.</span>style<span class="token punctuatio
 
 plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">'font.sans-serif'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'SimHei'</span><span class="token punctuation">]</span>  <span class="token comment"># 用来正常显示中文标签</span>
 plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">[</span><span class="token string">'axes.unicode_minus'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">False</span>  <span class="token comment"># 用来正常显示负号</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="ros2"><a class="markdownIt-Anchor" href="#ros2"></a> ROS2</h2>
+<h3 id="ros2模板"><a class="markdownIt-Anchor" href="#ros2模板"></a> ROS2模板</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/joshnewans/my_bot">joshnewans/my_bot</a>，亦可以<a href="/file/ROS/ros2_template.zip">直接下载zip文件</a>，使用方法将其中的所有<code>my_bot</code>文件名换成新项目的名称，例如<code>my_newbot</code>:</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> src/ros2_template
+<span class="token comment"># 用gerp递归找到所有包含`my_bot`的文件, 用sed将`my_bot`都替换为`my_newbot`</span>
+<span class="token function">sed</span> <span class="token parameter variable">-i</span> <span class="token string">'s/my_bot/my_newbot/g'</span> <span class="token variable"><span class="token variable">`</span><span class="token function">grep</span> <span class="token string">'my_bot'</span> <span class="token parameter variable">-lr</span> <span class="token builtin class-name">.</span><span class="token variable">`</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="修复zsh按tab没有提示的问题"><a class="markdownIt-Anchor" href="#修复zsh按tab没有提示的问题"></a> 修复zsh按tab没有提示的问题</h3>
+<p>参考<a target="_blank" rel="noopener" href="https://github.com/ros2/ros2cli/issues/534"> Autocomplete fails while using zsh. #534 </a>，参考这个<a target="_blank" rel="noopener" href="https://github.com/ros2/ros2cli/issues/534#issuecomment-988824521">回复</a>，修改如下文件</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /opt/ros/<span class="token variable">$ROS_DISTRO</span>/share/rosidl_cli/environment/rosidl-argcomplete.zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>找到15行<code>autoload -U +X compinit &amp;&amp; compinit</code>，将其注释掉即可</p>
+<h2 id="docker"><a class="markdownIt-Anchor" href="#docker"></a> Docker</h2>
+<h3 id="清空缓存内容创建镜像前"><a class="markdownIt-Anchor" href="#清空缓存内容创建镜像前"></a> 清空缓存内容(创建镜像前)</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 创建clean_cache.sh文件并写入命令</span>
+<span class="token function">cat</span> <span class="token operator">></span> clean_cache.sh <span class="token operator">&lt;&lt;</span> <span class="token string">EOF
+rm -rf /var/lib/apt/lists/* \
+  ~/.vscode-server \
+  ~/.zcompdump* \
+  ~/.bash_history \
+  ~/.zsh_history \
+  ~/.gazebo \
+  ~/.ros \
+  ~/.rviz3 \
+  ~/.sdformat \
+  ~/.ignition
+EOF</span>
+<span class="token comment"># 赋予权限</span>
+<span class="token function">chmod</span> +x clean_cache.sh
+<span class="token comment"># 清空缓存</span>
+./clean_cache.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="markdown"><a class="markdownIt-Anchor" href="#markdown"></a> MarkDown</h2>
+<h3 id="用table多图并行显示"><a class="markdownIt-Anchor" href="#用table多图并行显示"></a> 用table多图并行显示</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">|fig1|fig2|
+|-|-|
+|<span class="token url"><span class="token operator">!</span>[<span class="token content">img1</span>](<span class="token url">/figures/essay/bivariate_normal_plot.png</span>)</span>|<span class="token url"><span class="token operator">!</span>[<span class="token content">img2</span>](<span class="token url">/figures/essay/many_number_plot.png</span>)</span>|
+|<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">width</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span>50%</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/figures/essay/bivariate_normal_plot.png<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>|<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">width</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span>100%</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/figures/essay/many_number_plot.png<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>|<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>效果如下:</p>
+<table>
+<thead>
+<tr>
+<th>fig1</th>
+<th>fig2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/figures/essay/bivariate_normal_plot.png" srcset="/img/loading.gif" lazyload alt="img1" /></td>
+<td><img src="/figures/essay/many_number_plot.png" srcset="/img/loading.gif" lazyload alt="img2" /></td>
+</tr>
+<tr>
+<td><img width=50% src="/figures/essay/bivariate_normal_plot.png" srcset="/img/loading.gif" lazyload/></td>
+<td><img width=100% src="/figures/essay/many_number_plot.png" srcset="/img/loading.gif" lazyload/></td>
+</tr>
+</tbody>
+</table>
+<h3 id="折叠"><a class="markdownIt-Anchor" href="#折叠"></a> 折叠</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>details</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>summary</span><span class="token punctuation">></span></span>hi<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>summary</span><span class="token punctuation">></span></span>
+debug
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>details</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>效果如下:</p>
+<details>
+<summary>hi</summary>
+debug
+</details>
 <h1 id="dotfiles"><a class="markdownIt-Anchor" href="#dotfiles"></a> Dotfiles</h1>
 <h2 id="vimrc"><a class="markdownIt-Anchor" href="#vimrc"></a> .vimrc</h2>
 <div class='spoiler collapsed'>
