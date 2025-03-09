@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/ros2_controller_struct.drawio.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/robotics/ros2/ros2_controller_start_success.png">
 <meta property="article:published_time" content="2025-01-12T02:07:41.000Z">
-<meta property="article:modified_time" content="2025-01-15T17:40:10.764Z">
+<meta property="article:modified_time" content="2025-03-09T12:08:03.025Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/ros2/urdf_joint_and_link.png">
@@ -321,7 +321,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.7k 字
+          5k 字
         
       </span>
     
@@ -332,7 +332,7 @@
         
         
         
-          39 分钟
+          42 分钟
         
       </span>
     
@@ -397,20 +397,92 @@
 colcon build --symlink-install  <span class="token comment"># 编译所有包</span>
 colcon build --symlink-install --packages-select <span class="token operator">&lt;</span>package<span class="token operator"><span class="token file-descriptor important">1</span>></span> <span class="token punctuation">..</span>.  <span class="token comment"># 编译指定包</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
 <p><code>--symlink-install</code>使用虚拟连接python代码，URDF，yaml配置文件（无需编译的文件），当项目中文件修改后，运行即是最新更新的文件。</p>
-<h3 id="launch文件"><a class="markdownIt-Anchor" href="#launch文件"></a> Launch文件</h3>
+<h2 id="launch文件"><a class="markdownIt-Anchor" href="#launch文件"></a> Launch文件</h2>
+<h3 id="指令基础"><a class="markdownIt-Anchor" href="#指令基础"></a> 指令基础</h3>
+<h4 id="启动文件基础"><a class="markdownIt-Anchor" href="#启动文件基础"></a> 启动文件基础</h4>
+<p>启动文件只需实现<code>generate_launch_description</code>函数，该函数返回<code>launch.LaunchDescription</code>类</p>
+<h4 id="启动launch文件"><a class="markdownIt-Anchor" href="#启动launch文件"></a> 启动Launch文件</h4>
+<p>创建<code>*.launch.py</code>文件，一般放在项目的<code>launch/</code>文件夹下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> launch <span class="token keyword">import</span> LaunchDescription
+<span class="token keyword">from</span> launch<span class="token punctuation">.</span>actions <span class="token keyword">import</span> DeclareLaunchArgument<span class="token punctuation">,</span> IncludeLaunchDescription<span class="token punctuation">,</span> ExecuteProcess
+<span class="token keyword">from</span> launch<span class="token punctuation">.</span>launch_description_sources <span class="token keyword">import</span> PythonLaunchDescriptionSource
+<span class="token keyword">from</span> launch_ros<span class="token punctuation">.</span>actions <span class="token keyword">import</span> Node
+<span class="token keyword">from</span> launch<span class="token punctuation">.</span>conditions <span class="token keyword">import</span> IfCondition
+<span class="token keyword">def</span> <span class="token function">generate_launch_description</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword">return</span> LaunchDescription<span class="token punctuation">(</span><span class="token punctuation">[</span>  <span class="token comment"># 定义Launch启动的对象</span>
+    <span class="token comment"># 定义launch文件的cmd argument参数输入</span>
+    <span class="token comment"># 使用方法ros2 launch *.launch.py robot_name:=cubot</span>
+    DeclareLaunchArgument<span class="token punctuation">(</span>  
+      name<span class="token operator">=</span><span class="token string">'robot_name'</span><span class="token punctuation">,</span>  <span class="token comment"># 参数名为robot_name</span>
+      default_value<span class="token operator">=</span><span class="token string">'cubot'</span><span class="token punctuation">,</span>  <span class="token comment"># 默认参数</span>
+      description<span class="token operator">=</span><span class="token string">'Define your robot name'</span>  <span class="token comment"># 对参数的描述</span>
+    <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    DeclareLaunchArgument<span class="token punctuation">(</span>  
+      name<span class="token operator">=</span><span class="token string">'rviz'</span><span class="token punctuation">,</span>  <span class="token comment"># 参数名为rviz</span>
+      default_value<span class="token operator">=</span>false<span class="token punctuation">,</span>  <span class="token comment"># 默认参数</span>
+      description<span class="token operator">=</span><span class="token string">'Run Rviz2'</span>  <span class="token comment"># 对参数的描述</span>
+    <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    ExecuteProcess<span class="token punctuation">(</span>cmd<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'gazebo'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> output<span class="token operator">=</span><span class="token string">'screen'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 执行的命令行指令</span>
+    <span class="token comment"># 开启节点，等价于</span>
+    <span class="token comment"># ros2 run turtlesim turtlesim_node</span>
+    Node<span class="token punctuation">(</span>  
+      package<span class="token operator">=</span><span class="token string">'turtlesim'</span><span class="token punctuation">,</span>  <span class="token comment"># 包名称</span>
+      executable<span class="token operator">=</span><span class="token string">'turtlesim_node'</span><span class="token punctuation">,</span>  <span class="token comment"># 执行的文件名</span>
+      arguments<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span>  <span class="token comment"># 传入的命令行参数</span>
+      parameters<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">&#123;</span><span class="token string">'data'</span><span class="token punctuation">:</span> <span class="token number">123</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span>  <span class="token comment"># 传入节点中的参数，保存到ros2 param的turtlesim_node/data下</span>
+      remappings<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token string">'origin_topic'</span><span class="token punctuation">,</span> <span class="token string">'target_topic'</span><span class="token punctuation">)</span><span class="token punctuation">]</span>  <span class="token comment"># 将节点创建的origin_topic映射到target_topic</span>
+      name<span class="token operator">=</span><span class="token string">'turtlesim_node'</span>  <span class="token comment"># 节点名称</span>
+    <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    Node<span class="token punctuation">(</span>
+      package<span class="token operator">=</span><span class="token string">'rviz2'</span><span class="token punctuation">,</span>
+      executable<span class="token operator">=</span><span class="token string">'rviz2'</span><span class="token punctuation">,</span>
+      name<span class="token operator">=</span><span class="token string">'rviz2'</span><span class="token punctuation">,</span>
+      output<span class="token operator">=</span><span class="token string">'screen'</span><span class="token punctuation">,</span>
+      condition<span class="token operator">=</span>IfCondition<span class="token punctuation">(</span>LaunchConfiguration<span class="token punctuation">(</span><span class="token string">"rviz"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 当rviz为true时启动该Node</span>
+      parameters<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">&#123;</span><span class="token string">'use_sim_time'</span><span class="token punctuation">:</span> LaunchConfiguration<span class="token punctuation">(</span><span class="token string">'use_sim_time'</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
+    <span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token comment"># 执行launch文件，等价于</span>
+    <span class="token comment"># ros2 launch *.launch.py</span>
+    IncludeLaunchDescription<span class="token punctuation">(</span>
+      <span class="token comment"># 需要启动的launch文件的路径</span>
+      PythonLaunchDescriptionSource<span class="token punctuation">(</span>description_launch_path<span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 当path是FindPackage类</span>
+      <span class="token comment"># description_launch_path,  # 当path是字符串</span>
+      launch_arguments<span class="token operator">=</span><span class="token punctuation">&#123;</span>
+        <span class="token string">'use_sim_time'</span><span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">(</span>use_sim_time<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">'publish_joints'</span><span class="token punctuation">:</span> <span class="token string">'false'</span><span class="token punctuation">,</span>
+      <span class="token punctuation">&#125;</span><span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 注意需要转为迭代器</span>
+    <span class="token punctuation">)</span>
+  <span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h4 id="按包名称获取绝对路径"><a class="markdownIt-Anchor" href="#按包名称获取绝对路径"></a> 按包名称获取绝对路径</h4>
-<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> ament_index_python<span class="token punctuation">.</span>packages <span class="token keyword">import</span> get_package_share_directory<span class="token punctuation">,</span> get_package_prefix
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> launch<span class="token punctuation">.</span>substitutions <span class="token keyword">import</span> PathJoinSubstitution
+<span class="token keyword">from</span> launch_ros<span class="token punctuation">.</span>substitutions <span class="token keyword">import</span> FindPackageShare<span class="token punctuation">,</span> FindPackagePrefix
+<span class="token comment"># /ros2_ws/install/&lt;package_name>/share/&lt;package_name></span>
+path_install_pkg <span class="token operator">=</span> FindPackageShare<span class="token punctuation">(</span><span class="token string">'package_name'</span><span class="token punctuation">)</span>
+<span class="token comment"># /ros2_ws/install/&lt;package_name>/share/&lt;package_name>/config/robot.urdf</span>
+path_urdf <span class="token operator">=</span> PathJoinSubstitution<span class="token punctuation">(</span><span class="token punctuation">[</span>
+  path_install_pkg<span class="token punctuation">,</span> <span class="token string">'config'</span><span class="token punctuation">,</span> <span class="token string">'robot.urdf'</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token comment"># /ros2_ws/install/&lt;package_name></span>
+path_prefix_pkg <span class="token operator">=</span> FindPackagePrefix<span class="token punctuation">(</span><span class="token string">'package_name'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        旧方法，使用get_package_share_directory
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> ament_index_python<span class="token punctuation">.</span>packages <span class="token keyword">import</span> get_package_share_directory<span class="token punctuation">,</span> get_package_prefix
 <span class="token comment"># /ros2_ws/install/&lt;package_name>/share/&lt;package_name></span>
 path_install_pkg <span class="token operator">=</span> get_package_share_directory<span class="token punctuation">(</span><span class="token string">'package_name'</span><span class="token punctuation">)</span>
 <span class="token comment"># /ros2_ws/install/&lt;package_name></span>
 path_prefix_pkg <span class="token operator">=</span> get_package_prefix<span class="token punctuation">(</span><span class="token string">'package_name'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<h4 id="获取urdf"><a class="markdownIt-Anchor" href="#获取urdf"></a> 获取URDF</h4>
-<h5 id="解析xacro文件"><a class="markdownIt-Anchor" href="#解析xacro文件"></a> 解析xacro文件</h5>
+    </div>
+</div>
+<h3 id="获取urdf"><a class="markdownIt-Anchor" href="#获取urdf"></a> 获取URDF</h3>
+<h4 id="解析xacro文件"><a class="markdownIt-Anchor" href="#解析xacro文件"></a> 解析xacro文件</h4>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> xacro
 path_xacro_file <span class="token operator">=</span> <span class="token string">".../xx.xacro"</span>
 robot_xacro <span class="token operator">=</span> xacro<span class="token punctuation">.</span>process_file<span class="token punctuation">(</span>path_xacro_file<span class="token punctuation">)</span>
 robot_description <span class="token operator">=</span> robot_xacro<span class="token punctuation">.</span>toxml<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 转为URDF的xml格式</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<h5 id="读取urdf"><a class="markdownIt-Anchor" href="#读取urdf"></a> 读取URDF</h5>
+<h4 id="读取urdf"><a class="markdownIt-Anchor" href="#读取urdf"></a> 读取URDF</h4>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>path_urdf_file<span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> urdf_file<span class="token punctuation">:</span>
   robot_description <span class="token operator">=</span> urdf_file<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 直接读取即可</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
 <h2 id="urdf相关"><a class="markdownIt-Anchor" href="#urdf相关"></a> URDF相关</h2>
@@ -856,6 +928,34 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args <span class="tok
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Robotics/" class="category-chain-item">Robotics</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Robotics/ROS/" class="category-chain-item">ROS</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
   
 </div>
 
@@ -909,6 +1009,12 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args <span class="tok
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/posts/64305/" title="模型设计及3D打印笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">模型设计及3D打印笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
