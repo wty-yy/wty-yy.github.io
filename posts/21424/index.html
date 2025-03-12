@@ -1,0 +1,878 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="总结下每次调试乐聚Kuavo42真机遇到的问题 # 真机启动指令为 roslaunch humanoid_controllers load_kuavo_real.launch cali:&#x3D;true cali_arm:&#x3D;true # 关闭所有ros服务, ros意外退出可以用该方法清理 pkill -i ros # 查看当前是否有正在运行的node rosnode list">
+<meta property="og:type" content="article">
+<meta property="og:title" content="乐聚Kuavo42机器人真机调试日志">
+<meta property="og:url" content="https://wty-yy.github.io/posts/21424/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="总结下每次调试乐聚Kuavo42真机遇到的问题 # 真机启动指令为 roslaunch humanoid_controllers load_kuavo_real.launch cali:&#x3D;true cali_arm:&#x3D;true # 关闭所有ros服务, ros意外退出可以用该方法清理 pkill -i ros # 查看当前是否有正在运行的node rosnode list">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/real/kuavo42/tb_logger_leju_down_mujoco.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/real/kuavo42/tb_logger_leju_down_real.png">
+<meta property="article:published_time" content="2025-03-10T03:25:09.000Z">
+<meta property="article:modified_time" content="2025-03-11T07:39:36.744Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/real/kuavo42/tb_logger_leju_down_mujoco.png">
+  
+  
+  
+  <title>乐聚Kuavo42机器人真机调试日志 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="乐聚Kuavo42机器人真机调试日志"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-10 11:25" pubdate>
+          2025年3月10日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">乐聚Kuavo42机器人真机调试日志</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>总结下每次调试乐聚Kuavo42真机遇到的问题</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 真机启动指令为</span>
+roslaunch humanoid_controllers load_kuavo_real.launch cali:<span class="token operator">=</span>true cali_arm:<span class="token operator">=</span>true
+<span class="token comment"># 关闭所有ros服务, ros意外退出可以用该方法清理</span>
+<span class="token function">pkill</span> <span class="token parameter variable">-i</span> ros
+<span class="token comment"># 查看当前是否有正在运行的node</span>
+rosnode list<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        点击显/隐ssh连接ip（曲江）
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Host leju_down
+    HostName <span class="token number">192.168</span>.31.102
+    User lab
+    <span class="token comment"># Password: 三个空格</span>
+
+Host leju_up
+    HostName <span class="token number">192.168</span>.31.73
+    User kuavo
+    <span class="token comment"># Password: leju_kuavo</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<h3 id="2025310"><a class="markdownIt-Anchor" href="#2025310"></a> 2025.3.10.</h3>
+<h4 id="上午"><a class="markdownIt-Anchor" href="#上午"></a> 上午</h4>
+<p>10:30到曲江开始调机器人</p>
+<p><code>pull kuavo-rl-controller-xjtu</code>仓库测试通讯延迟问题，结果直接运行该仓库下的<code>humanoid_controllers</code>无法找到电机报错</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Error: Joint <span class="token number">10</span> joint status error<span class="token operator">!</span><span class="token number">1</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>分别测试在bash,zsh下运行<code>kuavo-rl-opensource</code>仓库中的<code>humanoid_controllers</code>虽然能够站立，但行走存在明显延迟，不稳定，有问题</p>
+<hr />
+<p>再测试mpc控制<code>kuavo-ros-opensource:beta 8d17a39e2ff9a341d542adf36e2bd63d281c33ed</code>，只能bash启动，应该是缺少source的库文件，修复下zsh</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># /root/.zshrc加入, 应该是libdrake.so没找到的问题</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">LD_LIBRARY_PATH</span><span class="token operator">=</span><span class="token variable">$LD_LIBRARY_PATH</span>:/opt/drake/lib<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>可以在bash或zsh下正常使用mpc控制了</p>
+<blockquote>
+<p>用<code>passwd root</code>将下位机的<code>root</code>密码也设置为三个空格了，不然ssh无法直接连上root</p>
+</blockquote>
+<hr />
+<p>难道是installed中的interface版本问题，尝试再用zsh运行<code>kuavo-rl-opensource</code>，仍然不行，走路严重右偏移；尝试bash下再运行<code>kuavo-rl-opensource</code>，依旧有问题</p>
+<h4 id="下午"><a class="markdownIt-Anchor" href="#下午"></a> 下午</h4>
+<p>休息到2:40开始继续调</p>
+<p>用nomachine测试下mujoco仿真的效果，发现python的exec执行速度非常慢，最高延迟到35ms无法接受</p>
+<p>安装下<code>pip install onnxruntime-openvino</code>，用openvino试下能否有优化</p>
+<p>调取tensorboard报错<code>TypeError: MessageToJson() got an unexpected keyword argument 'including_default_value_fields</code>：降级即可解决<code>pip install tensorboard==2.12.0 protobuf==3.20.2</code></p>
+<p>在下位机上测试预测时间误差，没看出很大问题<br />
+<img src="/figures/robotics/real/kuavo42/tb_logger_leju_down_mujoco.png" srcset="/img/loading.gif" lazyload alt="Mujoco上MPC计算时间误差图像" /></p>
+<p>通过将<code>~/kuavo-rl-opensource/installed</code>拷贝到<code>~/kauvo-rl-controller-xjtu/</code>下，即更换驱动程序，使<code>kuavo-rl-controller-xjtu</code>的程序可以运行，得到的延迟曲线如图所示，虽然延迟不高，但不清楚为什么控制效果仍然非常不好，有明显的颤抖（这个重启下电机即可）</p>
+<p>启动<code>kuavo-rl-controller-xjtu</code>可能出现以下问题，但是执行<code>kuavo-rl-opensource</code>就不会有问题，执行一遍<code>kuavo-rl-opensource</code>后再执行<code>kuavo-rl-controller-xjtu</code>就又好了，非常迷</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>HardwareNode<span class="token punctuation">]</span>正在等待 cppad 构建完成<span class="token punctuation">..</span>.
+<span class="token punctuation">..</span>.
+<span class="token punctuation">[</span> INFO<span class="token punctuation">]</span> <span class="token punctuation">[</span><span class="token number">1741594703.970564987</span><span class="token punctuation">]</span>: Waiting <span class="token keyword">for</span> <span class="token string">'initial_state'</span> parameter to be set<span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>不是很理解为什么，正常rl走一次路以后，就再无法正常了</p>
+<p>测试:</p>
+<ol>
+<li>重启电机电源，启动<code>kuavo-rl-opensource</code>，走路偏右侧</li>
+<li>再次重启电机电源，启动<code>kuavo-rl-opensource</code>，走路偏右侧</li>
+<li>直接启动<code>kuavo-rl-opensource</code>，走路偏右侧更严重，走着走着倒了</li>
+<li>重启电机电源，启动<code>kuavo-rl-opensource</code>，没有成功站起来，初始时弯曲不正确</li>
+<li>重启电机电源，启动<code>kuavo-rl-opensource</code>，走的非常不稳，掉了个六角杯头螺丝下来</li>
+<li>重启电机电源，启动<code>kuavo-ros-opensource-beta</code>，OK MPC很稳定没有任何问题，就是向前走路声音非常吵</li>
+<li>直接启动<code>kuavo-rl-opensource</code>，仍然向右偏非常严重，自己倒了</li>
+<li>重启电机，用bash启动<code>kuavo-rl-opensource</code>，仍然向右偏非常严重，自己倒了</li>
+<li>重启电机，启动<code>kuavo-rl-controller-xjtu/humanoid_controllers</code>，仍然右偏严重，控制命令都有向左的方向即可稳住不倒</li>
+<li>直接启动<code>kuavo-rl-controller-xjtu/rl_controller_xjtu</code>，基本无法行走，抬腿速度非常缓慢，对命令的执行也非常慢（如下图所示，从命令的时间延迟上没看出什么区别）</li>
+<li>直接启动<code>kuavo-rl-opensource</code>，虽然向右偏，但能基本走</li>
+<li>直接启动<code>kuavo-rl-opensource</code>，走了一半后，基本无法抬腿，颤抖非常严重</li>
+<li>重启电机，启动<code>kuavo-rl-opensource</code>，虽然向右偏，但基本能走，最后摔倒</li>
+<li>直接启动<code>kuavo-ros-opensource-beta</code>，站起来时候直接倒下，掉了一个长的沉头螺丝，重新装回去了</li>
+<li>重启电机，启动<code>kuavo-ros-opensource-beta</code>，向前走非常不稳，高度站得很低，最后走倒了（日志时间为<code>~/.ros/stdout/2025-03-10_17-57-33</code>）</li>
+<li>重启电机，启动<code>kuavo-ros-opensource-beta</code>，9号电机编码器直接无法读取到数据了，无法启动（日志时间为<code>~/.ros/stdout/2025-03-10_17-59-56</code>）</li>
+</ol>
+<p><img src="/figures/robotics/real/kuavo42/tb_logger_leju_down_real.png" srcset="/img/loading.gif" lazyload alt="真机上时间延迟" /></p>
+<h3 id="2025311"><a class="markdownIt-Anchor" href="#2025311"></a> 2025.3.11.</h3>
+<h4 id="上午-2"><a class="markdownIt-Anchor" href="#上午-2"></a> 上午</h4>
+<p>10点30到曲江开始调试</p>
+<p>按照<a target="_blank" rel="noopener" href="https://kuavo.lejurobot.com/beta_manual/basic_usage/kuavo-ros-control/docs/3%E8%B0%83%E8%AF%95%E6%95%99%E7%A8%8B/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%85%B3%E8%8A%82%E6%A0%87%E5%AE%9A/">机器人关节标定教程</a>对机器人进行重新标定</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 执行</span>
+<span class="token builtin class-name">source</span> devel/setup.bash
+roslaunch humanoid_controllers load_kuavo_real.launch cali:<span class="token operator">=</span>true cali_leg:<span class="token operator">=</span>true cali_arm:<span class="token operator">=</span>true
+
+<span class="token comment"># 显示如下信息</span>
+0000012766: Slave <span class="token number">1</span> actual position <span class="token number">13.7060546</span>,Encoder <span class="token number">89824.0000000</span>
+0000012776: Rated current <span class="token number">39.6000000</span>
+0000012786: Slave <span class="token number">2</span> actual position -0.4518127,Encoder <span class="token parameter variable">-1645.0000000</span>
+0000012796: Rated current <span class="token number">11.7900000</span>
+0000012806: Slave <span class="token number">3</span> actual position <span class="token number">24.7090759</span>,Encoder <span class="token number">89963.0000000</span>
+0000012816: Rated current <span class="token number">42.4300000</span>
+0000012826: Slave <span class="token number">4</span> actual position -1.4784240,Encoder <span class="token parameter variable">-9689.0000000</span>
+0000012836: Rated current <span class="token number">42.4300000</span>
+0000012846: Slave <span class="token number">5</span> actual position <span class="token number">5.2983093</span>,Encoder <span class="token number">69446.0000000</span>
+0000012856: Rated current <span class="token number">8.4900000</span>
+0000012866: Slave <span class="token number">6</span> actual position <span class="token number">6.0652160</span>,Encoder <span class="token number">79498.0000000</span>
+0000012876: Rated current <span class="token number">8.4900000</span>
+0000012887: Slave <span class="token number">7</span> actual position <span class="token number">16.2445068</span>,Encoder <span class="token number">106460.0000000</span>
+0000012897: Rated current <span class="token number">39.6000000</span>
+0000012906: Slave <span class="token number">8</span> actual position -4.8746337,Encoder <span class="token parameter variable">-17748.0000000</span>
+0000012916: Rated current <span class="token number">11.7900000</span>
+0000012927: Slave <span class="token number">9</span> actual position -2.0871276,Encoder <span class="token parameter variable">-7599.0000000</span>
+0000012937: Rated current <span class="token number">42.4300000</span>
+0000012946: Slave <span class="token number">10</span> actual position -17.6039123,Encoder <span class="token parameter variable">-115369.0000000</span>
+0000012956: Rated current <span class="token number">42.4300000</span>
+0000012966: Slave <span class="token number">11</span> actual position -3.6605835,Encoder <span class="token parameter variable">-47980.0000000</span>
+0000012977: Rated current <span class="token number">8.4900000</span>
+0000012987: Slave <span class="token number">12</span> actual position <span class="token number">10.4799652</span>,Encoder <span class="token number">137363.0000000</span>
+0000012997: Rated current <span class="token number">8.4900000</span>
+0000013010: Slave <span class="token number">13</span> actual position <span class="token number">18.7921142</span>,Encoder <span class="token number">68420.0000000</span>
+0000013019: Rated current <span class="token number">14.9900000</span>
+0000013029: Slave <span class="token number">14</span> actual position -4.8100891,Encoder <span class="token parameter variable">-17513.0000000</span>
+0000013039: Rated current <span class="token number">14.9900000</span>
+
+<span class="token comment"># 按c保存当前偏移量到~/.config/lejuconfig/offset.csv文件中</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Robotics/" class="category-chain-item">Robotics</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Robotics/Real/" class="category-chain-item">Real</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>乐聚Kuavo42机器人真机调试日志</div>
+      <div>https://wty-yy.github.io/posts/21424/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年3月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/23781/" title="Hunamoid Gym学习">
+                        <span class="hidden-mobile">Hunamoid Gym学习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
