@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://wty-yy.github.io/figures/essay/bivariate_normal_plot.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/essay/many_number_plot.png">
 <meta property="article:published_time" content="2022-03-31T14:54:03.000Z">
-<meta property="article:modified_time" content="2025-01-02T01:56:15.389Z">
+<meta property="article:modified_time" content="2025-03-28T12:13:41.826Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s1.ax1x.com/2023/01/01/pSCGYfs.png">
@@ -311,7 +311,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.3k 字
+          4.7k 字
         
       </span>
     
@@ -322,7 +322,7 @@
         
         
         
-          36 分钟
+          40 分钟
         
       </span>
     
@@ -769,27 +769,162 @@ config <span class="token operator">=</span> <span class="token punctuation">&#1
 <span class="token punctuation">&#125;</span>
 plt<span class="token punctuation">.</span>rcParams<span class="token punctuation">.</span>update<span class="token punctuation">(</span>config<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="重定向输出到文本和文件"><a class="markdownIt-Anchor" href="#重定向输出到文本和文件"></a> 重定向输出到文本和文件</h3>
-<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> sys
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># -*- coding: utf-8 -*-</span>
+<span class="token triple-quoted-string string">'''
+@File    : redirect_std_to_file.py
+@Time    : 2025/02/27 14:09:38
+@Author  : wty-yy
+@Version : 1.0
+@Blog    : https://wty-yy.github.io/
+@Desc    : For each python process,
+use `redirect_std_to_file(path_log)` once time,
+redirect stdout and stderr into path_log file.
+'''</span>
+<span class="token keyword">import</span> sys
 <span class="token keyword">class</span> <span class="token class-name">Logger</span><span class="token punctuation">:</span>
   <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">:</span>
     self<span class="token punctuation">.</span>terminal <span class="token operator">=</span> sys<span class="token punctuation">.</span>stdout
     self<span class="token punctuation">.</span>log <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span>filename<span class="token punctuation">,</span> <span class="token string">'a'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
-  
+
   <span class="token keyword">def</span> <span class="token function">write</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> message<span class="token punctuation">)</span><span class="token punctuation">:</span>
     self<span class="token punctuation">.</span>terminal<span class="token punctuation">.</span>write<span class="token punctuation">(</span>message<span class="token punctuation">)</span>
     self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>write<span class="token punctuation">(</span>message<span class="token punctuation">)</span>
-  
+
   <span class="token keyword">def</span> <span class="token function">flush</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
     self<span class="token punctuation">.</span>terminal<span class="token punctuation">.</span>flush<span class="token punctuation">(</span><span class="token punctuation">)</span>
     self<span class="token punctuation">.</span>log<span class="token punctuation">.</span>flush<span class="token punctuation">(</span><span class="token punctuation">)</span>
-  
+
 <span class="token keyword">def</span> <span class="token function">redirect_std_to_file</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">:</span>
   sys<span class="token punctuation">.</span>stderr <span class="token operator">=</span> sys<span class="token punctuation">.</span>stdout <span class="token operator">=</span> Logger<span class="token punctuation">(</span>filename<span class="token punctuation">)</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
   redirect_std_to_file<span class="token punctuation">(</span><span class="token string">'test.log'</span><span class="token punctuation">)</span>
   <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"hi"</span><span class="token punctuation">)</span>
-  <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">"GG"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+  <span class="token keyword">raise</span> ValueError<span class="token punctuation">(</span><span class="token string">"GG"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="自定义的logger"><a class="markdownIt-Anchor" href="#自定义的logger"></a> 自定义的Logger</h3>
+<p>无需安装额外包，支持：</p>
+<ol>
+<li>将Level等级彩色输出到终端</li>
+<li>同时输出到终端并保存到文件中</li>
+<li>支持vscode文件位置跳转 (ctrl+左键)</li>
+</ol>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        点击显/隐代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># -*- coding: utf-8 -*-</span>
+<span class="token triple-quoted-string string">'''
+@File    : my_logger.py
+@Time    : 2025/02/26 21:43:47
+@Author  : wty-yy
+@Version : 1.0
+@Blog    : https://wty-yy.github.io/
+@Desc    : A customed logger, support: 
+1. Color level name
+2. Output to console and save log to file
+3. Support vscode file location jump (ctrl+left key)
+'''</span>
+<span class="token keyword">import</span> logging
+
+<span class="token keyword">class</span> <span class="token class-name">LogColor</span><span class="token punctuation">:</span>
+  <span class="token triple-quoted-string string">""" ANSI color codes """</span>
+  RESET <span class="token operator">=</span> <span class="token string">'\033[0m'</span>
+  RED   <span class="token operator">=</span> <span class="token string">'\033[31m'</span>
+  GREEN <span class="token operator">=</span> <span class="token string">'\033[32m'</span>
+  YELLOW <span class="token operator">=</span> <span class="token string">'\033[33m'</span>
+  BLUE  <span class="token operator">=</span> <span class="token string">'\033[34m'</span>
+  MAGENTA <span class="token operator">=</span> <span class="token string">'\033[35m'</span>
+  CYAN  <span class="token operator">=</span> <span class="token string">'\033[36m'</span>
+  WHITE <span class="token operator">=</span> <span class="token string">'\033[37m'</span>
+  BOLD  <span class="token operator">=</span> <span class="token string">'\033[1m'</span>
+  UNDERLINE <span class="token operator">=</span> <span class="token string">'\033[4m'</span>
+
+LOG_COLORS <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token triple-quoted-string string">""" Match level name to color """</span>
+  <span class="token string">'DEBUG'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>CYAN<span class="token punctuation">,</span>
+  <span class="token string">'INFO'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>GREEN<span class="token punctuation">,</span>
+  <span class="token string">'WARNING'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>YELLOW<span class="token punctuation">,</span>
+  <span class="token string">'ERROR'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>RED<span class="token punctuation">,</span>
+  <span class="token string">'CRITICAL'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>RED <span class="token operator">+</span> LogColor<span class="token punctuation">.</span>BOLD<span class="token punctuation">,</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">ColorFormatter</span><span class="token punctuation">(</span>logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token triple-quoted-string string">"""Color Formatter for color_level"""</span>
+  <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> fmt<span class="token punctuation">,</span> datefmt<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> use_color<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    self<span class="token punctuation">.</span>formatter <span class="token operator">=</span> logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">(</span>fmt<span class="token punctuation">,</span> datefmt<span class="token punctuation">)</span>
+    self<span class="token punctuation">.</span>use_color <span class="token operator">=</span> use_color
+
+  <span class="token keyword">def</span> <span class="token function">format</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> record<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    record<span class="token punctuation">.</span>color_level <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>LOG_COLORS<span class="token punctuation">.</span>get<span class="token punctuation">(</span>record<span class="token punctuation">.</span>levelname<span class="token punctuation">,</span> LogColor<span class="token punctuation">.</span>RESET<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token interpolation"><span class="token punctuation">&#123;</span>record<span class="token punctuation">.</span>levelname<span class="token punctuation">&#125;</span></span><span class="token interpolation"><span class="token punctuation">&#123;</span>LogColor<span class="token punctuation">.</span>RESET<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span> <span class="token keyword">if</span> self<span class="token punctuation">.</span>use_color <span class="token keyword">else</span> record<span class="token punctuation">.</span>levelname
+    <span class="token keyword">return</span> self<span class="token punctuation">.</span>formatter<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>record<span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">get_logger</span><span class="token punctuation">(</span>
+    logger_name<span class="token punctuation">,</span> path_log_file<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>
+    console_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> color_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
+    log_level<span class="token operator">=</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">,</span> save_file_mode<span class="token operator">=</span><span class="token string">'a'</span>
+  <span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token triple-quoted-string string">"""
+  Get customed Logger
+
+  Args:
+    logger_name (str): Logger name
+    path_log_file (str, optional): Path of logging file. Defaults to None.
+    console_output (bool, optional): Whether output to console. Defaults to True.
+    color_output (bool, optional): Whether use color output. Defaults to True.
+    log_level (int, optional): Defaults to logging.DEBUG.
+    save_file_mode (str, optional): The mode of saving to path_log_file
+
+  Returns:
+    logging.Logger: logger
+  """</span>
+  logger <span class="token operator">=</span> logging<span class="token punctuation">.</span>getLogger<span class="token punctuation">(</span>logger_name<span class="token punctuation">)</span>
+  logger<span class="token punctuation">.</span>setLevel<span class="token punctuation">(</span>log_level<span class="token punctuation">)</span>
+
+  console_formatter <span class="token operator">=</span> ColorFormatter<span class="token punctuation">(</span>  <span class="token comment"># console output format</span>
+    fmt<span class="token operator">=</span><span class="token string">"%(asctime)s - %(color_level)s - %(filename)s:%(lineno)d - %(message)s"</span><span class="token punctuation">,</span>
+    datefmt<span class="token operator">=</span><span class="token string">"%Y-%m-%d %H:%M:%S"</span><span class="token punctuation">,</span>
+    use_color<span class="token operator">=</span>color_output
+  <span class="token punctuation">)</span>
+  file_formatter <span class="token operator">=</span> logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">(</span>  <span class="token comment"># file output format</span>
+    fmt<span class="token operator">=</span><span class="token string">"%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s"</span><span class="token punctuation">,</span>
+    datefmt<span class="token operator">=</span><span class="token string">"%Y-%m-%d %H:%M:%S"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">)</span>
+
+  <span class="token keyword">if</span> console_output<span class="token punctuation">:</span>
+    sh <span class="token operator">=</span> logging<span class="token punctuation">.</span>StreamHandler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    sh<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>console_formatter<span class="token punctuation">)</span>
+    logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>sh<span class="token punctuation">)</span>
+
+  <span class="token keyword">if</span> path_log_file<span class="token punctuation">:</span>
+    fh <span class="token operator">=</span> logging<span class="token punctuation">.</span>FileHandler<span class="token punctuation">(</span>path_log_file<span class="token punctuation">,</span> mode<span class="token operator">=</span>save_file_mode<span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
+    fh<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>file_formatter<span class="token punctuation">)</span>
+    logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>fh<span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> logger
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+  <span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
+  path_parent <span class="token operator">=</span> Path<span class="token punctuation">(</span>__file__<span class="token punctuation">)</span><span class="token punctuation">.</span>parents<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+  path_log <span class="token operator">=</span> path_parent <span class="token operator">/</span> <span class="token string">"app.log"</span>
+
+  logger <span class="token operator">=</span> get_logger<span class="token punctuation">(</span><span class="token string">"my_logger"</span><span class="token punctuation">,</span> path_log_file<span class="token operator">=</span>path_log<span class="token punctuation">)</span>
+
+  logger<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">"This is a debug message"</span><span class="token punctuation">)</span>
+  logger<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">"This is an info message"</span><span class="token punctuation">)</span>
+  logger<span class="token punctuation">.</span>warning<span class="token punctuation">(</span><span class="token string">"This is a warning message"</span><span class="token punctuation">)</span>
+  logger<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token string">"This is an error message"</span><span class="token punctuation">)</span>
+  logger<span class="token punctuation">.</span>critical<span class="token punctuation">(</span><span class="token string">"This is a critical message"</span><span class="token punctuation">)</span>
+
+  logger_no_color <span class="token operator">=</span> get_logger<span class="token punctuation">(</span><span class="token string">"no_color_logger"</span><span class="token punctuation">,</span> console_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> color_output<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>  <span class="token comment"># console output only</span>
+  logger_no_color<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">"This is a info message without color"</span><span class="token punctuation">)</span>
+
+  logger_file_only <span class="token operator">=</span> get_logger<span class="token punctuation">(</span><span class="token string">"file_only_logger"</span><span class="token punctuation">,</span> path_log_file<span class="token operator">=</span>path_log<span class="token punctuation">,</span> console_output<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span> <span class="token comment">#  save to file only</span>
+  logger_file_only<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token string">"This is an error message only in file"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
 <h2 id="jupyter-notebook"><a class="markdownIt-Anchor" href="#jupyter-notebook"></a> Jupyter Notebook</h2>
 <h3 id="vim安装"><a class="markdownIt-Anchor" href="#vim安装"></a> Vim安装</h3>
 <p>主要使用Vim-Binding插件，具体安装方法可以参考我写的这个 <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/384989800/answer/2433089568">Zhihu - 在Jupyter Notebook中使用Vim</a>.</p>
