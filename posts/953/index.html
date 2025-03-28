@@ -27,7 +27,7 @@
 <meta property="og:description" content="git作为最流行代码版本管理软件，使我们可以方便的查看每次代码的更新内容，不用害怕修改代码时出现错误回退不到之前的版本，还可以将代码开源到GitHub，Gitee上，向更多人分享我们的成果，我使用了好久的git，但还是对整个处理逻辑理解不充分，容易导致误操作，因此简单总结下git的使用方法 我们先介绍本次git仓库的使用方法，再介绍如何将本地仓库上传到远程仓库，所有操作都在Linux系统上操作">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-27T07:24:23.000Z">
-<meta property="article:modified_time" content="2025-03-27T14:21:55.819Z">
+<meta property="article:modified_time" content="2025-03-28T04:01:49.527Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -304,7 +304,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          3k 字
         
       </span>
     
@@ -315,7 +315,7 @@
         
         
         
-          15 分钟
+          26 分钟
         
       </span>
     
@@ -428,31 +428,30 @@
 <p>这样别人<code>clone</code>仓库时就不会下载错误的<code>commit</code>缓存了</p>
 <h4 id="如果后面的commit存在分支"><a class="markdownIt-Anchor" href="#如果后面的commit存在分支"></a> 如果后面的commit存在分支</h4>
 <p>这里就产生一个问题，如果我们<code>reset</code>的commit后面有其他的branch，那么branch会消失么？（branch的创建请见下文）</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"print('HELLO')"</span> <span class="token operator">></span> code.py
-<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span> <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Add HELLO in code.py"</span>
-<span class="token function">git</span> checkout <span class="token parameter variable">-b</span> dev  <span class="token comment"># 创建新分支dev</span>
-<span class="token builtin class-name">echo</span> <span class="token string">"print('HI')"</span> <span class="token operator">></span> code.py
-<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span> <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Add HI in code.py"</span>
-<span class="token function">git</span> checkout <span class="token parameter variable">-b</span> 
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 假如当前分支情况如下</span>
+<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span> <span class="token parameter variable">--graph</span>  <span class="token comment"># --graph可以看到分支图</span>
+* b0967da <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> dev<span class="token punctuation">)</span> Add a.txt
+<span class="token operator">|</span> * 66f7a63 <span class="token punctuation">(</span>master<span class="token punctuation">)</span> Add HELLO <span class="token keyword">in</span> code.py
+<span class="token operator">|</span>/
+* f8b8ef4 Add HI <span class="token keyword">in</span> code.py
+* 38a2929 First commit
 
-<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span>  <span class="token comment"># 如果我们在master中将commit回退到38a2929, 那么dev的commit会消失么</span>
-<span class="token operator">></span> 21520a6 <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> dev<span class="token punctuation">)</span> Add HI <span class="token keyword">in</span> code.py
-<span class="token operator">></span> 8e23d54 <span class="token punctuation">(</span>master<span class="token punctuation">)</span> Add HELLO <span class="token keyword">in</span> code.py
-<span class="token operator">></span> 38a2929 First commit
-
+<span class="token comment"># 如果master回退到38a2929, 那么dev会消失么</span>
 <span class="token function">git</span> checkout master
 <span class="token function">git</span> reset <span class="token parameter variable">--hard</span> 38a2  <span class="token comment"># master重置到38a2</span>
 
-<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span>  <span class="token comment"># --all可以看到全部的提交信息, 包括其他的branch</span>
-<span class="token operator">></span> 21520a6 <span class="token punctuation">(</span>dev<span class="token punctuation">)</span> Add HI <span class="token keyword">in</span> code.py  <span class="token comment"># 可以看到dev branch还是存在的</span>
-<span class="token operator">></span> 8e23d54 Add HELLO <span class="token keyword">in</span> code.py
-<span class="token operator">></span> 38a2929 <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> master<span class="token punctuation">)</span> First commit  <span class="token comment"># 只是master回退到38a2</span>
+<span class="token comment"># 可以看到只有66f7a63被删除了, dev分支部分还是存在</span>
+<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span> <span class="token parameter variable">--graph</span>  <span class="token comment"># --all可以看到全部的提交信息, 包括其他的branch</span>
+* b0967da <span class="token punctuation">(</span>dev<span class="token punctuation">)</span> Add a.txt
+* f8b8ef4 Add HI <span class="token keyword">in</span> code.py
+* 38a2929 <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> master<span class="token punctuation">)</span> First commit
 
 <span class="token function">git</span> branch <span class="token parameter variable">-D</span> dev  <span class="token comment"># 我们删除dev分支</span>
-<span class="token comment"># 再次查看全部提交, 发现只有38a2929提交了</span>
+<span class="token comment"># 再次查看全部提交, 发现只有38a2929了</span>
 <span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span>
-<span class="token operator">></span> 38a2929 <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> master<span class="token punctuation">)</span> First commit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p>上面例子说明，如果其他分支在当前回退的commit之后，则该commit只是在当前分支上不显示，但是在其他分支上还是存在的！</p>
+<span class="token operator">></span> 38a2929 <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> master<span class="token punctuation">)</span> First commit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>上面例子说明，如果其他分支在当前回退的commit之后，如果后继commit不从属于任何的branch，则会被删除，否则后继commit只是在当前分支上不显示，但是在其他分支上还是存在的！</p>
+<p>也就是说，当commit不从属于任何的branch时，其会被删除。</p>
 <h3 id="git-revert"><a class="markdownIt-Anchor" href="#git-revert"></a> git revert</h3>
 <p>另一种回退方法，仅回退某次<code>commit</code>的修改内容，例如</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 修改README.md和code.py</span>
@@ -471,7 +470,7 @@
 <span class="token operator">></span> CONFLICT <span class="token punctuation">(</span>modify/delete<span class="token punctuation">)</span>: code.py deleted <span class="token keyword">in</span> parent of 9ba1079 <span class="token punctuation">(</span>Add HELLO <span class="token keyword">in</span> README.md and Add HI <span class="token keyword">in</span> code.py<span class="token punctuation">)</span> and modified <span class="token keyword">in</span> HEAD.  Version HEAD of code.py left <span class="token keyword">in</span> tree.
 <span class="token operator">></span> error: could not revert 9ba1079<span class="token punctuation">..</span>. Add HELLO <span class="token keyword">in</span> README.md and Add HI <span class="token keyword">in</span> code.py
 <span class="token function">git</span> --no-pager <span class="token function">diff</span>  <span class="token comment"># 查看冲突</span>
-<span class="token operator">></span> * Unmerged path code.py  <span class="token comment"># code.py无法合并</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+* Unmerged path code.py  <span class="token comment"># code.py无法合并</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>这里我们有两个方法处理这个文件</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 1. 删除文件</span>
 <span class="token function">rm</span> code.py
@@ -486,9 +485,128 @@
 <span class="token operator">></span> 72fa98e Add HELLO <span class="token keyword">in</span> code.py
 <span class="token operator">></span> 9ba1079 Add HELLO <span class="token keyword">in</span> README.md and Add HI <span class="token keyword">in</span> code.py
 <span class="token operator">></span> 38a2929 First commit<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<h2 id="添加branch分支"><a class="markdownIt-Anchor" href="#添加branch分支"></a> 添加branch分支</h2>
+<h2 id="添加与合并branch分支"><a class="markdownIt-Anchor" href="#添加与合并branch分支"></a> 添加与合并branch分支</h2>
+<p>默认我们会有一个叫master的分支名称，上文通过<code>git log</code>已经查看了，那么如果我们想同步开发另外的一些功能，那么就可以基于某次commit再开启一个分支（就和树杈一样）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 当前只有一个commit, 在master分支上</span>
+<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span>
+<span class="token operator">></span> 38a2929 <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> master<span class="token punctuation">)</span> First commit
+
+<span class="token builtin class-name">echo</span> <span class="token string">"print('HI')"</span> <span class="token operator">></span> code.py
+<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span> <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Add HI in code.py"</span>
+
+<span class="token comment"># 主分支上再修改一次code.py</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"print('HELLO')"</span> <span class="token operator">></span> code.py
+<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span> <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Add HELLO in code.py"</span>
+
+<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span> <span class="token parameter variable">--graph</span>
+* 65d4669 <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> master<span class="token punctuation">)</span> Add HELLO <span class="token keyword">in</span> code.py
+* 1f2eeec Add HI <span class="token keyword">in</span> code.py
+* 38a2929 First commit
+
+<span class="token comment"># 如果我们想在HI这一次进行开发, 可以回到1f2ee, 创建分支dev</span>
+<span class="token function">git</span> checkout <span class="token parameter variable">-b</span> dev 1f2ee
+<span class="token comment"># 可以看到1f2e上面已经创建新的分支dev了</span>
+<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span> <span class="token parameter variable">--graph</span>
+* 65d4669 <span class="token punctuation">(</span>master<span class="token punctuation">)</span> Add HELLO <span class="token keyword">in</span> code.py
+* 1f2eeec <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> dev<span class="token punctuation">)</span> Add HI <span class="token keyword">in</span> code.py
+* 38a2929 First commit
+
+<span class="token comment"># 在dev节点上提交</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"print('HELLO dev')"</span> <span class="token operator">></span> code.py
+<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span> <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">"Add HELLO dev in code.py"</span>
+
+<span class="token comment"># 可以看到就出现树杈的分支了</span>
+<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span> <span class="token parameter variable">--graph</span>
+* c7c9a11 <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> dev<span class="token punctuation">)</span> Add HELLO dev <span class="token keyword">in</span> code.py
+<span class="token operator">|</span> * 65d4669 <span class="token punctuation">(</span>master<span class="token punctuation">)</span> Add HELLO <span class="token keyword">in</span> code.py
+<span class="token operator">|</span>/
+* 1f2eeec Add HI <span class="token keyword">in</span> code.py
+* 38a2929 First commit
+
+<span class="token comment"># 通过git branch --all也可以查看当前已有分支</span>
+<span class="token function">git</span> --no-pager branch <span class="token parameter variable">--all</span>
+* dev
+  master<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>现在我们想要合并master和dev分支，来将我们开发的功能合并到主分支中</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 回到主分支中</span>
+<span class="token function">git</span> checkout master
+<span class="token comment"># 合并分支</span>
+<span class="token function">git</span> merge dev
+<span class="token operator">></span> Auto-merging code.py  <span class="token comment"># 发生报错, 无法合并, 因为我们同时改了code.py文件</span>
+<span class="token operator">></span> CONFLICT <span class="token punctuation">(</span>content<span class="token punctuation">)</span>: Merge conflict <span class="token keyword">in</span> code.py
+<span class="token operator">></span> Automatic merge failed<span class="token punctuation">;</span> fix conflicts and <span class="token keyword">then</span> commit the result.
+<span class="token comment"># 查看差异</span>
+<span class="token function">git</span> <span class="token function">diff</span>
+<span class="token comment"># 发现code.py文件中差异部分被修改为如下内容</span>
+<span class="token comment"># &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
+<span class="token comment"># print('HELLO')  # 原始master内容</span>
+<span class="token comment"># =======</span>
+<span class="token comment"># print('HELLO dev')  # 合并发生冲突dev内容</span>
+<span class="token comment"># >>>>>>> dev</span>
+<span class="token comment"># 我们手动修改文件, 保留我们想要的内容</span>
+
+<span class="token comment"># 暂存并提交</span>
+<span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+<span class="token function">git</span> commit  <span class="token comment"># 这次git会帮我们写好备注内容, 解决了什么文件的冲突</span>
+
+<span class="token comment"># 可以看到我们的分支成功被合并了！</span>
+<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span> <span class="token parameter variable">--graph</span>
+*   cc84921 <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> master<span class="token punctuation">)</span> Merge branch <span class="token string">'dev'</span>
+<span class="token operator">|</span><span class="token punctuation">\</span>
+<span class="token operator">|</span> * c7c9a11 <span class="token punctuation">(</span>dev<span class="token punctuation">)</span> Add HELLO dev <span class="token keyword">in</span> code.py
+* <span class="token operator">|</span> 65d4669 Add HELLO <span class="token keyword">in</span> code.py
+<span class="token operator">|</span>/
+* 1f2eeec Add HI <span class="token keyword">in</span> code.py
+* 38a2929 First commit
+
+<span class="token comment"># 注意此时我们的dev分支还是存在的, 我们可以继续在dev分支上添加内容, 如果不再使用, 可以将其删除</span>
+<span class="token function">git</span> branch <span class="token parameter variable">-d</span> dev
+<span class="token function">git</span> branch <span class="token parameter variable">-D</span> dev  <span class="token comment"># 强制删除, 如果发现dev有提交的commit没有被合并, 则需要</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h2 id="上传远程仓库"><a class="markdownIt-Anchor" href="#上传远程仓库"></a> 上传远程仓库</h2>
-<p>下文以GitHub为例，介绍git的远程仓库使用方法，初始化仓库，点击头像左侧的</p>
+<p>下文以GitHub为例，介绍git的远程仓库使用方法</p>
+<p>初始化仓库，点击头像左侧的加号，点击New repository</p>
+<ol>
+<li>起一个Repository name，例如我的是<code>test</code></li>
+<li>在Description中添加仓库描述，可以在仓库主页右侧看到</li>
+<li>选择仓库的类型Public还是Private（公开：所有人都能看到，私有：只有自己以及添加的管理员能看到）</li>
+<li>添加一个README文件，这就会自动添加一个空<code>README.md</code>文件在master分支上（可以不选，后续手动添加）</li>
+<li>添加<code>.gitignore</code>文件，该文件存放于<code>.git/</code>的同级目录下，在<code>git add</code>时会自动忽略<code>.gitignore</code>中包含的文件名（可以不选，后续手动添加）</li>
+<li>添加<code>license</code>，我一般用MIT License，个人的通用开源协议，同样会自动添加<code>LICENSE</code>在master分支上（建议添加）</li>
+<li>右下方按钮，创建仓库</li>
+</ol>
+<p>如果是第一次使用git，先配置用户信息：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config <span class="token parameter variable">--global</span> user.name <span class="token string">"你的GitHub用户名"</span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> user.email <span class="token string">"你的GitHub邮箱"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>初始化完成仓库后，进入仓库主页点击右上角<code>Code</code>按钮，点击<code>HTTPS</code>复制下方连接<code>https://github.com/wty-yy/test.git</code>，然后我们有两种方法向其中添加代码：</p>
+<p><code>git clone https://github.com/wty-yy/test.git</code>将空仓库克隆下来，然后将文件复制进去，这样就默认将<code>master</code>分支和<code>origin/master</code>分支绑定了，后续直接通过<code>git push</code>就可以将本地的<code>master</code>分支内容上传到<code>origin/master</code>，如果想要详细理解，请见下文的绑定关系理解</p>
+<h3 id="本地分支与远程分支绑定关系"><a class="markdownIt-Anchor" href="#本地分支与远程分支绑定关系"></a> 本地分支与远程分支绑定关系</h3>
+<p>在已有本地仓库上添加</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> <span class="token operator">&lt;</span>本地仓库<span class="token operator">></span>  <span class="token comment"># 如上文创建好的</span>
+<span class="token comment"># 添加远程仓库url, 默认的远程仓库名字为origin</span>
+<span class="token function">git</span> remote <span class="token function">add</span> origin https://github.com/wty-yy/test.git
+<span class="token function">git</span> remote <span class="token parameter variable">-v</span>  <span class="token comment"># 看到远程仓库已经被绑定了</span>
+<span class="token operator">></span> origin	https://github.com/wty-yy/test.git <span class="token punctuation">(</span>fetch<span class="token punctuation">)</span>
+<span class="token operator">></span> origin	https://github.com/wty-yy/test.git <span class="token punctuation">(</span>push<span class="token punctuation">)</span>
+<span class="token comment"># 使用rebase从远程的master节点拉取代码, 并用rebase（变基）方法整合代码</span>
+<span class="token comment"># rebase相当于将本地的commit放置到远程commit的后面</span>
+<span class="token function">git</span> pull origin master <span class="token parameter variable">--rebase</span>
+
+<span class="token comment"># 效果如下</span>
+<span class="token function">git</span> --no-pager log <span class="token parameter variable">--oneline</span> <span class="token parameter variable">--all</span> <span class="token parameter variable">--graph</span>
+* c99faba <span class="token punctuation">(</span>HEAD -<span class="token operator">></span> master<span class="token punctuation">)</span> First commit
+* 74b6441 <span class="token punctuation">(</span>origin/master<span class="token punctuation">)</span> Initial commit
+
+<span class="token comment"># 提交到远程, 将master分支提交到origin/master</span>
+<span class="token function">git</span> push origin master
+<span class="token comment"># 但这样是不完美的, 因为我们还没有将本地master分支和origin/master绑定, 这样每次都需要输入 git push origin master 很麻烦</span>
+<span class="token function">git</span> branch <span class="token parameter variable">-vv</span>  <span class="token comment"># vv表示very verbose可以显示本地和远程分支的关系</span>
+* master c99faba First commit
+<span class="token comment"># 我们需要设定master和origin/master的跟踪关系(origin/master称为master的upstream branch)</span>
+<span class="token function">git</span> push <span class="token parameter variable">-u</span> origin master
+<span class="token function">git</span> branch <span class="token parameter variable">-vv</span>  <span class="token comment"># 再次查看关系</span>
+* master c99faba <span class="token punctuation">[</span>origin/master<span class="token punctuation">]</span> First commit  <span class="token comment"># 可以看到和origin/master绑定了</span>
+<span class="token function">git</span> remote show origin  <span class="token comment"># 查看详细的远程节点信息, 也可以看到绑定的内容</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>这时，我们在网上仓库，例如<a target="_blank" rel="noopener" href="https://github.com/wty-yy/test">GitHub - test</a>，就可以看到更新内容啦，可以看到项目根目录中由于出现了<code>README.md</code>文件，下方就会直接显示当前<code>README.md</code>文件，这个文件就是仓库的更加详细的使用说明，因此该文件也是每个仓库所必须的，理解一个仓库功能，一般看首页<code>README.md</code>即可</p>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
