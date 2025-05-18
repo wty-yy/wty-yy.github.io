@@ -1,0 +1,1041 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToDesk或者向日葵即可（注意：向日葵不支持Ubuntu24.04），用本地局域网连接推荐用WIFI6，带宽更大  局域网屏幕共享 此处有两种常用工具：NoMachine和VNC，这里推荐用VNC服务器，延迟相比NoMachine更低些 NoMachine使用方法非常简单，直接在两">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux局域网屏幕共享">
+<meta property="og:url" content="https://wty-yy.xyz/posts/47970/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToDesk或者向日葵即可（注意：向日葵不支持Ubuntu24.04），用本地局域网连接推荐用WIFI6，带宽更大  局域网屏幕共享 此处有两种常用工具：NoMachine和VNC，这里推荐用VNC服务器，延迟相比NoMachine更低些 NoMachine使用方法非常简单，直接在两">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/novnc_startup_application.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/server_screen_sharing.png">
+<meta property="article:published_time" content="2025-05-15T05:22:30.000Z">
+<meta property="article:modified_time" content="2025-05-18T14:59:03.483Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
+  
+  
+  
+  <title>Linux局域网屏幕共享 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Linux局域网屏幕共享"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-05-15 13:22" pubdate>
+          2025年5月15日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          25 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linux局域网屏幕共享</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。</p>
+<p>如果是从外网连接，直接用<a target="_blank" rel="noopener" href="https://www.todesk.com/">ToDesk</a>或者<a target="_blank" rel="noopener" href="https://sunlogin.oray.com/">向日葵</a>即可（注意：向日葵不支持Ubuntu24.04），用本地局域网连接推荐用WIFI6，带宽更大</p>
+<h1 id="局域网屏幕共享"><a class="markdownIt-Anchor" href="#局域网屏幕共享"></a> 局域网屏幕共享</h1>
+<p>此处有两种常用工具：<a target="_blank" rel="noopener" href="https://www.nomachine.com/">NoMachine</a>和VNC，这里推荐用VNC服务器，延迟相比NoMachine更低些</p>
+<p>NoMachine使用方法非常简单，直接在两台电脑上都下载NoMachine，服务端打开server，客户端刷新即可看到可连接的设备，缺点是经常卡住不懂，需要手动刷新页面非常麻烦</p>
+<h2 id="vnc服务端"><a class="markdownIt-Anchor" href="#vnc服务端"></a> VNC服务端</h2>
+<blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_30883899/article/details/146980989">CSDN - VNC服务端比对 (vncserver vs x11vnc)</a></p>
+</blockquote>
+<p>VNC的服务端有两种常用的版本，分别为</p>
+<ul>
+<li><code>vncserver</code>（全称为<code>TigerVNC</code>）：创建一个全新的独立桌面（适合无图形界面的服务器）</li>
+<li><code>x11vnc</code>：直接共享当前屏幕内容（适合临时远程控制已有桌面的电脑）</li>
+</ul>
+<p>分别的安装方法为：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># TigerVNC</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> tigervnc-standalone-server
+<span class="token comment"># x11vnc</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>服务端启动VNC服务后都会在本机上创建一个端口，他们的默认端口都是<code>5900, 5901, ...</code>，当主机没有固定的显示屏时，推荐使用<code>vncserver</code></p>
+<h3 id="vncserver配置开机自启在没有直连显示器时使用稳定不会有黑屏"><a class="markdownIt-Anchor" href="#vncserver配置开机自启在没有直连显示器时使用稳定不会有黑屏"></a> vncserver配置开机自启（在没有直连显示器时使用，稳定，不会有黑屏）</h3>
+<h4 id="直接启动"><a class="markdownIt-Anchor" href="#直接启动"></a> 直接启动</h4>
+<p>首先介绍<code>vncserver</code>直接使用的方法，他会创建一个新的<code>DISPLAY</code>窗口，不会和已有的<code>DISPLAY</code>窗口冲突并且不会共享窗口，先用<code>vncpasswd</code>配置VNC登陆密码</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ vncpasswd
+Password:
+Verify:
+Would you like to enter a view-only password <span class="token punctuation">(</span>y/n<span class="token punctuation">)</span>? n
+A view-only password is not used<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>创建新窗口</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ vncserver :1
+
+New Xtigervnc server <span class="token string">'kuavo-NUC12WSKi7:2 (kuavo)'</span> on port <span class="token number">5902</span> <span class="token keyword">for</span> display :2.
+Use xtigervncviewer <span class="token parameter variable">-SecurityTypes</span> VncAuth <span class="token parameter variable">-passwd</span> /home/kuavo/.vnc/passwd :2 to connect to the VNC server.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>查看当前以创建窗口</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ vncserver <span class="token parameter variable">--list</span>
+
+TigerVNC server sessions:
+
+X <span class="token environment constant">DISPLAY</span> <span class="token comment">#     RFB PORT #      RFB UNIX PATH   PROCESS ID #    SERVER</span>
+<span class="token number">1</span>               <span class="token number">5901</span>                            <span class="token number">38001</span>           Xtigervnc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>如果创建的是<code>:1</code>则对应端口为<code>5901</code>，后续客户端连接对应的端口即可，创建<code>:N</code>（N为正整数）则对应端口为<code>590N</code>（<code>:0</code>通常为默认的窗口界面，如果没有连主显示屏可能是黑屏）</p>
+<p>关闭<code>:1</code>号窗口：<code>vncserver -kill :1</code></p>
+<h4 id="配置开机自启"><a class="markdownIt-Anchor" href="#配置开机自启"></a> 配置开机自启</h4>
+<p><code>tigervnc</code>已经为我们配置好开机自启文件了，我们只需要学会使用即可，<code>cat /usr/lib/systemd/system/tigervncserver@.service</code>查看已经为我们配置好的启动文件，使用方法就是在<code>/etc/tigervnc/vncserver.users</code>中加入一个名称即可</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/tigervnc/vncserver.users
+
+<span class="token comment"># 在文件的最下面一行加入, 例如我电脑的用户名为kuavo</span>
+:1<span class="token operator">=</span>kuavo<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>如果之前启动了<code>:1</code>窗口，先将其关闭<code>vncserver -kill :1</code>，使用<code>systemctl</code>启动：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl start tigervncserver@:1.service  <span class="token comment"># 启动服务</span>
+<span class="token function">sudo</span> systemctl status tigervncserver@:1.service  <span class="token comment"># 查看服务的启动状态, 显示active (running)就说明正常</span>
+<span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> tigervncserver@:1.service  <span class="token comment"># 创建开机自启</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="x11vnc配置开机自启在有直连的显示屏时使用"><a class="markdownIt-Anchor" href="#x11vnc配置开机自启在有直连的显示屏时使用"></a> x11vnc配置开机自启（在有直连的显示屏时使用）</h3>
+<blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43878078/article/details/122137067">ubuntu18.04安装x11vnc远程登录并设置开机自启</a></p>
+</blockquote>
+<h4 id="直接启动-2"><a class="markdownIt-Anchor" href="#直接启动-2"></a> 直接启动</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装x11vnc</span>
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> x11vnc <span class="token parameter variable">-y</span>
+<span class="token comment"># 设置VNC密码</span>
+<span class="token function">sudo</span> x11vnc <span class="token parameter variable">-storepasswd</span> /etc/x11vnc.pass
+<span class="token comment"># 给予权限</span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">777</span> /etc/x11vnc.pass
+<span class="token comment"># 创建启动文件</span>
+<span class="token function">sudo</span> <span class="token function">vim</span> /etc/init/x11vnc.conf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<blockquote>
+<p>在安装完<code>x11vnc</code>后，按功能键（Win键）后输入<code>x11vnc server</code>可以打开可视化配置界面，第一个界面配置端口，用默认<code>5900</code>即可，在第二个界面点<code>Accept Connection</code>，然后就启动VNC服务了，可以用于调试是否可以联通，我们以下的自启动方法无需该界面进行配置</p>
+</blockquote>
+<p>启动文件如下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># x11vnc.conf</span>
+<span class="token builtin class-name">exec</span> /usr/bin/x11vnc <span class="token parameter variable">-auth</span> guess <span class="token parameter variable">-capslock</span> <span class="token parameter variable">-forever</span> <span class="token parameter variable">-loop</span> <span class="token parameter variable">-noxdamage</span> <span class="token parameter variable">-repeat</span> <span class="token parameter variable">-rfbauth</span> /etc/x11vnc.pass <span class="token parameter variable">-rfbport</span> <span class="token number">5900</span> <span class="token parameter variable">-shared</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>测试启动文件能否使用</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">source</span> /etc/init/x11vnc.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        点击显/隐成功启动返回内容
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"> --- x11vnc loop: <span class="token number">1</span> ---
+
+ --- x11vnc loop: waiting for: <span class="token number">24332</span>
+
+<span class="token number">15</span>/05/2025 <span class="token number">13</span>:39:59 passing arg to libvncserver: <span class="token parameter variable">-rfbauth</span>
+<span class="token number">15</span>/05/2025 <span class="token number">13</span>:39:59 passing arg to libvncserver: /etc/x11vnc.pass
+<span class="token number">15</span>/05/2025 <span class="token number">13</span>:39:59 passing arg to libvncserver: <span class="token parameter variable">-rfbport</span>
+<span class="token number">15</span>/05/2025 <span class="token number">13</span>:39:59 passing arg to libvncserver: <span class="token number">5900</span>
+<span class="token number">15</span>/05/2025 <span class="token number">13</span>:39:59 x11vnc version: <span class="token number">0.9</span>.16 lastmod: <span class="token number">2019</span>-01-05  pid: <span class="token number">24332</span>
+<span class="token number">15</span>/05/2025 <span class="token number">13</span>:39:59 <span class="token parameter variable">-auth</span> guess: using default <span class="token environment constant">XAUTHORITY</span> <span class="token keyword">for</span> <span class="token assign-left variable">display</span><span class="token operator">=</span><span class="token string">':1'</span>
+<span class="token number">15</span>/05/2025 <span class="token number">13</span>:39:59 Using X display :1
+<span class="token number">15</span>/05/2025 <span class="token number">13</span>:39:59 rootwin: 0x51a reswin: 0x4e00001 dpy: 0x609000b0
+<span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<h4 id="配置开机自启-2"><a class="markdownIt-Anchor" href="#配置开机自启-2"></a> 配置开机自启</h4>
+<p>配置开机自启动</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/init.d/x11vnc.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>启动脚本内容如下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token builtin class-name">source</span> /etc/init/x11vnc.conf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>修改权限</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">777</span> /etc/init.d/x11vnc.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>添加到自启动项中，按左下角功能键（Win键），输入<code>startup application</code>，打开窗口点击右侧<code>Add</code>，修改内容如下后保存：</p>
+<blockquote>
+<p>如果不想用GUI可以在<code>~/.conf/autostart</code>下创建<code>x11vnc.desktop</code>文件，内容如下</p>
+</blockquote>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        点击显/隐 x11vnc.desktop文件
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token section"><span class="token punctuation">[</span><span class="token section-name selector">Desktop Entry</span><span class="token punctuation">]</span></span>
+<span class="token key attr-name">Type</span><span class="token punctuation">=</span><span class="token value attr-value">Application</span>
+<span class="token key attr-name">Exec</span><span class="token punctuation">=</span><span class="token value attr-value">x11vnc -auth guess -forever -loop -noxdamage -repeat -rfbauth /etc/x11vnc.pass -rfbport 5901 -shared</span>
+<span class="token key attr-name">Hidden</span><span class="token punctuation">=</span><span class="token value attr-value">false</span>
+<span class="token key attr-name">NoDisplay</span><span class="token punctuation">=</span><span class="token value attr-value">false</span>
+<span class="token key attr-name">X-GNOME-Autostart-enabled</span><span class="token punctuation">=</span><span class="token value attr-value">true</span>
+<span class="token key attr-name">Name</span><span class="token punctuation">=</span><span class="token value attr-value">X11VNC Server</span>
+<span class="token key attr-name">Comment</span><span class="token punctuation">=</span><span class="token value attr-value">Start x11vnc on login</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p><img src="/figures/Linux/screen_sharing/x11vnc_startup_application.png" srcset="/img/loading.gif" lazyload alt="X11VNC startup application" /></p>
+<h2 id="vnc客户端"><a class="markdownIt-Anchor" href="#vnc客户端"></a> VNC客户端</h2>
+<p>VNC的客户端也有两种选择，Windows推荐用<a target="_blank" rel="noopener" href="https://www.realvnc.com/en/">RealVNC</a>效果可能更好些（Linux也可以用，但是界面比较简陋），更推荐的是用网页版的<a target="_blank" rel="noopener" href="https://github.com/novnc/noVNC">noVNC</a>，直接通过网页即可访问，功能也很全。</p>
+<h3 id="novnc服务端自动启动"><a class="markdownIt-Anchor" href="#novnc服务端自动启动"></a> noVNC服务端自动启动</h3>
+<p>一个直接用网页即可访问VNC的服务端/客户端，非常方便，需要启动一个服务端创建网页，然后客户端就可以直接访问主机的网页啦，使用方法如下：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/Programs  <span class="token comment"># 进入到你想保存软件的位置</span>
+<span class="token function">git</span> clone https://github.com/novnc/noVNC.git
+<span class="token comment"># 启动客户端网页界面, vnc端口为默认为5900, 网页访问端口默认为6080</span>
+./noVNC/utils/novnc_proxy <span class="token parameter variable">--vnc</span> localhost:5900<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>用<code>ifconfig</code>查看本机的IP地址，例如我的是<code>192.168.31.103</code>，则在局域网中的另一台电脑或手机可通过<code>http://192.168.31.103:6080/vnc.html</code>直接访问可视化界面</p>
+<p>自动启动配置如下，还是先创建启动脚本</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> /etc/init.d/novnc.sh  <span class="token comment"># 启动脚本内容如下</span>
+<span class="token comment">#!/bin/bash</span>
+<span class="token operator">&lt;</span>YOUR_PATH<span class="token operator">></span>/noVNC/utils/novnc_proxy <span class="token parameter variable">--vnc</span> localhost:5900<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>注意上述路径请替换为你的，并测试一下能否运行<code>source /etc/init.d/novnc.sh</code></p>
+<p>记得添加访问权限<code>sudo chmod 777 /etc/init.d/novnc.sh</code></p>
+<p>类似上述设置自启动脚本的方法，添加到自启动项中，按左下角功能键（Win键），输入<code>startup application</code>，打开窗口点击右侧<code>Add</code>，修改内容如下后保存：<br />
+<img src="/figures/Linux/screen_sharing/novnc_startup_application.png" srcset="/img/loading.gif" lazyload alt="noVNC startup application" /></p>
+<h3 id="realvnc"><a class="markdownIt-Anchor" href="#realvnc"></a> RealVNC</h3>
+<p>在<a target="_blank" rel="noopener" href="https://www.realvnc.com/en/connect/download/viewer">RealVNC/Download</a>中下载并安装，在打开APP界面，直接输入<code>IP:5900</code>即可直接连上（Linux的缺点是无法复制文本内容，有点麻烦）</p>
+<h1 id="服务器可视化"><a class="markdownIt-Anchor" href="#服务器可视化"></a> 服务器可视化</h1>
+<p>除了<code>apt</code>所需的命令需要管理员权限，其他的命令都可以非管理员执行，例如<code>vncserver</code>、启动<code>noVNC</code>，由于服务器默认是没有可视化界面的，因此考虑用<code>tigervnc</code>来启动界面</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> tigervnc-standalone-server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>先用<code>tigervncserver -xstartup /usr/bin/xterm</code>排除下问题</p>
+<p>可能缺少xterm，用<code>sudo apt install xterm</code>安装，</p>
+<p>查看下<code>xsessions</code>下有哪些可用的界面</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">ls</span> /usr/share/xsessions/
+gnome.desktop  gnome-flashback-compiz.desktop  gnome-flashback-metacity.desktop  gnome-xorg.desktop <span class="token punctuation">\</span>
+ubuntu.desktop  xfce.desktop<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>例如我有<code>gnome</code>和<code>xfce</code></p>
+<h2 id="不推荐xvnc启动x服务不支持默认显卡渲染驱动"><a class="markdownIt-Anchor" href="#不推荐xvnc启动x服务不支持默认显卡渲染驱动"></a> （不推荐）Xvnc启动X服务（不支持默认显卡渲染驱动）</h2>
+<p><code>vncserver</code>启动的X服务和<code>Xorg</code>（默认的外接显示器的启动是不一样的），而Nvidia的显卡渲染配置是在<code>/etc/X11/xorg.conf</code>下的，因此我们必须加载此文件才能用显卡渲染（找不到显卡可能在OpenGL或GLA渲染中出现黑屏，例如IsaacGym和IsaacSim），因此<a href="./#%E6%8E%A8%E8%8D%90%E6%97%A0%E7%95%8C%E9%9D%A2-%E4%BB%85%E7%AA%97%E5%8F%A3%E6%98%BE%E7%A4%BA%E6%94%AF%E6%8C%81%E6%9B%B4%E5%A5%BD%E6%B8%B2%E6%9F%93">推荐用下文<code>Xvfb</code>启动X服务的方法</a></p>
+<h3 id="xfce4界面-配置xstartup"><a class="markdownIt-Anchor" href="#xfce4界面-配置xstartup"></a> xfce4界面 - 配置xstartup</h3>
+<p>编辑文件<code>vim ~/.vnc/xstartup</code></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token builtin class-name">unset</span> <span class="token environment constant">SESSION_MANAGER</span>
+<span class="token builtin class-name">unset</span> <span class="token environment constant">DBUS_SESSION_BUS_ADDRESS</span>
+xrdb <span class="token environment constant">$HOME</span>/.Xresources <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+startxfce4 <span class="token operator">&amp;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="gnome界面-配置xstartup"><a class="markdownIt-Anchor" href="#gnome界面-配置xstartup"></a> gnome界面 - 配置xstartup</h3>
+<p>安装gnome界面相关应用：<code>sudo apt install ubuntu-gnome-desktop gnome-session gnome-panel gnome-terminal nautilus</code></p>
+<p>编辑文件<code>vim ~/.vnc/xstartup</code></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token builtin class-name">unset</span> <span class="token environment constant">SESSION_MANAGER</span>
+<span class="token builtin class-name">unset</span> <span class="token environment constant">DBUS_SESSION_BUS_ADDRESS</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">XKL_XMODMAP_DISABLE</span><span class="token operator">=</span><span class="token number">1</span>
+<span class="token punctuation">[</span> <span class="token parameter variable">-r</span> <span class="token environment constant">$HOME</span>/.Xresources <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> xrdb <span class="token environment constant">$HOME</span>/.Xresources
+gnome-session <span class="token parameter variable">--session</span><span class="token operator">=</span>gnome <span class="token operator">&amp;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="可能出现的错误"><a class="markdownIt-Anchor" href="#可能出现的错误"></a> 可能出现的错误</h3>
+<h4 id="黑屏报错"><a class="markdownIt-Anchor" href="#黑屏报错"></a> 黑屏报错</h4>
+<p>出现报错：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Could not update ICEauthority <span class="token function">file</span> /run/user/1016/ICEauthority<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>这是因为用另一个用户启动了这个vncserver但是他不具有当前ssh登陆的用户的权限，修改这个目录的权限即可</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">chown</span> guohanwei /run/user/1016<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<h4 id="vncserver-exited-too-early"><a class="markdownIt-Anchor" href="#vncserver-exited-too-early"></a> vncserver exited too early</h4>
+<p>出现这个报错信息：<code>vncserver exited too early</code>，可以参考<a target="_blank" rel="noopener" href="https://askubuntu.com/questions/1375111/vncserver-exited-too-early">StackExchange - vncserver exited too early</a>，修改<code>~/.vnc/xstartup</code>，删除最后的<code>&amp;</code>符号即可</p>
+<h4 id="gnome登陆界面输入密码后无法进入界面"><a class="markdownIt-Anchor" href="#gnome登陆界面输入密码后无法进入界面"></a> gnome登陆界面输入密码后无法进入界面</h4>
+<p>不清楚问题原因，可能没有管理员全线无法进入界面</p>
+<h4 id="转发gdm3后黑屏"><a class="markdownIt-Anchor" href="#转发gdm3后黑屏"></a> 转发gdm3后黑屏</h4>
+<p>不清楚问题原因，推荐使用后续的openbox直接启动方法</p>
+<h4 id="使用gpu渲染提升速度"><a class="markdownIt-Anchor" href="#使用gpu渲染提升速度"></a> 使用GPU渲染提升速度</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> virtualgl
+<span class="token comment"># 或者在官网下载</span>
+https://sourceforge.net/projects/virtualgl/files/
+<span class="token comment"># 找到*_amd64.deb安装包</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>查看是否有显卡渲染：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ glxinfo <span class="token parameter variable">-display</span> :1 <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"OpenGL renderer"</span>
+<span class="token comment"># 或者</span>
+$ /opt/VirtualGL/bin/glxinfo <span class="token parameter variable">-display</span> :1 <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"OpenGL renderer"</span>
+
+<span class="token comment"># 显示没有显卡驱动</span>
+OpenGL renderer string: llvmpipe <span class="token punctuation">(</span>LLVM <span class="token number">12.0</span>.0, <span class="token number">256</span> bits<span class="token punctuation">)</span>
+
+<span class="token comment"># 前面加上vglrun即可用显卡驱动渲染</span>
+$ vglrun /opt/VirtualGL/bin/glxinfo <span class="token parameter variable">-display</span> :1 <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"OpenGL renderer"</span>
+OpenGL renderer string: NVIDIA GeForce RTX <span class="token number">4090</span>/PCIe/SSE2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>测试渲染速度：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ glxgears
+<span class="token number">6757</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">1351.280</span> FPS
+<span class="token number">6821</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">1364.121</span> FPS
+
+$ vglrun glxgears
+<span class="token number">8169</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">1633.758</span> FPS
+<span class="token number">8067</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">1613.251</span> FPS<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>安装方法参考：<a target="_blank" rel="noopener" href="https://shaoyecheng.com/uncategorized/2020-04-08-TurboVNC-VirtualGL%EF%BC%9A%E5%AE%9E%E7%8E%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%A4%9A%E7%94%A8%E6%88%B7%E5%9B%BE%E5%BD%A2%E5%8C%96%E8%AE%BF%E9%97%AE%E4%B8%8E%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F.html">cyoahs - TurboVNC+VirtualGL：实现服务器的多用户图形化访问与硬件加速</a></p>
+<h4 id="isaacgym启动后黑屏问题"><a class="markdownIt-Anchor" href="#isaacgym启动后黑屏问题"></a> IsaacGym启动后黑屏问题</h4>
+<p>这个是vncserver转发的问题，可以通过<a href="./#%E6%8E%A8%E8%8D%90xorg%E6%88%96xvfb%E6%94%AF%E6%8C%81nvidia%E9%A9%B1%E5%8A%A8%E6%B8%B2%E6%9F%93">Xorg启动渲染的方式解决</a></p>
+<h2 id="推荐xorg或xvfb支持nvidia驱动渲染"><a class="markdownIt-Anchor" href="#推荐xorg或xvfb支持nvidia驱动渲染"></a> （推荐）Xorg或Xvfb支持Nvidia驱动渲染</h2>
+<p>这个可能是服务器上最好用的窗口渲染方法，在尝试了各种VNC转发，只有这种方法可以渲染<code>IsaacGym, IsaacSim</code></p>
+<p><code>Xorg</code>和<code>Xvfb</code>都是启动X服务的方法（<code>startx</code>也是便捷方法，但是启动后权限总是有问题于是不用），但只有<code>Xorg</code>才会用到<code>/etc/X11/xorg.conf</code>配置文件，因此使用<code>Xorg</code></p>
+<p>我们又想要修改分辨率，因此还需配置虚拟屏幕<code>xserver-xorg-video-dummy</code>，配置完成X服务相关内容后，再启动<code>x11vnc</code>用VNC协议转发图像界面，用<code>noVNC</code>使浏览器可以访问VNC界面，最后打开<code>xfce</code>会话就可以看到图形界面啦，从而也可以用Nvidia驱动渲染界面，打开<code>IsaacGym, IssaacSim</code>，流程如下：</p>
+<ol>
+<li>查看当前可用的显卡驱动Bus ID后面会用到： <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 先用脚本将nvidia-smi -q查询到的BusID从16进制转为10进制</span>
+nvidia-smi <span class="token parameter variable">-q</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Bus Id"</span> <span class="token operator">|</span> <span class="token keyword">while</span> <span class="token builtin class-name">read</span> <span class="token parameter variable">-r</span> _ _ _ busid<span class="token punctuation">;</span> <span class="token keyword">do</span>
+  <span class="token assign-left variable">bus</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f2</span><span class="token variable">)</span></span>
+  <span class="token assign-left variable">dev</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f3</span><span class="token variable">)</span></span>
+  <span class="token assign-left variable">func</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f4</span> <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">'.'</span> <span class="token parameter variable">-f2</span><span class="token variable">)</span></span>
+  <span class="token assign-left variable">dev_hex</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f4</span> <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">'.'</span> <span class="token parameter variable">-f1</span><span class="token variable">)</span></span>
+  <span class="token builtin class-name">printf</span> <span class="token string">"PCI:%d:%d:%d<span class="token entity" title="\n">\n</span>"</span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$bus<span class="token variable">))</span></span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$dev_hex<span class="token variable">))</span></span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$func<span class="token variable">))</span></span>
+<span class="token keyword">done</span>
+<span class="token comment"># 我的输出为（8张显卡）</span>
+PCI:1:0:0
+PCI:36:0:0
+PCI:65:0:0
+PCI:97:0:0
+PCI:129:0:0
+PCI:161:0:0
+PCI:193:0:0
+PCI:225:0:0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+</li>
+<li>新建一个<code>sudo vim /etc/X11/xorg-nvidia-dummy-sceen.conf</code> X服务启动配置文件 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"Device"</span>
+    Identifier     <span class="token string">"NvidiaGPU"</span>
+    Driver         <span class="token string">"nvidia"</span>
+    VendorName     <span class="token string">"NVIDIA Corporation"</span>
+    BoardName      <span class="token string">"GeForce RTX 4090"</span>
+    BusID          <span class="token string">"PCI:97:0:0"</span>  # 从上述输出的BusID中选一个用
+    Option         <span class="token string">"AllowEmptyInitialConfiguration"</span> <span class="token string">"true"</span>
+    Option         <span class="token string">"UseDisplayDevice"</span> <span class="token string">"None"</span>
+EndSection
+
+Section <span class="token string">"Screen"</span>
+    Identifier     <span class="token string">"Screen0"</span>
+    Device         <span class="token string">"NvidiaGPU"</span>
+    DefaultDepth   <span class="token number">24</span>
+    SubSection <span class="token string">"Display"</span>
+        Depth      <span class="token number">24</span>
+        Modes      <span class="token string">"1920x1080"</span>  # 修改为你想要的分辨率<span class="token punctuation">,</span> eg<span class="token operator">.</span> <span class="token string">"1280x720"</span>
+        Virtual    <span class="token number">1920</span> <span class="token number">1080</span>  # 修改为你想要的分辨率<span class="token punctuation">,</span> eg<span class="token operator">.</span> <span class="token number">1280</span> <span class="token number">720</span>
+    EndSubSection
+EndSection
+
+Section <span class="token string">"ServerLayout"</span>
+    Identifier     <span class="token string">"Layout0"</span>
+    Screen         <span class="token string">"Screen0"</span>
+EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+</li>
+<li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-sceen.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）</li>
+<li>启动转发：<code>x11vnc -display :1</code>（<a href="./#x11vnc%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%9C%A8%E6%9C%89%E7%9B%B4%E8%BF%9E%E7%9A%84%E6%98%BE%E7%A4%BA%E5%B1%8F%E6%97%B6%E4%BD%BF%E7%94%A8">安装x11vnc见上文</a>，设置转发窗口为<code>DISPLAY=:1</code>，还没设置密码）</li>
+<li>使用novnc显示：<code>./utils/novnc_proxy --vnc localhost:5900</code>（<a href="./#novnc%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8">安装noVNC见上文</a>）</li>
+</ol>
+<p>这时候在浏览器上输入<code>&lt;服务器IP&gt;:6080</code>即可连接上VNC，我们在终端中启动<code>DISPLAY=:1 xclock</code>一个小闹钟，可以看到屏幕，但是我们无法进行拖动，可以用<code>DISPLAY=:1 openbox</code>来进行简单窗口拖动，但是还是没有会话界面，下面启动一个会话界面<code>xfce4</code></p>
+<ol start="6">
+<li>先启动DBUS会话服务 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动</span>
+<span class="token builtin class-name">eval</span> <span class="token variable"><span class="token variable">$(</span>dbus-launch --sh-syntax<span class="token variable">)</span></span>
+<span class="token builtin class-name">export</span> <span class="token environment constant">DBUS_SESSION_BUS_ADDRESS</span>
+<span class="token builtin class-name">export</span> DBUS_SESSION_BUS_PID
+<span class="token comment"># 验证一下有没有返回值</span>
+<span class="token builtin class-name">echo</span> <span class="token environment constant">$DBUS_SESSION_BUS_ADDRESS</span>
+<span class="token comment"># unix:abstract=/tmp/dbus-7vGHzBEZzq,guid=7fe9bcd482e14c8e918179976829d0cd</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+</li>
+<li>启动xfce4：<code>DISPLAY=:1 startxfce4</code></li>
+<li>通过命令行打开可视化程序，只需要在终端执行一次<code>export DISPLAY=:1</code>，后续的所有可视化窗口都会在这个界面显示出来啦</li>
+</ol>
+<p>例如我们启动了<code>./isaac-sim.sh</code>, <code>python 1080_balls_of_solitude.py</code>效果如下，大功告成！（用工位的网络，非常流畅，和本机使用差不多效果，还只需要启动一个网页即可，非常方便，手机也可以）<br />
+<img src="/figures/Linux/screen_sharing/server_screen_sharing.png" srcset="/img/loading.gif" lazyload alt="服务器可视化效果" /></p>
+<h3 id="关闭已经启动的x服务"><a class="markdownIt-Anchor" href="#关闭已经启动的x服务"></a> 关闭已经启动的X服务</h3>
+<p>通过<code>ps aux | grep &quot;Xorg :1&quot;</code>命令可以查看当前启动的服务（例如我是在<code>DISPLAY=:1</code>上启动的），那么就要关掉<code>/usr/lib/xorg/Xorg</code>这个程序启动的PID，<code>sudo kill -9 3557223</code>即可</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ <span class="token function">ps</span> aux <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Xorg :1"</span>
+root     <span class="token number">3557222</span>  <span class="token number">0.2</span>  <span class="token number">0.0</span>  <span class="token number">15008</span>  <span class="token number">4844</span> pts/5    S+   <span class="token number">21</span>:40   <span class="token number">0</span>:00 <span class="token function">sudo</span> Xorg :1
+root     <span class="token number">3557223</span> <span class="token number">20.2</span>  <span class="token number">0.0</span> <span class="token number">26109244</span> <span class="token number">219564</span> tty2  Ssl+ <span class="token number">21</span>:40   <span class="token number">0</span>:00 /usr/lib/xorg/Xorg :1  <span class="token comment"># 注意是这个/usr/lib/xorg/Xorg</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Linux局域网屏幕共享</div>
+      <div>https://wty-yy.xyz/posts/47970/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年5月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/33835/" title="Effective Modern C++笔记">
+                        <span class="hidden-mobile">Effective Modern C++笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

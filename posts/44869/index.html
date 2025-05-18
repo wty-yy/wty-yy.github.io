@@ -22,19 +22,19 @@
     <meta name="description" content="我们使用深度相机 D435i 为例，使用 ROS1+RealSense+Kalibr 获取相机内参和畸变参数，再介绍两种获取外参的方法。   小孔成像相机模型 首先要搞懂三个坐标系的关系：  像素坐标系：是以成像平面中心为原点的 p-xyp\text{-} xyp-xy 二维坐标系，单位为像素，坐标记为 (u,v)(u,v)(u,v)。 相机坐标系：是以小孔成像点作为原点的 O-XcYcZcO\">
 <meta property="og:type" content="article">
 <meta property="og:title" content="小孔成像相机模型原理以及标定实现">
-<meta property="og:url" content="https://wty-yy.github.io/posts/44869/index.html">
+<meta property="og:url" content="https://wty-yy.xyz/posts/44869/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="我们使用深度相机 D435i 为例，使用 ROS1+RealSense+Kalibr 获取相机内参和畸变参数，再介绍两种获取外参的方法。   小孔成像相机模型 首先要搞懂三个坐标系的关系：  像素坐标系：是以成像平面中心为原点的 p-xyp\text{-} xyp-xy 二维坐标系，单位为像素，坐标记为 (u,v)(u,v)(u,v)。 相机坐标系：是以小孔成像点作为原点的 O-XcYcZcO\">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/camera/%E5%9D%90%E6%A0%87%E7%B3%BB%E8%BD%AC%E6%8D%A2.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/camera/ROS+RealSense%E8%8E%B7%E5%8F%96%E7%9B%B8%E6%9C%BA%E5%86%85%E5%8F%82%E7%9F%A9%E9%98%B5.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/camera/camera_projection_demo.gif">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/camera/ROS2%E6%98%BE%E7%A4%BA%E8%AF%9D%E9%A2%98%E5%8F%8A%E6%9F%A5%E7%9C%8B%E8%AF%9D%E9%A2%98%E5%86%85%E5%AE%B9.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/camera/%E5%9D%90%E6%A0%87%E7%B3%BB%E8%BD%AC%E6%8D%A2.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/camera/ROS+RealSense%E8%8E%B7%E5%8F%96%E7%9B%B8%E6%9C%BA%E5%86%85%E5%8F%82%E7%9F%A9%E9%98%B5.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/camera/camera_projection_demo.gif">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/camera/ROS2%E6%98%BE%E7%A4%BA%E8%AF%9D%E9%A2%98%E5%8F%8A%E6%9F%A5%E7%9C%8B%E8%AF%9D%E9%A2%98%E5%86%85%E5%AE%B9.png">
 <meta property="article:published_time" content="2024-07-02T12:29:56.000Z">
-<meta property="article:modified_time" content="2024-12-29T05:55:54.618Z">
+<meta property="article:modified_time" content="2025-05-18T07:48:58.671Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/camera/%E5%9D%90%E6%A0%87%E7%B3%BB%E8%BD%AC%E6%8D%A2.png">
+<meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/camera/%E5%9D%90%E6%A0%87%E7%B3%BB%E8%BD%AC%E6%8D%A2.png">
   
   
   
@@ -86,7 +86,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -309,7 +309,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.1k 字
+          6.3k 字
         
       </span>
     
@@ -320,7 +320,7 @@
         
         
         
-          52 分钟
+          53 分钟
         
       </span>
     
@@ -517,28 +517,45 @@ xhost +local:root  <span class="token comment"># 修改X11渲染主机权限为r
     <image src=/figures/robotics/camera/rviz使用3.png width=39%></image>
 </div>
 <h4 id="获取标定板"><a class="markdownIt-Anchor" href="#获取标定板"></a> 获取标定板</h4>
+<p><strong>方法1</strong>（本机生成）</p>
 <p>标定首先需要先打印出来一个标定板，标定版配置可以参考官方的配置文件，我们在共享路径创建配置文件如下：</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ <span class="token function">cat</span> /data/april_6x6.yaml
-target_type: <span class="token string">'aprilgrid'</span> <span class="token comment">#gridtype</span>
-tagCols: <span class="token number">6</span>                  <span class="token comment">#number of apriltags</span>
-tagRows: <span class="token number">6</span>                  <span class="token comment">#number of apriltags</span>
-tagSize: <span class="token number">0.088</span>              <span class="token comment">#size of apriltag, edge to edge [m]</span>
-tagSpacing: <span class="token number">0.3</span>             <span class="token comment">#ratio of space between tags to tagSize</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ <span class="token function">cat</span> /data/april.yaml
+target_type: <span class="token string">'aprilgrid'</span>    <span class="token comment"># gridtype</span>
+tagCols: <span class="token number">6</span>                  <span class="token comment"># number of apriltags</span>
+tagRows: <span class="token number">6</span>                  <span class="token comment"># number of apriltags</span>
+tagSize: <span class="token number">0.088</span>              <span class="token comment"># size of apriltag, edge to edge [m]</span>
+tagSpacing: <span class="token number">0.3</span>             <span class="token comment"># ratio of space between tags to tagSize</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>对应生成标记板 <code>pdf</code> 文件命令为</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">kalibr_create_target_pdf <span class="token parameter variable">--type</span> apriltag <span class="token parameter variable">--nx</span> <span class="token number">6</span> <span class="token parameter variable">--ny</span> <span class="token number">6</span> <span class="token parameter variable">--tsize</span> <span class="token number">0.088</span> <span class="token parameter variable">--tspace</span> <span class="token number">0.3</span> /data/target.pdf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
-<p>我们就能在本机的共享目录 <code>$FOLDER</code> 下看到标定i板 <a href="assets/figures/target.pdf"><code>target.pdf</code></a> 文件，从而进行打印。</p>
+<p>我们就能在本机的共享目录 <code>$FOLDER</code> 下看到标定板target.pdf文件，从而进行打印。（但这个标定版大小很大，所以不支持A4打印，手动调整应该也行，但是很麻烦，推荐下面这个方法）</p>
+<hr />
+<p><strong>方法2</strong>（用网页自动生成，推荐，用A4纸就能打印）<br />
+在这个网站<a target="_blank" rel="noopener" href="https://calib.io/pages/camera-calibration-pattern-generator">calib.io/Pattern Generator</a>，进行如下设置：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Target Type: Kalibr/AprilGrid
+Board Width <span class="token punctuation">[</span>mm<span class="token punctuation">]</span>: <span class="token number">297</span>
+Board Height <span class="token punctuation">[</span>mm<span class="token punctuation">]</span>: <span class="token number">210</span>
+Rows: <span class="token number">5</span>
+Columns: <span class="token number">6</span>
+Tag Size <span class="token punctuation">[</span>mm<span class="token punctuation">]</span>: <span class="token number">19</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>就可以得到这个<a href="/figures/robotics/camera/targetboard_A4_kalibr_aprilgrid_200x150_5x6_19.pdf">PDF文件</a>啦，我们直接用A4纸打印出来就能用，对应的标定配置文件如下：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ <span class="token function">cat</span> /data/april.yaml
+target_type: <span class="token string">'aprilgrid'</span>    <span class="token comment"># gridtype</span>
+tagCols: <span class="token number">6</span>                  <span class="token comment"># number of apriltags</span>
+tagRows: <span class="token number">5</span>                  <span class="token comment"># number of apriltags</span>
+tagSize: <span class="token number">0.019</span>              <span class="token comment"># size of apriltag, edge to edge [m]</span>
+tagSpacing: <span class="token number">0.3</span>             <span class="token comment"># ratio of space between tags to tagSize</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h4 id="录制ros视频包"><a class="markdownIt-Anchor" href="#录制ros视频包"></a> 录制ROS视频包</h4>
 <p>标定是离线进行的，所以我们需要先录制一个视频包下来，但是我们不用在相机原有的频率下标记，所以创建一个固定 10Hz 频率（随便给个低点的就行）的新节点 <code>\color</code>：<code>rosrun topic_tools throttle messages /camera/color/image_raw 10.0 /color</code>，然后我们再从上面的 <code>rviz</code> 中打开 <code>/color</code> 节点的图像，可以看到有明显掉帧，我们拿起标定板保持在摄像头中，开始视频录制 <code>rosbag record -O /data/camd435i_10hz /color</code>，在录制过程中可以左右移动下标记板，然后 <code>ctrl C</code> 停止录制，文件保存在 <code>/data/camd435i_10hz.bag</code> 中。</p>
 <h4 id="內参矩阵及畸变系数计算"><a class="markdownIt-Anchor" href="#內参矩阵及畸变系数计算"></a> 內参矩阵及畸变系数计算</h4>
 <p>如果 <code>kalibr_calibrate_cameras</code> 无法执行，添加路径：<code>export PATH=/catkin_ws/devel/lib/kalibr:$PATH</code> 。</p>
 <p>执行下述代码（<a target="_blank" rel="noopener" href="https://drive.google.com/file/d/19TT175ZED-C_JfZUa_B8XhbsDBknxlpf/view?usp=drive_link">可视化角点检测效果 Kalibr标记效果.webm</a>）</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">kalibr_calibrate_cameras <span class="token parameter variable">--target</span> /data/april_6x6.yaml <span class="token punctuation">\</span>  <span class="token comment"># 标记板配置文件</span>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">kalibr_calibrate_cameras <span class="token parameter variable">--target</span> /data/april.yaml <span class="token punctuation">\</span>  <span class="token comment"># 标记板配置文件</span>
 	<span class="token parameter variable">--bag</span> /data/camd435i_10hz.bag <span class="token punctuation">\</span>  <span class="token comment"># 录制的视频包</span>
 	<span class="token parameter variable">--models</span> pinhole-radtan <span class="token punctuation">\</span>  <span class="token comment"># 选择的相机模型为pinhole，畸变模型为radtan</span>
 	<span class="token parameter variable">--topics</span> /color <span class="token punctuation">\</span>  <span class="token comment"># 选择录制视频的话题</span>
 	--show-extractio  <span class="token comment"># 可视化角点检测结果</span>
 <span class="token comment"># 写成一行</span>
-kalibr_calibrate_cameras <span class="token parameter variable">--target</span> /data/april_6x6.yaml <span class="token parameter variable">--bag</span> /data/camd435i_10hz.bag <span class="token parameter variable">--models</span> pinhole-radtan <span class="token parameter variable">--topics</span> /color --show-extractio<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+kalibr_calibrate_cameras <span class="token parameter variable">--target</span> /data/april.yaml <span class="token parameter variable">--bag</span> /data/camd435i_10hz.bag <span class="token parameter variable">--models</span> pinhole-radtan <span class="token parameter variable">--topics</span> /color --show-extractio<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>等执行完成后，在 <code>/data</code> 文件夹（共享文件夹）下会生成三个文件 <code>*.pdf, *.txt, *.yaml</code></p>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
@@ -967,7 +984,7 @@ calc: <span class="token punctuation">[</span><span class="token punctuation">[<
   <div class="license-box my-3">
     <div class="license-title">
       <div>小孔成像相机模型原理以及标定实现</div>
-      <div>https://wty-yy.github.io/posts/44869/</div>
+      <div>https://wty-yy.xyz/posts/44869/</div>
     </div>
     <div class="license-meta">
       

@@ -19,20 +19,20 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="总结下每次调试乐聚Kuavo42真机遇到的问题 # 真机启动指令为 roslaunch humanoid_controllers load_kuavo_real.launch cali:&#x3D;true cali_arm:&#x3D;true # 关闭所有ros服务, ros意外退出可以用该方法清理 pkill -i ros # 查看当前是否有正在运行的node rosnode list">
+    <meta name="description" content="总结下每次调试乐聚Kuavo42真机遇到的问题  基础操作 # 真机启动指令为 roslaunch humanoid_controllers load_kuavo_real.launch cali:&#x3D;true cali_arm:&#x3D;true # 关闭所有ros服务, ros意外退出可以用该方法清理 pkill -i ros # 查看当前是否有正在运行的node rosnode list">
 <meta property="og:type" content="article">
 <meta property="og:title" content="乐聚Kuavo42机器人真机调试日志">
-<meta property="og:url" content="https://wty-yy.github.io/posts/21424/index.html">
+<meta property="og:url" content="https://wty-yy.xyz/posts/21424/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="总结下每次调试乐聚Kuavo42真机遇到的问题 # 真机启动指令为 roslaunch humanoid_controllers load_kuavo_real.launch cali:&#x3D;true cali_arm:&#x3D;true # 关闭所有ros服务, ros意外退出可以用该方法清理 pkill -i ros # 查看当前是否有正在运行的node rosnode list">
+<meta property="og:description" content="总结下每次调试乐聚Kuavo42真机遇到的问题  基础操作 # 真机启动指令为 roslaunch humanoid_controllers load_kuavo_real.launch cali:&#x3D;true cali_arm:&#x3D;true # 关闭所有ros服务, ros意外退出可以用该方法清理 pkill -i ros # 查看当前是否有正在运行的node rosnode list">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/real/kuavo42/tb_logger_leju_down_mujoco.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/real/kuavo42/tb_logger_leju_down_real.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/real/kuavo42/tb_logger_leju_down_mujoco.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/real/kuavo42/tb_logger_leju_down_real.png">
 <meta property="article:published_time" content="2025-03-10T03:25:09.000Z">
-<meta property="article:modified_time" content="2025-03-22T08:32:14.582Z">
+<meta property="article:modified_time" content="2025-05-18T07:48:58.672Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/real/kuavo42/tb_logger_leju_down_mujoco.png">
+<meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/real/kuavo42/tb_logger_leju_down_mujoco.png">
   
   
   
@@ -84,7 +84,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -307,7 +307,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.3k 字
+          1.6k 字
         
       </span>
     
@@ -318,7 +318,7 @@
         
         
         
-          12 分钟
+          14 分钟
         
       </span>
     
@@ -361,6 +361,7 @@
               <div class="markdown-body">
                 
                 <p>总结下每次调试乐聚Kuavo42真机遇到的问题</p>
+<h2 id="基础操作"><a class="markdownIt-Anchor" href="#基础操作"></a> 基础操作</h2>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 真机启动指令为</span>
 roslaunch humanoid_controllers load_kuavo_real.launch cali:<span class="token operator">=</span>true cali_arm:<span class="token operator">=</span>true
 <span class="token comment"># 关闭所有ros服务, ros意外退出可以用该方法清理</span>
@@ -383,6 +384,21 @@ Host leju_up
     <span class="token comment"># Password: leju_kuavo</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
     </div>
 </div>
+<h3 id="下肢标定"><a class="markdownIt-Anchor" href="#下肢标定"></a> 下肢标定</h3>
+<blockquote>
+<p>参考<a target="_blank" rel="noopener" href="https://kuavo.lejurobot.com/beta_manual/basic_usage/kuavo-ros-control/docs/3%E8%B0%83%E8%AF%95%E6%95%99%E7%A8%8B/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%85%B3%E8%8A%82%E6%A0%87%E5%AE%9A/">官方文档 - 机器人关节标定</a></p>
+</blockquote>
+<p>当机器人下肢初始化回到零点时，存在肉眼可发现的不平行，则需要重新标定下肢，首先将所有的“绿色工装”（一共10个）插入机器人下肢对应的关节处，保证每个关节都无法移动即可，我们先手动保存之前的<code>offset.csv</code>文件，位于<code>/root/.config/lejuconfig/</code>文件夹下，将其剪切为另一个文件名即可<code>mv offset.csv offset.csv.bak</code>，进入到MPC控制的项目中执行</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/kuavo-ros-opensource
+<span class="token function">sudo</span> <span class="token function">su</span>
+<span class="token builtin class-name">source</span> devel/setup.bash
+roslaunch humanoid_controllers load_kuavo_real.launch cali:<span class="token operator">=</span>true cali_leg:<span class="token operator">=</span>true cali_arm:<span class="token operator">=</span>true<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>出现</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">..</span>.
+输入<span class="token variable"><span class="token variable">`</span>c<span class="token variable">`</span></span>保存当前零点位置
+<span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>按键盘<code>c</code>即可将当前机器人的零点位置保存在上述位置，拆下工装即可，后续即可正常工作</p>
+<h2 id="日志"><a class="markdownIt-Anchor" href="#日志"></a> 日志</h2>
 <h3 id="2025310"><a class="markdownIt-Anchor" href="#2025310"></a> 2025.3.10.</h3>
 <h4 id="上午"><a class="markdownIt-Anchor" href="#上午"></a> 上午</h4>
 <p>10:30到曲江开始调机器人</p>
@@ -475,6 +491,10 @@ roslaunch humanoid_controllers load_kuavo_real.launch cali:<span class="token op
 <p>发现是因为机器人腿部侧面的tx线松了导致的问题，将机器人送到北京去</p>
 <h3 id="2025316~2025319"><a class="markdownIt-Anchor" href="#2025316~2025319"></a> 2025.3.16~2025.3.19</h3>
 <p>去北京的通研院学习，结果对方在准备中关村论坛没时间，我们简单学习了rl训练的方法，对方也主要做mpc，做rl的人也不清楚最初训练的细节，所以只能靠我们自己摸索了，思路就是在isaacgym/sim下训练，迁移到mujoco（python和C++）版本，如果稳定则迁移真机</p>
+<h3 id="202541"><a class="markdownIt-Anchor" href="#202541"></a> 2025.4.1.</h3>
+<p>先发现机器人标定关节不准，重新进行了标定，分别走了下官方的RL和MPC没什么大问题</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> kuavo-rl-controller-xjtu
+roslaunch humanoid_controllers load_kuavo_real.launch cail:<span class="token operator">=</span>true cali_arm:<span class="token operator">=</span>true joystick_type:<span class="token operator">=</span>bt2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
@@ -521,7 +541,7 @@ roslaunch humanoid_controllers load_kuavo_real.launch cali:<span class="token op
   <div class="license-box my-3">
     <div class="license-title">
       <div>乐聚Kuavo42机器人真机调试日志</div>
-      <div>https://wty-yy.github.io/posts/21424/</div>
+      <div>https://wty-yy.xyz/posts/21424/</div>
     </div>
     <div class="license-meta">
       

@@ -1,0 +1,1111 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本笔记基于IsaacSim 4.5.0，参考官方文档，本Blog的所有用例请见wty-yy&#x2F;isaac-sim-use-cases IsaacSim官方文档有非常多的代码与用例教学，但可能分布比较杂乱，这里重新理顺逻辑，并进行一些总结，首先给出一些重要的教程&#x2F;参考文档网址  最新版4.5.0的IsaacSim教程：Isaac Sim Documentation 老版本4.2.0的IsaacSim教">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IsaacSim 笔记">
+<meta property="og:url" content="https://wty-yy.xyz/posts/53877/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="本笔记基于IsaacSim 4.5.0，参考官方文档，本Blog的所有用例请见wty-yy&#x2F;isaac-sim-use-cases IsaacSim官方文档有非常多的代码与用例教学，但可能分布比较杂乱，这里重新理顺逻辑，并进行一些总结，首先给出一些重要的教程&#x2F;参考文档网址  最新版4.5.0的IsaacSim教程：Isaac Sim Documentation 老版本4.2.0的IsaacSim教">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/isaac_sim_note/WorldSceneStage.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/isaac_sim_note/isaac_sim_core_api_graph.drawio.png">
+<meta property="article:published_time" content="2025-04-17T07:58:37.000Z">
+<meta property="article:modified_time" content="2025-05-18T07:48:58.672Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/isaac_sim_note/WorldSceneStage.png">
+  
+  
+  
+  <title>IsaacSim 笔记 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><script src="/assets/js/DPlayer.min.js"></script></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="IsaacSim 笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-17 15:58" pubdate>
+          2025年4月17日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">IsaacSim 笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本笔记基于IsaacSim 4.5.0，参考<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/index.html">官方文档</a>，本Blog的所有用例请见<a target="_blank" rel="noopener" href="https://github.com/wty-yy/isaac-sim-use-cases">wty-yy/isaac-sim-use-cases</a></p>
+<p>IsaacSim官方文档有非常多的代码与用例教学，但可能分布比较杂乱，这里重新理顺逻辑，并进行一些总结，首先给出一些重要的教程/参考文档网址</p>
+<ol>
+<li>最新版4.5.0的IsaacSim教程：<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/index.html">Isaac Sim Documentation</a></li>
+<li>老版本4.2.0的IsaacSim教程：<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/isaacsim/latest/index.html">Isaac Sim 4.2.0 (OLD)</a></li>
+<li>官方的插件文档：<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/extensions/latest/index.html">Omniverse Extensions</a></li>
+<li>官方的USD编辑器文档：<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/kit/docs/kit-manual/latest/guide/kit_overview.html">Omniverse Kit</a></li>
+<li>词汇表：<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/reference_material/reference_glossary.html">Reference Glossary</a></li>
+</ol>
+<blockquote>
+<p>新版本4.5.0教程如果存在理解不清楚的位置，例如GUI操作，可以看4.2.0教程，有更多动图演示</p>
+</blockquote>
+<h2 id="安装"><a class="markdownIt-Anchor" href="#安装"></a> 安装</h2>
+<p>首先你需要一个有Nvidia显卡的电脑，RTX 3070以上，可以通过<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/requirements.html">Isaac Sim Requirements</a>中查看自己电脑是否支持安装</p>
+<p>IsaacSim安装：在<code>4.5.0</code>之后就可以直接在官网下载可执行的IsaacSim了，支持Linux和Windows，以下操作都在Ubuntu 24.04上完成，Windows理论上没有较大区别，常用安装方法有三种：</p>
+<blockquote>
+<p>如果你已经有conda，推荐用第二种安装方式，比较方便，并且后续安装<a target="_blank" rel="noopener" href="https://isaac-sim.github.io/IsaacLab/main/index.html">IsaacLab</a>用于强化训练，也可以直接在其基础上安装</p>
+</blockquote>
+<ol>
+<li>二进制文件：<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/download.html">Download Isaac Sim</a>
+<ul>
+<li>安装完成后也可以安装conda环境，参考<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_python.html#advanced-running-with-anaconda">Advanced: Running with Anaconda</a></li>
+<li><strong>conda安装后的推荐操作</strong>：每次启动环境后还需手动<code>source $ISAAC_PATH/setup_conda_env.sh</code>文件，效率很低，因此我们可以将该命令加入到环境启动时运行，具体来说  <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">conda activate isaac-sim
+<span class="token builtin class-name">cd</span> <span class="token variable">$CONDA_PREFIX</span>/etc/conda/activate.d
+<span class="token function">vim</span> isaacsim_hook.sh
+<span class="token comment"># ================= 文件中写入如下内容 =================</span>
+<span class="token comment">#!/bin/bash</span>
+<span class="token builtin class-name">source</span> <span class="token operator">&lt;</span>替换为IsaacSim安装路径<span class="token operator">></span>/setup_conda_env.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+这样就可以在启动环境时，自动加入IsaacSim相关的环境变量了！</li>
+</ul>
+</li>
+<li>pip安装到环境：<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_python.html#install-isaac-sim-using-pip">Install Isaac Sim using PIP</a>，此方法会将IsaacSim安装到conda的pip包路径中，位置有点难找，其余没有什么缺点</li>
+<li>docker安装：<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/installation/install_container.html">Install Container</a></li>
+</ol>
+<p><strong>注意</strong>：</p>
+<ol>
+<li>第一次启动IsaacSim会非常慢，需要编译大量文件，可以打开任务管理器看CPU的使用率，当使用率降下来时就是编译完成了</li>
+<li>使用IsaacSim中建议全程打开VPN，因为可能需要从Omniverse Nucleus服务器上下载机器人、环境文件，否则可能卡住不动，可以看网卡下载流量，判断IsaacSim是否卡住</li>
+</ol>
+<h2 id="基础芝士"><a class="markdownIt-Anchor" href="#基础芝士"></a> 基础芝士</h2>
+<h3 id="isaacsim逻辑"><a class="markdownIt-Anchor" href="#isaacsim逻辑"></a> IsaacSim逻辑</h3>
+<h4 id="工作流学习"><a class="markdownIt-Anchor" href="#工作流学习"></a> 工作流学习</h4>
+<p>参考<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/introduction/workflows.html">IsaacSim/workflows</a>，将IsaacSim的控制方法分为如下三种：</p>
+<ol>
+<li>可视化窗口交互 GUI：
+<ul>
+<li>启动方法：可视化界面操作，如果是pip安装，直接执行<code>isaacsim</code>即可，如果是二进制安装，到安装目录下执行<code>./isaac-sim.sh</code>即可打开，打开后就可以看到可视化界面</li>
+<li>官方教程推荐：<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/gui/index.html#tutorials">GUI/tutorial</a>中如何搭建一个小车（推荐看4.2.0老版本教程<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/isaacsim/latest/gui_tutorials/index.html">Build Your First Virtual World</a>，内容一致可用，且有更多动图容易理解），然后中间遇到一个新的窗口操作，看窗口的细节<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/gui/index.html#windows">GUI/Windows</a></li>
+<li>用途：可以方便的查看、修改机器人模型、场景搭建，在Python代码执行中可以进行调试</li>
+</ul>
+</li>
+<li>插件交互 Extensions：
+<ul>
+<li>启动方法：
+<ul>
+<li>Interactive Examples插件的使用方法：官方使用方法教程<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/introduction/examples.html#interactive-examples">Interactive Examples</a>，或者看<a target="_blank" rel="noopener" href="https://github.com/wty-yy/isaac-sim-use-cases/blob/master/interactive/README.md">wty-yy/isaac-sim-use-cases:Interactive用例/使用方法</a>，这里介绍了如何创建自定义脚本，及启动方法</li>
+<li>其他插件：可以认为GUI中的每个小窗口都是一个插件，相关插件可以在Window &gt; Extensions中进行管理</li>
+</ul>
+</li>
+<li>官方教程推荐：
+<ul>
+<li>Python脚本控制仿真环境<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/core_api_tutorials/index.html#core-api-tutorial-series">Core API Tutorial Series</a>中的全部内容</li>
+<li>样例学习：在<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/introduction/menu_examples.html#examples-reference-table">Examples Reference Table</a>中查看感兴趣的样例</li>
+<li>插件编写：<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/utilities/extension_template_generator.html">Extension Template Generator</a></li>
+<li>OmniGraph教程：<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/extensions/latest/ext_omnigraph.html">Omniverse Extensions/OmniGraph</a></li>
+</ul>
+</li>
+<li>用途：每次修改代码后，Interactive Examples中的代码会立刻更新(hot-reload)，点击LOAD按钮即可看到修改后的代码效果，便于调试代码、测试机器人</li>
+</ul>
+</li>
+<li>独立启动运行 Standalone：
+<ul>
+<li>启动方法：
+<ul>
+<li>直接通过<code>python.sh &lt;代码路径&gt;</code>执行（Windows是<code>python.bat</code>）</li>
+<li><strong>推荐</strong>使用conda环境启动，参考<a href="./#%E5%AE%89%E8%A3%85">安装方法</a>中的<strong>二进制文件</strong>或者<strong>pip安装到环境</strong>，进入<code>isaac-sim</code>环境后，直接执行<code>python &lt;代码路径&gt;</code></li>
+</ul>
+</li>
+<li>官方教程推荐：在IsaacSim安装目录下的<code>$ISAAC_PATH/standalone_examples/api</code>中，有各种插件对应的api接口使用教程，可以选择感兴趣的样例进行学习</li>
+<li>用途：通过Python单独启动仿真，缺点是每次启动新的仿真需要花费时间，常用于RL训练</li>
+</ul>
+</li>
+</ol>
+<h4 id="关键词及core-api调用关系"><a class="markdownIt-Anchor" href="#关键词及core-api调用关系"></a> 关键词及Core API调用关系</h4>
+<p><img src="/figures/robotics/isaac_sim_note/WorldSceneStage.png" srcset="/img/loading.gif" lazyload alt="调用关系示意图" /></p>
+<p>官方在<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/python_scripting/core_api_overview.html#application-vs-simulation-vs-world-vs-scene-vs-stage">Core API Overview</a>中对所有的接口进行大致介绍，我这里重新梳理一遍（结合自己在代码中使用的逻辑）：</p>
+<ul>
+<li>Prim：Primitive（原始的）表示物体的本体属性，例如质量、外形、关节连接等</li>
+<li>Attri：Attribute（属性）表示物体在环境中的属性，例如当前位置、朝向、速度、加速度等</li>
+<li>USD：包含各种Prim和相应的Attri，即物体的描述以及位置和朝向等信息（USD相当于下文的Stage，也可将USD加入到Stage/USD中）</li>
+<li>Simulation：根据代码逻辑改变Prim的Attri信息</li>
+<li>Stage：管理各种Prim及其对应的Attri信息</li>
+<li>World：管理Simulation和Stage，将二者进行连接构建成仿真场景，具有启动/重置的功能</li>
+<li>Scene：管理Prim和Attri，可将Prim加入Stage中，初始化Attri信息并为其分配<code>prim_path</code></li>
+<li>App：对Simulation的上层管理，例如渲染、用户交互（添加物体、控制仿真是否继续）</li>
+</ul>
+<p>总的来说，我将上述关系总结为下图便于理解，下文的常用API使用方法也按照上述分类进行<br />
+<img src="/figures/robotics/isaac_sim_note/isaac_sim_core_api_graph.drawio.png" srcset="/img/loading.gif" lazyload alt="IsaacSim Core API关系图" /></p>
+<h2 id="gui常用操作"><a class="markdownIt-Anchor" href="#gui常用操作"></a> GUI常用操作</h2>
+<h3 id="快捷键"><a class="markdownIt-Anchor" href="#快捷键"></a> 快捷键</h3>
+<p><a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/gui/reference_keyboard_shortcuts.html">isaacsim/reference_keyboard_shortcuts</a></p>
+<p>视角控制，参考<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/extensions/latest/ext_core/ext_viewport/navigation.html">Ext/Viewport/navigation</a></p>
+<ul>
+<li>进入我的世界创造飞行模式：
+<ul>
+<li><code>右键+W/S/A/D</code>：前后左右飞行</li>
+<li><code>右键+Q/E</code>：高度下降上升</li>
+<li><code>右键+滚轮/Ctrl/Shift</code>：调节飞行速度/减速/加速</li>
+</ul>
+</li>
+<li>聚焦于物体：选中物体，按<code>F</code></li>
+<li>截取Viewport图像：
+<ul>
+<li><code>F10</code>：截取当前图像，保存到<code>~/Documents/Kit/shared/screenshots</code></li>
+<li>连续图像截取：参考<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/extensions/latest/ext_core/ext_movie-capture.html">Ext/Movie Capture</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="tips"><a class="markdownIt-Anchor" href="#tips"></a> Tips</h3>
+<ul>
+<li>
+<p>永久化菜单：IsaacSim中的所有菜单都可以点击上方的横杠拖拽出来，这样就可以持续看到菜单了，参考<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/extensions/latest/ext_core/ext_viewport/persistent-menus.html">Ext/viewport/Persistent Menus</a></p>
+</li>
+<li>
+<p>左侧工具栏</p>
+<ul>
+<li>本体变换操作：参考<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/extensions/latest/ext_core/ext_viewport/transform-manipulator.html">Ext/Viewport/Transform Manipulator</a>，包含平移（Translation，快捷键<code>W</code>），旋转（Robotation，快捷键<code>E</code>），缩放（Scale，快捷键<code>R</code>）<br />
+平移与旋转操作有两个子选项（按两下相同快捷键切换，或者点击物体后，在下方出现一个小三角<code>&gt;</code>，点击展开再点第一个小地球即可切换）<strong>Local/Global</strong>，分别相对自身坐标系与世界坐标系，测试方法：加入一个Cube后，先用旋转任意转到一个角度，再测试Local/Global，即可看出区别</li>
+<li>相对变换操作：参考<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/extensions/latest/ext_core/ext_viewport/transform-context-menu.html">Ext/Viewport/Transform Context Menu</a>，上文的切换小三角<code>&gt;</code>按钮就是打开相对变化操作栏，包含变换空间切换（上文提到的Local/Global）、吸附（Snap，快捷键<code>S</code>）、切换坐标系<br />
+吸附的使用方法，在左侧找到“磁铁”图标右键，选择一种吸附模式Grid, Prim, Surface，这样在用平移操作时，可以保证物体被吸附限制</li>
+</ul>
+</li>
+<li>
+<p>USD文件保存与仅相对导入机器人：参考<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/omniverse_usd/intro_to_usd.html#isaac-sim-app-tutorial-intro-usd">USD/Working with USD</a>，在保存USD前，先将机器人部分单独分离出来（在Stage Tree中将机器人对应的Xform拖拽到最外层，或者选择Xform然后Edit &gt; Unparent移动到根目录），右键Xform选Set as Default Prim，即可在相对导入（Add Reference，或Python脚本读取）时仅读取设定为defaultPrim下的内容</p>
+<p>GUI中的相对导入有两种方法：</p>
+<ol>
+<li>左上角File &gt; Add Reference选择USD文件</li>
+<li>下方找到Content栏（没有就在Windows  &gt; Browsers &gt; Content打开），找到USD文件路径，右键点Add at Current Selection添加到Stage中</li>
+</ol>
+</li>
+<li>
+<p>Joint可视化：如果手动添加RevoluteJoint，为了方便查看旋转的方向，可以打开可视化，点击Viewport上方工具栏中的小眼睛 &gt; Show By Type &gt; Physics &gt; Joints</p>
+</li>
+</ul>
+<h2 id="注意事项"><a class="markdownIt-Anchor" href="#注意事项"></a> 注意事项</h2>
+<p>URDF, MJCF, USD都是保存机器人的配置文件，后两个可以包含更多的环境信息，三者中对机器人零部件的描述用语各不相同，如下表所示</p>
+<table>
+<thead>
+<tr>
+<th>URDF</th>
+<th>MJCF</th>
+<th>USD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Link</td>
+<td>Body</td>
+<td>Rigid</td>
+</tr>
+</tbody>
+</table>
+<h3 id="joint定义"><a class="markdownIt-Anchor" href="#joint定义"></a> Joint定义</h3>
+<p>在URDF或者MJCF文件，每个Link或Body都是有父子关系，通过坐标系变换从父Link的坐标系得到子Link的坐标系，因此在URDF和MJCF中定义Joint只需要给出Joint坐标系关于父Link的坐标系变换即可</p>
+<blockquote>
+<p>以下实验部分需要会添加RevoluteJoint，请在学习完<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/gui/tutorial_gui_simple_robot.html">Assemble a Simple Robot</a>后进行，实验所用USD文件为<a target="_blank" rel="noopener" href="https://github.com/wty-yy/isaac-sim-use-cases/blob/master/usd_demos/revolute_joint.usd">revolute_joint.usd</a></p>
+</blockquote>
+<p>注意到USD文件保存的机器人信息是没有两个Rigid之间的相对信息的，两两之间都是相互独立的存在，如果我们要描述Joint，就需要将父子Rigid绑定关系，并给出Joint坐标系相对于父坐标系的变换，在IsaacSim中定义Joint就产生了两个坐标系变换：</p>
+<ul>
+<li>Local Position/Rotation 0：相对body0（父坐标系）的变换，记为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">R_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></li>
+<li>Local Position/Rotation 1：相对body1（子坐标系）的变换，记为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">R_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></li>
+</ul>
+<p>于是，从父坐标系到子坐标系变换为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>1</mn></msub><msubsup><mi>R</mi><mn>2</mn><mrow><mo>−</mo><mn>1</mn></mrow></msubsup></mrow><annotation encoding="application/x-tex">R_1R_2^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.120547em;vertical-align:-0.266308em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.854239em;"><span style="top:-2.433692em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.1031310000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.266308em;"><span></span></span></span></span></span></span></span></span></span>（值得注意的是，这两个变换目标都是Joint坐标系）</p>
+<p>但我们的子坐标系其实在USD中已经被确定了，如果又被父坐标系确定一次会发生什么？如下面视频所示</p>
+<div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/revolute_joint_missing_position.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<blockquote>
+<p>显示Joint信息的方法：上文<a href="./#tips">GUI常用操作/Tips</a>中Joint可视化给出</p>
+</blockquote>
+<p>当Joint计算出的子坐标系与USD中子Rigid位置错位时，会有一个蓝色虚拟框给出期望位置，绿色为USD中位置，在开始仿真时，物体会受到极大的推力以到达期望位置，这通常是不正确的。</p>
+<p>但根据 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">R_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 计算 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">R_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 以符合USD中当前物体位置又挺复杂，所以如果想要修改Joint坐标系，推荐用左侧按钮中的平移和旋转来修改，这样会自动计算 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>R</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">R_1,R_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 满足子物体当前位置，如果需要精准确定位置，只需要调整到差不多的位置，重新手动输入数值即可！</p>
+<h2 id="常用api"><a class="markdownIt-Anchor" href="#常用api"></a> 常用API</h2>
+<h3 id="simulation"><a class="markdownIt-Anchor" href="#simulation"></a> Simulation</h3>
+<p>在standalone脚本中，<strong>必须在导入其他<code>isaacsim.*</code>包之前执行该命令，从而将其他包可见</strong>，并选择是否启动GUI界面，更多配置请见源码</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> isaacsim<span class="token punctuation">.</span>simulation_app <span class="token keyword">import</span> SimulationApp
+SimulationApp<span class="token punctuation">(</span><span class="token punctuation">&#123;</span><span class="token string">"headless"</span><span class="token punctuation">:</span> <span class="token boolean">False</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<h3 id="world"><a class="markdownIt-Anchor" href="#world"></a> World</h3>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> isaacsim<span class="token punctuation">.</span>core<span class="token punctuation">.</span>api<span class="token punctuation">.</span>world <span class="token keyword">import</span> World
+world <span class="token operator">=</span> World<span class="token punctuation">(</span>
+    physics_dt<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>  <span class="token comment"># 物理步进步长, 默认60Hz</span>
+    rendering_dt<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>  <span class="token comment"># 渲染步进步长(渲染相机图像等, 在headless下也会执行), 默认60Hz</span>
+    stage_units_in_meters<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>  <span class="token comment"># 单位缩放比例, 默认0.01, 也就是cm为单位</span>
+    backend<span class="token operator">=</span><span class="token string">'numpy'</span><span class="token punctuation">,</span>  <span class="token comment"># [numpy, torch, warp], 默认numpy</span>
+    device<span class="token operator">=</span><span class="token boolean">None</span>  <span class="token comment"># 选择torch或warp后, 指定运行设备, cpu/cuda/cuda:0</span>
+<span class="token punctuation">)</span>
+<span class="token comment"># 常用写法</span>
+world <span class="token operator">=</span> World<span class="token punctuation">(</span>stage_units_in_meters<span class="token operator">=</span><span class="token number">1.0</span><span class="token punctuation">)</span>
+world <span class="token operator">=</span> World<span class="token punctuation">(</span>stage_units_in_meters<span class="token operator">=</span><span class="token number">1.0</span><span class="token punctuation">,</span> backend<span class="token operator">=</span><span class="token string">'torch'</span><span class="token punctuation">,</span> device<span class="token operator">=</span><span class="token string">'cuda'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="环境步进"><a class="markdownIt-Anchor" href="#环境步进"></a> 环境步进</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">world<span class="token punctuation">.</span>step<span class="token punctuation">(</span>render<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>  <span class="token comment"># 是否执行渲染步进, 否则只执行物理步进</span>
+world<span class="token punctuation">.</span>render<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 执行渲染步进</span>
+world<span class="token punctuation">.</span>stop<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 环境暂停, 物理步进和渲染步进都变为0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>设渲染步进为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>r</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\delta_{render}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，物理步进为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mrow><mi>p</mi><mi>h</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>c</mi><mi>s</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\delta_{physics}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>，则<br />
+<code>world.step(render=True)</code>分两个情况：</p>
+<ul>
+<li>当 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>r</mi></mrow></msub><mo>⩾</mo><msub><mi>δ</mi><mrow><mi>p</mi><mi>h</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>c</mi><mi>s</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\delta_{render} \geqslant \delta_{physics}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">⩾</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> 时，会执行 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">⌊</mo><msub><mi>δ</mi><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>r</mi></mrow></msub><mi mathvariant="normal">/</mi><msub><mi>δ</mi><mrow><mi>p</mi><mi>h</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>c</mi><mi>s</mi></mrow></msub><mo stretchy="false">⌋</mo></mrow><annotation encoding="application/x-tex">\lfloor\delta_{render}/\delta_{physics}\rfloor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mopen">⌊</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">⌋</span></span></span></span> 个物理步进，再执行一次渲染步进</li>
+<li>当 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>r</mi></mrow></msub><mo>&lt;</mo><msub><mi>δ</mi><mrow><mi>p</mi><mi>h</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>c</mi><mi>s</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\delta_{render} &lt; \delta_{physics}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> 时，只执行一次渲染步进，当累计执行 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">⌈</mo><msub><mi>δ</mi><mrow><mi>p</mi><mi>h</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>c</mi><mi>s</mi></mrow></msub><mi mathvariant="normal">/</mi><msub><mi>δ</mi><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>r</mi></mrow></msub><mo stretchy="false">⌉</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\lceil\delta_{physics}/\delta_{render}\rceil-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mopen">⌈</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">⌉</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个渲染步进后，再执行一个物理步进和一个渲染步进</li>
+</ul>
+<p>相关测试代码可参考<code>$&#123;ISAAC_PATH&#125;/standalone_examples/api/isaacsim.core.api/time_stepping.py</code></p>
+<h4 id="gui显示的fps计算"><a class="markdownIt-Anchor" href="#gui显示的fps计算"></a> GUI显示的FPS计算</h4>
+<p>设物理步进步长为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mrow><mi>p</mi><mi>h</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>c</mi><mi>s</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\delta_{physics}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>，渲染步进步长为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>r</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\delta_{render}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，物理步进计算用时 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi>p</mi><mi>h</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>c</mi><mi>s</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T_{physics}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>，渲染步进计算用时 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>r</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T_{render}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，则GUI显示的FPS应该为</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mtext>FPS</mtext><mrow><mi>g</mi><mi>u</mi><mi>i</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mfrac><msub><mi>T</mi><mrow><mi>p</mi><mi>h</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>c</mi><mi>s</mi></mrow></msub><msub><mi>δ</mi><mrow><mi>p</mi><mi>h</mi><mi>y</mi><mi>s</mi><mi>i</mi><mi>c</mi><mi>s</mi></mrow></msub></mfrac><mo>+</mo><mfrac><msub><mi>T</mi><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>r</mi></mrow></msub><msub><mi>δ</mi><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>e</mi><mi>r</mi></mrow></msub></mfrac></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{FPS}_{gui}=\frac{1}{\frac{T_{physics}}{\delta_{physics}} + \frac{T_{render}}{\delta_{render}}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord text"><span class="mord">FPS</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.7509309999999996em;vertical-align:-1.4294909999999996em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.118589em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9914109999999998em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.03785em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29011428571428566em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.51308em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.13889em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">s</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29011428571428566em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5480799999999999em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.894191em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.03785em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.41586em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.13889em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4508599999999999em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4294909999999996em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<h3 id="scene"><a class="markdownIt-Anchor" href="#scene"></a> Scene</h3>
+<p>scene可以向stage中添加XForm对象（包含Prim和Attri）通过<code>scene.add(obj: SingleXFormPrim)</code>添加，而<code>SingleXFormPrim</code>可以通过<code>utils</code>中的一些函数获取（例如各种标准物体）</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> isaacsim<span class="token punctuation">.</span>core<span class="token punctuation">.</span>api<span class="token punctuation">.</span>scenes <span class="token keyword">import</span> Scene
+scene <span class="token operator">=</span> Scene<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<h4 id="创建平面"><a class="markdownIt-Anchor" href="#创建平面"></a> 创建平面</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">scene<span class="token punctuation">.</span>add_ground_plane<span class="token punctuation">(</span>color<span class="token operator">=</span>np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+scene<span class="token punctuation">.</span>add_default_ground_plane<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<h3 id="stage"><a class="markdownIt-Anchor" href="#stage"></a> Stage</h3>
+<p><code>stage</code>是一个USD中的句柄，如果要手动对<code>stage</code>中添加USD相关的物体必须先获取句柄，然后参考<a href="./#pxr-usd-api">pxr-usd-api</a>中的内容向<code>stage</code>中添加对象</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> omni<span class="token punctuation">.</span>usd  <span class="token comment"># 获取C++中stage调用句柄</span>
+stage <span class="token operator">=</span> omni<span class="token punctuation">.</span>usd<span class="token punctuation">.</span>get_context<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>get_stage<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>其他相关函数</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> isaacsim<span class="token punctuation">.</span>core<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>stage <span class="token keyword">import</span> add_reference_to_stage<span class="token punctuation">,</span> get_stage_units<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<ul>
+<li><code>add_reference_to_stage(usd_path, prim_path)</code>：在当前Stage中添加另一个USD文件作为reference，默认产生在原点</li>
+<li><code>get_stage_units</code>：获取当前Stage的单位比例，将<code>默认单位/get_stage_units()</code>即可转为Stage的单位，默认为<code>1.0</code></li>
+</ul>
+<h3 id="replicator"><a class="markdownIt-Anchor" href="#replicator"></a> Replicator</h3>
+<p>Replicator（复制器）功能就是能创建不同的实例并进行随机化：随机环境光、表面素材、位置等，用于生成合成数据（Synthetic Data Generation, SDG）、数据增强，其特点就是可以通过简单的API接口创建USD中的基础实例，例如长方体、椭球、环境光、相机等，而无需手动调用底层的<code>pxr</code>（USD Api这是C++接口，所以无法看到函数提示，必须参考<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/kit/docs/pxr-usd-api/latest/pxr.html">官方文档</a>）来创建，创建USD实例更加方便</p>
+<p>官方教程：</p>
+<ul>
+<li>新版教程<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/replicator_tutorials/index.html">Isaac Sim Doc/Replicator</a></li>
+<li>旧版教程<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/extensions/latest/ext_replicator.html">Omniverse Extensions/Replicator</a></li>
+</ul>
+<h4 id="环境光创建"><a class="markdownIt-Anchor" href="#环境光创建"></a> 环境光创建</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> omni<span class="token punctuation">.</span>replicator<span class="token punctuation">.</span>core <span class="token keyword">as</span> rep<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<h3 id="utils"><a class="markdownIt-Anchor" href="#utils"></a> Utils</h3>
+<h4 id="设置初始默认相机位置"><a class="markdownIt-Anchor" href="#设置初始默认相机位置"></a> 设置初始默认相机位置</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> isaacsim<span class="token punctuation">.</span>core<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>viewports <span class="token keyword">import</span> set_camera_view
+set_camera_view<span class="token punctuation">(</span>eye<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">,</span> target<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>Interactive脚本在<code>setup_post_load</code>中设置, Standalone在<code>world.reset()</code>前设置</p>
+<h4 id="创建长方体"><a class="markdownIt-Anchor" href="#创建长方体"></a> 创建长方体</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> isaacsim<span class="token punctuation">.</span>core<span class="token punctuation">.</span>api<span class="token punctuation">.</span>scenes <span class="token keyword">import</span> Scene
+<span class="token keyword">from</span> scipy<span class="token punctuation">.</span>spatial<span class="token punctuation">.</span>transform <span class="token keyword">import</span> Rotation <span class="token keyword">as</span> R  <span class="token comment"># 换算四元数需要</span>
+
+self<span class="token punctuation">.</span>scene<span class="token punctuation">:</span> Scene <span class="token operator">=</span> self<span class="token punctuation">.</span>world<span class="token punctuation">.</span>scene
+<span class="token comment"># 从欧拉角换算四元数</span>
+euler_angles <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">45</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">]</span>
+quat <span class="token operator">=</span> R<span class="token punctuation">.</span>from_euler<span class="token punctuation">(</span><span class="token string">'xyz'</span><span class="token punctuation">,</span> euler_angles<span class="token punctuation">,</span> degrees<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">.</span>as_quat<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
+<span class="token comment"># 实例化立方体</span>
+cube1 <span class="token operator">=</span> DynamicCuboid<span class="token punctuation">(</span>
+    prim_path<span class="token operator">=</span><span class="token string">"/World/Cube1"</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">'Cube1'</span><span class="token punctuation">,</span> color<span class="token operator">=</span>np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    position<span class="token operator">=</span>np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> scale<span class="token operator">=</span>np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    orientation<span class="token operator">=</span>np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>quat<span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token comment"># 加入scene</span>
+self<span class="token punctuation">.</span>scene<span class="token punctuation">.</span>add<span class="token punctuation">(</span>cube1<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="pxr-usd-api"><a class="markdownIt-Anchor" href="#pxr-usd-api"></a> pxr-usd-api</h3>
+<p><code>pxr</code>库是Python访问USD文件的C++接口</p>
+<ul>
+<li>Python API（仅有函数接口）：<a target="_blank" rel="noopener" href="https://docs.omniverse.nvidia.com/kit/docs/pxr-usd-api/latest/pxr.html">pxr-usd-api</a></li>
+<li>C++ API详细文档：<a target="_blank" rel="noopener" href="https://openusd.org/release/api/index.html">openusd-api</a></li>
+<li>C++ API详细文档类索引表：<a target="_blank" rel="noopener" href="https://openusd.org/release/api/classes.html">openusd-api/classes</a></li>
+<li>Python vs C++函数命名规则：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/usd/apinotes">USD/api-notes</a></li>
+</ul>
+<p>pxr库的函数都是面向方法的，需要转入stage句柄，在启动APP后通过<code>stage = omni.usd.get_context().get_stage()</code>来获取</p>
+<p>代码参考<a target="_blank" rel="noopener" href="https://github.com/wty-yy/isaac-sim-use-cases/tree/master/interactive/my_hello_world/pxr_demos">wty-yy/isaac-sim-use-cases - pxr_demos</a>中的例子</p>
+<p>可以使用如下方法查看类下的方法</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pxr <span class="token keyword">import</span> UsdLux
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">dir</span><span class="token punctuation">(</span>UsdLux<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># 返回信息</span>
+<span class="token comment"># ['BlackbodyTemperatureAsRgb', 'BoundableLightBase', 'CylinderLight', 'DiskLight', 'DistantLight', 'DomeLight', 'GeometryLight', 'LightAPI', 'LightFilter', 'LightListAPI', 'ListAPI', 'MeshLightAPI', 'NonboundableLightBase', 'PluginLight', 'PluginLightFilter', 'PortalLight', 'RectLight', 'ShadowAPI', 'ShapingAPI', 'SphereLight', 'Tokens', 'VolumeLightAPI', '_CanApplyResult', '__MFB_FULL_PACKAGE_NAME', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__']</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>用例代码：<a target="_blank" rel="noopener" href="https://github.com/wty-yy/isaac-sim-use-cases/blob/master/interactive/my_hello_world/pxr_demos/pxr_demo.py">wty-yy/isaac-sim-use-cases/pxr_demos/pxr_demo.py</a></p>
+<h4 id="创建光源"><a class="markdownIt-Anchor" href="#创建光源"></a> 创建光源</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pxr <span class="token keyword">import</span> UsdLux<span class="token punctuation">,</span> Sdf<span class="token punctuation">,</span> Gf
+
+<span class="token comment"># 获取UsdStagePtr</span>
+stage <span class="token operator">=</span> omni<span class="token punctuation">.</span>usd<span class="token punctuation">.</span>get_context<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>get_stage<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 创建平行光源</span>
+light_path <span class="token operator">=</span> <span class="token string">"/World/DistantLight"</span>  <span class="token comment"># 设置prim_path</span>
+light <span class="token operator">=</span> UsdLux<span class="token punctuation">.</span>DistantLight<span class="token punctuation">.</span>Define<span class="token punctuation">(</span>self<span class="token punctuation">.</span>stage<span class="token punctuation">,</span> Sdf<span class="token punctuation">.</span>Path<span class="token punctuation">(</span>light_path<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 创建DistantLight实例</span>
+light<span class="token punctuation">.</span>CreateIntensityAttr<span class="token punctuation">(</span><span class="token number">2e5</span><span class="token punctuation">)</span>  <span class="token comment"># 设置光照强度</span>
+light<span class="token punctuation">.</span>CreateColorAttr<span class="token punctuation">(</span>Gf<span class="token punctuation">.</span>Vec3f<span class="token punctuation">(</span><span class="token number">0.2</span><span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置RGB颜色</span>
+light<span class="token punctuation">.</span>AddRotateXYZOp<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Set<span class="token punctuation">(</span>Gf<span class="token punctuation">.</span>Vec3f<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">45</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置旋转</span>
+
+
+<span class="token comment"># 创建球装光源</span>
+light_path <span class="token operator">=</span> <span class="token string">"/World/SphereLight"</span>  <span class="token comment"># 设置prim_path</span>
+light <span class="token operator">=</span> UsdLux<span class="token punctuation">.</span>SphereLight<span class="token punctuation">.</span>Define<span class="token punctuation">(</span>stage<span class="token punctuation">,</span> Sdf<span class="token punctuation">.</span>Path<span class="token punctuation">(</span>light_path<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 创建SphereLight实例</span>
+light<span class="token punctuation">.</span>CreateIntensityAttr<span class="token punctuation">(</span><span class="token number">2e5</span><span class="token punctuation">)</span>  <span class="token comment"># 设置光照强度</span>
+light<span class="token punctuation">.</span>CreateColorAttr<span class="token punctuation">(</span>Gf<span class="token punctuation">.</span>Vec3f<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置RGB颜色</span>
+light<span class="token punctuation">.</span>AddScaleOp<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Set<span class="token punctuation">(</span>Gf<span class="token punctuation">.</span>Vec3f<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置缩放</span>
+light<span class="token punctuation">.</span>AddTranslateOp<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Set<span class="token punctuation">(</span>Gf<span class="token punctuation">.</span>Vec3f<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置坐标</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="创建平面-2"><a class="markdownIt-Anchor" href="#创建平面-2"></a> 创建平面</h4>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 创建平面</span>
+plane_path <span class="token operator">=</span> <span class="token string">"/World/Plane"</span>  <span class="token comment"># 设置prim_path</span>
+plane <span class="token operator">=</span> UsdGeom<span class="token punctuation">.</span>Plane<span class="token punctuation">.</span>Define<span class="token punctuation">(</span>self<span class="token punctuation">.</span>stage<span class="token punctuation">,</span> Sdf<span class="token punctuation">.</span>Path<span class="token punctuation">(</span>plane_path<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 创建Plane实例</span>
+plane<span class="token punctuation">.</span>CreateLengthAttr<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>  <span class="token comment"># 长度y (当垂直于z)</span>
+plane<span class="token punctuation">.</span>CreateWidthAttr<span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span>  <span class="token comment"># 宽度x (当垂直于z)</span>
+plane<span class="token punctuation">.</span>CreateAxisAttr<span class="token punctuation">(</span><span class="token string">'Z'</span><span class="token punctuation">)</span>  <span class="token comment"># 垂直轴 ['X', 'Y', 'Z']</span>
+UsdPhysics<span class="token punctuation">.</span>CollisionAPI<span class="token punctuation">.</span>Apply<span class="token punctuation">(</span>plane<span class="token punctuation">.</span>GetPrim<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 添加默认碰撞</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="创建长方体-2"><a class="markdownIt-Anchor" href="#创建长方体-2"></a> 创建长方体</h4>
+<p>不推荐使用pxr创建带有碰撞的物体，碰撞和IsaacSim默认的参数不一致，可能导致错误穿模，推荐用<a href="./#%E5%88%9B%E5%BB%BA%E7%AB%8B%E6%96%B9%E4%BD%93"><code>isaacsim.core.api.scenes.Scene</code></a></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 创建Cube BAD</span>
+cube_path <span class="token operator">=</span> <span class="token string">"/World/Cube"</span>
+cube <span class="token operator">=</span> UsdGeom<span class="token punctuation">.</span>Cube<span class="token punctuation">.</span>Define<span class="token punctuation">(</span>self<span class="token punctuation">.</span>stage<span class="token punctuation">,</span> Sdf<span class="token punctuation">.</span>Path<span class="token punctuation">(</span>cube_path<span class="token punctuation">)</span><span class="token punctuation">)</span>
+cube<span class="token punctuation">.</span>AddScaleOp<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Set<span class="token punctuation">(</span>Gf<span class="token punctuation">.</span>Vec3f<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+cube<span class="token punctuation">.</span>AddTranslateOp<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Set<span class="token punctuation">(</span>Gf<span class="token punctuation">.</span>Vec3f<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+cube<span class="token punctuation">.</span>AddRotateXYZOp<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Set<span class="token punctuation">(</span>Gf<span class="token punctuation">.</span>Vec3f<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">45</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment"># 设置旋转</span>
+cube<span class="token punctuation">.</span>CreateDisplayColorAttr<span class="token punctuation">(</span><span class="token punctuation">[</span>Gf<span class="token punctuation">.</span>Vec3f<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+UsdPhysics<span class="token punctuation">.</span>CollisionAPI<span class="token punctuation">.</span>Apply<span class="token punctuation">(</span>cube<span class="token punctuation">.</span>GetPrim<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+UsdPhysics<span class="token punctuation">.</span>RigidBodyAPI<span class="token punctuation">.</span>Apply<span class="token punctuation">(</span>cube<span class="token punctuation">.</span>GetPrim<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="sensors"><a class="markdownIt-Anchor" href="#sensors"></a> Sensors</h3>
+<h4 id="camera"><a class="markdownIt-Anchor" href="#camera"></a> Camera</h4>
+<p>参考：<a target="_blank" rel="noopener" href="https://docs.isaacsim.omniverse.nvidia.com/latest/sensors/isaacsim_sensors_camera.html">sensors/Camera Sensors</a>，基础获取rgb图像的使用方法：</p>
+<p>其实还有更多的方法可以通过<code>camera.add*</code>使用，例如绘制边界框、图像分割、速度矢量等</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> isaacsim<span class="token punctuation">.</span>sensors<span class="token punctuation">.</span>camera <span class="token keyword">import</span> Camera
+<span class="token keyword">import</span> isaacsim<span class="token punctuation">.</span>core<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>numpy<span class="token punctuation">.</span>rotations <span class="token keyword">as</span> rot_utils  <span class="token comment"># 还是调用的是scipy.spatial.transform.Rotation</span>
+<span class="token comment"># 初始化部分</span>
+camera <span class="token operator">=</span> Camera<span class="token punctuation">(</span>
+    <span class="token string">"/World/Camera"</span><span class="token punctuation">,</span>  <span class="token comment"># prim_path</span>
+    position<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">150</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    resolution<span class="token operator">=</span><span class="token punctuation">(</span>width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    frequency<span class="token operator">=</span>fps<span class="token punctuation">,</span>  <span class="token comment"># 这个fps只对self.camera.get_current_frame()有影响</span>
+    <span class="token comment"># 并且会自动检测(1/render_dt)%fps==0, 在render出的frame中插值得到current_frame</span>
+    orientation<span class="token operator">=</span>rot_utils<span class="token punctuation">.</span>euler_angles_to_quats<span class="token punctuation">(</span>np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">180</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> degrees<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token comment"># 环境启动时调用</span>
+camera<span class="token punctuation">.</span>initialize<span class="token punctuation">(</span><span class="token punctuation">)</span>
+world<span class="token punctuation">.</span>add_render_callback<span class="token punctuation">(</span><span class="token string">"render_step"</span><span class="token punctuation">,</span> render_step<span class="token punctuation">)</span>
+<span class="token comment"># 通常在每次渲染时获取</span>
+<span class="token keyword">def</span> <span class="token function">render_step</span><span class="token punctuation">(</span>dt<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    img <span class="token operator">=</span> camera<span class="token punctuation">.</span>get_rgb<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># fps=1/render_dt</span>
+    img <span class="token operator">=</span> self<span class="token punctuation">.</span>camera<span class="token punctuation">.</span>get_current_frame<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'rgba'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">,</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span>astype<span class="token punctuation">(</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span>  <span class="token comment"># fps=frequency</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>  <span class="token comment"># 记录、处理图像</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Robotics/" class="category-chain-item">Robotics</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Robotics/Simulator/" class="category-chain-item">Simulator</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>IsaacSim 笔记</div>
+      <div>https://wty-yy.xyz/posts/53877/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年4月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/33835/" title="Effective Modern C++笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Effective Modern C++笔记</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/953/" title="git常用命令">
+                        <span class="hidden-mobile">git常用命令</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

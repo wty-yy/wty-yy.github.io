@@ -22,25 +22,25 @@
     <meta name="description" content="参考文献：  YOLOv4: Optimal Speed and Accuracy of Object Detection 其中结论得到的最优模型用到的所有优化:  CIOU, DIOU：基于IOU给出了两个损失，其中CIOU作为边界框位置的损失，DIOU为NMS新的度量标准。 CSPNet：一种简单的对Backbone中ResBlock层进行优化的trick，可以大幅减少模型参数，同时具有稳定">
 <meta property="og:type" content="article">
 <meta property="og:title" content="YOLOv4 笔记">
-<meta property="og:url" content="https://wty-yy.github.io/posts/40875/index.html">
+<meta property="og:url" content="https://wty-yy.xyz/posts/40875/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="参考文献：  YOLOv4: Optimal Speed and Accuracy of Object Detection 其中结论得到的最优模型用到的所有优化:  CIOU, DIOU：基于IOU给出了两个损失，其中CIOU作为边界框位置的损失，DIOU为NMS新的度量标准。 CSPNet：一种简单的对Backbone中ResBlock层进行优化的trick，可以大幅减少模型参数，同时具有稳定">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv4/model_depart.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv4/CSPNet_to_ResBlock.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv4/CSPNet_ResBlock_detail.jpg">
+<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv4/model_depart.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv4/CSPNet_to_ResBlock.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv4/CSPNet_ResBlock_detail.jpg">
 <meta property="og:image" content="https://raw.githubusercontent.com/digantamisra98/Mish/master/Observations/Mish3.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv4/PANet.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv4/YOLOv4_hand.jpg">
-<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv4/DIOU.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv4/target_wh_distribution_coco.jpeg">
-<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv4/target_wh_distribution_pascal.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv4/PANet.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv4/YOLOv4_hand.jpg">
+<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv4/DIOU.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv4/target_wh_distribution_coco.jpeg">
+<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv4/target_wh_distribution_pascal.png">
 <meta property="article:published_time" content="2023-11-19T01:37:33.000Z">
 <meta property="article:modified_time" content="2024-12-29T05:55:54.496Z">
 <meta property="article:author" content="wty">
 <meta property="article:tag" content="YOLO">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv4/model_depart.png">
+<meta name="twitter:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv4/model_depart.png">
   
   
   
@@ -92,7 +92,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -596,7 +596,7 @@ val_transform <span class="token operator">=</span> A<span class="token punctuat
   <div class="license-box my-3">
     <div class="license-title">
       <div>YOLOv4 笔记</div>
-      <div>https://wty-yy.github.io/posts/40875/</div>
+      <div>https://wty-yy.xyz/posts/40875/</div>
     </div>
     <div class="license-meta">
       
