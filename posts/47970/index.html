@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/novnc_startup_application.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/server_screen_sharing.png">
 <meta property="article:published_time" content="2025-05-15T05:22:30.000Z">
-<meta property="article:modified_time" content="2025-05-18T14:59:03.483Z">
+<meta property="article:modified_time" content="2025-05-18T15:47:19.539Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
@@ -308,7 +308,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3k 字
+          3.1k 字
         
       </span>
     
@@ -319,7 +319,7 @@
         
         
         
-          25 分钟
+          26 分钟
         
       </span>
     
@@ -569,11 +569,17 @@ $ vglrun glxgears
 <h4 id="isaacgym启动后黑屏问题"><a class="markdownIt-Anchor" href="#isaacgym启动后黑屏问题"></a> IsaacGym启动后黑屏问题</h4>
 <p>这个是vncserver转发的问题，可以通过<a href="./#%E6%8E%A8%E8%8D%90xorg%E6%88%96xvfb%E6%94%AF%E6%8C%81nvidia%E9%A9%B1%E5%8A%A8%E6%B8%B2%E6%9F%93">Xorg启动渲染的方式解决</a></p>
 <h2 id="推荐xorg或xvfb支持nvidia驱动渲染"><a class="markdownIt-Anchor" href="#推荐xorg或xvfb支持nvidia驱动渲染"></a> （推荐）Xorg或Xvfb支持Nvidia驱动渲染</h2>
+<blockquote>
+<p>这一段启动需要sudo权限，以及至少4个终端，推荐用VsCode或者Tmux拆分终端</p>
+</blockquote>
 <p>这个可能是服务器上最好用的窗口渲染方法，在尝试了各种VNC转发，只有这种方法可以渲染<code>IsaacGym, IsaacSim</code></p>
 <p><code>Xorg</code>和<code>Xvfb</code>都是启动X服务的方法（<code>startx</code>也是便捷方法，但是启动后权限总是有问题于是不用），但只有<code>Xorg</code>才会用到<code>/etc/X11/xorg.conf</code>配置文件，因此使用<code>Xorg</code></p>
-<p>我们又想要修改分辨率，因此还需配置虚拟屏幕<code>xserver-xorg-video-dummy</code>，配置完成X服务相关内容后，再启动<code>x11vnc</code>用VNC协议转发图像界面，用<code>noVNC</code>使浏览器可以访问VNC界面，最后打开<code>xfce</code>会话就可以看到图形界面啦，从而也可以用Nvidia驱动渲染界面，打开<code>IsaacGym, IssaacSim</code>，流程如下：</p>
+<p>我们要直接用Nvidia显卡渲染需要自定义一个X服务，再启动<code>x11vnc</code>用VNC协议转发图像界面，用<code>noVNC</code>使浏览器可以访问VNC界面，最后打开<code>xfce</code>会话就可以看到图形界面啦，从而也可以用Nvidia驱动渲染界面，打开<code>IsaacGym, IssaacSim</code>，流程如下：</p>
 <ol>
-<li>查看当前可用的显卡驱动Bus ID后面会用到： <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 先用脚本将nvidia-smi -q查询到的BusID从16进制转为10进制</span>
+<li>查看当前可用的显卡驱动Bus ID后面会用到（或者从现在已有的<code>/etc/X11/xorg.conf</code>查看<code>BusID</code>，如果<code>xorg.conf</code>为空就用<code>nvidia-xconfig</code>初始化一个即可）： <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 用nvidia-smi -q查询BusID（16进制）, 需手动转为10进制</span>
+nvidia-smi <span class="token parameter variable">-q</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Bus Id"</span>
+
+<span class="token comment"># 脚本将nvidia-smi -q查询到的BusID从16进制转为10进制（脚本可能失效）</span>
 nvidia-smi <span class="token parameter variable">-q</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Bus Id"</span> <span class="token operator">|</span> <span class="token keyword">while</span> <span class="token builtin class-name">read</span> <span class="token parameter variable">-r</span> _ _ _ busid<span class="token punctuation">;</span> <span class="token keyword">do</span>
   <span class="token assign-left variable">bus</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f2</span><span class="token variable">)</span></span>
   <span class="token assign-left variable">dev</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f3</span><span class="token variable">)</span></span>
@@ -589,7 +595,7 @@ PCI:97:0:0
 PCI:129:0:0
 PCI:161:0:0
 PCI:193:0:0
-PCI:225:0:0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+PCI:225:0:0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
 <li>新建一个<code>sudo vim /etc/X11/xorg-nvidia-dummy-sceen.conf</code> X服务启动配置文件 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"Device"</span>
     Identifier     <span class="token string">"NvidiaGPU"</span>
@@ -618,7 +624,12 @@ Section <span class="token string">"ServerLayout"</span>
 EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
 <li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-sceen.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）</li>
-<li>启动转发：<code>x11vnc -display :1</code>（<a href="./#x11vnc%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%9C%A8%E6%9C%89%E7%9B%B4%E8%BF%9E%E7%9A%84%E6%98%BE%E7%A4%BA%E5%B1%8F%E6%97%B6%E4%BD%BF%E7%94%A8">安装x11vnc见上文</a>，设置转发窗口为<code>DISPLAY=:1</code>，还没设置密码）</li>
+<li>启动转发：<code>x11vnc -display :1</code>（<a href="./#x11vnc%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%9C%A8%E6%9C%89%E7%9B%B4%E8%BF%9E%E7%9A%84%E6%98%BE%E7%A4%BA%E5%B1%8F%E6%97%B6%E4%BD%BF%E7%94%A8">安装x11vnc见上文</a>，设置转发窗口为<code>DISPLAY=:1</code>）
+<ul>
+<li>配置密码（仅需一次）：<code>x11vnc -storepasswd</code>，默认保存在<code>~/.vnc/passwd</code>文件下</li>
+<li>启动转发：<code>x11vnc -display :1 -rfbauth ~/.vnc/passwd -forever -shared</code>（转发X服务器<code>:1</code>显示界面，使用密码，允许持续运行，不会在第一个客户端断开时退出，支持多电脑连接）</li>
+</ul>
+</li>
 <li>使用novnc显示：<code>./utils/novnc_proxy --vnc localhost:5900</code>（<a href="./#novnc%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8">安装noVNC见上文</a>）</li>
 </ol>
 <p>这时候在浏览器上输入<code>&lt;服务器IP&gt;:6080</code>即可连接上VNC，我们在终端中启动<code>DISPLAY=:1 xclock</code>一个小闹钟，可以看到屏幕，但是我们无法进行拖动，可以用<code>DISPLAY=:1 openbox</code>来进行简单窗口拖动，但是还是没有会话界面，下面启动一个会话界面<code>xfce4</code></p>
