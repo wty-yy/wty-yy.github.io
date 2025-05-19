@@ -19,25 +19,25 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToDesk或者向日葵即可（注意：向日葵不支持Ubuntu24.04），用本地局域网连接推荐用WIFI6，带宽更大  局域网屏幕共享 此处有两种常用工具：NoMachine和VNC，这里推荐用VNC服务器，延迟相比NoMachine更低些 NoMachine使用方法非常简单，直接在两">
+    <meta name="description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）  局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToDesk或者向日葵即可（注意：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux局域网屏幕共享">
+<meta property="og:title" content="实现Linux无头模式下硬件加速的屏幕共享">
 <meta property="og:url" content="https://wty-yy.xyz/posts/47970/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToDesk或者向日葵即可（注意：向日葵不支持Ubuntu24.04），用本地局域网连接推荐用WIFI6，带宽更大  局域网屏幕共享 此处有两种常用工具：NoMachine和VNC，这里推荐用VNC服务器，延迟相比NoMachine更低些 NoMachine使用方法非常简单，直接在两">
+<meta property="og:description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）  局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToDesk或者向日葵即可（注意：">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/novnc_startup_application.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/server_screen_sharing.png">
 <meta property="article:published_time" content="2025-05-15T05:22:30.000Z">
-<meta property="article:modified_time" content="2025-05-18T15:47:19.539Z">
+<meta property="article:modified_time" content="2025-05-19T14:09:22.608Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
   
   
   
-  <title>Linux局域网屏幕共享 - wty&#39;s blog</title>
+  <title>实现Linux无头模式下硬件加速的屏幕共享 - wty&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -285,7 +285,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Linux局域网屏幕共享"></span>
+            <span id="subtitle" data-typed-text="实现Linux无头模式下硬件加速的屏幕共享"></span>
           
         </div>
 
@@ -308,7 +308,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.1k 字
+          3.9k 字
         
       </span>
     
@@ -319,7 +319,7 @@
         
         
         
-          26 分钟
+          33 分钟
         
       </span>
     
@@ -356,14 +356,15 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Linux局域网屏幕共享</h1>
+            <h1 id="seo-header">实现Linux无头模式下硬件加速的屏幕共享</h1>
             
             
               <div class="markdown-body">
                 
-                <p>简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。</p>
-<p>如果是从外网连接，直接用<a target="_blank" rel="noopener" href="https://www.todesk.com/">ToDesk</a>或者<a target="_blank" rel="noopener" href="https://sunlogin.oray.com/">向日葵</a>即可（注意：向日葵不支持Ubuntu24.04），用本地局域网连接推荐用WIFI6，带宽更大</p>
+                <p>本文章分为两个部分，<a href="./#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%B1%8F%E5%B9%95%E5%85%B1%E4%BA%AB">第一部分</a>为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，<a href="./#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%AF%E8%A7%86%E5%8C%96">第二部分</a>为服务器中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）</p>
 <h1 id="局域网屏幕共享"><a class="markdownIt-Anchor" href="#局域网屏幕共享"></a> 局域网屏幕共享</h1>
+<p>简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。</p>
+<p>如果是从外网连接，直接用<a target="_blank" rel="noopener" href="https://www.todesk.com/">ToDesk</a>或者<a target="_blank" rel="noopener" href="https://sunlogin.oray.com/">向日葵</a>即可（注意：向日葵不支持Ubuntu24.04），用本地局域网连接推荐用WIFI6，带宽更大</p>
 <p>此处有两种常用工具：<a target="_blank" rel="noopener" href="https://www.nomachine.com/">NoMachine</a>和VNC，这里推荐用VNC服务器，延迟相比NoMachine更低些</p>
 <p>NoMachine使用方法非常简单，直接在两台电脑上都下载NoMachine，服务端打开server，客户端刷新即可看到可连接的设备，缺点是经常卡住不懂，需要手动刷新页面非常麻烦</p>
 <h2 id="vnc服务端"><a class="markdownIt-Anchor" href="#vnc服务端"></a> VNC服务端</h2>
@@ -372,8 +373,8 @@
 </blockquote>
 <p>VNC的服务端有两种常用的版本，分别为</p>
 <ul>
-<li><code>vncserver</code>（全称为<code>TigerVNC</code>）：创建一个全新的独立桌面（适合无图形界面的服务器）</li>
-<li><code>x11vnc</code>：直接共享当前屏幕内容（适合临时远程控制已有桌面的电脑）</li>
+<li><code>vncserver</code>（默认用<code>TigerVNC</code>, 还有<code>TightVNC</code>, <code>TurboVNC</code>等）：创建一个全新的独立桌面（适合无指定显卡渲染，完全由软件渲染，即没有配置<code>/etc/X11/xorg.conf</code>文件）</li>
+<li><code>x11vnc</code>：直接共享当前屏幕内容（适合有指定显卡渲染，即有配置<code>/etc/X11/xorg.conf</code>文件，需要手动启动一个X服务）</li>
 </ul>
 <p>分别的安装方法为：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># TigerVNC</span>
@@ -485,11 +486,12 @@ X <span class="token environment constant">DISPLAY</span> <span class="token com
 <h2 id="vnc客户端"><a class="markdownIt-Anchor" href="#vnc客户端"></a> VNC客户端</h2>
 <p>VNC的客户端也有两种选择，Windows推荐用<a target="_blank" rel="noopener" href="https://www.realvnc.com/en/">RealVNC</a>效果可能更好些（Linux也可以用，但是界面比较简陋），更推荐的是用网页版的<a target="_blank" rel="noopener" href="https://github.com/novnc/noVNC">noVNC</a>，直接通过网页即可访问，功能也很全。</p>
 <h3 id="novnc服务端自动启动"><a class="markdownIt-Anchor" href="#novnc服务端自动启动"></a> noVNC服务端自动启动</h3>
-<p>一个直接用网页即可访问VNC的服务端/客户端，非常方便，需要启动一个服务端创建网页，然后客户端就可以直接访问主机的网页啦，使用方法如下：</p>
+<p>一个直接用网页即可访问VNC的服务端/客户端，非常方便，只需在服务端启动一个网页程序，然后客户端就可以直接访问主机的网页啦，使用方法如下：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/Programs  <span class="token comment"># 进入到你想保存软件的位置</span>
 <span class="token function">git</span> clone https://github.com/novnc/noVNC.git
-<span class="token comment"># 启动客户端网页界面, vnc端口为默认为5900, 网页访问端口默认为6080</span>
-./noVNC/utils/novnc_proxy <span class="token parameter variable">--vnc</span> localhost:5900<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token comment"># 启动客户端网页界面, x11vnc端口为默认为5900, vncserver端口为590N, 这个N表示创建的DISPLAY=:N编号</span>
+<span class="token comment"># 网页访问端口默认为6080</span>
+./noVNC/utils/novnc_proxy <span class="token parameter variable">--vnc</span> localhost:5900<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>用<code>ifconfig</code>查看本机的IP地址，例如我的是<code>192.168.31.103</code>，则在局域网中的另一台电脑或手机可通过<code>http://192.168.31.103:6080/vnc.html</code>直接访问可视化界面</p>
 <p>自动启动配置如下，还是先创建启动脚本</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> /etc/init.d/novnc.sh  <span class="token comment"># 启动脚本内容如下</span>
@@ -626,8 +628,17 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 <li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-sceen.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）</li>
 <li>启动转发：<code>x11vnc -display :1</code>（<a href="./#x11vnc%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%9C%A8%E6%9C%89%E7%9B%B4%E8%BF%9E%E7%9A%84%E6%98%BE%E7%A4%BA%E5%B1%8F%E6%97%B6%E4%BD%BF%E7%94%A8">安装x11vnc见上文</a>，设置转发窗口为<code>DISPLAY=:1</code>）
 <ul>
-<li>配置密码（仅需一次）：<code>x11vnc -storepasswd</code>，默认保存在<code>~/.vnc/passwd</code>文件下</li>
-<li>启动转发：<code>x11vnc -display :1 -rfbauth ~/.vnc/passwd -forever -shared</code>（转发X服务器<code>:1</code>显示界面，使用密码，允许持续运行，不会在第一个客户端断开时退出，支持多电脑连接）</li>
+<li>配置密码（仅需一次）：<code>sudo x11vnc -storepasswd</code>，默认保存在<code>~/.vnc/passwd</code>文件下，这里就保存在<code>/root/.vnc/passwd</code>下了，后面写脚本更方便些</li>
+<li>启动转发：<code>x11vnc -display :1 -rfbauth /root/.vnc/passwd -forever -shared -loop</code>，每个参数的作用如下：
+<ul>
+<li><code>-display :1</code>：转发X服务器<code>:1</code>显示界面</li>
+<li><code>-rfbauth /root/.vnc/passwd</code>：使用密码</li>
+<li><code>-forever</code>：允许持续运行，不会在第一个客户端断开时退出</li>
+<li><code>-shared</code>：支持多电脑连接</li>
+<li><code>-loop</code>：如果发生错误（如 X session 暂时不可用），会自动尝试重新连接</li>
+<li><code>-noxdamage</code>：（可选）禁用 X Damage 扩展，用于修复某些情况下屏幕不刷新的问题（尤其在某些显卡驱动下）；当屏幕变化不大时，该扩展可以显著降低负载，并更快地检测变化区域</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>使用novnc显示：<code>./utils/novnc_proxy --vnc localhost:5900</code>（<a href="./#novnc%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8">安装noVNC见上文</a>）</li>
@@ -647,6 +658,118 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 </ol>
 <p>例如我们启动了<code>./isaac-sim.sh</code>, <code>python 1080_balls_of_solitude.py</code>效果如下，大功告成！（用工位的网络，非常流畅，和本机使用差不多效果，还只需要启动一个网页即可，非常方便，手机也可以）<br />
 <img src="/figures/Linux/screen_sharing/server_screen_sharing.png" srcset="/img/loading.gif" lazyload alt="服务器可视化效果" /></p>
+<p>通过<code>glxinfo | grep renderer</code>可查看使用的渲染：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ glxinfo <span class="token operator">|</span> <span class="token function">grep</span> renderer
+<span class="token comment"># 有Nvidia驱动</span>
+OpenGL renderer string: NVIDIA GeForce RTX <span class="token number">4090</span>/PCIe/SSE2
+<span class="token comment"># 没有显卡驱动，CPU软件渲染</span>
+OpenGL renderer string: llvmpipe <span class="token punctuation">(</span>LLVM <span class="token punctuation">..</span>.<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h3 id="一键启动脚本"><a class="markdownIt-Anchor" href="#一键启动脚本"></a> 一键启动脚本</h3>
+<p>创建脚本位置放在<code>/usr/local/bin/start-xfce-vnc.sh</code>（放哪都行，因为有<code>sudo</code>命令所以放在根目录下了），使用方法：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 设置一次启动权限</span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> +x /usr/local/bin/start-xfce-vnc.sh
+
+<span class="token function">sudo</span> <span class="token function">bash</span> start-xfce-vnc.sh  <span class="token comment"># 启动全部脚本</span>
+
+<span class="token comment"># ctrl+c即可退出, 并自动kill掉所有启动的进程</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>脚本功能：按照上述流程依次启动X服务、DBus会话服务、Xfce4会话、x11vnc转发、noVNC网页可视化；并自动检查<code>6080</code>端口是否被占用，若占用则说明已启动，无需再次启动</p>
+<blockquote>
+<p>下面脚本中的x11vnc密码就用<code>/root/.vnc/passwd</code>了，按需调整密码保存的位置</p>
+</blockquote>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        start-xfce-vnc.sh脚本
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+
+<span class="token comment"># 检查端口6080是否被占用</span>
+<span class="token keyword">if</span> <span class="token function">lsof</span> <span class="token parameter variable">-i:6080</span> <span class="token parameter variable">-sTCP:LISTEN</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"端口6080已被占用，脚本将不再继续启动，请用 http://[IP]/vnc.html 连接，export DISPLAY=:1 来可视化命令行启动的界面"</span>
+    <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+<span class="token keyword">fi</span>
+
+<span class="token comment"># 设置进程组，方便退出时统一管理</span>
+<span class="token builtin class-name">set</span> <span class="token parameter variable">-m</span>
+
+<span class="token comment"># 启动 X Server</span>
+<span class="token function">sudo</span> /usr/bin/X :1 <span class="token parameter variable">-config</span> /etc/X11/xorg-nvidia-dummy-sceen.conf <span class="token operator">&amp;</span>
+<span class="token assign-left variable">x_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+
+<span class="token comment"># 等待 X Server 启动</span>
+<span class="token function">sleep</span> <span class="token number">3</span>
+
+<span class="token comment"># 启动 DBus 会话服务</span>
+<span class="token builtin class-name">eval</span> <span class="token variable"><span class="token variable">$(</span>dbus-launch --sh-syntax<span class="token variable">)</span></span>
+<span class="token builtin class-name">export</span> <span class="token environment constant">DBUS_SESSION_BUS_ADDRESS</span>
+<span class="token builtin class-name">export</span> DBUS_SESSION_BUS_PID
+
+<span class="token comment"># 启动桌面环境（XFCE）</span>
+<span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1 startxfce4 <span class="token operator">&amp;</span>
+<span class="token assign-left variable">xfce_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+
+<span class="token comment"># 启动 x11vnc</span>
+x11vnc <span class="token parameter variable">-display</span> :1 <span class="token parameter variable">-rfbauth</span> /root/.vnc/passwd <span class="token parameter variable">-forever</span> <span class="token parameter variable">-shared</span> <span class="token parameter variable">-loop</span> <span class="token operator">&amp;</span>
+<span class="token assign-left variable">vnc_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+
+<span class="token comment"># 启动 noVNC proxy</span>
+/data/user/wutianyang/programs/noVNC/utils/novnc_proxy <span class="token parameter variable">--vnc</span> localhost:5900 <span class="token operator">&amp;</span>
+<span class="token assign-left variable">novnc_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+
+<span class="token function">sleep</span> <span class="token number">5</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"脚本全部启动完毕，请用 http://[IP]/vnc.html 连接，export DISPLAY=:1 来可视化命令行启动的界面"</span>
+
+<span class="token comment"># 定义清理函数</span>
+<span class="token function-name function">cleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"正在退出，清理子进程..."</span>
+
+    <span class="token comment"># 杀掉 novnc_proxy</span>
+    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$novnc_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 noVNC proxy (PID=<span class="token variable">$novnc_pid</span>)"</span>
+        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$novnc_pid</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># 杀掉 x11vnc</span>
+    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$vnc_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 x11vnc (PID=<span class="token variable">$vnc_pid</span>)"</span>
+        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$vnc_pid</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># 杀掉 XFCE</span>
+    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$xfce_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 XFCE (PID=<span class="token variable">$xfce_pid</span>)"</span>
+        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$xfce_pid</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># 杀掉 X Server</span>
+    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$x_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 X Server (PID=<span class="token variable">$x_pid</span>)"</span>
+        <span class="token function">sudo</span> <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$x_pid</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># 杀掉 dbus-daemon（如果有）</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">$DBUS_SESSION_BUS_PID</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 dbus-daemon (PID=<span class="token variable">$DBUS_SESSION_BUS_PID</span>)"</span>
+        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token string">"<span class="token variable">$DBUS_SESSION_BUS_PID</span>"</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token builtin class-name">echo</span> <span class="token string">"清理完成，退出脚本。"</span>
+    <span class="token builtin class-name">exit</span> <span class="token number">0</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment"># 注册退出清理钩子</span>
+<span class="token builtin class-name">trap</span> cleanup SIGINT SIGTERM EXIT
+
+<span class="token comment"># 等待桌面环境退出（或手动 Ctrl+C）</span>
+<span class="token function">wait</span> <span class="token variable">$xfce_pid</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>进一步可以在<code>~/.bashrc</code>中加入快捷启动命令：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># ~/.bashrc</span>
+<span class="token builtin class-name">alias</span> start-xfce-vnc<span class="token operator">=</span><span class="token string">"sudo bash /usr/local/bin/start-xfce-vnc.sh"</span>
+
+<span class="token builtin class-name">source</span> ~/.bashrc
+start-xfce-vnc  <span class="token comment"># 即可一键启动了</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="关闭已经启动的x服务"><a class="markdownIt-Anchor" href="#关闭已经启动的x服务"></a> 关闭已经启动的X服务</h3>
 <p>通过<code>ps aux | grep &quot;Xorg :1&quot;</code>命令可以查看当前启动的服务（例如我是在<code>DISPLAY=:1</code>上启动的），那么就要关掉<code>/usr/lib/xorg/Xorg</code>这个程序启动的PID，<code>sudo kill -9 3557223</code>即可</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ <span class="token function">ps</span> aux <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Xorg :1"</span>
@@ -690,7 +813,7 @@ root     <span class="token number">3557223</span> <span class="token number">20
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Linux局域网屏幕共享</div>
+      <div>实现Linux无头模式下硬件加速的屏幕共享</div>
       <div>https://wty-yy.xyz/posts/47970/</div>
     </div>
     <div class="license-meta">
