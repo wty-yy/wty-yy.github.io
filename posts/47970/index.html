@@ -28,9 +28,8 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/novnc_startup_application.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/server_screen_sharing.png">
 <meta property="article:published_time" content="2025-05-15T05:22:30.000Z">
-<meta property="article:modified_time" content="2025-05-19T14:09:22.608Z">
+<meta property="article:modified_time" content="2025-05-22T13:55:27.946Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
@@ -102,7 +101,7 @@
 <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
-<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><script src="/assets/js/DPlayer.min.js"></script></head>
 
 
 <body>
@@ -308,7 +307,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.9k 字
+          4.2k 字
         
       </span>
     
@@ -319,7 +318,7 @@
         
         
         
-          33 分钟
+          36 分钟
         
       </span>
     
@@ -543,7 +542,10 @@ gnome-session <span class="token parameter variable">--session</span><span class
 <p>不清楚问题原因，可能没有管理员全线无法进入界面</p>
 <h4 id="转发gdm3后黑屏"><a class="markdownIt-Anchor" href="#转发gdm3后黑屏"></a> 转发gdm3后黑屏</h4>
 <p>不清楚问题原因，推荐使用后续的openbox直接启动方法</p>
-<h4 id="使用gpu渲染提升速度"><a class="markdownIt-Anchor" href="#使用gpu渲染提升速度"></a> 使用GPU渲染提升速度</h4>
+<h4 id="使用turbovncvirtualgl用硬件提升渲染速度"><a class="markdownIt-Anchor" href="#使用turbovncvirtualgl用硬件提升渲染速度"></a> 使用TurboVNC+VirtualGL用硬件提升渲染速度</h4>
+<blockquote>
+<p>此方法不如<a href="./#%E6%8E%A8%E8%8D%90xorg%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%AF%E5%8A%A8%E4%BB%A5%E6%94%AF%E6%8C%81nvidia%E9%A9%B1%E5%8A%A8%E6%B8%B2%E6%9F%93">（推荐）Xorg服务器启动以支持Nvidia驱动渲染</a>，因为IsaacSim和IsaacGym通过vglrun启动时仍然会出现黑屏问题</p>
+</blockquote>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> virtualgl
 <span class="token comment"># 或者在官网下载</span>
 https://sourceforge.net/projects/virtualgl/files/
@@ -564,15 +566,18 @@ OpenGL renderer string: NVIDIA GeForce RTX <span class="token number">4090</span
 <span class="token number">6757</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">1351.280</span> FPS
 <span class="token number">6821</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">1364.121</span> FPS
 
-$ vglrun glxgears
-<span class="token number">8169</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">1633.758</span> FPS
-<span class="token number">8067</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">1613.251</span> FPS<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+❯ vglrun <span class="token parameter variable">-d</span> :1 glxgears
+<span class="token number">14218</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">2843.435</span> FPS
+<span class="token number">14330</span> frames <span class="token keyword">in</span> <span class="token number">5.0</span> seconds <span class="token operator">=</span> <span class="token number">2865.927</span> FPS<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>安装方法参考：<a target="_blank" rel="noopener" href="https://shaoyecheng.com/uncategorized/2020-04-08-TurboVNC-VirtualGL%EF%BC%9A%E5%AE%9E%E7%8E%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%A4%9A%E7%94%A8%E6%88%B7%E5%9B%BE%E5%BD%A2%E5%8C%96%E8%AE%BF%E9%97%AE%E4%B8%8E%E7%A1%AC%E4%BB%B6%E5%8A%A0%E9%80%9F.html">cyoahs - TurboVNC+VirtualGL：实现服务器的多用户图形化访问与硬件加速</a></p>
 <h4 id="isaacgym启动后黑屏问题"><a class="markdownIt-Anchor" href="#isaacgym启动后黑屏问题"></a> IsaacGym启动后黑屏问题</h4>
 <p>这个是vncserver转发的问题，可以通过<a href="./#%E6%8E%A8%E8%8D%90xorg%E6%88%96xvfb%E6%94%AF%E6%8C%81nvidia%E9%A9%B1%E5%8A%A8%E6%B8%B2%E6%9F%93">Xorg启动渲染的方式解决</a></p>
-<h2 id="推荐xorg或xvfb支持nvidia驱动渲染"><a class="markdownIt-Anchor" href="#推荐xorg或xvfb支持nvidia驱动渲染"></a> （推荐）Xorg或Xvfb支持Nvidia驱动渲染</h2>
+<h4 id="gnome和mujoco无法启动的问题"><a class="markdownIt-Anchor" href="#gnome和mujoco无法启动的问题"></a> Gnome和Mujoco无法启动的问题</h4>
+<p>Mujoco报错为<code>python: /builds/florianrhiem/pyGLFW/glfw-3.4/src/monitor.c:449: glfwGetVideoMode: Assertion monitor != NULL' failed.</code></p>
+<p>解决：在<code>xorg.conf</code>配置文件中没有对虚拟Monitor进行配置（参考下述<code>xorg-nvidia-dummy-monitor.conf</code>配置文件）</p>
+<h2 id="推荐xorg服务器启动以支持nvidia驱动渲染"><a class="markdownIt-Anchor" href="#推荐xorg服务器启动以支持nvidia驱动渲染"></a> （推荐）Xorg服务器启动以支持Nvidia驱动渲染</h2>
 <blockquote>
-<p>这一段启动需要sudo权限，以及至少4个终端，推荐用VsCode或者Tmux拆分终端</p>
+<p>这一段启动需要sudo权限，以及至少4个终端，推荐用VsCode或者Tmux拆分终端，或者直接参考最后的一键启动脚本</p>
 </blockquote>
 <p>这个可能是服务器上最好用的窗口渲染方法，在尝试了各种VNC转发，只有这种方法可以渲染<code>IsaacGym, IsaacSim</code></p>
 <p><code>Xorg</code>和<code>Xvfb</code>都是启动X服务的方法（<code>startx</code>也是便捷方法，但是启动后权限总是有问题于是不用），但只有<code>Xorg</code>才会用到<code>/etc/X11/xorg.conf</code>配置文件，因此使用<code>Xorg</code></p>
@@ -589,6 +594,7 @@ nvidia-smi <span class="token parameter variable">-q</span> <span class="token o
   <span class="token assign-left variable">dev_hex</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f4</span> <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">'.'</span> <span class="token parameter variable">-f1</span><span class="token variable">)</span></span>
   <span class="token builtin class-name">printf</span> <span class="token string">"PCI:%d:%d:%d<span class="token entity" title="\n">\n</span>"</span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$bus<span class="token variable">))</span></span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$dev_hex<span class="token variable">))</span></span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$func<span class="token variable">))</span></span>
 <span class="token keyword">done</span>
+
 <span class="token comment"># 我的输出为（8张显卡）</span>
 PCI:1:0:0
 PCI:36:0:0
@@ -597,39 +603,50 @@ PCI:97:0:0
 PCI:129:0:0
 PCI:161:0:0
 PCI:193:0:0
-PCI:225:0:0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+PCI:225:0:0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
-<li>新建一个<code>sudo vim /etc/X11/xorg-nvidia-dummy-sceen.conf</code> X服务启动配置文件 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"Device"</span>
+<li>新建一个<code>sudo vim /etc/X11/xorg-nvidia-dummy-monitor.conf</code> X服务启动配置文件，<a href="/file/linux_screen_sharing/edid.bin">在这里下载edid.bin</a>是我自己显示屏的EDID文件，放到<code>/etc/X11/edid.bin</code>下，这样就可以得到和我显示屏一样的配置文件了 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"Device"</span>
     Identifier     <span class="token string">"NvidiaGPU"</span>
     Driver         <span class="token string">"nvidia"</span>
     VendorName     <span class="token string">"NVIDIA Corporation"</span>
     BoardName      <span class="token string">"GeForce RTX 4090"</span>
-    BusID          <span class="token string">"PCI:97:0:0"</span>  # 从上述输出的BusID中选一个用
+    BusID          <span class="token string">"PCI:97:0:0"</span>
     Option         <span class="token string">"AllowEmptyInitialConfiguration"</span> <span class="token string">"true"</span>
-    Option         <span class="token string">"UseDisplayDevice"</span> <span class="token string">"None"</span>
+    Option         <span class="token string">"ConnectedMonitor"</span> <span class="token string">"DFP-0"</span>
+    Option         <span class="token string">"CustomEDID"</span> <span class="token string">"DFP-0:/etc/X11/edid.bin"</span>  # 显示器配置文件
+EndSection
+
+Section <span class="token string">"Monitor"</span>  # 必须要Monitor才能启动gnome界面<span class="token punctuation">,</span> mujoco也需要
+    Identifier     <span class="token string">"Monitor0"</span>
+    VendorName     <span class="token string">"Generic"</span>
+    ModelName      <span class="token string">"Virtual Monitor"</span>
+    HorizSync       <span class="token number">28.0</span> <span class="token operator">-</span> <span class="token number">72.0</span>
+    VertRefresh     <span class="token number">50.0</span> <span class="token operator">-</span> <span class="token number">75.0</span>
+    Option         <span class="token string">"DPMS"</span>
 EndSection
 
 Section <span class="token string">"Screen"</span>
     Identifier     <span class="token string">"Screen0"</span>
     Device         <span class="token string">"NvidiaGPU"</span>
-    DefaultDepth   <span class="token number">24</span>
+    Monitor        <span class="token string">"Monitor0"</span>
+    DefaultDepth    <span class="token number">24</span>
     SubSection <span class="token string">"Display"</span>
-        Depth      <span class="token number">24</span>
-        Modes      <span class="token string">"1920x1080"</span>  # 修改为你想要的分辨率<span class="token punctuation">,</span> eg<span class="token operator">.</span> <span class="token string">"1280x720"</span>
-        Virtual    <span class="token number">1920</span> <span class="token number">1080</span>  # 修改为你想要的分辨率<span class="token punctuation">,</span> eg<span class="token operator">.</span> <span class="token number">1280</span> <span class="token number">720</span>
+        Depth       <span class="token number">24</span>
+        Modes      <span class="token string">"1920x1080"</span>
+        Virtual     <span class="token number">1920</span> <span class="token number">1080</span>
     EndSubSection
 EndSection
 
 Section <span class="token string">"ServerLayout"</span>
     Identifier     <span class="token string">"Layout0"</span>
     Screen         <span class="token string">"Screen0"</span>
-EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
-<li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-sceen.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）</li>
+<li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-monitor.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）</li>
 <li>启动转发：<code>x11vnc -display :1</code>（<a href="./#x11vnc%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%9C%A8%E6%9C%89%E7%9B%B4%E8%BF%9E%E7%9A%84%E6%98%BE%E7%A4%BA%E5%B1%8F%E6%97%B6%E4%BD%BF%E7%94%A8">安装x11vnc见上文</a>，设置转发窗口为<code>DISPLAY=:1</code>）
 <ul>
 <li>配置密码（仅需一次）：<code>sudo x11vnc -storepasswd</code>，默认保存在<code>~/.vnc/passwd</code>文件下，这里就保存在<code>/root/.vnc/passwd</code>下了，后面写脚本更方便些</li>
-<li>启动转发：<code>x11vnc -display :1 -rfbauth /root/.vnc/passwd -forever -shared -loop</code>，每个参数的作用如下：
+<li>启动转发：<code>sudo x11vnc -display :1 -rfbauth /root/.vnc/passwd -forever -shared -loop</code>，每个参数的作用如下：
 <ul>
 <li><code>-display :1</code>：转发X服务器<code>:1</code>显示界面</li>
 <li><code>-rfbauth /root/.vnc/passwd</code>：使用密码</li>
@@ -643,7 +660,7 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 </li>
 <li>使用novnc显示：<code>./utils/novnc_proxy --vnc localhost:5900</code>（<a href="./#novnc%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8">安装noVNC见上文</a>）</li>
 </ol>
-<p>这时候在浏览器上输入<code>&lt;服务器IP&gt;:6080</code>即可连接上VNC，我们在终端中启动<code>DISPLAY=:1 xclock</code>一个小闹钟，可以看到屏幕，但是我们无法进行拖动，可以用<code>DISPLAY=:1 openbox</code>来进行简单窗口拖动，但是还是没有会话界面，下面启动一个会话界面<code>xfce4</code></p>
+<p>这时候在浏览器上输入<code>&lt;服务器IP&gt;:6080</code>即可连接上VNC，我们在终端中启动<code>DISPLAY=:1 xclock</code>一个小闹钟，可以看到屏幕，但是我们无法进行拖动，可以用<code>DISPLAY=:1 openbox</code>来进行简单窗口拖动，但是还是没有会话界面，下面启动一个会话界面<code>xfce4</code>或者<code>gnome</code></p>
 <ol start="6">
 <li>先启动DBUS会话服务 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动</span>
 <span class="token builtin class-name">eval</span> <span class="token variable"><span class="token variable">$(</span>dbus-launch --sh-syntax<span class="token variable">)</span></span>
@@ -653,11 +670,11 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 <span class="token builtin class-name">echo</span> <span class="token environment constant">$DBUS_SESSION_BUS_ADDRESS</span>
 <span class="token comment"># unix:abstract=/tmp/dbus-7vGHzBEZzq,guid=7fe9bcd482e14c8e918179976829d0cd</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
-<li>启动xfce4：<code>DISPLAY=:1 startxfce4</code></li>
+<li>启动gnome：<code>DISPLAY=:1 gnome-session</code>，或者，启动xfce4：<code>DISPLAY=:1 startxfce4</code></li>
 <li>通过命令行打开可视化程序，只需要在终端执行一次<code>export DISPLAY=:1</code>，后续的所有可视化窗口都会在这个界面显示出来啦</li>
 </ol>
-<p>例如我们启动了<code>./isaac-sim.sh</code>, <code>python 1080_balls_of_solitude.py</code>效果如下，大功告成！（用工位的网络，非常流畅，和本机使用差不多效果，还只需要启动一个网页即可，非常方便，手机也可以）<br />
-<img src="/figures/Linux/screen_sharing/server_screen_sharing.png" srcset="/img/loading.gif" lazyload alt="服务器可视化效果" /></p>
+<p>例如我们在Gnome下启动了<code>python -m mujoco.viewer</code>，<code>./isaac-sim.sh</code>, <code>python 1080_balls_of_solitude.py</code>效果如下，大功告成！（用工位的网络，非常流畅，和本机使用差不多效果，还只需要启动一个网页即可，非常方便，手机也可以）</p>
+<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/server_vnc_mujoco_isaac_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <p>通过<code>glxinfo | grep renderer</code>可查看使用的渲染：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ glxinfo <span class="token operator">|</span> <span class="token function">grep</span> renderer
 <span class="token comment"># 有Nvidia驱动</span>
@@ -667,25 +684,25 @@ OpenGL renderer string: llvmpipe <span class="token punctuation">(</span>LLVM <s
 <h3 id="一键启动脚本"><a class="markdownIt-Anchor" href="#一键启动脚本"></a> 一键启动脚本</h3>
 <p>创建脚本位置放在<code>/usr/local/bin/start-xfce-vnc.sh</code>（放哪都行，因为有<code>sudo</code>命令所以放在根目录下了），使用方法：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 设置一次启动权限</span>
-<span class="token function">sudo</span> <span class="token function">chmod</span> +x /usr/local/bin/start-xfce-vnc.sh
+<span class="token function">sudo</span> <span class="token function">chmod</span> +x /usr/local/bin/start-gnome-vnc.sh
 
-<span class="token function">sudo</span> <span class="token function">bash</span> start-xfce-vnc.sh  <span class="token comment"># 启动全部脚本</span>
+<span class="token function">sudo</span> <span class="token function">bash</span> start-gnome-vnc.sh  <span class="token comment"># 启动全部脚本</span>
 
 <span class="token comment"># ctrl+c即可退出, 并自动kill掉所有启动的进程</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p>脚本功能：按照上述流程依次启动X服务、DBus会话服务、Xfce4会话、x11vnc转发、noVNC网页可视化；并自动检查<code>6080</code>端口是否被占用，若占用则说明已启动，无需再次启动</p>
+<p>脚本功能：按照上述流程依次启动X服务、DBus会话服务、gnome会话、x11vnc转发、noVNC网页可视化；并自动检查<code>6080</code>端口是否被占用，若占用则说明已启动，无需再次启动</p>
 <blockquote>
-<p>下面脚本中的x11vnc密码就用<code>/root/.vnc/passwd</code>了，按需调整密码保存的位置</p>
+<p>下面脚本中的x11vnc密码就用<code>/root/.vnc/passwd</code>了，按需调整密码保存的位置（脚本由ChatGPT 4o生成）</p>
 </blockquote>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
-        start-xfce-vnc.sh脚本
+        start-gnome-vnc.sh脚本
     </div>
     <div class='spoiler-content'>
         <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
 <span class="token comment"># 检查端口6080是否被占用</span>
 <span class="token keyword">if</span> <span class="token function">lsof</span> <span class="token parameter variable">-i:6080</span> <span class="token parameter variable">-sTCP:LISTEN</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
-    <span class="token builtin class-name">echo</span> <span class="token string">"端口6080已被占用，脚本将不再继续启动，请用 http://[IP]/vnc.html 连接，export DISPLAY=:1 来可视化命令行启动的界面"</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"端口6080已被占用，脚本将不再继续启动，请用 http://10.184.17.132:6080/vnc.html 连接，export DISPLAY=:1 来可视化命令行启动的界面"</span>
     <span class="token builtin class-name">exit</span> <span class="token number">1</span>
 <span class="token keyword">fi</span>
 
@@ -693,7 +710,7 @@ OpenGL renderer string: llvmpipe <span class="token punctuation">(</span>LLVM <s
 <span class="token builtin class-name">set</span> <span class="token parameter variable">-m</span>
 
 <span class="token comment"># 启动 X Server</span>
-<span class="token function">sudo</span> /usr/bin/X :1 <span class="token parameter variable">-config</span> /etc/X11/xorg-nvidia-dummy-sceen.conf <span class="token operator">&amp;</span>
+<span class="token function">sudo</span> /usr/bin/X :1 <span class="token parameter variable">-config</span> /etc/X11/xorg-nvidia-dummy-monitor.conf <span class="token operator">&amp;</span>
 <span class="token assign-left variable">x_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
 
 <span class="token comment"># 等待 X Server 启动</span>
@@ -705,8 +722,9 @@ OpenGL renderer string: llvmpipe <span class="token punctuation">(</span>LLVM <s
 <span class="token builtin class-name">export</span> DBUS_SESSION_BUS_PID
 
 <span class="token comment"># 启动桌面环境（XFCE）</span>
-<span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1 startxfce4 <span class="token operator">&amp;</span>
-<span class="token assign-left variable">xfce_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+<span class="token comment"># DISPLAY=:1 startxfce4 &amp;  # 或者启动xfce4</span>
+<span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1 gnome-session <span class="token operator">&amp;</span>
+<span class="token assign-left variable">gnome_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
 
 <span class="token comment"># 启动 x11vnc</span>
 x11vnc <span class="token parameter variable">-display</span> :1 <span class="token parameter variable">-rfbauth</span> /root/.vnc/passwd <span class="token parameter variable">-forever</span> <span class="token parameter variable">-shared</span> <span class="token parameter variable">-loop</span> <span class="token operator">&amp;</span>
@@ -717,7 +735,7 @@ x11vnc <span class="token parameter variable">-display</span> :1 <span class="to
 <span class="token assign-left variable">novnc_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
 
 <span class="token function">sleep</span> <span class="token number">5</span>
-<span class="token builtin class-name">echo</span> <span class="token string">"脚本全部启动完毕，请用 http://[IP]/vnc.html 连接，export DISPLAY=:1 来可视化命令行启动的界面"</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"脚本全部启动完毕，请用 http://10.184.17.132:6080/vnc.html 连接，export DISPLAY=:1 来可视化命令行启动的界面"</span>
 
 <span class="token comment"># 定义清理函数</span>
 <span class="token function-name function">cleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -736,9 +754,9 @@ x11vnc <span class="token parameter variable">-display</span> :1 <span class="to
     <span class="token keyword">fi</span>
 
     <span class="token comment"># 杀掉 XFCE</span>
-    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$xfce_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
-        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 XFCE (PID=<span class="token variable">$xfce_pid</span>)"</span>
-        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$xfce_pid</span>
+    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$gnome_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 XFCE (PID=<span class="token variable">$gnome_pid</span>)"</span>
+        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$gnome_pid</span>
     <span class="token keyword">fi</span>
 
     <span class="token comment"># 杀掉 X Server</span>
@@ -760,16 +778,17 @@ x11vnc <span class="token parameter variable">-display</span> :1 <span class="to
 <span class="token comment"># 注册退出清理钩子</span>
 <span class="token builtin class-name">trap</span> cleanup SIGINT SIGTERM EXIT
 
-<span class="token comment"># 等待桌面环境退出（或手动 Ctrl+C）</span>
-<span class="token function">wait</span> <span class="token variable">$xfce_pid</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token comment"># 当X服务退出（或手动 Ctrl+C）全部kill</span>
+<span class="token function">wait</span> <span class="token variable">$x_pid</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
     </div>
 </div>
 <p>进一步可以在<code>~/.bashrc</code>中加入快捷启动命令：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># ~/.bashrc</span>
-<span class="token builtin class-name">alias</span> start-xfce-vnc<span class="token operator">=</span><span class="token string">"sudo bash /usr/local/bin/start-xfce-vnc.sh"</span>
+<span class="token builtin class-name">alias</span> start-gnome-vnc<span class="token operator">=</span><span class="token string">"sudo bash /usr/local/bin/start-gnome-vnc.sh"</span>
 
 <span class="token builtin class-name">source</span> ~/.bashrc
-start-xfce-vnc  <span class="token comment"># 即可一键启动了</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+start-gnome-vnc  <span class="token comment"># 即可一键启动了</span>
+<span class="token comment"># 退出使用Ctrl+C或者找到Xorg进程将其kill</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="关闭已经启动的x服务"><a class="markdownIt-Anchor" href="#关闭已经启动的x服务"></a> 关闭已经启动的X服务</h3>
 <p>通过<code>ps aux | grep &quot;Xorg :1&quot;</code>命令可以查看当前启动的服务（例如我是在<code>DISPLAY=:1</code>上启动的），那么就要关掉<code>/usr/lib/xorg/Xorg</code>这个程序启动的PID，<code>sudo kill -9 3557223</code>即可</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ <span class="token function">ps</span> aux <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Xorg :1"</span>
