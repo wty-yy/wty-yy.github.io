@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/novnc_startup_application.png">
 <meta property="article:published_time" content="2025-05-15T05:22:30.000Z">
-<meta property="article:modified_time" content="2025-05-22T13:55:27.946Z">
+<meta property="article:modified_time" content="2025-05-30T08:29:24.492Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
@@ -307,7 +307,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.2k 字
+          4.3k 字
         
       </span>
     
@@ -642,10 +642,14 @@ Section <span class="token string">"ServerLayout"</span>
     Screen         <span class="token string">"Screen0"</span>
 EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
-<li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-monitor.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）</li>
-<li>启动转发：<code>x11vnc -display :1</code>（<a href="./#x11vnc%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%9C%A8%E6%9C%89%E7%9B%B4%E8%BF%9E%E7%9A%84%E6%98%BE%E7%A4%BA%E5%B1%8F%E6%97%B6%E4%BD%BF%E7%94%A8">安装x11vnc见上文</a>，设置转发窗口为<code>DISPLAY=:1</code>）
+<li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-monitor.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）
+<blockquote>
+<p>检查当前DISPLAY下的分辨率和Monitor连接状态：<code>DISPLAY=:1 xrandr</code>，<code>DISPLAY=:1 xrandr --listmonitors</code>输出显示有屏幕型号即正确</p>
+</blockquote>
+</li>
+<li>启动<code>x11vnc</code>转发：（<a href="./#x11vnc%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%9C%A8%E6%9C%89%E7%9B%B4%E8%BF%9E%E7%9A%84%E6%98%BE%E7%A4%BA%E5%B1%8F%E6%97%B6%E4%BD%BF%E7%94%A8">安装x11vnc见上文</a>）
 <ul>
-<li>配置密码（仅需一次）：<code>sudo x11vnc -storepasswd</code>，默认保存在<code>~/.vnc/passwd</code>文件下，这里就保存在<code>/root/.vnc/passwd</code>下了，后面写脚本更方便些</li>
+<li>配置密码（仅需一次）：<code>sudo x11vnc -storepasswd</code>，默认保存在<code>~/.vnc/passwd</code>文件下，这里就保存在<code>/root/.vnc/passwd</code>下了，后面写脚本更方便些（需要注意这样启动的是root的桌面，如果无需root，还是将密码保存在用户文件夹下）</li>
 <li>启动转发：<code>sudo x11vnc -display :1 -rfbauth /root/.vnc/passwd -forever -shared -loop</code>，每个参数的作用如下：
 <ul>
 <li><code>-display :1</code>：转发X服务器<code>:1</code>显示界面</li>
@@ -682,7 +686,7 @@ OpenGL renderer string: NVIDIA GeForce RTX <span class="token number">4090</span
 <span class="token comment"># 没有显卡驱动，CPU软件渲染</span>
 OpenGL renderer string: llvmpipe <span class="token punctuation">(</span>LLVM <span class="token punctuation">..</span>.<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="一键启动脚本"><a class="markdownIt-Anchor" href="#一键启动脚本"></a> 一键启动脚本</h3>
-<p>创建脚本位置放在<code>/usr/local/bin/start-xfce-vnc.sh</code>（放哪都行，因为有<code>sudo</code>命令所以放在根目录下了），使用方法：</p>
+<p>创建脚本位置放在<code>/usr/local/bin/start-gnome-vnc.sh</code>（放哪都行，因为有<code>sudo</code>命令所以放在根目录下了），使用方法：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 设置一次启动权限</span>
 <span class="token function">sudo</span> <span class="token function">chmod</span> +x /usr/local/bin/start-gnome-vnc.sh
 
@@ -690,9 +694,10 @@ OpenGL renderer string: llvmpipe <span class="token punctuation">(</span>LLVM <s
 
 <span class="token comment"># ctrl+c即可退出, 并自动kill掉所有启动的进程</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>脚本功能：按照上述流程依次启动X服务、DBus会话服务、gnome会话、x11vnc转发、noVNC网页可视化；并自动检查<code>6080</code>端口是否被占用，若占用则说明已启动，无需再次启动</p>
-<blockquote>
-<p>下面脚本中的x11vnc密码就用<code>/root/.vnc/passwd</code>了，按需调整密码保存的位置（脚本由ChatGPT 4o生成）</p>
-</blockquote>
+<ol>
+<li>下面脚本中的x11vnc密码就用<code>/root/.vnc/passwd</code>了，按需调整密码保存的位置（脚本由ChatGPT 4o生成）</li>
+<li>需要调整noVNC保存的路径哦</li>
+</ol>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
         start-gnome-vnc.sh脚本
