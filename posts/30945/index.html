@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/ros2/ros2_controller_struct.drawio.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/ros2/ros2_controller_start_success.png">
 <meta property="article:published_time" content="2025-01-12T02:07:41.000Z">
-<meta property="article:modified_time" content="2025-03-09T12:08:03.025Z">
+<meta property="article:modified_time" content="2025-06-22T12:10:51.780Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/ros2/urdf_joint_and_link.png">
@@ -321,7 +321,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5k 字
+          5.4k 字
         
       </span>
     
@@ -332,7 +332,7 @@
         
         
         
-          42 分钟
+          45 分钟
         
       </span>
     
@@ -397,62 +397,120 @@
 colcon build --symlink-install  <span class="token comment"># 编译所有包</span>
 colcon build --symlink-install --packages-select <span class="token operator">&lt;</span>package<span class="token operator"><span class="token file-descriptor important">1</span>></span> <span class="token punctuation">..</span>.  <span class="token comment"># 编译指定包</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
 <p><code>--symlink-install</code>使用虚拟连接python代码，URDF，yaml配置文件（无需编译的文件），当项目中文件修改后，运行即是最新更新的文件。</p>
-<h2 id="launch文件"><a class="markdownIt-Anchor" href="#launch文件"></a> Launch文件</h2>
-<h3 id="指令基础"><a class="markdownIt-Anchor" href="#指令基础"></a> 指令基础</h3>
-<h4 id="启动文件基础"><a class="markdownIt-Anchor" href="#启动文件基础"></a> 启动文件基础</h4>
-<p>启动文件只需实现<code>generate_launch_description</code>函数，该函数返回<code>launch.LaunchDescription</code>类</p>
-<h4 id="启动launch文件"><a class="markdownIt-Anchor" href="#启动launch文件"></a> 启动Launch文件</h4>
-<p>创建<code>*.launch.py</code>文件，一般放在项目的<code>launch/</code>文件夹下</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> launch <span class="token keyword">import</span> LaunchDescription
-<span class="token keyword">from</span> launch<span class="token punctuation">.</span>actions <span class="token keyword">import</span> DeclareLaunchArgument<span class="token punctuation">,</span> IncludeLaunchDescription<span class="token punctuation">,</span> ExecuteProcess
-<span class="token keyword">from</span> launch<span class="token punctuation">.</span>launch_description_sources <span class="token keyword">import</span> PythonLaunchDescriptionSource
-<span class="token keyword">from</span> launch_ros<span class="token punctuation">.</span>actions <span class="token keyword">import</span> Node
-<span class="token keyword">from</span> launch<span class="token punctuation">.</span>conditions <span class="token keyword">import</span> IfCondition
-<span class="token keyword">def</span> <span class="token function">generate_launch_description</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-  <span class="token keyword">return</span> LaunchDescription<span class="token punctuation">(</span><span class="token punctuation">[</span>  <span class="token comment"># 定义Launch启动的对象</span>
-    <span class="token comment"># 定义launch文件的cmd argument参数输入</span>
-    <span class="token comment"># 使用方法ros2 launch *.launch.py robot_name:=cubot</span>
-    DeclareLaunchArgument<span class="token punctuation">(</span>  
-      name<span class="token operator">=</span><span class="token string">'robot_name'</span><span class="token punctuation">,</span>  <span class="token comment"># 参数名为robot_name</span>
-      default_value<span class="token operator">=</span><span class="token string">'cubot'</span><span class="token punctuation">,</span>  <span class="token comment"># 默认参数</span>
-      description<span class="token operator">=</span><span class="token string">'Define your robot name'</span>  <span class="token comment"># 对参数的描述</span>
-    <span class="token punctuation">)</span><span class="token punctuation">,</span>
-    DeclareLaunchArgument<span class="token punctuation">(</span>  
-      name<span class="token operator">=</span><span class="token string">'rviz'</span><span class="token punctuation">,</span>  <span class="token comment"># 参数名为rviz</span>
-      default_value<span class="token operator">=</span>false<span class="token punctuation">,</span>  <span class="token comment"># 默认参数</span>
-      description<span class="token operator">=</span><span class="token string">'Run Rviz2'</span>  <span class="token comment"># 对参数的描述</span>
-    <span class="token punctuation">)</span><span class="token punctuation">,</span>
-    ExecuteProcess<span class="token punctuation">(</span>cmd<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'gazebo'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> output<span class="token operator">=</span><span class="token string">'screen'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 执行的命令行指令</span>
-    <span class="token comment"># 开启节点，等价于</span>
-    <span class="token comment"># ros2 run turtlesim turtlesim_node</span>
-    Node<span class="token punctuation">(</span>  
-      package<span class="token operator">=</span><span class="token string">'turtlesim'</span><span class="token punctuation">,</span>  <span class="token comment"># 包名称</span>
-      executable<span class="token operator">=</span><span class="token string">'turtlesim_node'</span><span class="token punctuation">,</span>  <span class="token comment"># 执行的文件名</span>
-      arguments<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span>  <span class="token comment"># 传入的命令行参数</span>
-      parameters<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">&#123;</span><span class="token string">'data'</span><span class="token punctuation">:</span> <span class="token number">123</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span>  <span class="token comment"># 传入节点中的参数，保存到ros2 param的turtlesim_node/data下</span>
-      remappings<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token string">'origin_topic'</span><span class="token punctuation">,</span> <span class="token string">'target_topic'</span><span class="token punctuation">)</span><span class="token punctuation">]</span>  <span class="token comment"># 将节点创建的origin_topic映射到target_topic</span>
-      name<span class="token operator">=</span><span class="token string">'turtlesim_node'</span>  <span class="token comment"># 节点名称</span>
-    <span class="token punctuation">)</span><span class="token punctuation">,</span>
-    Node<span class="token punctuation">(</span>
-      package<span class="token operator">=</span><span class="token string">'rviz2'</span><span class="token punctuation">,</span>
-      executable<span class="token operator">=</span><span class="token string">'rviz2'</span><span class="token punctuation">,</span>
-      name<span class="token operator">=</span><span class="token string">'rviz2'</span><span class="token punctuation">,</span>
-      output<span class="token operator">=</span><span class="token string">'screen'</span><span class="token punctuation">,</span>
-      condition<span class="token operator">=</span>IfCondition<span class="token punctuation">(</span>LaunchConfiguration<span class="token punctuation">(</span><span class="token string">"rviz"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 当rviz为true时启动该Node</span>
-      parameters<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">&#123;</span><span class="token string">'use_sim_time'</span><span class="token punctuation">:</span> LaunchConfiguration<span class="token punctuation">(</span><span class="token string">'use_sim_time'</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span>
-    <span class="token punctuation">)</span><span class="token punctuation">,</span>
-    <span class="token comment"># 执行launch文件，等价于</span>
-    <span class="token comment"># ros2 launch *.launch.py</span>
-    IncludeLaunchDescription<span class="token punctuation">(</span>
-      <span class="token comment"># 需要启动的launch文件的路径</span>
-      PythonLaunchDescriptionSource<span class="token punctuation">(</span>description_launch_path<span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># 当path是FindPackage类</span>
-      <span class="token comment"># description_launch_path,  # 当path是字符串</span>
-      launch_arguments<span class="token operator">=</span><span class="token punctuation">&#123;</span>
-        <span class="token string">'use_sim_time'</span><span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">(</span>use_sim_time<span class="token punctuation">)</span><span class="token punctuation">,</span>
-        <span class="token string">'publish_joints'</span><span class="token punctuation">:</span> <span class="token string">'false'</span><span class="token punctuation">,</span>
-      <span class="token punctuation">&#125;</span><span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 注意需要转为迭代器</span>
-    <span class="token punctuation">)</span>
-  <span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="conda安装"><a class="markdownIt-Anchor" href="#conda安装"></a> Conda安装</h2>
+<blockquote>
+<p>可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/FRIGIDWINTER/article/details/136502435">CSDN - https://blog.csdn.net/FRIGIDWINTER/article/details/136502435</a>不过没有这么复杂</p>
+</blockquote>
+<p>安装十分简单，只需如下三行</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 必须为python 3.10</span>
+conda create <span class="token parameter variable">-n</span> ros2 <span class="token assign-left variable">python</span><span class="token operator">=</span><span class="token number">3.10</span>  <span class="token comment"># 安装的python版本一定要和ros2默认的版本一致</span>
+conda activate ros2
+conda <span class="token function">install</span> colcon-common-extensions  <span class="token comment"># 仅需安装</span>
+
+<span class="token comment"># 一些默认会安装的包</span>
+conda <span class="token function">install</span> numpy lark<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>下面简单测试一下：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ros2 pkg create my_test  <span class="token comment"># 创建测试项目名为my_test</span>
+
+<span class="token comment"># 先修改cmake配置文件, 找到python脚本</span>
+<span class="token function">vim</span> my_test/CMakeLists.txt
+<span class="token comment"># 在其中加入如下一行</span>
+install<span class="token punctuation">(</span>PROGRAMS scripts/my_test.py DESTINATION lib/<span class="token variable">$&#123;PROJECT_NAME&#125;</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 再编辑脚本程序</span>
+<span class="token function">mkdir</span> my_test/scripts
+<span class="token function">touch</span> my_test/scripts/my_test.py
+<span class="token function">chmod</span> +x my_test/scripts/my_test.py<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>其中<code>my_test.py</code>文件如下，后续编译之前只需进入<code>ros2</code>环境即可默认使用ros2的python了</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">conda activate ros2  <span class="token comment"># 要进入conda环境</span>
+colcon build --symlink-install  <span class="token comment"># 编译文件</span>
+<span class="token builtin class-name">source</span> install/setup.sh
+ros2 run my_test my_test.py  <span class="token comment"># 启动</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><strong>提醒一下</strong>：<code>#!/usr/bin.env python3</code>是必须要有的，或者写死python路径（不推荐），<code>chmod +x path/to/your/script.py</code>修改可执行权te<br />
+from std_msgs.msg import String<br />
+from threading import Thread</p>
+<p>class MyTestNode(Node):<br />
+def <strong>init</strong>(self):<br />
+super().<strong>init</strong>(‘my_test_node’)<br />
+self.get_logger().info(‘MyTestNode has been initialized!’)<br />
+self.hello_publisher = self.create_publisher(String, ‘hello_topic’, 10)<br />
+self.hello_publisher_thread = Thread(target=self.publish_hello)<br />
+self.hello_publisher_thread.start()</p>
+<figure><div class="code-wrapper"><pre class="language-none"><code class="language-none">def publish_hello(self):
+    msg = String()
+    msg.data = 'Hello, ROS 2!'
+    rate = self.create_rate(1.0)
+    while rclpy.ok():
+        self.hello_publisher.publish(msg)
+        self.get_logger().info('Published: &quot;%s&quot;' % msg.data)
+        rate.sleep()
+</code></pre></div></figure>
+<p>if <strong>name</strong> == ‘<strong>main</strong>’:<br />
+rclpy.init()<br />
+print(sys.version)<br />
+print(“Hello, ROS 2!”)<br />
+rclpy.spin(MyTestNode())<br />
+rclpy.shutdown()</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">&#123;% endspoiler %&#125;
+
+## Launch文件
+
+### 指令基础
+#### 启动文件基础
+启动文件只需实现&#96;generate_launch_description&#96;函数，该函数返回&#96;launch.LaunchDescription&#96;类
+#### 启动Launch文件
+创建&#96;*.launch.py&#96;文件，一般放在项目的&#96;launch&#x2F;&#96;文件夹下
+&#96;&#96;&#96;python
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_ros.actions import Node
+from launch.conditions import IfCondition
+def generate_launch_description():
+  return LaunchDescription([  # 定义Launch启动的对象
+    # 定义launch文件的cmd argument参数输入
+    # 使用方法ros2 launch *.launch.py robot_name:&#x3D;cubot
+    DeclareLaunchArgument(  
+      name&#x3D;&#39;robot_name&#39;,  # 参数名为robot_name
+      default_value&#x3D;&#39;cubot&#39;,  # 默认参数
+      description&#x3D;&#39;Define your robot name&#39;  # 对参数的描述
+    ),
+    DeclareLaunchArgument(  
+      name&#x3D;&#39;rviz&#39;,  # 参数名为rviz
+      default_value&#x3D;false,  # 默认参数
+      description&#x3D;&#39;Run Rviz2&#39;  # 对参数的描述
+    ),
+    ExecuteProcess(cmd&#x3D;[&#39;gazebo&#39;], output&#x3D;&#39;screen&#39;),  # 执行的命令行指令
+    # 开启节点，等价于
+    # ros2 run turtlesim turtlesim_node
+    Node(  
+      package&#x3D;&#39;turtlesim&#39;,  # 包名称
+      executable&#x3D;&#39;turtlesim_node&#39;,  # 执行的文件名
+      arguments&#x3D;[...]  # 传入的命令行参数
+      parameters&#x3D;[&#123;&#39;data&#39;: 123&#125;]  # 传入节点中的参数，保存到ros2 param的turtlesim_node&#x2F;data下
+      remappings&#x3D;[(&#39;origin_topic&#39;, &#39;target_topic&#39;)]  # 将节点创建的origin_topic映射到target_topic
+      name&#x3D;&#39;turtlesim_node&#39;  # 节点名称
+    ),
+    Node(
+      package&#x3D;&#39;rviz2&#39;,
+      executable&#x3D;&#39;rviz2&#39;,
+      name&#x3D;&#39;rviz2&#39;,
+      output&#x3D;&#39;screen&#39;,
+      condition&#x3D;IfCondition(LaunchConfiguration(&quot;rviz&quot;)),  # 当rviz为true时启动该Node
+      parameters&#x3D;[&#123;&#39;use_sim_time&#39;: LaunchConfiguration(&#39;use_sim_time&#39;)&#125;]
+    ),
+    # 执行launch文件，等价于
+    # ros2 launch *.launch.py
+    IncludeLaunchDescription(
+      # 需要启动的launch文件的路径
+      PythonLaunchDescriptionSource(description_launch_path),  # 当path是FindPackage类
+      # description_launch_path,  # 当path是字符串
+      launch_arguments&#x3D;&#123;
+        &#39;use_sim_time&#39;: str(use_sim_time),
+        &#39;publish_joints&#39;: &#39;false&#39;,
+      &#125;.items()  # 注意需要转为迭代器
+    )
+  ])<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h4 id="按包名称获取绝对路径"><a class="markdownIt-Anchor" href="#按包名称获取绝对路径"></a> 按包名称获取绝对路径</h4>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> launch<span class="token punctuation">.</span>substitutions <span class="token keyword">import</span> PathJoinSubstitution
 <span class="token keyword">from</span> launch_ros<span class="token punctuation">.</span>substitutions <span class="token keyword">import</span> FindPackageShare<span class="token punctuation">,</span> FindPackagePrefix
@@ -831,7 +889,7 @@ teleop_node:
 <p>我写了一个launch文件可以同时启动gazebo,rsp,joystick三者<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ros-car-cubot/blob/v2-cubot-sim-demo/launch/launch_all_sim_rsp_joy.launch.py">GitHub - launch/launch_all_sim_rsp_joy.launch.py</a>，直接启动可以看到下图的节点关系：<br />
 <img src="/figures/robotics/ros2/gazebo_rsp_joystick_node_graph.png" srcset="/img/loading.gif" lazyload alt="Gazebo + RSP + joystick" /></p>
 <p>这样我们就可以用手柄直接控制仿真中的小车啦！效果如下所示，手柄就可以直接后端控制哦</p>
-<div id="dplayer4" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer4"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/gazebo_rsp_joystick_control.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/gazebo_rsp_joystick_control.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <h2 id="ros2-controller"><a class="markdownIt-Anchor" href="#ros2-controller"></a> ROS2 controller</h2>
 <blockquote>
 <p>相关教程：（差分驱动小车为例）</p>
@@ -919,7 +977,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args <span class="tok
 <li>最后调整Ki：加入Ki，消除稳态误差，但注意不要使Ki过大</li>
 </ol>
 <p>我最后调的结果为：<code>kp=15, ki=0, kd=0.1</code></p>
-<div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/cubot_real_ros2_control.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer1" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer1"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/cubot_real_ros2_control.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>
