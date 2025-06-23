@@ -21,7 +21,7 @@
   
     <meta name="description" content="软硬件型号  Ubuntu(24.04) + Docker Docker - ROS2 Humble: Docker镜像下载    Livox mid-360 + 三分数据线(DC电源线, 网线, 多功能数据线) 9~27V DC电源 + (接线端子&#x2F;直接焊DC电源线和TX接口) 带有网口的主机   Livox SDK2 + ROS2驱动安装  参考CSDN - 大疆Livox MID-360&#x2F;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Livox mid-360+ROS2+FAST_LIO">
+<meta property="og:title" content="MID-360 + ROS2 + FAST LIO2建图">
 <meta property="og:url" content="https://wty-yy.xyz/posts/43386/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="软硬件型号  Ubuntu(24.04) + Docker Docker - ROS2 Humble: Docker镜像下载    Livox mid-360 + 三分数据线(DC电源线, 网线, 多功能数据线) 9~27V DC电源 + (接线端子&#x2F;直接焊DC电源线和TX接口) 带有网口的主机   Livox SDK2 + ROS2驱动安装  参考CSDN - 大疆Livox MID-360&#x2F;">
@@ -30,14 +30,14 @@
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/lidar/slam_map_hotal.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/lidar/slam_map_road.png">
 <meta property="article:published_time" content="2025-02-03T07:53:25.000Z">
-<meta property="article:modified_time" content="2025-03-09T12:07:49.970Z">
+<meta property="article:modified_time" content="2025-06-22T12:13:21.877Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/lidar/mid-360-rviz2.png">
   
   
   
-  <title>Livox mid-360+ROS2+FAST_LIO - wty&#39;s blog</title>
+  <title>MID-360 + ROS2 + FAST LIO2建图 - wty&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -285,7 +285,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Livox mid-360+ROS2+FAST_LIO"></span>
+            <span id="subtitle" data-typed-text="MID-360 + ROS2 + FAST LIO2建图"></span>
           
         </div>
 
@@ -308,7 +308,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          476 字
+          516 字
         
       </span>
     
@@ -319,7 +319,7 @@
         
         
         
-          4 分钟
+          5 分钟
         
       </span>
     
@@ -356,7 +356,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Livox mid-360+ROS2+FAST_LIO</h1>
+            <h1 id="seo-header">MID-360 + ROS2 + FAST LIO2建图</h1>
             
             
               <div class="markdown-body">
@@ -399,7 +399,7 @@ colcon build <span class="token punctuation">..</span>. --symlink-install
 <span class="token builtin class-name">source</span> ~/.bashrc
 <span class="token comment"># For zsh</span>
 <span class="token builtin class-name">source</span> ~/.zshrc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p>修改<code>~/ws_livox/src/livox_ros_driver2/config/MID360_config.json</code>中主机ip(<code>MID360['host_net_info']['cmd_data_ip']</code>)和雷达ip(<code>lidar_configs[0]['ip']</code>)，其中雷达ip<code>192.168.1.1xx</code>中的<code>xx</code>为雷达S/N码最后两位（可以在雷达包装盒或雷达侧面二维码下方找到），可以通过<code>ping 192.168.1.1xx</code>判断ip是否正确</p>
+<p>修改<code>~/ws_livox/src/livox_ros_driver2/config/MID360_config.json</code>中主机ip(<code>MID360['host_net_info']['cmd_data_ip']</code>)和雷达ip(<code>lidar_configs[0]['ip']</code>)，其中雷达ip<code>192.168.1.1xx</code>中的<code>xx</code>为雷达S/N码最后两位（可以在雷达包装盒或雷达侧面二维码下方找到，或者通过wireshark抓包获得，选择的有线端口进行抓包即可看到不停在发送的雷达信息），可以通过<code>ping 192.168.1.1xx</code>判断ip是否正确</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-toml" data-language="toml"><code class="language-toml">vim ~/ws_livox/src/livox_ros_driver2/config/MID360_config<span class="token punctuation">.</span>json
 <span class="token comment"># 主机ip</span>
 <span class="token string">"cmd_data_ip"</span> : <span class="token string">"192.168.1.50"</span><span class="token punctuation">,</span>
@@ -416,9 +416,9 @@ ros2 launch livox_ros_driver2 rviz_MID360_launch.py<span aria-hidden="true" clas
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ros2 launch livox_ros_driver2 msg_MID360_launch.py  <span class="token comment"># 启动MID360通讯节点</span>
 ros2 launch fast_lio mapping.launch.py config_file:<span class="token operator">=</span>mid360.yaml  <span class="token comment"># 启动建图</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
 <h3 id="保存map"><a class="markdownIt-Anchor" href="#保存map"></a> 保存map</h3>
-<p>建立完成后的数据如果想要保存下来，需要解开<a target="_blank" rel="noopener" href="https://github.com/hku-mars/FAST_LIO/blob/ROS2/src/laserMapping.cpp">src/laserMapping.cpp</a>文件中的516行下方的所有注释，重新编译。</p>
+<p>建立完成后的数据如果想要保存下来，需要解开<a target="_blank" rel="noopener" href="https://github.com/hku-mars/FAST_LIO/blob/ROS2/src/laserMapping.cpp#L516">src/laserMapping.cpp</a>文件中的516行下方的所有注释，重新编译。</p>
 <p>再参考<a target="_blank" rel="noopener" href="https://github.com/hku-mars/FAST_LIO/tree/ROS2?tab=readme-ov-file#34-pcd-file-save">PCD file save</a>将yaml配置文件中的<code>pcd_save_en</code>置为true（默认就是true）。</p>
-<p>这样在关闭LAST_LIO建图时，就会默认保存当前图，到<code>[FAST_LIO_WS]/PCD/scans.pcd</code>，使用<code>pcl_viewer scans.pcd</code>可以查看点云图。</p>
+<p>这样在关闭LAST_LIO建图时，就会默认保存当前图，到<code>[FAST_LIO_WS]/PCD/scans.pcd</code>，使用<code>pcl_viewer scans.pcd</code>可以查看点云图。（<code>pcl_viewer</code>使用<code>sudo apt install pcl-tools</code>安装）</p>
 <table>
 <thead>
 <tr>
@@ -481,7 +481,7 @@ ros2 launch fast_lio mapping.launch.py config_file:<span class="token operator">
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Livox mid-360+ROS2+FAST_LIO</div>
+      <div>MID-360 + ROS2 + FAST LIO2建图</div>
       <div>https://wty-yy.xyz/posts/43386/</div>
     </div>
     <div class="license-meta">
