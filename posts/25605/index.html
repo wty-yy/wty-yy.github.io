@@ -37,11 +37,12 @@
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash4.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash5.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash6.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_docker_container_test.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_JetPack6.1_UVC_D435i_realsense-viewer.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_D435i_ROS2_view.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_rs_ros_node_python_cv_show.png">
 <meta property="article:published_time" content="2024-12-29T06:47:35.000Z">
-<meta property="article:modified_time" content="2025-01-01T10:31:48.836Z">
+<meta property="article:modified_time" content="2025-11-08T09:23:56.288Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash_real1.jpg">
@@ -319,7 +320,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.3k 字
+          4.3k 字
         
       </span>
     
@@ -330,7 +331,7 @@
         
         
         
-          28 分钟
+          36 分钟
         
       </span>
     
@@ -422,21 +423,25 @@
 </tr>
 </tbody>
 </table>
-<h3 id="docker-cli-安装514"><a class="markdownIt-Anchor" href="#docker-cli-安装514"></a> Docker CLI 安装5.1.4</h3>
+<h3 id="docker-cli-安装-推荐"><a class="markdownIt-Anchor" href="#docker-cli-安装-推荐"></a> Docker CLI 安装 (推荐)</h3>
 <blockquote>
-<p>由于我的host主机是Ubuntu24.02，无法安装5.1.4，必须用镜像，推荐用可视化窗口安装</p>
+<p>由于我的host主机是Ubuntu24.02，无法安装6.2.1和5.1.4，必须用镜像安装（Nvidia agx nano的最高版本支持就是6.2.1，7.*不再支持）</p>
 </blockquote>
-<p>进入<a target="_blank" rel="noopener" href="https://developer.nvidia.com/sdk-manager">skd-manager下载界面</a>，下载Docker Image Ubuntu18.04 (20.04)也可以安装JetPack 5.x，下载完成后加载镜像，并重新命名为sdkmanager:</p>
+<p>进入<a target="_blank" rel="noopener" href="https://developer.nvidia.com/sdk-manager">skd-manager下载界面</a>，下载Docker Image Ubuntu18.04 (20.04)可以安装JetPack 5.x，Ubuntu22.04可以安装JetPack 6.2.1，下载完成后加载镜像，并重新命名为sdkmanager:</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> load <span class="token parameter variable">-i</span> sdkmanager-<span class="token punctuation">[</span>版本号<span class="token punctuation">]</span>-Ubuntu_18.04_docker.tar.gz
 <span class="token function">docker</span> tag sdkmanager:<span class="token punctuation">[</span>版本号<span class="token punctuation">]</span>-Ubuntu_18.04 sdkmanager:latest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
-<p>参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/sdk-manager/docker-containers/index.html">SDK Manager - Docker Images</a>中的教程，执行如下命令行就可以安装<code>5.1.4</code>版本的了，如果不是AGX型号，修改<code>--target JETSON_AGX_ORIN_TARGETS</code>为对应的型号（全部支持的型号参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/sdk-manager/system-requirements/index.html#target-device">SDK Manager - target-device</a>）</p>
+<p>参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/sdk-manager/docker-containers/index.html">SDK Manager - Docker Images</a>中的教程，执行如下命令行就可以安装<code>5.1.4</code>版本的了，如果不是AGX型号，修改<code>--target JETSON_AGX_ORIN_TARGETS</code>为对应的型号（全部支持的型号参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/sdk-manager/system-requirements/index.html#target-device">SDK Manager - target-device</a>, Jetson硬件对应的可刷版本参考<a target="_blank" rel="noopener" href="https://developer.nvidia.com/embedded/jetson-linux-archive">Jetson Linux Archive</a>）</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> run <span class="token parameter variable">-it</span> <span class="token parameter variable">--privileged</span> <span class="token punctuation">\</span>
     <span class="token parameter variable">-v</span> /dev/bus/usb:/dev/bus/usb/ <span class="token parameter variable">-v</span> /dev:/dev <span class="token parameter variable">-v</span> /media/<span class="token environment constant">$USER</span>:/media/nvidia:slave <span class="token punctuation">\</span>
+    <span class="token parameter variable">-v</span> ~/nvidia/sdkmanager_data:/home/nvidia/Downloads/nvidia <span class="token punctuation">\</span>
     <span class="token parameter variable">--name</span> JetPack_AGX_Orin_Devkit <span class="token parameter variable">--network</span> <span class="token function">host</span> <span class="token punctuation">\</span>
     sdkmanager <span class="token parameter variable">--cli</span> <span class="token parameter variable">--action</span> <span class="token function">install</span> --login-type devzone <span class="token punctuation">\</span>
     <span class="token parameter variable">--product</span> Jetson --target-os Linux <span class="token parameter variable">--version</span> <span class="token number">5.1</span>.4 <span class="token punctuation">\</span>
     <span class="token parameter variable">--target</span> JETSON_AGX_ORIN_TARGETS <span class="token parameter variable">--flash</span> <span class="token parameter variable">--license</span> accept <span class="token punctuation">\</span>
-    --stay-logged-in <span class="token boolean">true</span> --collect-usage-data <span class="token builtin class-name">enable</span> --exit-on-finish<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    --stay-logged-in <span class="token boolean">true</span> --collect-usage-data <span class="token builtin class-name">enable</span> --exit-on-finish<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<blockquote>
+<p>这里在官方的基础上加了一行 <code>-v ~/nvidia/sdkmanager_data:/home/nvidia/Downloads/nvidia</code>，这样可以将下载的内容挂载到宿主机，无需重复下载</p>
+</blockquote>
 <p>这部分主要分为两步，下载部件，烧录Ubuntu系统</p>
 <table>
 <thead>
@@ -459,7 +464,7 @@
 <thead>
 <tr>
 <th>选择Install，选择Ethernet cable，IPv4，输入AGX的IP</th>
-<th>开始自动安装第二部分(CUDA等)</th>
+<th>开始自动安装第二部分(CUDA, container等)</th>
 <th>安装完毕!</th>
 </tr>
 </thead>
@@ -482,11 +487,71 @@
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> run <span class="token parameter variable">-it</span> <span class="token parameter variable">--rm</span> <span class="token parameter variable">--privileged</span> <span class="token parameter variable">-v</span> /dev/bus/usb:/dev/bus/usb/ jetpack_agx_orin_devkit:5.1.4_flash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
     </div>
 </div>
+<h2 id="前置工作"><a class="markdownIt-Anchor" href="#前置工作"></a> 前置工作</h2>
+<ol>
+<li>如果有加装固态硬盘需要手动进行挂载，参考 <a href="/posts/64648/#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%8F%8A%E6%8C%82%E8%BD%BD%E7%A1%AC%E7%9B%98">常用命令及函数 - Linux -  格式化及挂载硬盘</a></li>
+<li>配置Docker
+<ul>
+<li>修改用户权限，参考 <a href="/posts/51856/#docker-%E5%AE%89%E8%A3%85">Docker安装与常用命令 - Docker 安装</a></li>
+<li>如果有固态硬盘推荐将Docker存储位置移动到固态上，系统盘就64Gb，参考 <a href="/posts/51856/#docker-%E7%A7%BB%E5%8A%A8%E9%95%9C%E5%83%8F%E4%BD%8D%E7%BD%AE">Docker安装与常用命令 - Docker 移动镜像位置</a></li>
+<li>使用代理，参考 <a href="/posts/51856/#docker-%E4%BB%A3%E7%90%86%E5%8A%A0%E9%80%9F">Docker安装与常用命令 - 代理加速</a></li>
+</ul>
+</li>
+<li>Ubuntu22.04以上版本Fcitx5的中文输入法安装及外观/字体大小调整，参考 <a href="/posts/46722/#%E5%AE%89%E8%A3%85%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95">从零配置Ubuntu全过程 - 安装中文输入法</a></li>
+<li>Clash快捷方式设置及自启动，参考 <a href="/posts/46722/#clash%E5%AE%89%E8%A3%85-%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F-%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8">从零配置Ubuntu全过程 -  Clash安装、快捷方式、自动启动</a></li>
+<li>网络配置，如果agx和其他的主机需要通过网线直连，则要设置静态IP，参考 <a href="/posts/1797/">乐聚Kuavo机器人上位机静态网络配置</a></li>
+<li>VNC网页版可视化界面，参考 <a href="/posts/47970/#nvidia-jetson%E5%8F%AF%E8%A7%86%E5%8C%96%E9%85%8D%E7%BD%AE">实现Linux无头模式下硬件加速的屏幕共享 - Nvidia Jetson可视化配置</a></li>
+<li>推荐安装jtop查看显卡使用率： <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> python3-pip
+<span class="token function">sudo</span> pip3 <span class="token function">install</span> <span class="token parameter variable">-U</span> jetson-stats
+jtop  <span class="token comment"># 类似nvitop</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+通过jtop下方第六项CTRL，可以修改当前的功率大小，推荐开到最大功率 <code>MAXN</code></li>
+</ol>
+<p>如果发现 <code>sudo apt update</code> 中报错docker源不正确，可以直接删除 <code>sudo rm /etc/apt/sources.list.d/docker.list</code> 文件，再次更新则不会报错。（因为后续无需对docker升级所以删除源不会有影响）</p>
+<h3 id="docker测试容器cuda可用性"><a class="markdownIt-Anchor" href="#docker测试容器cuda可用性"></a> Docker测试容器CUDA可用性</h3>
+<h4 id="jetson-containers"><a class="markdownIt-Anchor" href="#jetson-containers"></a> jetson-containers</h4>
+<p><a target="_blank" rel="noopener" href="https://github.com/dusty-nv/jetson-containers">GitHub - jetson-containers</a>这里面有很多DockerFile，甚至他们帮忙设计好了build命令直接运行即可，参考文档安装上就能用，他们的命名规则为：</p>
+<ul>
+<li>r32最低支持<code>JetPack 4.*</code></li>
+<li>r35最低支持<code>JetPack 5.*</code></li>
+<li>r36最低支持<code>JetPack 6.*</code></li>
+</ul>
+<p>这里推荐他们已经装好的镜像：</p>
+<ul>
+<li>Ubuntu22.04, CUDA12.2, TensorRT, onnxruntime: <code>docker pull dustynv/onnxruntime:r36.2.0</code></li>
+</ul>
+<p>我在他们这个镜像基础上参考教程<a target="_blank" rel="noopener" href="https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048">PyTorch for Jetson</a>，使用pip wheel安装上了<code>PyTorch 2.3</code>以及<code>torchvision 0.18</code></p>
+<ul>
+<li><code>docker pull wtyyy/jetson:cuda12.2-torch-torchvision-onnxruntime-ubuntu22.04</code><br />
+启动命令</li>
+</ul>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> run <span class="token parameter variable">-it</span> <span class="token punctuation">\</span>
+    <span class="token parameter variable">--name</span> cuda <span class="token punctuation">\</span>
+    <span class="token parameter variable">--runtime</span><span class="token operator">=</span>nvidia <span class="token punctuation">\</span>
+    <span class="token parameter variable">--net</span><span class="token operator">=</span>host <span class="token punctuation">\</span>
+    wtyyy/jetson:cuda12.2-torch-torchvision-onnxruntime-ubuntu22.04 <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>测试代码是否可用</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/Coding/tests
+python3 test_onnx.py
+python3 test_onnx2.py
+python3 test_torch.py
+python3 test_torchvision.py<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h4 id="仅安装容器中驱动"><a class="markdownIt-Anchor" href="#仅安装容器中驱动"></a> 仅安装容器中驱动</h4>
+<p>在命令行中用 <code>nvidia-smi</code> 查看当前的CUDA最高支持版本，例如我安装的是6.2.1，可用CUDA版本为12.6，在<a target="_blank" rel="noopener" href="https://catalog.ngc.nvidia.com/containers?filters=&amp;orderBy=weightPopularDESC&amp;query=&amp;page=&amp;pageSize=">Nvidia容器站 nvcr.io</a>搜索 <code>l4t</code> 可以看到 <a target="_blank" rel="noopener" href="https://catalog.ngc.nvidia.com/orgs/nvidia/containers/l4t-cuda"><code>NVIDIA L4T CUDA</code></a>，在这里点击Tags找到对应的版本，例如我用的是 <code>12.6.11-runtime</code>，下拉镜像并启动：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> pull nvcr.io/nvidia/l4t-cuda:12.6.11-runtime
+<span class="token function">docker</span> run <span class="token parameter variable">--name</span> cuda <span class="token parameter variable">--runtime</span><span class="token operator">=</span>nvidia <span class="token parameter variable">-it</span> nvcr.io/nvidia/l4t-cuda:12.6.11-runtime
+<span class="token comment"># 进入容器后测试显卡是否能找到, 如下图显示就是成功</span>
+nvidia-smi<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p><img src="/figures/robotics/Jetson/AGX_docker_container_test.png" srcset="/img/loading.gif" lazyload alt="容器CUDA测试" /></p>
+<h4 id="安装pytorch-cuda-cudnn"><a class="markdownIt-Anchor" href="#安装pytorch-cuda-cudnn"></a> 安装Pytorch, CUDA, cudnn</h4>
+<p>参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform-release-notes/pytorch-jetson-rel.html">Nvidia - PyTorch for Jetson Platform</a>可知，在<a target="_blank" rel="noopener" href="https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch">nvcr.io - PyTorch</a>中下载带有iGPU就是为Jetson准备的，可以直接下载对应的版本</p>
 <h2 id="realsense-sdk-ros-安装"><a class="markdownIt-Anchor" href="#realsense-sdk-ros-安装"></a> RealSense SDK &amp; ROS 安装</h2>
 <h3 id="jetpack-5x"><a class="markdownIt-Anchor" href="#jetpack-5x"></a> JetPack 5.x</h3>
 <p>直接按照官网的安装方法安装即可: <a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/blob/master/doc/installation_jetson.md#4-install-with-debian-packages"><code>4. Install with Debian Packages</code></a><br />
 安装完成后执行<code>realsense-viewer</code>插上摄像头即可看到图像(IMU也可以识别)</p>
-<h3 id="jetpack-6x"><a class="markdownIt-Anchor" href="#jetpack-6x"></a> JetPack 6.x</h3>
+<h3 id="jetpack-6x-万能方法"><a class="markdownIt-Anchor" href="#jetpack-6x-万能方法"></a> JetPack 6.x （万能方法）</h3>
+<blockquote>
+<p>因为这个方法不依赖内核编译，理论上任何Linux设备都能直接使用，推荐用该方法安装。</p>
+</blockquote>
 <p>参考realsense官方人员给出的回复(<a target="_blank" rel="noopener" href="https://support.intelrealsense.com/hc/en-us/community/posts/31576776977427-cannot-connect-D455-on-jetson-agx-orin">帖子</a>)，因为包含IMU摄像头为HID设备，需要MIPI驱动，安装这个驱动非常麻烦，参考<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/realsense_mipi_platform_driver">realsense_mipi_platform_driver</a>，基本没有仍和参考文档，根本装不上。</p>
 <p>帖子下方给出了另一个<a target="_blank" rel="noopener" href="https://support.intelrealsense.com/hc/en-us/community/posts/31576776977427/comments/31683171974419">很好的方法</a>，基于<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/blob/master/doc/libuvc_installation.md">libuvc_installation.md</a>安装UVC后端的realsense即可，三行即可解决</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://github.com/IntelRealSense/librealsense/raw/master/scripts/libuvc_installation.sh
@@ -495,9 +560,14 @@
 gnome-text-editor libuvc_installation.sh
 <span class="token comment"># 找到倒数第3行, make -j2 改为</span>
 <span class="token function">make</span> -j<span class="token variable">$&#123;nproc&#125;</span>
+<span class="token comment"># 推荐一并安装上pyrealsense2 (安装到系统默认的python中, 如果是conda则无需这样安装, 用 pip install pyrealsense2 安装)</span>
+<span class="token comment"># 找到 sudo apt-get install git cmake libssl-dev freeglut3-dev libusb-1.0-0-dev pkg-config libgtk-3-dev unzip -y 修改为</span>
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token function">git</span> cmake libssl-dev freeglut3-dev libusb-1.0-0-dev pkg-config libgtk-3-dev <span class="token function">unzip</span> python3-dev python3-pip <span class="token parameter variable">-y</span>
+<span class="token comment"># 找到 cmake ../ -DFORCE_LIBUVC=true -DCMAKE_BUILD_TYPE=release 修改为</span>
+cmake <span class="token punctuation">..</span>/ <span class="token parameter variable">-DFORCE_LIBUVC</span><span class="token operator">=</span>true <span class="token parameter variable">-DCMAKE_BUILD_TYPE</span><span class="token operator">=</span>release <span class="token parameter variable">-DBUILD_PYTHON_BINDINGS:BOOL</span><span class="token operator">=</span>true
 <span class="token comment"># 保存退出</span>
 <span class="token comment"># 开始安装</span>
-./libuvc_installation.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+./libuvc_installation.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p><strong>D435i</strong>的IMU读取方法，如果直接打开<code>realsense-viewer</code>还是无法读取IMU数据，一读取就会报错，解决方法就是将相机的Firmware降级到适配你相机的最低版本，参考<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/issues/13130#issuecomment-2225099648">D455 Errors when activating imu stream in rs-viewer中的一条回复</a>，方法很简单，先在<a target="_blank" rel="noopener" href="https://dev.intelrealsense.com/docs/firmware-releases-d400">Firmware releases D400</a>找到你相继对应的最低驱动版本，例如我的D435i就是<a target="_blank" rel="noopener" href="https://www.intelrealsense.com/wp-content/uploads/2020/08/D400_Series_Production_FW_5_12_7_100.zip?_ga=2.41355745.2140590151.1735553428-1109731474.1735553428">Version-5_12_7_100</a>，下载解压得到<code>*.bin</code>文件，通过<a target="_blank" rel="noopener" href="https://dev.intelrealsense.com/docs/firmware-update-tool">Firmware Update Tool</a>安装教程(安装librealsense时候就附带安装了)安装</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">rs-fw-update  <span class="token comment"># 查看当前连接的相机驱动版本</span>
 rs-fw-update <span class="token parameter variable">-f</span> Signed_Image_UVC_5_12_7_100.bin  <span class="token comment"># 安装驱动</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
@@ -522,7 +592,8 @@ ros2 topic <span class="token builtin class-name">echo</span> /camera/camera/acc
 <p><img src="/figures/robotics/Jetson/AGX_D435i_ROS2_view.png" srcset="/img/loading.gif" lazyload alt="使用rviz2查看ROS2启动的D435i相机相关节点" /></p>
 <h2 id="使用yolov11识别ros相机节点"><a class="markdownIt-Anchor" href="#使用yolov11识别ros相机节点"></a> 使用YOLOv11识别ROS相机节点</h2>
 <h3 id="在虚拟环境中安装pytorch"><a class="markdownIt-Anchor" href="#在虚拟环境中安装pytorch"></a> 在虚拟环境中安装PyTorch</h3>
-<p>参考<a target="_blank" rel="noopener" href="https://forums.developer.nvidia.com/t/error-with-pytorch-and-torchvision/314612/5?u=993660140">Error with Pytorch and Torchvision</a>中回复的消息，可以使用Python官方的<code>virtualenv</code>创建环境（这个虚拟环境类似Conda，但更轻量），好处在于安装的Pytorch所需的<code>numpy</code>等包不会和root下ROS相关的包冲突，并且由于是从root中Python生成的环境，因此可以使用root下的包（也就是ROS包）</p>
+<p>PyTorch安装方法: 参考<a target="_blank" rel="noopener" href="https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048">PyTorch for Jetson</a>中回复的消息，给出了torch的编译好的wheel可以直接安装，下面还写了torchvision的安装方法，按照流程安装即可, 对于Jetson4,5只能从这个位置找对应的torch进行下载</p>
+<p>可以使用Python官方的<code>virtualenv</code>创建环境（这个虚拟环境类似Conda，但更轻量），好处在于安装的Pytorch所需的<code>numpy</code>等包不会和root下ROS相关的包冲突，并且由于是从root中Python生成的环境，因此可以使用root下的包（也就是ROS包），后面发现也可以安装和ROS相同版本的python以及一些相关的ROS包就可以连接ROS了</p>
 <blockquote>
 <p>注意环境创建后不能再随便移动位置，因为pip安装绑定了创建时的路径</p>
 </blockquote>
@@ -536,7 +607,7 @@ pip <span class="token function">install</span> torch-2.5.0-cp310-cp310-linux_aa
 <span class="token function">wget</span> http://jetson.webredirect.org/jp6/cu126/+f/5f9/67f920de3953f/torchvision-0.20.0-cp310-cp310-linux_aarch64.whl<span class="token comment">#sha256=5f967f920de3953f2a39d95154b1feffd5ccc06b4589e51540dc070021a9adb9</span>
 pip <span class="token function">install</span> torchvision-0.20.0-cp310-cp310-linux_aarch64.whl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <blockquote>
-<p>其他jetpack版本可以在<a target="_blank" rel="noopener" href="https://pypi.jetson-ai-lab.dev/">devpi - jetson-ai-lab</a>中找到</p>
+<p>其他jetpack6版本可以在<a target="_blank" rel="noopener" href="https://pypi.jetson-ai-lab.io">devpi - jetson-ai-lab</a>中找到</p>
 </blockquote>
 <p>安装完成后执行<code>python -c &quot;import torch; import torchvision; print(torch.__version__, torchvision.__version__); print(torch.cuda.is_available());&quot;</code>看看有没有抱错，输出</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-none"><code class="language-none">2.5.0 0.20.0
