@@ -1,0 +1,1113 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="网络配置 参考Unitree - G1_developer电气接口, 可知9号type-c接口为Jetson Orin NX的带显示接口, 使用拓展坞连接鼠标、键盘、显示屏开机即可打开NX界面, 界面中连接上Wifi, 常用用局域网内的其他电脑ping该设备, 如果无法ping通一般是网卡的优先级默认为有线, 且路由器的网段和上下机的网段相同(都是192.168.123.*), 导致外部无法连接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="宇树g1-edu 29dof配置">
+<meta property="og:url" content="https://wty-yy.xyz/posts/30512/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="网络配置 参考Unitree - G1_developer电气接口, 可知9号type-c接口为Jetson Orin NX的带显示接口, 使用拓展坞连接鼠标、键盘、显示屏开机即可打开NX界面, 界面中连接上Wifi, 常用用局域网内的其他电脑ping该设备, 如果无法ping通一般是网卡的优先级默认为有线, 且路由器的网段和上下机的网段相同(都是192.168.123.*), 导致外部无法连接">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/real/g1/g1_yolo11_demo.png">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/real/g1/g1_mid-360_demo.png">
+<meta property="article:published_time" content="2025-10-30T19:46:22.000Z">
+<meta property="article:modified_time" content="2025-12-20T10:35:10.645Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/real/g1/g1_yolo11_demo.png">
+  
+  
+  
+  <title>宇树g1-edu 29dof配置 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="宇树g1-edu 29dof配置"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-10-31 03:46" pubdate>
+          2025年10月31日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">宇树g1-edu 29dof配置</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    <!-- compatible with older versions-->
+                    最新更新于: 2025年12月20日晚上6点35分
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="网络配置"><a class="markdownIt-Anchor" href="#网络配置"></a> 网络配置</h2>
+<p>参考<a target="_blank" rel="noopener" href="https://support.unitree.com/home/zh/G1_developer">Unitree - G1_developer</a>电气接口, 可知9号type-c接口为Jetson Orin NX的带显示接口, 使用拓展坞连接鼠标、键盘、显示屏开机即可打开NX界面, 界面中连接上Wifi, 常用用局域网内的其他电脑ping该设备, 如果无法ping通一般是网卡的优先级默认为有线, 且路由器的网段和上下机的网段相同(都是<code>192.168.123.*</code>), 导致外部无法连接到NX, 这里不推荐将路由器Wifi的网段也改成<code>123.*</code>的, 这样会导致上下网卡的网段冲突, 当存在多个宇树设备时, 上位机无法连接到下位机发生问题.</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        点击显/隐 修改route metric优先级
+    </div>
+    <div class='spoiler-content'>
+        <p>在Jetson Nano NX中修改route metric优先级:</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ip</span> a  <span class="token comment"># 找到无线网卡为 wlan0</span>
+<span class="token function">ip</span> route  <span class="token comment"># 看到 wlan0 metric 后面数字就表示优先级, 需要将该数字设置比 eth0 更低即可</span>
+<span class="token function">sudo</span> nmcli device  <span class="token comment"># 看到我们的无限网卡为wlan0连接到的wifi名称</span>
+<span class="token function">sudo</span> nmcli connection modify <span class="token string">"wifi名称"</span> ipv4.route-metric <span class="token number">10</span>  <span class="token comment"># 把wifi的优先级设置为较低的值</span>
+<span class="token function">sudo</span> nmcli connection up <span class="token string">"wifi名称"</span>  <span class="token comment"># 重启wifi</span>
+<span class="token function">ip</span> route  <span class="token comment"># 看到 wlan0 metric后面数字为 10 即可</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>再常使用局域网内其他电脑ping, 应该就能ping通了, 用这个方法只需要每次切换wifi名称时用命令行配置一次即可</p>
+
+    </div>
+</div>
+<p>NX连接上Wifi后, 用<code>ifconfig</code>查看<code>wlan0</code>的IP, 然后主机通过<code>ssh unitree@&lt;IP&gt;</code>输入密码<code>123</code>即可连接上NX, 连上NX后我们做如下几个配置:</p>
+<ol>
+<li>创建可视化界面</li>
+<li>用YOLO视觉识别测试D435i相机和显卡速度</li>
+<li>Mid-360雷达是否可用</li>
+</ol>
+<h2 id="创建可视化界面"><a class="markdownIt-Anchor" href="#创建可视化界面"></a> 创建可视化界面</h2>
+<blockquote>
+<p>参考<a href="/posts/47970/#nvidia-jetson%E5%8F%AF%E8%A7%86%E5%8C%96%E9%85%8D%E7%BD%AE">实现Linux无头模式下硬件加速的屏幕共享 - Nvidia Jetson可视化配置</a><br />
+我们期望拔掉电源后也可以通过网页来查看NX的界面, 安装依赖</p>
+</blockquote>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc  <span class="token comment"># x11的vnc转发软件</span>
+<span class="token function">mkdir</span> ~/Programs
+<span class="token builtin class-name">cd</span> ~/Programs
+<span class="token function">git</span> clone https://github.com/novnc/noVNC.git  <span class="token comment"># 网页可视化VNC客户端</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>添加配置文件<code>/etc/X11/xorg-nvidia-dummy-monitor.conf</code></p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        点击显/隐 xorg-nvidia-dummy-monitor.conf 配置文件
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Section <span class="token string">"Module"</span>
+    Disable     <span class="token string">"dri"</span>
+    SubSection  <span class="token string">"extmod"</span>
+        Option  <span class="token string">"omit xfree86-dga"</span>
+    EndSubSection
+EndSection
+
+Section <span class="token string">"Device"</span>
+    Identifier  <span class="token string">"Tegra0"</span>
+    Driver      <span class="token string">"nvidia"</span>
+    Option      <span class="token string">"AllowEmptyInitialConfiguration"</span> <span class="token string">"true"</span>
+    Option      <span class="token string">"ConnectedMonitor"</span> <span class="token string">"DFP-0"</span>
+    Option      <span class="token string">"CustomEDID"</span> <span class="token string">"DFP-0:/etc/X11/edid.bin"</span>
+EndSection
+
+Section <span class="token string">"Monitor"</span>
+    Identifier     <span class="token string">"Monitor0"</span>
+    VendorName     <span class="token string">"Generic"</span>
+    ModelName      <span class="token string">"Virtual Monitor"</span>
+    HorizSync       <span class="token number">28.0</span> - <span class="token number">72.0</span>
+    VertRefresh     <span class="token number">50.0</span> - <span class="token number">75.0</span>
+    Option         <span class="token string">"DPMS"</span>
+EndSection
+
+Section <span class="token string">"Screen"</span>
+    Identifier     <span class="token string">"Screen0"</span>
+    Device         <span class="token string">"Tegra0"</span>
+    Monitor        <span class="token string">"Monitor0"</span>
+    DefaultDepth    <span class="token number">24</span>
+    SubSection <span class="token string">"Display"</span>
+        Depth       <span class="token number">24</span>
+        Modes      <span class="token string">"1920x1080"</span>
+        Virtual     <span class="token number">1920</span> <span class="token number">1080</span>
+    EndSubSection
+EndSection
+
+Section <span class="token string">"ServerLayout"</span>
+    Identifier     <span class="token string">"Layout0"</span>
+    Screen         <span class="token string">"Screen0"</span>
+EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>下载<a href="/file/linux_screen_sharing/edid.bin">edid.bin</a>放到<code>/etc/X11/edid.bin</code></p>
+<p>创建<a href="/posts/47970/#%E4%B8%80%E9%94%AE%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC">一键启动脚本</a>在<code>/usr/local/bin/start-gnome-vnc.sh</code>下</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        点击显/隐 start-gnome-vnc.sh脚本
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+
+<span class="token comment"># 使用方法, 第一个参数为当前的用户名, 用于启动gnome会话</span>
+<span class="token comment"># sudo bash /usr/local/bin/start-gnome-vnc.sh $USER</span>
+
+<span class="token comment"># 检查端口6080是否被占用</span>
+<span class="token keyword">if</span> <span class="token function">lsof</span> <span class="token parameter variable">-i:6080</span> <span class="token parameter variable">-sTCP:LISTEN</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"端口6080已被占用，脚本将不再继续启动，请用 http://&lt;IP>:6080/vnc.html 连接，export DISPLAY=:1 来可视化命令行启动的界面"</span>
+    <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+<span class="token keyword">fi</span>
+
+<span class="token comment"># 设置进程组，方便退出时统一管理</span>
+<span class="token builtin class-name">set</span> <span class="token parameter variable">-m</span>
+
+<span class="token comment"># 启动 X Server</span>
+<span class="token function">sudo</span> /usr/bin/X :1 <span class="token parameter variable">-config</span> /etc/X11/xorg-nvidia-dummy-monitor.conf <span class="token operator">&amp;</span>
+<span class="token assign-left variable">x_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+
+<span class="token comment"># 等待 X Server 启动</span>
+<span class="token function">sleep</span> <span class="token number">3</span>
+
+<span class="token comment"># 启动 DBus 会话服务</span>
+<span class="token builtin class-name">eval</span> <span class="token variable"><span class="token variable">$(</span>dbus-launch --sh-syntax<span class="token variable">)</span></span>
+<span class="token builtin class-name">export</span> <span class="token environment constant">DBUS_SESSION_BUS_ADDRESS</span>
+<span class="token builtin class-name">export</span> DBUS_SESSION_BUS_PID
+
+<span class="token comment"># 启动桌面环境（Gnome / Xfce）这里必须要用$1用户身份启动, 避免出现无法登陆的问题</span>
+<span class="token comment"># sudo -u $1 DISPLAY=:1 startxfce4 &amp;  # 或者启动xfce4</span>
+<span class="token function">sudo</span> <span class="token parameter variable">-u</span> <span class="token variable">$1</span> <span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1 gnome-session <span class="token operator">&amp;</span>
+<span class="token assign-left variable">gnome_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+
+<span class="token comment"># 启动 x11vnc</span>
+x11vnc <span class="token parameter variable">-display</span> :1 <span class="token parameter variable">-rfbauth</span> /root/.vnc/passwd <span class="token parameter variable">-forever</span> <span class="token parameter variable">-shared</span> <span class="token parameter variable">-loop</span> <span class="token parameter variable">-nodpms</span> <span class="token operator">&amp;</span>
+<span class="token comment"># 或者无密码启动 (简单)</span>
+<span class="token comment"># x11vnc -display :1 -forever -shared -loop -nodpms &amp;</span>
+<span class="token assign-left variable">vnc_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+
+<span class="token comment"># 启动 noVNC proxy</span>
+/data/user/wutianyang/programs/noVNC/utils/novnc_proxy <span class="token parameter variable">--vnc</span> localhost:5900 <span class="token operator">&amp;</span>
+<span class="token assign-left variable">novnc_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+
+<span class="token function">sleep</span> <span class="token number">5</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"脚本全部启动完毕，请用 http://&lt;IP>:6080/vnc.html 连接，export DISPLAY=:1 来可视化命令行启动的界面"</span>
+
+<span class="token comment"># 定义清理函数</span>
+<span class="token function-name function">cleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">"正在退出，清理子进程..."</span>
+
+    <span class="token comment"># 杀掉 novnc_proxy</span>
+    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$novnc_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 noVNC proxy (PID=<span class="token variable">$novnc_pid</span>)"</span>
+        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$novnc_pid</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># 杀掉 x11vnc</span>
+    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$vnc_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 x11vnc (PID=<span class="token variable">$vnc_pid</span>)"</span>
+        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$vnc_pid</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># 杀掉 XFCE</span>
+    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$gnome_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 XFCE (PID=<span class="token variable">$gnome_pid</span>)"</span>
+        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$gnome_pid</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># 杀掉 X Server</span>
+    <span class="token keyword">if</span> <span class="token function">ps</span> <span class="token parameter variable">-p</span> <span class="token variable">$x_pid</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 X Server (PID=<span class="token variable">$x_pid</span>)"</span>
+        <span class="token function">sudo</span> <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token variable">$x_pid</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># 杀掉 dbus-daemon（如果有）</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">$DBUS_SESSION_BUS_PID</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">"杀掉 dbus-daemon (PID=<span class="token variable">$DBUS_SESSION_BUS_PID</span>)"</span>
+        <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token string">"<span class="token variable">$DBUS_SESSION_BUS_PID</span>"</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token builtin class-name">echo</span> <span class="token string">"清理完成，退出脚本。"</span>
+    <span class="token builtin class-name">exit</span> <span class="token number">0</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment"># 注册退出清理钩子</span>
+<span class="token builtin class-name">trap</span> cleanup SIGINT SIGTERM EXIT
+
+<span class="token comment"># 当X服务退出（或手动 Ctrl+C）全部kill</span>
+<span class="token function">wait</span> <span class="token variable">$x_pid</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p><strong>修改其中的39行，为你的noVNC路径位置；如果没有设置x11vnc密码，则分别注释33行和解注35行</strong></p>
+<p>在<code>~/.bashrc</code>中加入快捷启动命令</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">alias</span> start-gnome-vnc<span class="token operator">=</span><span class="token string">"sudo bash /usr/local/bin/start-gnome-vnc.sh <span class="token environment constant">$USER</span>"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>这样在终端下就可以<code>start-gnome-vnc</code>一键启动了, 打开<code>&lt;IP&gt;:6080/vnc.html</code>网页即可连接上可视化界面</p>
+<h2 id="感知测试"><a class="markdownIt-Anchor" href="#感知测试"></a> 感知测试</h2>
+<h3 id="相机"><a class="markdownIt-Anchor" href="#相机"></a> 相机</h3>
+<p>将g1头部后面的Typc-c线插在9号口上 (参考<a target="_blank" rel="noopener" href="https://support.unitree.com/home/zh/G1_developer">Unitree - G1_developer电气接口</a>), 在终端中运行<code>realsense-viewer</code>即可看到可视化界面, 不过9号口为USB2.0, 6号口为USB3.2, 但是6号口在下面Python启动时会出现报错, 还不清楚原因</p>
+<h3 id="yolo视觉识别"><a class="markdownIt-Anchor" href="#yolo视觉识别"></a> YOLO视觉识别</h3>
+<blockquote>
+<p>参考<a href="/posts/25605/#%E4%BD%BF%E7%94%A8yolov11%E8%AF%86%E5%88%ABros%E7%9B%B8%E6%9C%BA%E8%8A%82%E7%82%B9">Jetson AGX Orin - 使用yolov11识别ros相机节点</a></p>
+</blockquote>
+<p>推荐安装<a target="_blank" rel="noopener" href="https://github.com/conda-forge/miniforge/releases">miniforge</a>(下载Linux-aarch64版本安装): 创建conda环境</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">mamba create <span class="token parameter variable">-n</span> torch <span class="token assign-left variable">python</span><span class="token operator">=</span><span class="token number">3.8</span>
+mamba activate torch<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>安装PyTorch: 从<a target="_blank" rel="noopener" href="https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048">PyTorch for Jetson</a>中下载<a target="_blank" rel="noopener" href="https://developer.download.nvidia.cn/compute/redist/jp/v512/pytorch/torch-2.1.0a0+41361538.nv23.06-cp38-cp38-linux_aarch64.whl">JetPack5 Pytorch v2.1.0</a></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip <span class="token function">install</span> torch-2.1.0a0+41361538.nv23.06-cp38-cp38-linux_aarch64.whl<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>编译安装torchvision</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> libjpeg-dev zlib1g-dev libpython3-dev libopenblas-dev libavcodec-dev libavformat-dev libswscale-dev
+<span class="token function">git</span> clone <span class="token parameter variable">--branch</span> v0.16.1 <span class="token parameter variable">--depth</span> <span class="token number">1</span> https://github.com/pytorch/vision torchvision
+<span class="token builtin class-name">cd</span> torchvision
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">BUILD_VERSION</span><span class="token operator">=</span><span class="token number">0.16</span>.1  <span class="token comment"># where 0.16.1 is the torchvision version  </span>
+python setup.py <span class="token function">install</span>
+<span class="token builtin class-name">cd</span> <span class="token punctuation">..</span>/  <span class="token comment"># attempting to load torchvision from build dir will result in import error</span>
+pip <span class="token function">install</span> numpy pillow opencv-python<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>测试安装是否成功:</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">python <span class="token parameter variable">-c</span> <span class="token string">"import torch; import torchvision; print(torch.__version__, torchvision.__version__); print(torch.cuda.is_available());"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>安装YOLO包<code>pip install ultralytics</code>, 运行下面代码即可看到实时识别速度</p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        点击显/隐 yolo_demo.py
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> cv2
+<span class="token keyword">import</span> pyrealsense2 <span class="token keyword">as</span> rs
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> time
+<span class="token keyword">from</span> ultralytics <span class="token keyword">import</span> YOLO
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># --- 1. 初始化 YOLO 模型 ---</span>
+    <span class="token comment"># 加载 YOLOv11 Medium 模型</span>
+    <span class="token comment"># 当您第一次运行它时，它会自动下载 'yolov11m.pt'</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"正在加载 YOLOv11m 模型..."</span><span class="token punctuation">)</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        model <span class="token operator">=</span> YOLO<span class="token punctuation">(</span><span class="token string">'yolo11m.pt'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">(</span><span class="token string">'cuda'</span><span class="token punctuation">)</span>
+    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"加载模型失败: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>e<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"请确保您已连接互联网以下载模型，或 'yolo11m.pt' 文件已存在。"</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+
+    <span class="token comment"># --- 2. 初始化 Intel RealSense ---</span>
+    pipeline <span class="token operator">=</span> rs<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    config <span class="token operator">=</span> rs<span class="token punctuation">.</span>config<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 配置流：</span>
+    <span class="token comment"># 警告：同时运行 1080p RGB 和 720p Depth 对 USB 带宽要求很高</span>
+    <span class="token comment"># 请确保您使用的是 USB 3.0+ 端口和高质量的数据线</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        <span class="token comment"># RGB 流</span>
+        <span class="token comment"># config.enable_stream(rs.stream.color, 1920, 1080, rs.format.bgr8, 15)</span>
+        config<span class="token punctuation">.</span>enable_stream<span class="token punctuation">(</span>rs<span class="token punctuation">.</span>stream<span class="token punctuation">.</span>color<span class="token punctuation">,</span> <span class="token number">1280</span><span class="token punctuation">,</span> <span class="token number">720</span><span class="token punctuation">,</span> rs<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">.</span>bgr8<span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">)</span>
+        <span class="token comment"># 深度流</span>
+        config<span class="token punctuation">.</span>enable_stream<span class="token punctuation">(</span>rs<span class="token punctuation">.</span>stream<span class="token punctuation">.</span>depth<span class="token punctuation">,</span> <span class="token number">640</span><span class="token punctuation">,</span> <span class="token number">480</span><span class="token punctuation">,</span> rs<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">.</span>z16<span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">)</span>
+    <span class="token keyword">except</span> RuntimeError <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"配置 RealSense 流失败: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>e<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"请检查相机是否连接，或尝试降低分辨率（例如RGB 1280x720）。"</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+
+    <span class="token comment"># --- 3. 启动相机并创建对齐对象 ---</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"正在启动 RealSense 管道..."</span><span class="token punctuation">)</span>
+    profile <span class="token operator">=</span> pipeline<span class="token punctuation">.</span>start<span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+
+    <span class="token comment"># 创建一个 'align' 对象</span>
+    <span class="token comment"># rs.align 允许我们将深度帧对齐到 'color' 帧的视角</span>
+    align_to <span class="token operator">=</span> rs<span class="token punctuation">.</span>stream<span class="token punctuation">.</span>color
+    align <span class="token operator">=</span> rs<span class="token punctuation">.</span>align<span class="token punctuation">(</span>align_to<span class="token punctuation">)</span>
+
+    <span class="token comment"># --- 4. 初始化速度计算变量 ---</span>
+    fps_list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token comment"># 用于存储最近的N次FPS</span>
+    rolling_window_size <span class="token operator">=</span> <span class="token number">30</span> <span class="token comment"># 使用最近30帧的数据来计算平均FPS</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"相机已启动。按 'q' 键退出。"</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+            <span class="token comment"># 等待一组成帧：color 和 depth</span>
+            frames <span class="token operator">=</span> pipeline<span class="token punctuation">.</span>wait_for_frames<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+            <span class="token comment"># 对齐深度帧到彩色帧</span>
+            aligned_frames <span class="token operator">=</span> align<span class="token punctuation">.</span>process<span class="token punctuation">(</span>frames<span class="token punctuation">)</span>
+            
+            color_frame <span class="token operator">=</span> aligned_frames<span class="token punctuation">.</span>get_color_frame<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            depth_frame <span class="token operator">=</span> aligned_frames<span class="token punctuation">.</span>get_depth_frame<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+            <span class="token keyword">if</span> <span class="token keyword">not</span> color_frame <span class="token keyword">or</span> <span class="token keyword">not</span> depth_frame<span class="token punctuation">:</span>
+                <span class="token keyword">continue</span>
+
+            <span class="token comment"># --- 5. 转换图像数据为 NumPy 数组 ---</span>
+            <span class="token comment"># RGB 图像 (1920, 1080, 3)</span>
+            color_image <span class="token operator">=</span> np<span class="token punctuation">.</span>asanyarray<span class="token punctuation">(</span>color_frame<span class="token punctuation">.</span>get_data<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            
+            <span class="token comment"># 深度图像 (16-bit, 1920, 1080)</span>
+            <span class="token comment"># 注意：对齐后，深度图的分辨率会匹配彩色图的分辨率</span>
+            depth_image <span class="token operator">=</span> np<span class="token punctuation">.</span>asanyarray<span class="token punctuation">(</span>depth_frame<span class="token punctuation">.</span>get_data<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+            <span class="token comment"># --- 6. YOLO 推理并计时 ---</span>
+            start_time <span class="token operator">=</span> time<span class="token punctuation">.</span>perf_counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            
+            <span class="token comment"># 运行 YOLOv11 推理</span>
+            <span class="token comment"># verbose=False 会禁止在控制台打印每次识别的详细信息</span>
+            results <span class="token operator">=</span> model<span class="token punctuation">(</span>color_image<span class="token punctuation">,</span> stream<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">,</span> verbose<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span> 
+            
+            end_time <span class="token operator">=</span> time<span class="token punctuation">.</span>perf_counter<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            
+            <span class="token comment"># 计算单帧 FPS</span>
+            fps <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">/</span> <span class="token punctuation">(</span>end_time <span class="token operator">-</span> start_time<span class="token punctuation">)</span>
+            
+            <span class="token comment"># 更新 FPS 列表（滚动窗口）</span>
+            fps_list<span class="token punctuation">.</span>append<span class="token punctuation">(</span>fps<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>fps_list<span class="token punctuation">)</span> <span class="token operator">></span> rolling_window_size<span class="token punctuation">:</span>
+                fps_list<span class="token punctuation">.</span>pop<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+            
+            <span class="token comment"># 计算平均 FPS</span>
+            avg_fps <span class="token operator">=</span> np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>fps_list<span class="token punctuation">)</span>
+            
+            <span class="token comment"># 打印平均速度</span>
+            <span class="token comment"># 使用 \r 和 end="" 确保只在同一行上更新，避免刷屏</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"\r[YOLO 平均识别速度: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>avg_fps<span class="token punctuation">:</span><span class="token format-spec">.2f</span><span class="token punctuation">&#125;</span></span><span class="token string"> FPS]"</span></span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span>
+
+            <span class="token comment"># --- 7. 可视化 YOLO 结果 ---</span>
+            <span class="token comment"># 'results[0].plot()' 会返回一个绘制了检测框的 BGR 图像 (NumPy 数组)</span>
+            annotated_frame <span class="token operator">=</span> results<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+            <span class="token comment"># 在图像上绘制平均 FPS</span>
+            cv2<span class="token punctuation">.</span>putText<span class="token punctuation">(</span>annotated_frame<span class="token punctuation">,</span> <span class="token string-interpolation"><span class="token string">f"Avg FPS: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>avg_fps<span class="token punctuation">:</span><span class="token format-spec">.2f</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">,</span> 
+                        <span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">40</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>FONT_HERSHEY_SIMPLEX<span class="token punctuation">,</span> <span class="token number">1.5</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">255</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
+
+            <span class="token comment"># --- 8. 可视化深度图 ---</span>
+            <span class="token comment"># 将 16-bit 深度图 (单位: 毫米) 转换为 8-bit (0-255) 以便显示</span>
+            <span class="token comment"># 0.03 是一个常用的缩放因子，假设我们关心 8 米（8000mm）左右的距离</span>
+            <span class="token comment"># 8000 * 0.03 = 240</span>
+            depth_image_8bit <span class="token operator">=</span> cv2<span class="token punctuation">.</span>convertScaleAbs<span class="token punctuation">(</span>depth_image<span class="token punctuation">,</span> alpha<span class="token operator">=</span><span class="token number">0.03</span><span class="token punctuation">)</span>
+            
+            <span class="token comment"># 将 8-bit 灰度图转换为彩色图 (Jet colormap) 以便观察</span>
+            depth_colormap <span class="token operator">=</span> cv2<span class="token punctuation">.</span>applyColorMap<span class="token punctuation">(</span>depth_image_8bit<span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>COLORMAP_JET<span class="token punctuation">)</span>
+            
+            <span class="token comment"># 由于对齐，深度图中没有数据的地方（黑色）也会被着色</span>
+            <span class="token comment"># 我们可以加一个掩码让无数据的地方保持黑色</span>
+            black_mask <span class="token operator">=</span> <span class="token punctuation">(</span>depth_image <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            depth_colormap<span class="token punctuation">[</span>black_mask<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+
+            <span class="token comment"># --- 9. 显示图像 ---</span>
+            <span class="token comment"># 注意：1920x1080 图像在标准显示器上可能太大</span>
+            <span class="token comment"># 我们可以缩小它以便显示</span>
+            display_rgb <span class="token operator">=</span> cv2<span class="token punctuation">.</span>resize<span class="token punctuation">(</span>annotated_frame<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">960</span><span class="token punctuation">,</span> <span class="token number">540</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            display_depth <span class="token operator">=</span> cv2<span class="token punctuation">.</span>resize<span class="token punctuation">(</span>depth_colormap<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">960</span><span class="token punctuation">,</span> <span class="token number">540</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+            cv2<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">"YOLOv11 (RGB)"</span><span class="token punctuation">,</span> display_rgb<span class="token punctuation">)</span>
+            cv2<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">"Depth"</span><span class="token punctuation">,</span> display_depth<span class="token punctuation">)</span>
+
+            <span class="token comment"># --- 10. 退出循环 ---</span>
+            <span class="token keyword">if</span> cv2<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xFF</span> <span class="token operator">==</span> <span class="token builtin">ord</span><span class="token punctuation">(</span><span class="token string">'q'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">break</span>
+
+    <span class="token keyword">finally</span><span class="token punctuation">:</span>
+        <span class="token comment"># 停止数据流</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"\n正在关闭 RealSense 管道..."</span><span class="token punctuation">)</span>
+        pipeline<span class="token punctuation">.</span>stop<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        cv2<span class="token punctuation">.</span>destroyAllWindows<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"程序结束。YOLOv11 的最终平均识别速度为: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>np<span class="token punctuation">.</span>mean<span class="token punctuation">(</span>fps_list<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token format-spec">.2f</span><span class="token punctuation">&#125;</span></span><span class="token string"> FPS"</span></span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p><img src="/figures/robotics/real/g1/g1_yolo11_demo.png" srcset="/img/loading.gif" lazyload alt="g1 yolo11m demo" /></p>
+<h3 id="测试mid-360"><a class="markdownIt-Anchor" href="#测试mid-360"></a> 测试Mid-360</h3>
+<p>进入终端时, 会默认弹出来对ROS版本的选择, 我们输入1回车, 就进入foxy版本, 运行<code>rviz2</code>命令打开可视化界面, 点击左下角<code>add</code>按钮, 找到弹出窗口中的<code>By topic</code>, 选择<code>/utlidar/cloud_livox_mid360</code>点击<code>OK</code>, 然后将左上角的<code>Fixed Frame</code>右侧框中输入<code>livox_frame</code>即可看到雷达信息<br />
+<img src="/figures/robotics/real/g1/g1_mid-360_demo.png" srcset="/img/loading.gif" lazyload alt="g1 mid360 demo" /></p>
+<h2 id="运控开发"><a class="markdownIt-Anchor" href="#运控开发"></a> 运控开发</h2>
+<p>…</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>宇树g1-edu 29dof配置</div>
+      <div>https://wty-yy.xyz/posts/30512/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年10月31日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/posts/4856/" title="使用SAM2对视频物体进行连续帧打码">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">使用SAM2对视频物体进行连续帧打码</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/30632/" title="Ubuntu22.04安装ROS1 Noetic和ROS2 Humble">
+                        <span class="hidden-mobile">Ubuntu22.04安装ROS1 Noetic和ROS2 Humble</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/ros2/ros2_controller_struct.drawio.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/robotics/ros2/ros2_controller_start_success.png">
 <meta property="article:published_time" content="2025-01-12T02:07:41.000Z">
-<meta property="article:modified_time" content="2025-07-09T09:13:12.481Z">
+<meta property="article:modified_time" content="2025-12-20T10:35:10.645Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/ros2/urdf_joint_and_link.png">
@@ -371,6 +371,15 @@
           <article class="post-content mx-auto">
             <h1 id="seo-header">ROS2笔记</h1>
             
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    <!-- compatible with older versions-->
+                    最新更新于: 2025年12月20日晚上6点35分
+                  
+                
+              </p>
+            
             
               <div class="markdown-body">
                 
@@ -402,13 +411,15 @@ colcon build --symlink-install --packages-select <span class="token operator">&l
 <p>可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/FRIGIDWINTER/article/details/136502435">CSDN - https://blog.csdn.net/FRIGIDWINTER/article/details/136502435</a>不过没有这么复杂</p>
 </blockquote>
 <p>安装十分简单，只需如下三行</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 必须为python 3.10</span>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 必须为python 3.10 (humble), python 3.8 (foxy)</span>
 conda create <span class="token parameter variable">-n</span> ros2 <span class="token assign-left variable">python</span><span class="token operator">=</span><span class="token number">3.10</span>  <span class="token comment"># 安装的python版本一定要和ros2默认的版本一致</span>
 conda activate ros2
-conda <span class="token function">install</span> colcon-common-extensions  <span class="token comment"># 仅需安装</span>
+pip <span class="token function">install</span> colcon-common-extensions  <span class="token comment"># 仅需安装</span>
 
-<span class="token comment"># 一些默认会安装的包</span>
-conda <span class="token function">install</span> numpy matplotlib lark pyqt opencv<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token comment"># 安装一些必备的包</span>
+pip <span class="token function">install</span> numpy matplotlib lark pyqt opencv-python
+<span class="token comment"># foxy还需安装指定版本的empy</span>
+pip <span class="token function">install</span> <span class="token assign-left variable">empy</span><span class="token operator">==</span><span class="token number">3.3</span>.4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>下面简单测试一下：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ros2 pkg create my_test  <span class="token comment"># 创建测试项目名为my_test</span>
 
@@ -889,7 +900,7 @@ teleop_node:
 <p>我写了一个launch文件可以同时启动gazebo,rsp,joystick三者<a target="_blank" rel="noopener" href="https://github.com/wty-yy/ros-car-cubot/blob/v2-cubot-sim-demo/launch/launch_all_sim_rsp_joy.launch.py">GitHub - launch/launch_all_sim_rsp_joy.launch.py</a>，直接启动可以看到下图的节点关系：<br />
 <img src="/figures/robotics/ros2/gazebo_rsp_joystick_node_graph.png" srcset="/img/loading.gif" lazyload alt="Gazebo + RSP + joystick" /></p>
 <p>这样我们就可以用手柄直接控制仿真中的小车啦！效果如下所示，手柄就可以直接后端控制哦</p>
-<div id="dplayer4" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer4"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/gazebo_rsp_joystick_control.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer6" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer6"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/gazebo_rsp_joystick_control.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <h2 id="ros2-controller"><a class="markdownIt-Anchor" href="#ros2-controller"></a> ROS2 controller</h2>
 <blockquote>
 <p>相关教程：（差分驱动小车为例）</p>
@@ -977,7 +988,7 @@ ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args <span class="tok
 <li>最后调整Ki：加入Ki，消除稳态误差，但注意不要使Ki过大</li>
 </ol>
 <p>我最后调的结果为：<code>kp=15, ki=0, kd=0.1</code></p>
-<div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/cubot_real_ros2_control.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer7" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer7"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/cubot_real_ros2_control.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
               </div>

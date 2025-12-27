@@ -1,0 +1,1161 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="由于视频中的物体需要进行连续帧打码, 又不能打码过多导致视频展示性降低, 因此尝试通过SAM2框选prompt跟踪掩码的功能来对视频中的物体进行打码, 我的电脑配置如下  CPU: R7-5700X GPU: RTX 4080 内存: 50GB  只对原视频中三帧框选需要蒙版的对象即可, 整个视频分割效果如下  .layout-container {   display: flex;   flex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用SAM2对视频物体进行连续帧打码">
+<meta property="og:url" content="https://wty-yy.xyz/posts/4856/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="由于视频中的物体需要进行连续帧打码, 又不能打码过多导致视频展示性降低, 因此尝试通过SAM2框选prompt跟踪掩码的功能来对视频中的物体进行打码, 我的电脑配置如下  CPU: R7-5700X GPU: RTX 4080 内存: 50GB  只对原视频中三帧框选需要蒙版的对象即可, 整个视频分割效果如下  .layout-container {   display: flex;   flex">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/sam2_mask_prompts_1.jpg">
+<meta property="og:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/sam2_mask_prompts_2.jpg">
+<meta property="og:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/sam2_mask_prompts_3.jpg">
+<meta property="article:published_time" content="2025-11-08T09:26:40.000Z">
+<meta property="article:modified_time" content="2025-12-20T10:35:10.645Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/sam2_mask_prompts_1.jpg">
+  
+  
+  
+  <title>使用SAM2对视频物体进行连续帧打码 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><script src="/assets/js/DPlayer.min.js"></script></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="使用SAM2对视频物体进行连续帧打码"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-08 17:26" pubdate>
+          2025年11月8日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">使用SAM2对视频物体进行连续帧打码</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    <!-- compatible with older versions-->
+                    最新更新于: 2025年12月20日晚上6点35分
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>由于视频中的物体需要进行连续帧打码, 又不能打码过多导致视频展示性降低, 因此尝试通过SAM2框选prompt跟踪掩码的功能来对视频中的物体进行打码, 我的电脑配置如下</p>
+<ol>
+<li>CPU: R7-5700X</li>
+<li>GPU: RTX 4080</li>
+<li>内存: 50GB</li>
+</ol>
+<p>只对原视频中三帧框选需要蒙版的对象即可, 整个视频分割效果如下</p>
+<style>
+.layout-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+}
+.layout-left, .layout-right {
+  flex: 1;
+  min-width: 300px;
+}
+@media (max-width: 768px) {
+  .layout-container {
+    flex-direction: column;
+  }
+}
+</style>
+<div class="layout-container">
+  <div class="layout-left">
+<div id="dplayer3" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer3"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/g1_dance_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+  <div align="center">
+    原视频
+    <a href="/videos/g1_dance_demo.mp4" download>下载链接</a>
+  </div>
+  </div>
+  <div class="layout-right">
+<div id="dplayer4" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer4"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/g1_dance_demo_masked.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+  <div align="center">
+    SAM2分割打码后效果
+    <a href="/videos/g1_dance_demo_masked.mp4" download>下载链接</a>
+  </div>
+  </div>
+</div>
+<h2 id="安装sam2"><a class="markdownIt-Anchor" href="#安装sam2"></a> 安装SAM2</h2>
+<p>推荐安装Conda Miniforge环境: <a target="_blank" rel="noopener" href="https://github.com/conda-forge/miniforge/releases">miniforge</a>, 再根据<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/sam2?tab=readme-ov-file#installation">SAM2 GitHub 官方安装流程</a>安装好Pytorch, SAM2, 下载好模型文件, 放到<code>sam2/checkpoints</code>文件夹下：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_tiny.pt">sam2.1_hiera_tiny.pt</a></li>
+<li><a target="_blank" rel="noopener" href="https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_small.pt">sam2.1_hiera_small.pt</a></li>
+<li><a target="_blank" rel="noopener" href="https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_base_plus.pt">sam2.1_hiera_base_plus.pt</a></li>
+</ol>
+<p>如果后续运行显存不够, 可以尝试更小的模型文件, 我这里使用的是<code>sam2.1_hiera_base_plus</code></p>
+<h2 id="分割视频"><a class="markdownIt-Anchor" href="#分割视频"></a> 分割视频</h2>
+<p>由于SAM2每次需要将整个视频划分为图片, 再一次性全部读入内存中, 并读取全部的prompt, 如果处理的视频时间过长则会显存溢出, 我的显存只有16GB每次只能处理20秒的数据, 下面我们先对视频数据进行处理:</p>
+<p>裁剪命令如下, 可以将mp4文件按照20s中所有帧提取到同级目录下的文件夹中, 用于后续处理</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">python extract_frames_from_video.py --video-file g1_dance_demo.mp4 --folder-duration <span class="token number">20</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p><code>extract_frames_from_video.py</code>源代码如下</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+从视频中按指定时间间隔提取帧并保存为图片存储到对应文件夹中。
+python extract_frames_from_video.py \
+    --video-file g1_dance_demo.mp4 \
+    --output-folder g1_dance_demo_frames \
+    --start 2 --end 4 --folder-duration 0.2
+"""</span>
+<span class="token keyword">import</span> os
+<span class="token keyword">import</span> cv2
+<span class="token keyword">import</span> time
+<span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
+<span class="token keyword">from</span> typing <span class="token keyword">import</span> Optional
+
+<span class="token keyword">def</span> <span class="token function">extract_frames</span><span class="token punctuation">(</span>
+        video_path<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span>
+        output_dir<span class="token punctuation">:</span> Optional<span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">,</span>
+        start<span class="token punctuation">:</span> <span class="token builtin">int</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        end<span class="token punctuation">:</span> Optional<span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">,</span>
+        interval_sec<span class="token punctuation">:</span> Optional<span class="token punctuation">[</span><span class="token builtin">float</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">,</span>
+        folder_duration<span class="token punctuation">:</span> Optional<span class="token punctuation">[</span><span class="token builtin">float</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">None</span><span class="token punctuation">,</span>
+        folder_prefix<span class="token punctuation">:</span> <span class="token builtin">str</span> <span class="token operator">=</span> <span class="token string">"frame"</span><span class="token punctuation">,</span>
+        folder_start_idx<span class="token punctuation">:</span> <span class="token builtin">int</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    从视频中按指定时间间隔提取帧并保存为图片存储到对应文件夹中, 例如:
+        folder_duration=20, start=0, end=60, 则会创建3个文件夹:
+        
+        output_dir/
+            1_frame0-19/
+            2_frame20-39/
+            3_frame40-59/
+        
+        每个文件夹内保存对应时间段的视频帧图片。
+
+    Args:
+        video_path (str): 输入视频文件的路径。
+        output_dir (str): 保存图片的目标目录, 默认在video_path同级路径下创建同名文件夹。
+        start (int): 开始时间点 (秒), 默认从0秒开始。
+        end (Optional[int]): 结束时间点 (秒), 默认到视频结尾。
+        interval_sec (Optional[float]): 提取帧的时间间隔 (秒), 默认提取所有帧。
+        folder_duration (Optional[float]): 每个子文件夹包含的视频时长 (秒), 默认不分文件夹。
+        folder_prefix (str): 子文件夹前缀名称, 默认 "frame"。
+        folder_start_idx (int): 子文件夹起始索引, 默认从1开始。
+    """</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>exists<span class="token punctuation">(</span>video_path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"[ERROR] Video file </span><span class="token interpolation"><span class="token punctuation">&#123;</span>video_path<span class="token punctuation">&#125;</span></span><span class="token string"> not found."</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+
+    cap <span class="token operator">=</span> cv2<span class="token punctuation">.</span>VideoCapture<span class="token punctuation">(</span>video_path<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> cap<span class="token punctuation">.</span>isOpened<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"[ERROR] Can't open video </span><span class="token interpolation"><span class="token punctuation">&#123;</span>video_path<span class="token punctuation">&#125;</span></span><span class="token string">."</span></span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+
+    fps <span class="token operator">=</span> cap<span class="token punctuation">.</span>get<span class="token punctuation">(</span>cv2<span class="token punctuation">.</span>CAP_PROP_FPS<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> fps <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"[ERROR] Can't get FPS."</span><span class="token punctuation">)</span>
+        cap<span class="token punctuation">.</span>release<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span>
+    total_frames <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>cap<span class="token punctuation">.</span>get<span class="token punctuation">(</span>cv2<span class="token punctuation">.</span>CAP_PROP_FRAME_COUNT<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Process video: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>video_path<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"  - FPS: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>fps<span class="token punctuation">:</span><span class="token format-spec">.2f</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+    <span class="token keyword">if</span> end <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">or</span> end <span class="token operator">></span> total_frames <span class="token operator">/</span> fps<span class="token punctuation">:</span>
+        end <span class="token operator">=</span> total_frames <span class="token operator">/</span> fps
+    <span class="token keyword">if</span> output_dir <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        output_dir <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>Path<span class="token punctuation">(</span>video_path<span class="token punctuation">)</span><span class="token punctuation">.</span>parent <span class="token operator">/</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>Path<span class="token punctuation">(</span>video_path<span class="token punctuation">)</span><span class="token punctuation">.</span>stem<span class="token punctuation">&#125;</span></span><span class="token string">_frames"</span></span><span class="token punctuation">)</span>
+    output_dir <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>output_dir<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string-interpolation"><span class="token string">f"_</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">int</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">/</span>interval_sec<span class="token punctuation">)</span> <span class="token keyword">if</span> interval_sec <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span> <span class="token keyword">else</span> <span class="token builtin">int</span><span class="token punctuation">(</span>fps<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">fps"</span></span>
+    output_dir <span class="token operator">=</span> Path<span class="token punctuation">(</span>output_dir<span class="token punctuation">)</span>
+    output_dirs <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    output_dir<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    now_save_dir <span class="token operator">=</span> output_dir <span class="token operator">/</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>folder_start_idx<span class="token punctuation">&#125;</span></span><span class="token string">_</span><span class="token interpolation"><span class="token punctuation">&#123;</span>folder_prefix<span class="token punctuation">&#125;</span></span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">int</span><span class="token punctuation">(</span>start<span class="token operator">*</span>fps<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">-</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">int</span><span class="token punctuation">(</span>end<span class="token operator">*</span>fps<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span>
+    <span class="token keyword">if</span> folder_duration <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        now_save_dir<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+        output_dirs<span class="token punctuation">.</span>append<span class="token punctuation">(</span>now_save_dir<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+    now_end <span class="token operator">=</span> <span class="token boolean">None</span>  <span class="token comment"># 当前子文件夹结束时间点 (秒)</span>
+
+
+    <span class="token comment"># 循环读取和保存帧</span>
+    frame_count <span class="token operator">=</span> <span class="token number">0</span>  <span class="token comment"># 记录总共读取了多少帧</span>
+    saved_count <span class="token operator">=</span> <span class="token number">0</span>  <span class="token comment"># 记录总共保存了多少帧</span>
+    next_save_time_sec <span class="token operator">=</span> <span class="token number">0.0</span>  <span class="token comment"># 下一个保存图片的目标时间点（秒）</span>
+
+    use_tqdm <span class="token operator">=</span> <span class="token boolean">True</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        <span class="token keyword">from</span> tqdm <span class="token keyword">import</span> tqdm
+        bar <span class="token operator">=</span> tqdm<span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>end <span class="token operator">*</span> fps<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> desc<span class="token operator">=</span><span class="token string">"Extracting frames"</span><span class="token punctuation">,</span> unit<span class="token operator">=</span><span class="token string">" frames"</span><span class="token punctuation">)</span>
+    <span class="token keyword">except</span> ImportError<span class="token punctuation">:</span>
+        bar <span class="token operator">=</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>end <span class="token operator">*</span> fps<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        use_tqdm <span class="token operator">=</span> <span class="token boolean">False</span>
+
+    start_time <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> _ <span class="token keyword">in</span> bar<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> cap<span class="token punctuation">.</span>isOpened<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            flag<span class="token punctuation">,</span> frame <span class="token operator">=</span> cap<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> flag<span class="token punctuation">:</span>
+            <span class="token keyword">break</span>
+
+        current_time_sec <span class="token operator">=</span> frame_count <span class="token operator">/</span> fps
+        frame_count <span class="token operator">+=</span> <span class="token number">1</span>
+        <span class="token keyword">if</span> end <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span> <span class="token keyword">and</span> current_time_sec <span class="token operator">>=</span> end<span class="token punctuation">:</span>
+            <span class="token keyword">break</span>
+        <span class="token keyword">if</span> current_time_sec <span class="token operator">&lt;</span> start<span class="token punctuation">:</span>
+            <span class="token keyword">continue</span>
+
+        <span class="token comment"># 检查是否达到了保存时间点</span>
+        <span class="token keyword">if</span> current_time_sec <span class="token operator">></span> next_save_time_sec <span class="token keyword">or</span> interval_sec <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> folder_duration <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span> <span class="token keyword">and</span> <span class="token punctuation">(</span>now_end <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">or</span> current_time_sec <span class="token operator">>=</span> now_end<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token comment"># 创建新的子文件夹</span>
+                now_save_dir <span class="token operator">=</span> output_dir <span class="token operator">/</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>folder_start_idx<span class="token punctuation">&#125;</span></span><span class="token string">_</span><span class="token interpolation"><span class="token punctuation">&#123;</span>folder_prefix<span class="token punctuation">&#125;</span></span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">int</span><span class="token punctuation">(</span>current_time_sec<span class="token operator">*</span>fps<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">-</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">min</span><span class="token punctuation">(</span>current_time_sec<span class="token operator">+</span>folder_duration<span class="token punctuation">,</span> end<span class="token punctuation">)</span><span class="token operator">*</span>fps<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span>
+                output_dirs<span class="token punctuation">.</span>append<span class="token punctuation">(</span>now_save_dir<span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+                now_save_dir<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+                folder_start_idx <span class="token operator">+=</span> <span class="token number">1</span>
+                saved_count <span class="token operator">=</span> <span class="token number">0</span>
+                now_end <span class="token operator">=</span> current_time_sec <span class="token operator">+</span> folder_duration
+
+            output_filename <span class="token operator">=</span> now_save_dir <span class="token operator">/</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>saved_count<span class="token punctuation">:</span><span class="token format-spec">05d</span><span class="token punctuation">&#125;</span></span><span class="token string">.jpg"</span></span>
+            cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span>output_filename<span class="token punctuation">,</span> frame<span class="token punctuation">)</span>
+            saved_count <span class="token operator">+=</span> <span class="token number">1</span>
+            <span class="token keyword">if</span> interval_sec <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+                next_save_time_sec <span class="token operator">+=</span> interval_sec
+        <span class="token keyword">if</span> <span class="token keyword">not</span> use_tqdm<span class="token punctuation">:</span>
+            <span class="token keyword">if</span> frame_count <span class="token operator">%</span> <span class="token builtin">int</span><span class="token punctuation">(</span>fps<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+                time_used <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> start_time
+                <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"  - Processed </span><span class="token interpolation"><span class="token punctuation">&#123;</span>frame_count<span class="token punctuation">&#125;</span></span><span class="token string">/</span><span class="token interpolation"><span class="token punctuation">&#123;</span>total_frames<span class="token punctuation">&#125;</span></span><span class="token string"> frames, remaining </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">int</span><span class="token punctuation">(</span>time_used<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">&lt;</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">int</span><span class="token punctuation">(</span><span class="token punctuation">(</span>total_frames <span class="token operator">-</span> frame_count<span class="token punctuation">)</span> <span class="token operator">/</span> frame_count <span class="token operator">*</span> time_used<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string"> sec"</span></span><span class="token punctuation">)</span>
+
+    cap<span class="token punctuation">.</span>release<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"\n处理完成。"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"  - 总共读取帧数: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>frame_count<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"  - 图片保存至: '</span><span class="token interpolation"><span class="token punctuation">&#123;</span>output_dir<span class="token punctuation">&#125;</span></span><span class="token string">'"</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"  - 包含子文件夹: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>output_dirs<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+<span class="token keyword">from</span> argparse <span class="token keyword">import</span> ArgumentParser
+parser <span class="token operator">=</span> ArgumentParser<span class="token punctuation">(</span><span class="token punctuation">)</span>
+parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">"--video-file"</span><span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">str</span><span class="token punctuation">,</span> required<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> <span class="token builtin">help</span><span class="token operator">=</span><span class="token string">"Path to the video file."</span><span class="token punctuation">)</span>
+parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">"--output-folder"</span><span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">str</span><span class="token punctuation">,</span> <span class="token builtin">help</span><span class="token operator">=</span><span class="token string">"Directory to save extracted frames."</span><span class="token punctuation">)</span>
+parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">"--start"</span><span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">,</span> default<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">help</span><span class="token operator">=</span><span class="token string">"Start time in seconds."</span><span class="token punctuation">)</span>
+parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">"--end"</span><span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token builtin">help</span><span class="token operator">=</span><span class="token string">"End time in seconds."</span><span class="token punctuation">)</span>
+parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">"--folder-duration"</span><span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">float</span><span class="token punctuation">,</span> <span class="token builtin">help</span><span class="token operator">=</span><span class="token string">"Duration of each folder in seconds."</span><span class="token punctuation">)</span>
+parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">"--interval-sec"</span><span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">float</span><span class="token punctuation">,</span> <span class="token builtin">help</span><span class="token operator">=</span><span class="token string">"Interval between extracted frames in seconds."</span><span class="token punctuation">)</span>
+parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">"--folder-prefix"</span><span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">str</span><span class="token punctuation">,</span> default<span class="token operator">=</span><span class="token string">"frame"</span><span class="token punctuation">,</span> <span class="token builtin">help</span><span class="token operator">=</span><span class="token string">"Prefix for folder names."</span><span class="token punctuation">)</span>
+parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span><span class="token string">"--start-idx"</span><span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">,</span> default<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token builtin">help</span><span class="token operator">=</span><span class="token string">"Starting index for folder naming."</span><span class="token punctuation">)</span>
+
+args <span class="token operator">=</span> parser<span class="token punctuation">.</span>parse_args<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+extract_frames<span class="token punctuation">(</span>
+    video_path<span class="token operator">=</span>args<span class="token punctuation">.</span>video_file<span class="token punctuation">,</span>
+    output_dir<span class="token operator">=</span>args<span class="token punctuation">.</span>output_folder<span class="token punctuation">,</span>
+    start<span class="token operator">=</span>args<span class="token punctuation">.</span>start<span class="token punctuation">,</span>
+    end<span class="token operator">=</span>args<span class="token punctuation">.</span>end<span class="token punctuation">,</span>
+    folder_duration<span class="token operator">=</span>args<span class="token punctuation">.</span>folder_duration<span class="token punctuation">,</span>
+    interval_sec<span class="token operator">=</span>args<span class="token punctuation">.</span>interval_sec<span class="token punctuation">,</span>
+    folder_prefix<span class="token operator">=</span>args<span class="token punctuation">.</span>folder_prefix<span class="token punctuation">,</span>
+    folder_start_idx<span class="token operator">=</span>args<span class="token punctuation">.</span>start_idx<span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="labelme制作prompt"><a class="markdownIt-Anchor" href="#labelme制作prompt"></a> LabelMe制作prompt</h2>
+<p>SAM2支持两种prompt: points和boxes, 通过prompt可以给出我们想要分割的目标对象, 在第<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathnormal">i</span></span></span></span>帧我们给出了分割对象, 后面模型就会自动追踪将其分割出来, 这里我们使用LabelMe来绘制boxes prompt, 这里推荐下载<a target="_blank" rel="noopener" href="https://github.com/wkentaro/labelme/releases/tag/v5.5.0">GitHub - LabelMe - v5.5.0</a>可执行文件, 直接运行</p>
+<blockquote>
+<p>LabelMe的配置文件在<code>~/.labelmerc</code> (Linux), <code>用户目录/.labelmerc</code> (Windows)下, 如果每次启动的配置不符合要求, 可以修改配置文件, 便于下次启动</p>
+</blockquote>
+<p>打开LabelMe, 首先进行配置:</p>
+<ol>
+<li>File -&gt; Save Automatically 打开</li>
+<li>File -&gt; Save With Image Data 关闭</li>
+<li>Edit -&gt; Keep Previous Annotation 关闭</li>
+</ol>
+<p>然后点击Open Dir, 打开刚才我们执行完<code>extract_frames_from_video.py</code>得到的数据文件夹<code>g1_dance_demo_frames_30fps/1_frame0-149</code>, 选择矩形边界框如下图所示, 框选出边界即可, Ctrl+S保存标记 (由于我们选择了Save Automatically, 切换到其他的图片也能自动保存标记)</p>
+<table>
+<thead>
+<tr>
+<th>第0帧</th>
+<th>第14帧</th>
+<th>第29帧</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/figures/tools/sam2_mask/sam2_mask_prompts_1.jpg" srcset="/img/loading.gif" lazyload alt="sam2_mask_prompts_1" /></td>
+<td><img src="/figures/tools/sam2_mask/sam2_mask_prompts_2.jpg" srcset="/img/loading.gif" lazyload alt="sam2_mask_prompts_2" /></td>
+<td><img src="/figures/tools/sam2_mask/sam2_mask_prompts_3.jpg" srcset="/img/loading.gif" lazyload alt="sam2_mask_prompts_3" /></td>
+</tr>
+</tbody>
+</table>
+<h2 id="sam2蒙版生成"><a class="markdownIt-Anchor" href="#sam2蒙版生成"></a> SAM2蒙版生成</h2>
+<p>完成上述两帧的prompt标记后, <strong>将下述代码main中的<code>video_parent_dir</code>修改为带有分割文件夹的图片路径</strong>, 运行分割代码<code>python sam2_segment_video.py</code>, 最后就会在同文件夹下生成每个片段的蒙版视频, 如最上面的视频效果</p>
+<p>如果要看手动标记的分割效果, 可以将<code>86-88, 104, 107-108</code>行的注释解注, 再运行就能看到prompt帧对应的分割效果图了</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+# Extract frames from video using ffmpeg
+python tools/extract_frames_from_video.py  # change video path and output folder inside the script
+"""</span>
+<span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
+
+<span class="token keyword">import</span> os
+<span class="token comment"># if using Apple MPS, fall back to CPU for unsupported ops</span>
+os<span class="token punctuation">.</span>environ<span class="token punctuation">[</span><span class="token string">"PYTORCH_ENABLE_MPS_FALLBACK"</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"1"</span>
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> torch
+<span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+<span class="token keyword">import</span> json
+<span class="token keyword">from</span> tqdm <span class="token keyword">import</span> tqdm
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+<span class="token keyword">import</span> cv2
+
+<span class="token keyword">def</span> <span class="token function">show_mask</span><span class="token punctuation">(</span>mask<span class="token punctuation">,</span> ax<span class="token punctuation">,</span> obj_id<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> random_color<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> random_color<span class="token punctuation">:</span>
+        color <span class="token operator">=</span> np<span class="token punctuation">.</span>concatenate<span class="token punctuation">(</span><span class="token punctuation">[</span>np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>random<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">0.6</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span> axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        cmap <span class="token operator">=</span> plt<span class="token punctuation">.</span>get_cmap<span class="token punctuation">(</span><span class="token string">"tab10"</span><span class="token punctuation">)</span>
+        cmap_idx <span class="token operator">=</span> <span class="token number">0</span> <span class="token keyword">if</span> obj_id <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">else</span> obj_id
+        color <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token operator">*</span>cmap<span class="token punctuation">(</span>cmap_idx<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">0.6</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    h<span class="token punctuation">,</span> w <span class="token operator">=</span> mask<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+    mask_image <span class="token operator">=</span> mask<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>h<span class="token punctuation">,</span> w<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> color<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    ax<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span>mask_image<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">show_points</span><span class="token punctuation">(</span>coords<span class="token punctuation">,</span> labels<span class="token punctuation">,</span> ax<span class="token punctuation">,</span> marker_size<span class="token operator">=</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    pos_points <span class="token operator">=</span> coords<span class="token punctuation">[</span>labels<span class="token operator">==</span><span class="token number">1</span><span class="token punctuation">]</span>
+    neg_points <span class="token operator">=</span> coords<span class="token punctuation">[</span>labels<span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">]</span>
+    ax<span class="token punctuation">.</span>scatter<span class="token punctuation">(</span>pos_points<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> pos_points<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'green'</span><span class="token punctuation">,</span> marker<span class="token operator">=</span><span class="token string">'*'</span><span class="token punctuation">,</span> s<span class="token operator">=</span>marker_size<span class="token punctuation">,</span> edgecolor<span class="token operator">=</span><span class="token string">'white'</span><span class="token punctuation">,</span> linewidth<span class="token operator">=</span><span class="token number">1.25</span><span class="token punctuation">)</span>
+    ax<span class="token punctuation">.</span>scatter<span class="token punctuation">(</span>neg_points<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> neg_points<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> color<span class="token operator">=</span><span class="token string">'red'</span><span class="token punctuation">,</span> marker<span class="token operator">=</span><span class="token string">'*'</span><span class="token punctuation">,</span> s<span class="token operator">=</span>marker_size<span class="token punctuation">,</span> edgecolor<span class="token operator">=</span><span class="token string">'white'</span><span class="token punctuation">,</span> linewidth<span class="token operator">=</span><span class="token number">1.25</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">show_box</span><span class="token punctuation">(</span>box<span class="token punctuation">,</span> ax<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    x0<span class="token punctuation">,</span> y0 <span class="token operator">=</span> box<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> box<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+    w<span class="token punctuation">,</span> h <span class="token operator">=</span> box<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">-</span> box<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> box<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">-</span> box<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+    ax<span class="token punctuation">.</span>add_patch<span class="token punctuation">(</span>plt<span class="token punctuation">.</span>Rectangle<span class="token punctuation">(</span><span class="token punctuation">(</span>x0<span class="token punctuation">,</span> y0<span class="token punctuation">)</span><span class="token punctuation">,</span> w<span class="token punctuation">,</span> h<span class="token punctuation">,</span> edgecolor<span class="token operator">=</span><span class="token string">'green'</span><span class="token punctuation">,</span> facecolor<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> lw<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">class</span> <span class="token class-name">SAM2SegmentVideoProcessor</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># select the device for computation</span>
+        <span class="token keyword">if</span> torch<span class="token punctuation">.</span>cuda<span class="token punctuation">.</span>is_available<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            device <span class="token operator">=</span> torch<span class="token punctuation">.</span>device<span class="token punctuation">(</span><span class="token string">"cuda"</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            device <span class="token operator">=</span> torch<span class="token punctuation">.</span>device<span class="token punctuation">(</span><span class="token string">"cpu"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"using device: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>device<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> device<span class="token punctuation">.</span><span class="token builtin">type</span> <span class="token operator">==</span> <span class="token string">"cuda"</span><span class="token punctuation">:</span>
+            <span class="token comment"># use bfloat16 for the entire notebook</span>
+            torch<span class="token punctuation">.</span>autocast<span class="token punctuation">(</span><span class="token string">"cuda"</span><span class="token punctuation">,</span> dtype<span class="token operator">=</span>torch<span class="token punctuation">.</span>bfloat16<span class="token punctuation">)</span><span class="token punctuation">.</span>__enter__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token comment"># turn on tfloat32 for Ampere GPUs (https://pytorch.org/docs/stable/notes/cuda.html#tensorfloat-32-tf32-on-ampere-devices)</span>
+            <span class="token keyword">if</span> torch<span class="token punctuation">.</span>cuda<span class="token punctuation">.</span>get_device_properties<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>major <span class="token operator">>=</span> <span class="token number">8</span><span class="token punctuation">:</span>
+                torch<span class="token punctuation">.</span>backends<span class="token punctuation">.</span>cuda<span class="token punctuation">.</span>matmul<span class="token punctuation">.</span>allow_tf32 <span class="token operator">=</span> <span class="token boolean">True</span>
+                torch<span class="token punctuation">.</span>backends<span class="token punctuation">.</span>cudnn<span class="token punctuation">.</span>allow_tf32 <span class="token operator">=</span> <span class="token boolean">True</span>
+
+        <span class="token keyword">from</span> sam2<span class="token punctuation">.</span>build_sam <span class="token keyword">import</span> build_sam2_video_predictor
+
+        sam2_checkpoint <span class="token operator">=</span> <span class="token string">"./checkpoints/sam2.1_hiera_base_plus.pt"</span>
+        model_cfg <span class="token operator">=</span> <span class="token string">"configs/sam2.1/sam2.1_hiera_b+.yaml"</span>
+        <span class="token comment"># sam2_checkpoint = "./checkpoints/sam2.1_hiera_tiny.pt"</span>
+        <span class="token comment"># model_cfg = "./configs/sam2.1/sam2.1_hiera_t.yaml"</span>
+
+        self<span class="token punctuation">.</span>predictor <span class="token operator">=</span> build_sam2_video_predictor<span class="token punctuation">(</span>model_cfg<span class="token punctuation">,</span> sam2_checkpoint<span class="token punctuation">,</span> device<span class="token operator">=</span>device<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>label2obj_id <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+        self<span class="token punctuation">.</span>num_prompts <span class="token operator">=</span> <span class="token number">0</span>
+
+    <span class="token keyword">def</span> <span class="token function">init_state</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> video_dir<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>video_dir <span class="token operator">=</span> Path<span class="token punctuation">(</span>video_dir<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>frames <span class="token operator">=</span> <span class="token builtin">sorted</span><span class="token punctuation">(</span>Path<span class="token punctuation">(</span>video_dir<span class="token punctuation">)</span><span class="token punctuation">.</span>rglob<span class="token punctuation">(</span><span class="token string">"*.jpg"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>w<span class="token punctuation">,</span> self<span class="token punctuation">.</span>h <span class="token operator">=</span> Image<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>frames<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>size
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"found </span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>frames<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string"> frames"</span></span><span class="token punctuation">)</span>
+
+        <span class="token comment"># Init model</span>
+        self<span class="token punctuation">.</span>inference_state <span class="token operator">=</span> self<span class="token punctuation">.</span>predictor<span class="token punctuation">.</span>init_state<span class="token punctuation">(</span>video_path<span class="token operator">=</span>video_dir<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>predictor<span class="token punctuation">.</span>reset_state<span class="token punctuation">(</span>self<span class="token punctuation">.</span>inference_state<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">load_frame_prompt</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">""" Find all json files for frame prompts (from LabelMe) """</span>
+        <span class="token keyword">for</span> frame_json <span class="token keyword">in</span> <span class="token builtin">sorted</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>video_dir<span class="token punctuation">.</span>rglob<span class="token punctuation">(</span><span class="token string">"*.json"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            frame_idx <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>frame_json<span class="token punctuation">.</span>stem<span class="token punctuation">)</span>
+            <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>frame_json<span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+                labelme_data <span class="token operator">=</span> json<span class="token punctuation">.</span>load<span class="token punctuation">(</span>f<span class="token punctuation">)</span>
+            shapes <span class="token operator">=</span> labelme_data<span class="token punctuation">[</span><span class="token string">"shapes"</span><span class="token punctuation">]</span>
+            <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>shapes<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span> <span class="token keyword">continue</span>
+            <span class="token comment"># plt.figure(figsize=(self.w / 100, self.h / 100), dpi=100)</span>
+            <span class="token comment"># plt.title(f"Frame &#123;frame_idx&#125; with Box Prompts")</span>
+            <span class="token comment"># plt.imshow(Image.open(self.frames[frame_idx]))</span>
+            <span class="token keyword">for</span> shape <span class="token keyword">in</span> shapes<span class="token punctuation">:</span>
+                <span class="token keyword">if</span> shape<span class="token punctuation">[</span><span class="token string">'shape_type'</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token string">'rectangle'</span><span class="token punctuation">:</span> <span class="token keyword">continue</span>
+                label <span class="token operator">=</span> shape<span class="token punctuation">[</span><span class="token string">'label'</span><span class="token punctuation">]</span>
+                <span class="token keyword">if</span> label <span class="token keyword">not</span> <span class="token keyword">in</span> self<span class="token punctuation">.</span>label2obj_id<span class="token punctuation">:</span>
+                    self<span class="token punctuation">.</span>label2obj_id<span class="token punctuation">[</span>label<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>label2obj_id<span class="token punctuation">)</span>
+                box <span class="token operator">=</span> shape<span class="token punctuation">[</span><span class="token string">'points'</span><span class="token punctuation">]</span>  <span class="token comment"># [[x0, y0], [x1, y1]]</span>
+                x0<span class="token punctuation">,</span> y0 <span class="token operator">=</span> box<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+                x1<span class="token punctuation">,</span> y1 <span class="token operator">=</span> box<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+                box <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">min</span><span class="token punctuation">(</span>x0<span class="token punctuation">,</span> x1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">min</span><span class="token punctuation">(</span>y0<span class="token punctuation">,</span> y1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">(</span>x0<span class="token punctuation">,</span> x1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">max</span><span class="token punctuation">(</span>y0<span class="token punctuation">,</span> y1<span class="token punctuation">)</span><span class="token punctuation">]</span>
+                _<span class="token punctuation">,</span> out_obj_ids<span class="token punctuation">,</span> out_mask_logits <span class="token operator">=</span> self<span class="token punctuation">.</span>predictor<span class="token punctuation">.</span>add_new_points_or_box<span class="token punctuation">(</span>
+                    inference_state<span class="token operator">=</span>self<span class="token punctuation">.</span>inference_state<span class="token punctuation">,</span>
+                    frame_idx<span class="token operator">=</span>frame_idx<span class="token punctuation">,</span>
+                    obj_id<span class="token operator">=</span>self<span class="token punctuation">.</span>label2obj_id<span class="token punctuation">[</span>label<span class="token punctuation">]</span><span class="token punctuation">,</span>
+                    box<span class="token operator">=</span>box
+                <span class="token punctuation">)</span>
+                <span class="token comment"># show_box(box, plt.gca())</span>
+            <span class="token keyword">for</span> i<span class="token punctuation">,</span> out_obj_id <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>out_obj_ids<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                show_mask<span class="token punctuation">(</span><span class="token punctuation">(</span>out_mask_logits<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>cpu<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> plt<span class="token punctuation">.</span>gca<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> obj_id<span class="token operator">=</span>out_obj_id<span class="token punctuation">)</span>
+            <span class="token comment"># plt.axis('off')</span>
+            <span class="token comment"># plt.show()</span>
+            self<span class="token punctuation">.</span>num_prompts <span class="token operator">+=</span> <span class="token number">1</span>
+
+    <span class="token keyword">def</span> <span class="token function">segment_frames</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># output_dir  = self.video_dir.parent / f"&#123;self.video_dir.name&#125;_segmented"</span>
+        <span class="token comment"># output_dir.mkdir(exist_ok=True, parents=True)</span>
+        output_video <span class="token operator">=</span> self<span class="token punctuation">.</span>video_dir<span class="token punctuation">.</span>parent <span class="token operator">/</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>self<span class="token punctuation">.</span>video_dir<span class="token punctuation">.</span>name<span class="token punctuation">&#125;</span></span><span class="token string">_segmented.avi"</span></span>
+        video_segments <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+        writer <span class="token operator">=</span> cv2<span class="token punctuation">.</span>VideoWriter<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>output_video<span class="token punctuation">)</span><span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>VideoWriter_fourcc<span class="token punctuation">(</span><span class="token operator">*</span><span class="token string">'XVID'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> fps<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">,</span> frameSize<span class="token operator">=</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>w<span class="token punctuation">,</span> self<span class="token punctuation">.</span>h<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>num_prompts <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">:</span>
+            <span class="token keyword">for</span> out_frame_idx<span class="token punctuation">,</span> out_obj_ids<span class="token punctuation">,</span> out_mask_logits <span class="token keyword">in</span> self<span class="token punctuation">.</span>predictor<span class="token punctuation">.</span>propagate_in_video<span class="token punctuation">(</span>self<span class="token punctuation">.</span>inference_state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                video_segments<span class="token punctuation">[</span>out_frame_idx<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+                    out_obj_id<span class="token punctuation">:</span> <span class="token punctuation">(</span>out_mask_logits<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">></span> <span class="token number">0.0</span><span class="token punctuation">)</span><span class="token punctuation">.</span>cpu<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token keyword">for</span> i<span class="token punctuation">,</span> out_obj_id <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>out_obj_ids<span class="token punctuation">)</span>
+                <span class="token punctuation">&#125;</span>
+        <span class="token keyword">for</span> frame_idx <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>frames<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment"># Write video</span>
+            <span class="token keyword">if</span> frame_idx <span class="token keyword">not</span> <span class="token keyword">in</span> video_segments<span class="token punctuation">:</span>
+                img <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span>self<span class="token punctuation">.</span>frames<span class="token punctuation">[</span>frame_idx<span class="token punctuation">]</span><span class="token punctuation">)</span>
+                writer<span class="token punctuation">.</span>write<span class="token punctuation">(</span>img<span class="token punctuation">)</span>
+                <span class="token keyword">continue</span>
+            img <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span>self<span class="token punctuation">.</span>frames<span class="token punctuation">[</span>frame_idx<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            <span class="token keyword">for</span> out_obj_id<span class="token punctuation">,</span> out_mask <span class="token keyword">in</span> video_segments<span class="token punctuation">[</span>frame_idx<span class="token punctuation">]</span><span class="token punctuation">.</span>items<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                mask <span class="token operator">=</span> out_mask<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>self<span class="token punctuation">.</span>h<span class="token punctuation">,</span> self<span class="token punctuation">.</span>w<span class="token punctuation">)</span>
+                pixels <span class="token operator">=</span> img<span class="token punctuation">[</span>mask<span class="token punctuation">]</span><span class="token punctuation">.</span>astype<span class="token punctuation">(</span>np<span class="token punctuation">.</span>float32<span class="token punctuation">)</span>
+                <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>pixels<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">:</span>
+                    <span class="token comment"># img[mask] = np.mean(pixels, axis=0).astype(np.uint8)  # (Optional 1) color the masked area with mean color</span>
+                    img<span class="token punctuation">[</span>mask<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">255</span>  <span class="token comment"># (Optional 2) white out the masked area</span>
+
+            writer<span class="token punctuation">.</span>write<span class="token punctuation">(</span>img<span class="token punctuation">)</span>
+
+            <span class="token comment"># Save segmented frames</span>
+            <span class="token comment"># img = Image.open(self.frames[frame_idx])</span>
+            <span class="token comment"># img = np.array(img)</span>
+            <span class="token comment"># for out_obj_id, out_mask in video_segments[frame_idx].items():</span>
+            <span class="token comment">#     img[out_mask.reshape(self.h, self.w)] = 255</span>
+            <span class="token comment"># output_path = output_dir / f"&#123;frame_idx:05d&#125;.png"</span>
+            <span class="token comment"># Image.fromarray(img).save(output_path)</span>
+
+            <span class="token comment"># Matplotlib visualization (optional)</span>
+            <span class="token comment"># plt.figure(figsize=(self.w / 100, self.h / 100), dpi=100)</span>
+            <span class="token comment"># plt.title(f"Frame &#123;frame_idx&#125;")</span>
+            <span class="token comment"># plt.imshow(Image.open(self.frames[frame_idx]))</span>
+            <span class="token comment"># for out_obj_id, out_mask in video_segments[frame_idx].items():</span>
+            <span class="token comment">#     show_mask(out_mask, plt.gca(), obj_id=out_obj_id)</span>
+            <span class="token comment"># plt.axis('off')</span>
+            <span class="token comment"># output_path = output_dir / f"&#123;frame_idx:05d&#125;.png"</span>
+            <span class="token comment"># plt.savefig(output_path, bbox_inches='tight', pad_inches=0)</span>
+            <span class="token comment"># plt.close()</span>
+        writer<span class="token punctuation">.</span>release<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Segmented video saved to: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>output_video<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    video_parent_dir <span class="token operator">=</span> <span class="token string">"/home/yy/Videos/sam2_mask_demo/g1_dance_demo_frames_30fps"</span>
+    video_dirs <span class="token operator">=</span> <span class="token punctuation">[</span>x <span class="token keyword">for</span> x <span class="token keyword">in</span> <span class="token builtin">sorted</span><span class="token punctuation">(</span>Path<span class="token punctuation">(</span>video_parent_dir<span class="token punctuation">)</span><span class="token punctuation">.</span>glob<span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">if</span> x<span class="token punctuation">.</span>is_dir<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> video_dir <span class="token keyword">in</span> video_dirs<span class="token punctuation">:</span>
+        idx <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>video_dir<span class="token punctuation">.</span>name<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">"_"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> idx <span class="token operator">>=</span> <span class="token number">1</span><span class="token punctuation">:</span>
+        <span class="token comment"># if 2 &lt;= idx &lt;= 9 and idx not in []:</span>
+            sam2_segment_video_processor <span class="token operator">=</span> SAM2SegmentVideoProcessor<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Processing video directory: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>video_dir<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+            sam2_segment_video_processor<span class="token punctuation">.</span>init_state<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>video_dir<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            sam2_segment_video_processor<span class="token punctuation">.</span>load_frame_prompt<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            sam2_segment_video_processor<span class="token punctuation">.</span>segment_frames<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>使用SAM2对视频物体进行连续帧打码</div>
+      <div>https://wty-yy.xyz/posts/4856/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/30512/" title="宇树g1-edu 29dof配置">
+                        <span class="hidden-mobile">宇树g1-edu 29dof配置</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
