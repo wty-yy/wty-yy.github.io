@@ -19,17 +19,17 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）  局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToD">
+    <meta name="description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法） 一键跳转：  局域网安装 服务器安装 Nvidia Jetson安装   局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享">
 <meta property="og:type" content="article">
 <meta property="og:title" content="实现Linux无头模式下硬件加速的屏幕共享">
 <meta property="og:url" content="https://wty-yy.xyz/posts/47970/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）  局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToD">
+<meta property="og:description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法） 一键跳转：  局域网安装 服务器安装 Nvidia Jetson安装   局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/novnc_startup_application.png">
 <meta property="article:published_time" content="2025-05-15T05:22:30.000Z">
-<meta property="article:modified_time" content="2025-12-20T10:35:10.644Z">
+<meta property="article:modified_time" content="2025-12-29T12:46:13.010Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
@@ -307,7 +307,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.7k 字
+          4.8k 字
         
       </span>
     
@@ -318,7 +318,7 @@
         
         
         
-          39 分钟
+          40 分钟
         
       </span>
     
@@ -361,7 +361,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2025年12月20日晚上6点35分
+                    最新更新于: 2025年12月29日晚上8点46分
                   
                 
               </p>
@@ -369,7 +369,13 @@
             
               <div class="markdown-body">
                 
-                <p>本文章分为两个部分，<a href="./#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%B1%8F%E5%B9%95%E5%85%B1%E4%BA%AB">第一部分</a>为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，<a href="./#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%88%96nvidia-jetson%E5%8F%AF%E8%A7%86%E5%8C%96">第二部分</a>为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）</p>
+                <p>本文章分为两个部分，<a href="./#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%B1%8F%E5%B9%95%E5%85%B1%E4%BA%AB">第一部分</a>为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，<a href="./#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%AF%E8%A7%86%E5%8C%96">第二部分</a>为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）</p>
+<p>一键跳转：</p>
+<ol>
+<li><a href="./#vnc%E6%9C%8D%E5%8A%A1%E7%AB%AF">局域网安装</a></li>
+<li><a href="./#%E6%8E%A8%E8%8D%90xorg%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%AF%E5%8A%A8%E4%BB%A5%E6%94%AF%E6%8C%81nvidia%E9%A9%B1%E5%8A%A8%E6%B8%B2%E6%9F%93">服务器安装</a></li>
+<li><a href="./#nvidia-jetson%E5%8F%AF%E8%A7%86%E5%8C%96%E9%85%8D%E7%BD%AE">Nvidia Jetson安装</a></li>
+</ol>
 <h1 id="局域网屏幕共享"><a class="markdownIt-Anchor" href="#局域网屏幕共享"></a> 局域网屏幕共享</h1>
 <p>简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。</p>
 <p>如果是从外网连接，直接用<a target="_blank" rel="noopener" href="https://www.todesk.com/">ToDesk</a>或者<a target="_blank" rel="noopener" href="https://sunlogin.oray.com/">向日葵</a>即可（注意：向日葵不支持Ubuntu24.04），用本地局域网连接推荐用WIFI6，带宽更大</p>
@@ -590,11 +596,17 @@ OpenGL renderer string: NVIDIA GeForce RTX <span class="token number">4090</span
 <p>这一段启动需要sudo权限，以及至少4个终端，推荐用VsCode或者Tmux拆分终端，或者直接参考最后的一键启动脚本</p>
 </blockquote>
 <p>仅需安装x11vnc和noVNC，详细用法介绍请见上文<a href="./#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%B1%8F%E5%B9%95%E5%85%B1%E4%BA%AB">局域网屏幕共享</a>，这里给出直接使用方法</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装包含X服务, X窗口vnc转发, D-Bus的X支持</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc xserver-xorg dbus-x11
+<span class="token comment"># xfce4轻量级图形界面</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> xfce4
+<span class="token comment"># 或者选择gnome图形界面</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gnome-session gnome-terminal
 <span class="token comment"># 创建noVNC存储位置</span>
 <span class="token function">mkdir</span> ~/Programs
 <span class="token builtin class-name">cd</span> ~/Programs
-<span class="token function">git</span> clone https://github.com/novnc/noVNC.git<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token function">git</span> clone https://github.com/novnc/noVNC.git<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>查看下<code>xsessions</code>下有哪些可用的界面<code>ls /usr/share/xsessions/</code>。</p>
 <p>这个可能是服务器上最好用的窗口渲染方法，在尝试了各种VNC转发，只有这种方法可以渲染<code>IsaacGym, IsaacSim</code></p>
 <p><code>Xorg</code>和<code>Xvfb</code>都是启动X服务的方法（<code>startx</code>也是便捷方法，但是启动后权限总是有问题于是不用），但只有<code>Xorg</code>才会用到<code>/etc/X11/xorg.conf</code>配置文件，因此使用<code>Xorg</code></p>
 <p>我们要直接用Nvidia显卡渲染需要自定义一个X服务，再启动<code>x11vnc</code>用VNC协议转发图像界面，用<code>noVNC</code>使浏览器可以访问VNC界面，最后打开<code>xfce</code>会话就可以看到图形界面啦，从而也可以用Nvidia驱动渲染界面，打开<code>IsaacGym, IssaacSim</code>，流程如下：</p>
@@ -621,7 +633,11 @@ PCI:161:0:0
 PCI:193:0:0
 PCI:225:0:0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
-<li>新建一个<code>sudo vim /etc/X11/xorg-nvidia-dummy-monitor.conf</code> X服务启动配置文件，<a href="/file/linux_screen_sharing/edid.bin">在这里下载edid.bin</a>是我自己显示屏的EDID文件，放到<code>/etc/X11/edid.bin</code>下，这样就可以得到和我显示屏一样的配置文件了 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"Device"</span>
+<li>新建一个<code>sudo vim /etc/X11/xorg-nvidia-dummy-monitor.conf</code> X服务启动配置文件，<a href="/file/linux_screen_sharing/edid.bin">在这里下载edid.bin</a>是我自己显示屏的EDID文件，放到<code>/etc/X11/edid.bin</code>下，这样就可以得到和我显示屏一样的配置文件了 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"ServerFlags"</span>
+    Option <span class="token string">"AutoAddGPU"</span> <span class="token string">"false"</span>
+EndSection
+
+Section <span class="token string">"Device"</span>
     Identifier     <span class="token string">"NvidiaGPU"</span>
     Driver         <span class="token string">"nvidia"</span>
     VendorName     <span class="token string">"NVIDIA Corporation"</span>
@@ -656,7 +672,7 @@ EndSection
 Section <span class="token string">"ServerLayout"</span>
     Identifier     <span class="token string">"Layout0"</span>
     Screen         <span class="token string">"Screen0"</span>
-EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
 <li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-monitor.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）
 <blockquote>
@@ -694,7 +710,7 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 <li>通过命令行打开可视化程序，只需要在终端执行一次<code>export DISPLAY=:1</code>，后续的所有可视化窗口都会在这个界面显示出来啦</li>
 </ol>
 <p>例如我们在Gnome下启动了<code>python -m mujoco.viewer</code>，<code>./isaac-sim.sh</code>, <code>python 1080_balls_of_solitude.py</code>效果如下，大功告成！（用工位的网络，非常流畅，和本机使用差不多效果，还只需要启动一个网页即可，非常方便，手机也可以）</p>
-<div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/server_vnc_mujoco_isaac_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/server_vnc_mujoco_isaac_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <p>通过<code>glxinfo | grep renderer</code>可查看使用的渲染：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> mesa-utils
 $ glxinfo <span class="token operator">|</span> <span class="token function">grep</span> renderer
@@ -707,23 +723,26 @@ OpenGL renderer string: llvmpipe <span class="token punctuation">(</span>LLVM <s
 $ <span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1
 $ vkcube<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="一键启动脚本"><a class="markdownIt-Anchor" href="#一键启动脚本"></a> 一键启动脚本</h3>
-<p>创建脚本位置放在<code>/usr/local/bin/start-gnome-vnc.sh</code>（其实放哪都行，因为启动需要 <code>sudo</code> 权限所以放在根目录下了），使用方法：</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 设置一次启动权限</span>
-<span class="token function">sudo</span> <span class="token function">chmod</span> +x /usr/local/bin/start-gnome-vnc.sh
+<p>创建脚本位置放在<code>/usr/local/bin/start-vnc.sh</code>（其实放哪都行，因为启动需要 <code>sudo</code> 权限所以放在根目录下了），使用方法：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 将下文脚本复制进去</span>
+<span class="token function">sudo</span> <span class="token function">vim</span> /usr/local/bin/start-vnc.sh
 
-<span class="token function">sudo</span> <span class="token function">bash</span> start-gnome-vnc.sh <span class="token environment constant">$USER</span>  <span class="token comment"># 启动全部脚本, 以用户权限启动gnome服务</span>
+<span class="token comment"># 设置一次启动权限</span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> +x /usr/local/bin/start-vnc.sh
 
-<span class="token comment"># ctrl+c即可退出, 并自动kill掉所有启动的进程</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token function">sudo</span> <span class="token function">bash</span> start-vnc.sh <span class="token environment constant">$USER</span>  <span class="token comment"># 启动全部脚本, 以用户权限启动gnome服务</span>
+
+<span class="token comment"># ctrl+c即可退出, 并自动kill掉所有启动的进程</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p><strong>修改其中的39行，为你的noVNC路径位置；如果没有设置x11vnc密码，则分别注释33行和解注35行</strong></p>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
-        start-gnome-vnc.sh脚本
+        start-vnc.sh脚本
     </div>
     <div class='spoiler-content'>
         <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
 <span class="token comment"># 使用方法, 第一个参数为当前的用户名, 用于启动gnome会话</span>
-<span class="token comment"># sudo bash /usr/local/bin/start-gnome-vnc.sh $USER</span>
+<span class="token comment"># sudo bash /usr/local/bin/start-vnc.sh $USER</span>
 
 <span class="token comment"># 检查端口6080是否被占用</span>
 <span class="token keyword">if</span> <span class="token function">lsof</span> <span class="token parameter variable">-i:6080</span> <span class="token parameter variable">-sTCP:LISTEN</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
@@ -747,8 +766,8 @@ $ vkcube<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <span class="token builtin class-name">export</span> DBUS_SESSION_BUS_PID
 
 <span class="token comment"># 启动桌面环境（Gnome / Xfce）这里必须要用$1用户身份启动, 避免出现无法登陆的问题</span>
-<span class="token comment"># sudo -u $1 DISPLAY=:1 startxfce4 &amp;  # 或者启动xfce4</span>
-<span class="token function">sudo</span> <span class="token parameter variable">-u</span> <span class="token variable">$1</span> <span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1 gnome-session <span class="token operator">&amp;</span>
+<span class="token function">sudo</span> <span class="token parameter variable">-u</span> <span class="token variable">$1</span> <span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1 startxfce4 <span class="token operator">&amp;</span>  <span class="token comment"># 或者启动xfce4</span>
+<span class="token comment"># sudo -u $1 DISPLAY=:1 gnome-session &amp;  # 或者启动gnome</span>
 <span class="token assign-left variable">gnome_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
 
 <span class="token comment"># 启动 x11vnc</span>
@@ -812,10 +831,10 @@ x11vnc <span class="token parameter variable">-display</span> :1 <span class="to
 <p>脚本功能：按照上述流程依次启动X服务、DBus会话服务、gnome会话、x11vnc转发、noVNC网页可视化；并自动检查<code>6080</code>端口是否被占用，若占用则说明已启动，无需再次启动</p>
 <p>进一步可以在<code>~/.bashrc</code>中加入快捷启动命令：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># ~/.bashrc</span>
-<span class="token builtin class-name">alias</span> start-gnome-vnc<span class="token operator">=</span><span class="token string">"sudo bash /usr/local/bin/start-gnome-vnc.sh <span class="token environment constant">$USER</span>"</span>
+<span class="token builtin class-name">alias</span> start-vnc<span class="token operator">=</span><span class="token string">"sudo bash /usr/local/bin/start-vnc.sh <span class="token environment constant">$USER</span>"</span>
 
 <span class="token builtin class-name">source</span> ~/.bashrc
-start-gnome-vnc  <span class="token comment"># 即可一键启动了</span>
+start-vnc  <span class="token comment"># 即可一键启动了</span>
 <span class="token comment"># 退出使用Ctrl+C或者找到Xorg进程将其kill</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="关闭已经启动的x服务"><a class="markdownIt-Anchor" href="#关闭已经启动的x服务"></a> 关闭已经启动的X服务</h3>
 <p>通过<code>ps aux | grep &quot;Xorg :1&quot;</code>命令可以查看当前启动的服务（例如我是在<code>DISPLAY=:1</code>上启动的），那么就要关掉<code>/usr/lib/xorg/Xorg</code>这个程序启动的PID，<code>sudo kill -9 3557223</code>即可</p>
