@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/novnc_startup_application.png">
 <meta property="article:published_time" content="2025-05-15T05:22:30.000Z">
-<meta property="article:modified_time" content="2025-12-29T12:46:13.010Z">
+<meta property="article:modified_time" content="2026-01-02T08:21:36.394Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
@@ -361,7 +361,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2025年12月29日晚上8点46分
+                    最新更新于: 2026年1月2日下午4点21分
                   
                 
               </p>
@@ -611,27 +611,13 @@ OpenGL renderer string: NVIDIA GeForce RTX <span class="token number">4090</span
 <p><code>Xorg</code>和<code>Xvfb</code>都是启动X服务的方法（<code>startx</code>也是便捷方法，但是启动后权限总是有问题于是不用），但只有<code>Xorg</code>才会用到<code>/etc/X11/xorg.conf</code>配置文件，因此使用<code>Xorg</code></p>
 <p>我们要直接用Nvidia显卡渲染需要自定义一个X服务，再启动<code>x11vnc</code>用VNC协议转发图像界面，用<code>noVNC</code>使浏览器可以访问VNC界面，最后打开<code>xfce</code>会话就可以看到图形界面啦，从而也可以用Nvidia驱动渲染界面，打开<code>IsaacGym, IssaacSim</code>，流程如下：</p>
 <ol>
-<li>查看当前可用的显卡驱动Bus ID后面会用到（或者从现在已有的<code>/etc/X11/xorg.conf</code>查看<code>BusID</code>，如果<code>xorg.conf</code>为空就用<code>nvidia-xconfig</code>初始化一个即可）： <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 用nvidia-smi -q查询BusID（16进制）, 需手动转为10进制</span>
-nvidia-smi <span class="token parameter variable">-q</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Bus Id"</span>
+<li>查看当前可用的显卡驱动Bus ID后面会用到（或者从现在已有的<code>/etc/X11/xorg.conf</code>查看<code>BusID</code>，如果<code>xorg.conf</code>为空就用<code>nvidia-xconfig</code>初始化一个即可）： <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 用nvidia-xconfig查询BusID 10进制</span>
+nvidia-xconfig --query-gpu-info
 
-<span class="token comment"># 脚本将nvidia-smi -q查询到的BusID从16进制转为10进制（脚本可能失效）</span>
-nvidia-smi <span class="token parameter variable">-q</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Bus Id"</span> <span class="token operator">|</span> <span class="token keyword">while</span> <span class="token builtin class-name">read</span> <span class="token parameter variable">-r</span> _ _ _ busid<span class="token punctuation">;</span> <span class="token keyword">do</span>
-  <span class="token assign-left variable">bus</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f2</span><span class="token variable">)</span></span>
-  <span class="token assign-left variable">dev</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f3</span><span class="token variable">)</span></span>
-  <span class="token assign-left variable">func</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f4</span> <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">'.'</span> <span class="token parameter variable">-f2</span><span class="token variable">)</span></span>
-  <span class="token assign-left variable">dev_hex</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f4</span> <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">'.'</span> <span class="token parameter variable">-f1</span><span class="token variable">)</span></span>
-  <span class="token builtin class-name">printf</span> <span class="token string">"PCI:%d:%d:%d<span class="token entity" title="\n">\n</span>"</span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$bus<span class="token variable">))</span></span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$dev_hex<span class="token variable">))</span></span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$func<span class="token variable">))</span></span>
-<span class="token keyword">done</span>
+<span class="token comment"># PCI BusID: PCI:xxx:x:x, 记住这个PCI编号</span>
 
-<span class="token comment"># 我的输出为（8张显卡）</span>
-PCI:1:0:0
-PCI:36:0:0
-PCI:65:0:0
-PCI:97:0:0
-PCI:129:0:0
-PCI:161:0:0
-PCI:193:0:0
-PCI:225:0:0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token comment"># 或者用nvidia-smi -q查询BusID（16进制）, 需手动转为10进制</span>
+nvidia-smi <span class="token parameter variable">-q</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Bus Id"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
 <li>新建一个<code>sudo vim /etc/X11/xorg-nvidia-dummy-monitor.conf</code> X服务启动配置文件，<a href="/file/linux_screen_sharing/edid.bin">在这里下载edid.bin</a>是我自己显示屏的EDID文件，放到<code>/etc/X11/edid.bin</code>下，这样就可以得到和我显示屏一样的配置文件了 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"ServerFlags"</span>
     Option <span class="token string">"AutoAddGPU"</span> <span class="token string">"false"</span>
@@ -674,6 +660,40 @@ Section <span class="token string">"ServerLayout"</span>
     Screen         <span class="token string">"Screen0"</span>
 EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
+</ol>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        或者新建一个无需monitor的启动器, 能解决大部分的gpu渲染报错问题
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"Device"</span>
+    Identifier     <span class="token string">"NvidiaGPU"</span>
+    Driver         <span class="token string">"nvidia"</span>
+    VendorName     <span class="token string">"NVIDIA Corporation"</span>
+    BoardName      <span class="token string">"GeForce RTX 4090"</span>
+    BusID          <span class="token string">"PCI:154:0:0"</span>  # 从上述输出的BusID中选一个用
+    Option         <span class="token string">"AllowEmptyInitialConfiguration"</span> <span class="token string">"true"</span>
+    Option         <span class="token string">"UseDisplayDevice"</span> <span class="token string">"None"</span>
+EndSection
+
+Section <span class="token string">"Screen"</span>
+    Identifier     <span class="token string">"Screen0"</span>
+    Device         <span class="token string">"NvidiaGPU"</span>
+    DefaultDepth   <span class="token number">24</span>
+    SubSection <span class="token string">"Display"</span>
+        Depth      <span class="token number">24</span>
+        Modes      <span class="token string">"1920x1080"</span>  # 修改为你想要的分辨率<span class="token punctuation">,</span> eg<span class="token operator">.</span> <span class="token string">"1280x720"</span>
+        Virtual    <span class="token number">1920</span> <span class="token number">1080</span>  # 修改为你想要的分辨率<span class="token punctuation">,</span> eg<span class="token operator">.</span> <span class="token number">1280</span> <span class="token number">720</span>
+    EndSubSection
+EndSection
+
+Section <span class="token string">"ServerLayout"</span>
+    Identifier     <span class="token string">"Layout0"</span>
+    Screen         <span class="token string">"Screen0"</span>
+EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<ol start="3">
 <li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-monitor.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）
 <blockquote>
 <p>检查当前DISPLAY下的分辨率和Monitor连接状态：<code>DISPLAY=:1 xrandr</code>，<code>DISPLAY=:1 xrandr --listmonitors</code>输出显示有屏幕型号即正确</p>
@@ -710,7 +730,7 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 <li>通过命令行打开可视化程序，只需要在终端执行一次<code>export DISPLAY=:1</code>，后续的所有可视化窗口都会在这个界面显示出来啦</li>
 </ol>
 <p>例如我们在Gnome下启动了<code>python -m mujoco.viewer</code>，<code>./isaac-sim.sh</code>, <code>python 1080_balls_of_solitude.py</code>效果如下，大功告成！（用工位的网络，非常流畅，和本机使用差不多效果，还只需要启动一个网页即可，非常方便，手机也可以）</p>
-<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/server_vnc_mujoco_isaac_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/server_vnc_mujoco_isaac_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <p>通过<code>glxinfo | grep renderer</code>可查看使用的渲染：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> mesa-utils
 $ glxinfo <span class="token operator">|</span> <span class="token function">grep</span> renderer
