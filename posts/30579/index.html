@@ -1,0 +1,896 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  <link rel="icon" href="https://s4.ax1x.com/2021/12/22/TQjIaQ.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="2025.1.9第一天拿到全新go2-edu-U2也就是带有Jetson ORIN NX 100TOP的拓展坞版本，由于一次不小心手滑，执行了sudo apt purge systemd-timesyncd -y将系统中全部的可视化界面删除了，连网络管理器也没了，只能重装系统。 刷机无需拆开整个拓展坞，进入安全模式后刷机即可，正确刷机方法跳转  失败方法（请勿尝试） 首先参考宇树官网给出的重刷整个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="宇树Go2拓展坞刷Jetpack 6.2">
+<meta property="og:url" content="https://wty-yy.xyz/posts/30579/index.html">
+<meta property="og:site_name" content="wty&#39;s blog">
+<meta property="og:description" content="2025.1.9第一天拿到全新go2-edu-U2也就是带有Jetson ORIN NX 100TOP的拓展坞版本，由于一次不小心手滑，执行了sudo apt purge systemd-timesyncd -y将系统中全部的可视化界面删除了，连网络管理器也没了，只能重装系统。 刷机无需拆开整个拓展坞，进入安全模式后刷机即可，正确刷机方法跳转  失败方法（请勿尝试） 首先参考宇树官网给出的重刷整个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/real/go2/go2_nx_100top.jpg">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/real/go2/go2_nx_nvme.jpg">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/real/go2/go2_type-c_computer.jpg">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/real/go2/go2_insert_PIN.jpg">
+<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/real/go2/go2_connect.jpg">
+<meta property="article:published_time" content="2026-01-10T14:48:11.000Z">
+<meta property="article:modified_time" content="2026-01-11T05:37:31.476Z">
+<meta property="article:author" content="wty">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/real/go2/go2_nx_100top.jpg">
+  
+  
+  
+  <title>宇树Go2拓展坞刷Jetpack 6.2 - wty&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.15.2/katex.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/fold_code.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_3429772_kq6ntj4nzdo.css">
+<link rel="stylesheet" href="//fastly.jsdelivr.net/gh/bynotes/texiao/source/css/toubudaziji.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Home</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" target="_self" href="javascript:;" role="button"
+                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="iconfont icon-books"></i>
+                <span>文档</span>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/020109/" target="_self">
+                    
+                    <span>杂记</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/18857/" target="_self">
+                    
+                    <span>模板&dotfiles</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/64648/" target="_self">
+                    
+                    <span>常用命令及函数</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/57899/" target="_self">
+                    
+                    <span>算法总结</span>
+                  </a>
+                
+                  
+                  
+                  
+                  <a class="dropdown-item" href="/posts/20023/" target="_self">
+                    
+                    <span>Linux杂记</span>
+                  </a>
+                
+              </div>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://s4.ax1x.com/2021/12/22/TQOxyT.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="宇树Go2拓展坞刷Jetpack 6.2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-10 22:48" pubdate>
+          2026年1月10日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">宇树Go2拓展坞刷Jetpack 6.2</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    <!-- compatible with older versions-->
+                    最新更新于: 2026年1月11日下午1点37分
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>2025.1.9第一天拿到全新go2-edu-U2也就是带有Jetson ORIN NX 100TOP的拓展坞版本，由于一次不小心手滑，执行了<code>sudo apt purge systemd-timesyncd -y</code>将系统中全部的可视化界面删除了，连网络管理器也没了，只能重装系统。</p>
+<p>刷机无需拆开整个拓展坞，进入安全模式后刷机即可，<a href="./#%E9%87%8D%E5%88%B7%E7%B3%BB%E7%BB%9F%E6%AD%A3%E7%A1%AE%E6%96%B9%E6%B3%95">正确刷机方法跳转</a></p>
+<h2 id="失败方法请勿尝试"><a class="markdownIt-Anchor" href="#失败方法请勿尝试"></a> 失败方法（请勿尝试）</h2>
+<p>首先参考宇树官网给出的<a target="_blank" rel="noopener" href="https://support.unitree.com/home/zh/developer/module_update#heading-9">重刷整个硬盘镜像</a>的方法，下载了<code>go2_nx_Jetpack5.1.1_20250930.img.bz2</code>版本，然后将拓展坞拆开，取下nvme，装在读卡器上，直接将img刷到硬盘上</p>
+<table>
+<thead>
+<tr>
+<th><img src="/figures/robotics/real/go2/go2_nx_100top.jpg" srcset="/img/loading.gif" lazyload alt="img1" /></th>
+<th><img src="/figures/robotics/real/go2/go2_nx_nvme.jpg" srcset="/img/loading.gif" lazyload alt="img2" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div align='center'>拆开后的NX</div></td>
+<td><div align='center'>取下来的NVME硬盘</div></td>
+</tr>
+</tbody>
+</table>
+<p>尝试了多次，win, linux各种工具和命令都装过，还发现一个最快的安装方法：先用bz2解压得到.img文件，再用balenaEtcher安装，它还会自动校验，刷机速度可以达到700M/s。但结果是启动仍然黑屏，甚至连kernel加载界面都没看到，过完Nvidia UEFI界面就直接黑屏</p>
+<p>综上，我可以确认不是镜像刷的过程中损坏了，而是NX上刷过<code>Jetpack 6.*</code>导致里面的UEFI firmware（存储在QSPI flash中）升级了，再刷官方给的<code>Jetpack 5.*</code>也就不兼容了，因此怎么都启动不了kernel。</p>
+<h2 id="重刷系统正确方法"><a class="markdownIt-Anchor" href="#重刷系统正确方法"></a> 重刷系统（正确方法）</h2>
+<p>最终看到有个英文教程<a target="_blank" rel="noopener" href="https://theroboverse.com/unitree-go2-edu-jetpack-6-2-1-update/">theroboverse - Unitree Go2 EDU: Jetpack 6.2.1 Update</a>是通过Nvidia官方的Autoflash，也就是sdkmanager会调用的安装方法，不过直接通过命令行直接刷固定版本。原blog讲得很清楚了，这里我搬运并强调些细节</p>
+<p><strong>刷机需求</strong>：SIM卡针，Linux系统电脑（必须是ext4硬盘格式），电脑硬盘大小至少有100G（压缩包9.5G，解压后75G）</p>
+<p><strong>刷机镜像压缩包下载</strong>：</p>
+<ul>
+<li>百度网盘：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1GMs-DE8SSHYTSNIVKsoktw?pwd=7riu"><code>https://pan.baidu.com/s/1GMs-DE8SSHYTSNIVKsoktw?pwd=7riu</code></a>，下载<code>Jetpack_6.2_nx.tar.bz2</code></li>
+<li>yandex网盘（无需冲会员，可能要挂梯子）：<a target="_blank" rel="noopener" href="https://disk.yandex.com/d/90OADxPeLx_ztg?ref=theroboverse.com"><code>https://disk.yandex.com/d/90OADxPeLx_ztg?ref=theroboverse.com</code></a>，下载<code>Unitree_Go2_EDU_Orin_NX_JetPack_6.2.1.tar.bz2</code>，这里也有NANO版本的6.2.1</li>
+</ul>
+<p>下载完成镜像后，解压<code>sudo tar -xpjvf [filename].tar.bz2</code>，<strong>注意一定要加sudo</strong>，因为有镜像文件<code>rootfs</code>下的用户必须为root，否则加载进系统时必定会黑屏！</p>
+<p>进入恢复模式，先关掉机械狗，连上电脑，如下方法启动，lsusb看到<code>NVIDIA Corp. APX</code>就说明OK了</p>
+<table>
+<thead>
+<tr>
+<th><img src="/figures/robotics/real/go2/go2_type-c_computer.jpg" srcset="/img/loading.gif" lazyload alt="img1" /></th>
+<th><img src="/figures/robotics/real/go2/go2_insert_PIN.jpg" srcset="/img/loading.gif" lazyload alt="img2" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div align='center'>将type-C连接到电脑</div></td>
+<td><div align='center'>先关掉Go2，用SIM卡针按住侧面的PIN，再启动Go2给NX上电，电脑上执行lsusb，看到有<code>Bus 00* Device 00*: ... NVIDIA Corp. APX</code>就说明进入刷机模式了，松开PIN</div></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>如果想单独拔掉NX的供电，可以取下上面的提手，拔掉BAT端口的XT30电源，按住PIN，再插上BAT端口的XT30，这样就不用重启整个狗了</p>
+</blockquote>
+<p>开始刷机，直接进入到Linux_for_Tegra下，复制命令直接运行：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># For Orin NX</span>
+<span class="token builtin class-name">cd</span> JetPack_6.2.1_Linux_JETSON_ORIN_NX_TARGETS/Linux_for_Tegra/
+<span class="token function">sudo</span> ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 <span class="token parameter variable">-p</span> <span class="token string">"-c ./bootloader/generic/cfg/flash_t234_qspi.xml"</span> <span class="token parameter variable">-c</span> ./tools/kernel_flash/flash_l4t_t234_nvme.xml <span class="token parameter variable">--showlogs</span> <span class="token parameter variable">--network</span> usb0 jetson-orin-nano-devkit internal
+
+<span class="token comment"># For Orin Nano</span>
+<span class="token builtin class-name">cd</span> JetPack_6.2.1_Linux_JETSON_ORIN_NANO_TARGETS/Linux_for_Tegra/
+<span class="token function">sudo</span> ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 <span class="token parameter variable">-p</span> <span class="token string">"-c ./bootloader/generic/cfg/flash_t234_qspi.xml"</span> <span class="token parameter variable">-c</span> ./tools/kernel_flash/flash_l4t_t234_nvme.xml <span class="token parameter variable">--showlogs</span> <span class="token parameter variable">--network</span> usb0 jetson-orin-nano-devkit-super internal<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<blockquote>
+<p>P.S. 我将blog中的最后一个命令从<code>external</code>换成了<code>internal</code>，效果貌似一样，可能是有<code>*_nvme.xml</code>保证了，但这样应该更保险，将QSPI和NVME绑定在一起启动<br />
+这里的Orin NX对应的套件底板和Nano一样，因此板卡配置文件名就是jetson-orin-nano-devkit，没有问题</p>
+</blockquote>
+<p>等几分钟，显示Flash is successful说明刷机完了，就可以连上网线，将电脑的静态网段改成<code>192.168.123.*</code>，尝试<code>ping 192.168.123.18</code>能通说明装成功了，通过ssh连接<code>ssh unitree@192.168.123.18</code>密码123，或者直接连显示屏应该就能显示了。</p>
+<p><img src="/figures/robotics/real/go2/go2_connect.jpg" srcset="/img/loading.gif" lazyload alt="官方连接说明图" /></p>
+<p>可能出现的问题：如果启动后还是黑屏，一定检查<code>ls -alh Linux_for_Tegra/rootfs</code>下的全线是否都是root的，非常重要因为会直接将这个系统镜像拷贝到Jetson上，包括用户权限，所以必须是正确的，如果不是，请重新用<code>sudo tar -xpjvf *.tar.bz2</code>解压</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ <span class="token function">ls</span> <span class="token parameter variable">-alh</span> Linux_for_Tegra/rootfs
+total 96K
+drwxr-xr-x  <span class="token number">18</span> root root <span class="token number">4</span>.0K  <span class="token number">7</span>月 <span class="token number">17</span> <span class="token number">11</span>:12 <span class="token builtin class-name">.</span>
+drwxrwxr-x  <span class="token number">12</span> yy   yy   <span class="token number">4</span>.0K  <span class="token number">7</span>月 <span class="token number">31</span> 09:45 <span class="token punctuation">..</span>
+lrwxrwxrwx   <span class="token number">1</span> root root    <span class="token number">7</span>  <span class="token number">2</span>月 <span class="token number">18</span>  <span class="token number">2023</span> bin -<span class="token operator">></span> usr/bin
+drwxr-xr-x   <span class="token number">3</span> root root  12K  <span class="token number">7</span>月 <span class="token number">16</span> <span class="token number">16</span>:33 boot
+drwxr-xr-x   <span class="token number">2</span> root root <span class="token number">4</span>.0K  <span class="token number">7</span>月 <span class="token number">16</span> <span class="token number">16</span>:31 dev
+drwxr-xr-x <span class="token number">144</span> root root  12K  <span class="token number">7</span>月 <span class="token number">31</span> <span class="token number">10</span>:26 etc
+drwxr-xr-x   <span class="token number">2</span> root root <span class="token number">4</span>.0K  <span class="token number">4</span>月 <span class="token number">18</span>  <span class="token number">2022</span> home
+lrwxrwxrwx   <span class="token number">1</span> root root    <span class="token number">7</span>  <span class="token number">2</span>月 <span class="token number">18</span>  <span class="token number">2023</span> lib -<span class="token operator">></span> usr/lib
+drwxr-xr-x   <span class="token number">2</span> root root <span class="token number">4</span>.0K  <span class="token number">2</span>月 <span class="token number">18</span>  <span class="token number">2023</span> media
+drwxr-xr-x   <span class="token number">2</span> root root <span class="token number">4</span>.0K  <span class="token number">2</span>月 <span class="token number">18</span>  <span class="token number">2023</span> mnt
+-rw-r--r--   <span class="token number">1</span> root root  <span class="token number">364</span>  <span class="token number">7</span>月 <span class="token number">17</span> <span class="token number">11</span>:12 nv_preseed.cfg
+drwxr-xr-x   <span class="token number">4</span> root root <span class="token number">4</span>.0K  <span class="token number">7</span>月 <span class="token number">16</span> <span class="token number">16</span>:29 opt
+drwxr-xr-x   <span class="token number">2</span> root root <span class="token number">4</span>.0K  <span class="token number">4</span>月 <span class="token number">18</span>  <span class="token number">2022</span> proc
+-rw-rw-r--   <span class="token number">1</span> yy   yy     <span class="token number">62</span>  <span class="token number">1</span>月  <span class="token number">8</span>  <span class="token number">2025</span> README.txt
+drwx------   <span class="token number">3</span> root root <span class="token number">4</span>.0K  <span class="token number">3</span>月 <span class="token number">22</span>  <span class="token number">2023</span> root
+drwxr-xr-x  <span class="token number">19</span> root root <span class="token number">4</span>.0K <span class="token number">10</span>月 <span class="token number">17</span>  <span class="token number">2024</span> run
+lrwxrwxrwx   <span class="token number">1</span> root root    <span class="token number">8</span>  <span class="token number">2</span>月 <span class="token number">18</span>  <span class="token number">2023</span> sbin -<span class="token operator">></span> usr/sbin
+drwxr-xr-x   <span class="token number">2</span> root root <span class="token number">4</span>.0K <span class="token number">12</span>月  <span class="token number">1</span>  <span class="token number">2022</span> snap
+drwxr-xr-x   <span class="token number">2</span> root root <span class="token number">4</span>.0K  <span class="token number">2</span>月 <span class="token number">18</span>  <span class="token number">2023</span> srv
+drwxr-xr-x   <span class="token number">2</span> root root <span class="token number">4</span>.0K  <span class="token number">4</span>月 <span class="token number">18</span>  <span class="token number">2022</span> sys
+drwxrwxrwt   <span class="token number">4</span> root root <span class="token number">4</span>.0K  <span class="token number">7</span>月 <span class="token number">23</span> <span class="token number">15</span>:20 tmp
+drwxr-xr-x  <span class="token number">11</span> root root <span class="token number">4</span>.0K  <span class="token number">2</span>月 <span class="token number">18</span>  <span class="token number">2023</span> usr
+drwxr-xr-x  <span class="token number">15</span> root root <span class="token number">4</span>.0K  <span class="token number">7</span>月 <span class="token number">16</span> <span class="token number">16</span>:29 var<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<h2 id="后续安装"><a class="markdownIt-Anchor" href="#后续安装"></a> 后续安装</h2>
+<p>进系统现在右上角选择Power Mode，MAXN最大功率模式，安装速度更快。</p>
+<h3 id="安装无线网卡"><a class="markdownIt-Anchor" href="#安装无线网卡"></a> 安装无线网卡</h3>
+<p>安装无限网卡驱动，通过ssh连接192.168.123.18，用户名unitree，密码123，将你买的wifi无线网卡驱动发送上去，安装好驱动后，连接wifi上网，上网后先更新软件源<code>sudo apt update</code></p>
+<blockquote>
+<p>我们用的无线网卡为Tenda AX300(M)或U2，都可以在官网下载Ubuntu驱动直接安装使用</p>
+</blockquote>
+<h3 id="配置exfat读取u盘"><a class="markdownIt-Anchor" href="#配置exfat读取u盘"></a> 配置exfat读取U盘</h3>
+<p>安装好后，我们发现无法打开exfat格式的U盘，可以通过<code>sudo apt install exfat-fuse exfatprogs</code>，安装驱动包，再创建软连接：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /sbin/
+<span class="token function">ls</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token function">mount</span>  <span class="token comment"># 可以看到有mount.exfat-fuse但是没有mount.exfat</span>
+<span class="token function">sudo</span> <span class="token function">ln</span> <span class="token parameter variable">-s</span> mount.exfat-fuse mount.exfat<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>这样就可以正常打开U盘文件了</p>
+<h3 id="安装firefox"><a class="markdownIt-Anchor" href="#安装firefox"></a> 安装firefox</h3>
+<p>参考<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/mozilla/">清华源-Mozilla软件仓库</a></p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">install</span> <span class="token parameter variable">-d</span> <span class="token parameter variable">-m</span> 0755 /etc/apt/keyrings
+<span class="token function">wget</span> <span class="token parameter variable">-q</span> https://packages.mozilla.org/apt/repo-signing-key.gpg -O- <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/apt/keyrings/packages.mozilla.org.asc <span class="token operator">></span> /dev/null
+gpg <span class="token parameter variable">-n</span> <span class="token parameter variable">-q</span> <span class="token parameter variable">--import</span> --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc <span class="token operator">|</span> <span class="token function">awk</span> <span class="token string">'/pub/&#123;getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nThe key fingerprint matches ("$0").\n"; else print "\nVerification failed: the fingerprint ("$0") does not match the expected one.\n"&#125;'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>编辑<code>sudo vim /etc/apt/sources.list</code>加入</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">deb <span class="token punctuation">[</span>arch<span class="token operator">=</span>arm64 signed-by<span class="token operator">=</span>/etc/apt/keyrings/packages.mozilla.org.asc<span class="token punctuation">]</span> https://mirrors.tuna.tsinghua.edu.cn/mozilla/apt mozilla main<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>配置APT优先级：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'
+Package: *
+Pin: release a=mozilla
+Pin-Priority: 1000
+'</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/apt/preferences.d/mozilla-firefox<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>完成安装<code>sudo apt update &amp;&amp; sudo apt install firefox</code></p>
+<h3 id="安装clash"><a class="markdownIt-Anchor" href="#安装clash"></a> 安装Clash</h3>
+<p>Clash必须有，下载<a target="_blank" rel="noopener" href="https://github.com/clash-download/Clash-for-Windows/releases/download/v0.20.39/Clash.for.Windows-0.20.39-arm64-linux.tar.gz">Arm64版Clash for Windows</a>，解压，放到固定位置后，找到cfw可执行文件路径，创建快捷方式</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> ~/.local/share/applications/clash.desktop<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>Desktop Entry<span class="token punctuation">]</span>
+Type <span class="token operator">=</span> Application
+Name <span class="token operator">=</span> Clash
+Exec <span class="token operator">=</span> /home/unitree/Programs/Clash/cfw --no-sandbox
+<span class="token comment"># 可选加一个图标</span>
+<span class="token comment"># Icon = /home/wty/Pictures/icons/clash.png</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>这样按win键，弹出的搜索框搜索clash就可以打开了，将配置文件传上去，选择能用的节点</p>
+<ul>
+<li>浏览器上网：配置setting-network-network proxy-manual-HTTP Proxy, HTTPS Proxy均为127.0.0.1, Port 7890</li>
+<li>终端上网：<code>export http_proxy=127.0.0.1:7890</code>, <code>export https_proxy=127.0.0.1:7890</code></li>
+</ul>
+<p>clash自动启动：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> ~/.config/autostart
+<span class="token function">cp</span> ~/.local/share/applications/clash.desktop ~/.config/autostart<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<p>在Startup Application应用中就可以看到有clash了</p>
+<h3 id="其他安装"><a class="markdownIt-Anchor" href="#其他安装"></a> 其他安装</h3>
+<p>其他都比较简单：</p>
+<ul>
+<li>安装VsCode直接<a target="_blank" rel="noopener" href="https://code.visualstudio.com/download">官网下载</a>arm64版本<code>dpkg -i *.deb</code></li>
+<li>输入法参考<a href="/posts/46722/#%E5%AE%89%E8%A3%85%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95">安装中文输入法</a>，</li>
+<li>我的终端配置<a target="_blank" rel="noopener" href="https://github.com/wty-yy/dotfiles">dotfiles</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/unitreerobotics/unitree_sdk2">Unitree-SDK2</a></li>
+<li>从unitree rl lab中提取的部署运控模型代码<a target="_blank" rel="noopener" href="https://github.com/wty-yy-mini/unitree_cpp_deploy/">unitree_cpp_deploy</a></li>
+</ul>
+<h3 id="其他报错"><a class="markdownIt-Anchor" href="#其他报错"></a> 其他报错</h3>
+<p>安装完<code>unitree-sdk2</code>后执行<code>unitree_cpp_deploy</code>中<code>go2_ctrl</code>时报错：<code>error while loading shared libraries: libddsc.so.0</code>，就是动态链接没链接到<code>/usr/local/lib</code>文件夹下，因为sdk2装到这里了，添加新的路径到ld中即可</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"/usr/local/lib"</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/ld.so.conf.d/usr-local-lib.conf  <span class="token comment"># 添加配置</span>
+<span class="token function">sudo</span> ldconfig  <span class="token comment"># 刷新动态链接库</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>宇树Go2拓展坞刷Jetpack 6.2</div>
+      <div>https://wty-yy.xyz/posts/30579/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/4856/" title="使用SAM2获取视频物体连续帧蒙版">
+                        <span class="hidden-mobile">使用SAM2获取视频物体连续帧蒙版</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <br> Enjoy sharing! <br> <span id="runtime_span"></span> <script type="text/javascript">function show_runtime(){window.setTimeout("show_runtime()",1000);X=new Date("3/19/2021 00:00:00");Y=new Date();T=(Y.getTime()-X.getTime());M=24*60*60*1000;a=T/M;A=Math.floor(a);b=(a-A)*24;B=Math.floor(b);c=(b-B)*60;C=Math.floor((b-B)*60);D=Math.floor((c-C)*60);runtime_span.innerHTML="小站已运行"+A+"天"+B+"小时"+C+"分"+D+"秒"}show_runtime();</script> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script  src="https://lib.baomitu.com/prism/1.26.0/plugins/line-numbers/prism-line-numbers.min.js" ></script>
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//fastly.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
