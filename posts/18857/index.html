@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://wty-yy.xyz/figures/essay/bivariate_normal_plot.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/essay/many_number_plot.png">
 <meta property="article:published_time" content="2022-03-31T14:54:03.000Z">
-<meta property="article:modified_time" content="2025-07-11T08:04:01.272Z">
+<meta property="article:modified_time" content="2026-02-07T11:57:55.561Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://s1.ax1x.com/2023/01/01/pSCGYfs.png">
@@ -218,14 +218,6 @@
                   
                   
                   
-                  <a class="dropdown-item" href="/posts/020109/" target="_self">
-                    
-                    <span>杂记</span>
-                  </a>
-                
-                  
-                  
-                  
                   <a class="dropdown-item" href="/posts/18857/" target="_self">
                     
                     <span>模板&dotfiles</span>
@@ -311,7 +303,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.8k 字
+          5k 字
         
       </span>
     
@@ -322,7 +314,7 @@
         
         
         
-          41 分钟
+          42 分钟
         
       </span>
     
@@ -365,7 +357,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2025年7月11日下午4点04分
+                    最新更新于: 2026年2月7日晚上7点57分
                   
                 
               </p>
@@ -834,104 +826,146 @@ redirect stdout and stderr into path_log file.
 2. Output to console and save log to file
 3. Support vscode file location jump (ctrl+left key)
 '''</span>
+<span class="token keyword">import</span> time
 <span class="token keyword">import</span> logging
+<span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
+PARENT_DIR <span class="token operator">=</span> Path<span class="token punctuation">(</span>__file__<span class="token punctuation">)</span><span class="token punctuation">.</span>parents<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
 
 <span class="token keyword">class</span> <span class="token class-name">LogColor</span><span class="token punctuation">:</span>
-  <span class="token triple-quoted-string string">""" ANSI color codes """</span>
-  RESET <span class="token operator">=</span> <span class="token string">'\033[0m'</span>
-  RED   <span class="token operator">=</span> <span class="token string">'\033[31m'</span>
-  GREEN <span class="token operator">=</span> <span class="token string">'\033[32m'</span>
-  YELLOW <span class="token operator">=</span> <span class="token string">'\033[33m'</span>
-  BLUE  <span class="token operator">=</span> <span class="token string">'\033[34m'</span>
-  MAGENTA <span class="token operator">=</span> <span class="token string">'\033[35m'</span>
-  CYAN  <span class="token operator">=</span> <span class="token string">'\033[36m'</span>
-  WHITE <span class="token operator">=</span> <span class="token string">'\033[37m'</span>
-  BOLD  <span class="token operator">=</span> <span class="token string">'\033[1m'</span>
-  UNDERLINE <span class="token operator">=</span> <span class="token string">'\033[4m'</span>
+    <span class="token triple-quoted-string string">""" ANSI color codes """</span>
+    RESET <span class="token operator">=</span> <span class="token string">'\033[0m'</span>
+    RED   <span class="token operator">=</span> <span class="token string">'\033[31m'</span>
+    GREEN <span class="token operator">=</span> <span class="token string">'\033[32m'</span>
+    YELLOW <span class="token operator">=</span> <span class="token string">'\033[33m'</span>
+    BLUE  <span class="token operator">=</span> <span class="token string">'\033[34m'</span>
+    MAGENTA <span class="token operator">=</span> <span class="token string">'\033[35m'</span>
+    CYAN  <span class="token operator">=</span> <span class="token string">'\033[36m'</span>
+    WHITE <span class="token operator">=</span> <span class="token string">'\033[37m'</span>
+    BOLD  <span class="token operator">=</span> <span class="token string">'\033[1m'</span>
+    UNDERLINE <span class="token operator">=</span> <span class="token string">'\033[4m'</span>
 
 LOG_COLORS <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-  <span class="token triple-quoted-string string">""" Match level name to color """</span>
-  <span class="token string">'DEBUG'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>CYAN<span class="token punctuation">,</span>
-  <span class="token string">'INFO'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>GREEN<span class="token punctuation">,</span>
-  <span class="token string">'WARNING'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>YELLOW<span class="token punctuation">,</span>
-  <span class="token string">'ERROR'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>RED<span class="token punctuation">,</span>
-  <span class="token string">'CRITICAL'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>RED <span class="token operator">+</span> LogColor<span class="token punctuation">.</span>BOLD<span class="token punctuation">,</span>
+    <span class="token triple-quoted-string string">""" Match level name to color """</span>
+    <span class="token string">'DEBUG'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>CYAN<span class="token punctuation">,</span>
+    <span class="token string">'INFO'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>GREEN<span class="token punctuation">,</span>
+    <span class="token string">'WARNING'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>YELLOW<span class="token punctuation">,</span>
+    <span class="token string">'ERROR'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>RED<span class="token punctuation">,</span>
+    <span class="token string">'CRITICAL'</span><span class="token punctuation">:</span> LogColor<span class="token punctuation">.</span>RED <span class="token operator">+</span> LogColor<span class="token punctuation">.</span>BOLD<span class="token punctuation">,</span>
 <span class="token punctuation">&#125;</span>
 
 <span class="token keyword">class</span> <span class="token class-name">ColorFormatter</span><span class="token punctuation">(</span>logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">)</span><span class="token punctuation">:</span>
-  <span class="token triple-quoted-string string">"""Color Formatter for color_level"""</span>
-  <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> fmt<span class="token punctuation">,</span> datefmt<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> use_color<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    self<span class="token punctuation">.</span>formatter <span class="token operator">=</span> logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">(</span>fmt<span class="token punctuation">,</span> datefmt<span class="token punctuation">)</span>
-    self<span class="token punctuation">.</span>use_color <span class="token operator">=</span> use_color
+    <span class="token triple-quoted-string string">"""Color Formatter for color_level"""</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> fmt<span class="token punctuation">,</span> datefmt<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> use_color<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>formatter <span class="token operator">=</span> logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">(</span>fmt<span class="token punctuation">,</span> datefmt<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>use_color <span class="token operator">=</span> use_color
 
-  <span class="token keyword">def</span> <span class="token function">format</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> record<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    record<span class="token punctuation">.</span>color_level <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>LOG_COLORS<span class="token punctuation">.</span>get<span class="token punctuation">(</span>record<span class="token punctuation">.</span>levelname<span class="token punctuation">,</span> LogColor<span class="token punctuation">.</span>RESET<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token interpolation"><span class="token punctuation">&#123;</span>record<span class="token punctuation">.</span>levelname<span class="token punctuation">&#125;</span></span><span class="token interpolation"><span class="token punctuation">&#123;</span>LogColor<span class="token punctuation">.</span>RESET<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span> <span class="token keyword">if</span> self<span class="token punctuation">.</span>use_color <span class="token keyword">else</span> record<span class="token punctuation">.</span>levelname
-    <span class="token keyword">return</span> self<span class="token punctuation">.</span>formatter<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>record<span class="token punctuation">)</span>
+    <span class="token keyword">def</span> <span class="token function">format</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> record<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        record<span class="token punctuation">.</span>color_level <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>LOG_COLORS<span class="token punctuation">.</span>get<span class="token punctuation">(</span>record<span class="token punctuation">.</span>levelname<span class="token punctuation">,</span> LogColor<span class="token punctuation">.</span>RESET<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token interpolation"><span class="token punctuation">&#123;</span>record<span class="token punctuation">.</span>levelname<span class="token punctuation">&#125;</span></span><span class="token interpolation"><span class="token punctuation">&#123;</span>LogColor<span class="token punctuation">.</span>RESET<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span> <span class="token keyword">if</span> self<span class="token punctuation">.</span>use_color <span class="token keyword">else</span> record<span class="token punctuation">.</span>levelname
+        <span class="token keyword">return</span> self<span class="token punctuation">.</span>formatter<span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>record<span class="token punctuation">)</span>
 
 
-<span class="token keyword">def</span> <span class="token function">get_logger</span><span class="token punctuation">(</span>
-    logger_name<span class="token punctuation">,</span> path_log_file<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>
-    console_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> color_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
-    log_level<span class="token operator">=</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">,</span> save_file_mode<span class="token operator">=</span><span class="token string">'a'</span>
-  <span class="token punctuation">)</span><span class="token punctuation">:</span>
-  <span class="token triple-quoted-string string">"""
-  Get customed Logger
+<span class="token keyword">class</span> <span class="token class-name">Logger</span><span class="token punctuation">:</span>
+    logger<span class="token punctuation">:</span> logging<span class="token punctuation">.</span>Logger <span class="token operator">=</span> <span class="token boolean">None</span>
+    log_dir<span class="token punctuation">:</span> Path <span class="token operator">=</span> <span class="token boolean">None</span>
 
-  Args:
-    logger_name (str): Logger name
-    path_log_file (str, optional): Path of logging file. Defaults to None.
-    console_output (bool, optional): Whether output to console. Defaults to True.
-    color_output (bool, optional): Whether use color output. Defaults to True.
-    log_level (int, optional): Defaults to logging.DEBUG.
-    save_file_mode (str, optional): The mode of saving to path_log_file
+    <span class="token keyword">def</span> <span class="token function">create</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>
+        logger_name<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span>
+        console_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> color_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
+        log_level<span class="token operator">=</span>logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">,</span> save_file_mode<span class="token operator">=</span><span class="token string">'a'</span><span class="token punctuation">,</span>
+        parent_log_dir<span class="token operator">=</span>PARENT_DIR
+    <span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token triple-quoted-string string">"""
+        Create customed Logger
 
-  Returns:
-    logging.Logger: logger
-  """</span>
-  logger <span class="token operator">=</span> logging<span class="token punctuation">.</span>getLogger<span class="token punctuation">(</span>logger_name<span class="token punctuation">)</span>
-  logger<span class="token punctuation">.</span>setLevel<span class="token punctuation">(</span>log_level<span class="token punctuation">)</span>
+        Args:
+            logger_name (str): Logger name
+            console_output (bool, optional): Whether output to console. Defaults to True.
+            color_output (bool, optional): Whether use color output. Defaults to True.
+            log_level (int, optional): Defaults to logging.DEBUG.
+            save_file_mode (str, optional): The mode of saving to path_log_file
+            parent_log_dir (Path | str, optional): If specified, log_dir will be created under this directory.
 
-  console_formatter <span class="token operator">=</span> ColorFormatter<span class="token punctuation">(</span>  <span class="token comment"># console output format</span>
-    fmt<span class="token operator">=</span><span class="token string">"%(asctime)s - %(color_level)s - %(filename)s:%(lineno)d - %(message)s"</span><span class="token punctuation">,</span>
-    datefmt<span class="token operator">=</span><span class="token string">"%Y-%m-%d %H:%M:%S"</span><span class="token punctuation">,</span>
-    use_color<span class="token operator">=</span>color_output
-  <span class="token punctuation">)</span>
-  file_formatter <span class="token operator">=</span> logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">(</span>  <span class="token comment"># file output format</span>
-    fmt<span class="token operator">=</span><span class="token string">"%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s"</span><span class="token punctuation">,</span>
-    datefmt<span class="token operator">=</span><span class="token string">"%Y-%m-%d %H:%M:%S"</span><span class="token punctuation">,</span>
-  <span class="token punctuation">)</span>
+        Returns:
+            logging.Logger: logger
+        """</span>
+        self<span class="token punctuation">.</span>logger <span class="token operator">=</span> logging<span class="token punctuation">.</span>getLogger<span class="token punctuation">(</span>logger_name<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>setLevel<span class="token punctuation">(</span>log_level<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>propagate <span class="token operator">=</span> <span class="token boolean">False</span>
+        self<span class="token punctuation">.</span>parent_log_dir <span class="token operator">=</span> Path<span class="token punctuation">(</span>parent_log_dir<span class="token punctuation">)</span>
 
-  <span class="token keyword">if</span> console_output<span class="token punctuation">:</span>
-    sh <span class="token operator">=</span> logging<span class="token punctuation">.</span>StreamHandler<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    sh<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>console_formatter<span class="token punctuation">)</span>
-    logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>sh<span class="token punctuation">)</span>
+        <span class="token comment"># Clear existing handlers to prevent duplicate logging</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>hasHandlers<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">for</span> handler <span class="token keyword">in</span> self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>handlers<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+                handler<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>removeHandler<span class="token punctuation">(</span>handler<span class="token punctuation">)</span>
 
-  <span class="token keyword">if</span> path_log_file<span class="token punctuation">:</span>
-    fh <span class="token operator">=</span> logging<span class="token punctuation">.</span>FileHandler<span class="token punctuation">(</span>path_log_file<span class="token punctuation">,</span> mode<span class="token operator">=</span>save_file_mode<span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
-    fh<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>file_formatter<span class="token punctuation">)</span>
-    logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>fh<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>time_tag <span class="token operator">=</span> time<span class="token punctuation">.</span>strftime<span class="token punctuation">(</span><span class="token string">"%Y%m%d-%H-%M-%S"</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>tag <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">&#123;</span>self<span class="token punctuation">.</span>time_tag<span class="token punctuation">&#125;</span></span><span class="token string">_</span><span class="token interpolation"><span class="token punctuation">&#123;</span>logger_name<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span>
 
-  <span class="token keyword">return</span> logger
+        console_formatter <span class="token operator">=</span> ColorFormatter<span class="token punctuation">(</span>    <span class="token comment"># console output format</span>
+            fmt<span class="token operator">=</span><span class="token string">"%(asctime)s - %(color_level)s - %(filename)s:%(lineno)d - %(message)s"</span><span class="token punctuation">,</span>
+            datefmt<span class="token operator">=</span><span class="token string">"%Y-%m-%d %H:%M:%S"</span><span class="token punctuation">,</span>
+            use_color<span class="token operator">=</span>color_output
+        <span class="token punctuation">)</span>
+        file_formatter <span class="token operator">=</span> logging<span class="token punctuation">.</span>Formatter<span class="token punctuation">(</span>    <span class="token comment"># file output format</span>
+            fmt<span class="token operator">=</span><span class="token string">"%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s"</span><span class="token punctuation">,</span>
+            datefmt<span class="token operator">=</span><span class="token string">"%Y-%m-%d %H:%M:%S"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">)</span>
 
+        <span class="token keyword">if</span> console_output<span class="token punctuation">:</span>
+            sh <span class="token operator">=</span> logging<span class="token punctuation">.</span>StreamHandler<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            sh<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>console_formatter<span class="token punctuation">)</span>
+            self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>sh<span class="token punctuation">)</span>
+
+        self<span class="token punctuation">.</span>log_dir <span class="token operator">=</span> self<span class="token punctuation">.</span>parent_log_dir <span class="token operator">/</span> self<span class="token punctuation">.</span>tag
+        self<span class="token punctuation">.</span>log_dir<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+        path_log_file <span class="token operator">=</span> self<span class="token punctuation">.</span>log_dir <span class="token operator">/</span> <span class="token string">"stdout.log"</span>
+        <span class="token keyword">if</span> path_log_file<span class="token punctuation">:</span>
+            fh <span class="token operator">=</span> logging<span class="token punctuation">.</span>FileHandler<span class="token punctuation">(</span>path_log_file<span class="token punctuation">,</span> mode<span class="token operator">=</span>save_file_mode<span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
+            fh<span class="token punctuation">.</span>setFormatter<span class="token punctuation">(</span>file_formatter<span class="token punctuation">)</span>
+            self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>addHandler<span class="token punctuation">(</span>fh<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"Logs saved at: </span><span class="token interpolation"><span class="token punctuation">&#123;</span>path_log_file<span class="token punctuation">&#125;</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">def</span> <span class="token function">get_data_path</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> robot_name<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> model_name<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">,</span> goal_name<span class="token punctuation">:</span> <span class="token builtin">str</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> Path<span class="token punctuation">:</span>
+        data_path <span class="token operator">=</span> self<span class="token punctuation">.</span>parent_log_dir <span class="token operator">/</span> <span class="token string">'data'</span> <span class="token operator">/</span> robot_name <span class="token operator">/</span> model_name <span class="token operator">/</span> goal_name <span class="token operator">/</span> self<span class="token punctuation">.</span>tag
+        data_path<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span>parents<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> exist_ok<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> data_path
+    
+    <span class="token keyword">def</span> <span class="token function">debug</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>debug<span class="token punctuation">(</span>msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">,</span> stacklevel<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">def</span> <span class="token function">info</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>info<span class="token punctuation">(</span>msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">,</span> stacklevel<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+    
+    <span class="token keyword">def</span> <span class="token function">warning</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>warning<span class="token punctuation">(</span>msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">,</span> stacklevel<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">error</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>error<span class="token punctuation">(</span>msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">,</span> stacklevel<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">critical</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>logger<span class="token punctuation">.</span>critical<span class="token punctuation">(</span>msg<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">,</span> stacklevel<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+
+logger <span class="token operator">=</span> Logger<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-  <span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
-  path_parent <span class="token operator">=</span> Path<span class="token punctuation">(</span>__file__<span class="token punctuation">)</span><span class="token punctuation">.</span>parents<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
-  path_log <span class="token operator">=</span> path_parent <span class="token operator">/</span> <span class="token string">"app.log"</span>
+    logger <span class="token operator">=</span> Logger<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    logger<span class="token punctuation">.</span>create<span class="token punctuation">(</span><span class="token string">"my_logger"</span><span class="token punctuation">)</span>
 
-  logger <span class="token operator">=</span> get_logger<span class="token punctuation">(</span><span class="token string">"my_logger"</span><span class="token punctuation">,</span> path_log_file<span class="token operator">=</span>path_log<span class="token punctuation">)</span>
+    logger<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">"This is a debug message"</span><span class="token punctuation">)</span>
+    logger<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">"This is an info message"</span><span class="token punctuation">)</span>
+    logger<span class="token punctuation">.</span>warning<span class="token punctuation">(</span><span class="token string">"This is a warning message"</span><span class="token punctuation">)</span>
+    logger<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token string">"This is an error message"</span><span class="token punctuation">)</span>
+    logger<span class="token punctuation">.</span>critical<span class="token punctuation">(</span><span class="token string">"This is a critical message"</span><span class="token punctuation">)</span>
 
-  logger<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token string">"This is a debug message"</span><span class="token punctuation">)</span>
-  logger<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">"This is an info message"</span><span class="token punctuation">)</span>
-  logger<span class="token punctuation">.</span>warning<span class="token punctuation">(</span><span class="token string">"This is a warning message"</span><span class="token punctuation">)</span>
-  logger<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token string">"This is an error message"</span><span class="token punctuation">)</span>
-  logger<span class="token punctuation">.</span>critical<span class="token punctuation">(</span><span class="token string">"This is a critical message"</span><span class="token punctuation">)</span>
+    logger_no_color <span class="token operator">=</span> Logger<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    logger_no_color<span class="token punctuation">.</span>create<span class="token punctuation">(</span><span class="token string">"no_color_logger"</span><span class="token punctuation">,</span> console_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> color_output<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+    logger_no_color<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">"This is a info message without color"</span><span class="token punctuation">)</span>
 
-  logger_no_color <span class="token operator">=</span> get_logger<span class="token punctuation">(</span><span class="token string">"no_color_logger"</span><span class="token punctuation">,</span> console_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> color_output<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>  <span class="token comment"># console output only</span>
-  logger_no_color<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string">"This is a info message without color"</span><span class="token punctuation">)</span>
-
-  logger_file_only <span class="token operator">=</span> get_logger<span class="token punctuation">(</span><span class="token string">"file_only_logger"</span><span class="token punctuation">,</span> path_log_file<span class="token operator">=</span>path_log<span class="token punctuation">,</span> console_output<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span> <span class="token comment">#  save to file only</span>
-  logger_file_only<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token string">"This is an error message only in file"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    logger_file_only <span class="token operator">=</span> Logger<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    logger_file_only<span class="token punctuation">.</span>create<span class="token punctuation">(</span><span class="token string">"file_only_logger"</span><span class="token punctuation">,</span> console_output<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span>  <span class="token comment"># save to file only</span>
+    logger_file_only<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token string">"This is an error message only in file"</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
     </div>
 </div>
 <h2 id="jupyter-notebook"><a class="markdownIt-Anchor" href="#jupyter-notebook"></a> Jupyter Notebook</h2>

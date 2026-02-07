@@ -1,61 +1,104 @@
+/* =========================================
+   Hexo Sliding Spoiler - 优化版样式表
+   ========================================= */
+
+/* 1. 外层容器 */
 .spoiler {
-    margin: 5px 0;
-    padding: 0 15px;
-    border: 3px solid rgb(105, 105, 105);
-    position: relative;
-    clear: both;
-    border-radius: 3px;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 10px 0;
+    padding: 0 !important;
+    border-radius: 4px;
+    
+    /* 边框：自适应半透明灰 */
+    border: 1px solid rgba(127, 127, 127, 0.3); 
+    background: transparent;
 }
 
+/* 2. 标题栏 */
 .spoiler .spoiler-title {
-    background: rgb(105, 105, 105);
-    opacity: 1;
-    margin: 0 -15px;
-    padding: 5px 15px;
-    color: rgb(200, 200, 200);
-    font-weight: bold;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 10px 15px !important;
+    
+    /* 颜色自适应继承 */
+    color: inherit; 
+    background: rgba(127, 127, 127, 0.08);
+    border-bottom: 1px dashed rgba(127, 127, 127, 0.2);
+    
     font-size: 14px;
-    display: block;
-    cursor: pointer;
-}
-
-.spoiler .spoiler-title:before {
     font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    z-index: 10;
 }
 
-.spoiler.collapsed .spoiler-title:before {
-    content: "▲ ";
+/* 标题栏悬停高亮 */
+.spoiler .spoiler-title:hover {
+    background: rgba(127, 127, 127, 0.15);
 }
 
+/* 3. 箭头图标 */
+.spoiler .spoiler-title:before {
+    content: "▶";
+    display: inline-block;
+    margin-right: 8px;
+    font-weight: normal;
+    transition: transform 0.2s;
+    opacity: 0.7; 
+}
+
+/* 展开状态箭头 */
 .spoiler.expanded .spoiler-title:before {
-    content: "▼ ";
+    content: "▼"; 
 }
 
+/* 收起状态移除下边框 */
+.spoiler.collapsed .spoiler-title {
+    border-bottom: none;
+}
+
+/* 4. 内容区域 */
 .spoiler .spoiler-content {
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    -moz-transition-duration: 0.3s;
-    -webkit-transition-duration: 0.3s;
-    -o-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    -moz-transition-timing-function: ease-in-out;
-    -webkit-transition-timing-function: ease-in-out;
-    -o-transition-timing-function: ease-in-out;
-    transition-timing-function: ease-in-out;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    background: transparent;
+    color: inherit; 
+    
+    /* 这里的 max-height 配合 transition 实现动画 */
+    opacity: 1;
+    max-height: 99999px; /* 设置极大值以防止长内容被截断 */
+    padding: 15px !important;
+    
+    transition: max-height 0.2s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 
+/* 5. 收起状态 */
 .spoiler.collapsed .spoiler-content {
-    overflow: hidden;
-    max-height: 0;
+    opacity: 0;
+    max-height: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
 }
 
-.spoiler.expanded .spoiler-content {
-    max-height: 3000px;
-    overflow: hidden;
+/* 6. 内部元素修正 (代码块/图片/表格) */
+.spoiler .spoiler-content .highlight,
+.spoiler .spoiler-content figure,
+.spoiler .spoiler-content table,
+.spoiler .spoiler-content pre {
+    margin: 0 !important;
+    width: 100% !important;
+    overflow-x: auto !important; /* 允许内部横向滚动 */
+    display: block !important;
 }
 
-.spoiler .spoiler-content p:first-child {
-    margin-top: 0 !important;
-}
+/* 7. 首尾间距清理 */
+.spoiler .spoiler-content > *:first-child { margin-top: 0; }
+.spoiler .spoiler-content > *:last-child { margin-bottom: 0; }
