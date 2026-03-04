@@ -19,15 +19,15 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一个系统性例子在入门CMake中，本文主要从几个独立的例子，并记录下其中使用的函数的具体用法。  Modern CMake CN   Demo1 - Simple 一个简单的单个项目，介绍库的创建，架构如下 ❯ tree . ├── CMakeLists.txt ├── include │   ├── gdb.hpp │   └── mylib.hpp └── src     ├── main.c">
+    <meta name="description" content="一个系统性例子在入门CMake中，本文主要从几个独立的例子，并记录下其中使用的函数的具体用法。  Modern CMake CN   VsCode中配置 默认的CPP路径搜索一般都不准确，需要通过cmake生成compile_commands.json文件来提供路径信息，生成方法如下： cmake -DCMAKE_BUILD_TYPE&#x3D;Release -DCMAKE_EXPORT_COMPILE_">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CMake速查表">
 <meta property="og:url" content="https://wty-yy.xyz/posts/63366/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="一个系统性例子在入门CMake中，本文主要从几个独立的例子，并记录下其中使用的函数的具体用法。  Modern CMake CN   Demo1 - Simple 一个简单的单个项目，介绍库的创建，架构如下 ❯ tree . ├── CMakeLists.txt ├── include │   ├── gdb.hpp │   └── mylib.hpp └── src     ├── main.c">
+<meta property="og:description" content="一个系统性例子在入门CMake中，本文主要从几个独立的例子，并记录下其中使用的函数的具体用法。  Modern CMake CN   VsCode中配置 默认的CPP路径搜索一般都不准确，需要通过cmake生成compile_commands.json文件来提供路径信息，生成方法如下： cmake -DCMAKE_BUILD_TYPE&#x3D;Release -DCMAKE_EXPORT_COMPILE_">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-02-08T08:03:53.000Z">
-<meta property="article:modified_time" content="2026-02-12T12:54:11.150Z">
+<meta property="article:modified_time" content="2026-03-04T01:46:08.134Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -296,7 +296,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          269 字
+          451 字
         
       </span>
     
@@ -307,7 +307,7 @@
         
         
         
-          3 分钟
+          4 分钟
         
       </span>
     
@@ -350,7 +350,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2026年2月12日晚上8点54分
+                    最新更新于: 2026年3月4日上午9点46分
                   
                 
               </p>
@@ -362,6 +362,27 @@
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/">Modern CMake CN</a></p>
 </blockquote>
+<h1 id="vscode中配置"><a class="markdownIt-Anchor" href="#vscode中配置"></a> VsCode中配置</h1>
+<p>默认的CPP路径搜索一般都不准确，需要通过cmake生成<code>compile_commands.json</code>文件来提供路径信息，生成方法如下：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">cmake <span class="token parameter variable">-DCMAKE_BUILD_TYPE</span><span class="token operator">=</span>Release <span class="token parameter variable">-DCMAKE_EXPORT_COMPILE_COMMANDS</span><span class="token operator">=</span>on <span class="token parameter variable">-B</span> build<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></div></figure>
+<p>可以在<code>build/compile_commands.json</code>中找到生成的编译命令信息，<code>ctrl+shift+p</code>输入<code>Edit Configuration JSON</code>会自动生成一个模板，手动加入<code>compileCommands</code>列表，将刚才生成的相对路径填入，我这给出一个模板：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"configurations"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Linux"</span><span class="token punctuation">,</span>
+            <span class="token property">"defines"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"compilerPath"</span><span class="token operator">:</span> <span class="token string">"/usr/bin/clang"</span><span class="token punctuation">,</span>  <span class="token comment">// 可选gcc，如果装了clang选择clang下IntelliSense解析速度稍微快些</span>
+            <span class="token property">"intelliSenseMode"</span><span class="token operator">:</span> <span class="token string">"linux-clang-x64"</span><span class="token punctuation">,</span>
+            <span class="token property">"cppStandard"</span><span class="token operator">:</span> <span class="token string">"c++17"</span><span class="token punctuation">,</span>
+            <span class="token property">"compileCommands"</span><span class="token operator">:</span> <span class="token punctuation">[</span>  <span class="token comment">// 将生成的compile_commands.json路径填入</span>
+                <span class="token string">"$&#123;workspaceFolder&#125;/deploy/robots/g1_bfm/build/compile_commands.json"</span><span class="token punctuation">,</span>
+                <span class="token string">"$&#123;workspaceFolder&#125;/deploy/robots/g1/build/compile_commands.json"</span><span class="token punctuation">,</span>
+                <span class="token string">"$&#123;workspaceFolder&#125;/deploy/robots/go2/build/compile_commands.json"</span>
+            <span class="token punctuation">]</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"version"</span><span class="token operator">:</span> <span class="token number">4</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h1 id="demo1-simple"><a class="markdownIt-Anchor" href="#demo1-simple"></a> Demo1 - Simple</h1>
 <p>一个简单的单个项目，介绍库的创建，架构如下</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">❯ tree
