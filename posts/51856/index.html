@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://wty-yy.xyz/figures/tools/docker%E5%8F%AF%E8%A7%86%E5%8C%96%E9%92%9F%E8%A1%A8.png">
 <meta property="og:image" content="https://wty-yy.xyz/figures/tools/dockerhub%E6%9F%A5%E7%9C%8B%E4%B8%8A%E4%BC%A0%E7%BB%93%E6%9E%9C.png">
 <meta property="article:published_time" content="2024-06-17T02:10:13.000Z">
-<meta property="article:modified_time" content="2026-03-09T09:23:01.653Z">
+<meta property="article:modified_time" content="2026-04-05T12:04:24.946Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.xyz/figures/tools/docker_desktop.png">
@@ -301,7 +301,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.5k 字
+          4.7k 字
         
       </span>
     
@@ -312,7 +312,7 @@
         
         
         
-          30 分钟
+          40 分钟
         
       </span>
     
@@ -355,7 +355,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2026年3月9日下午5点23分
+                    最新更新于: 2026年4月5日晚上8点04分
                   
                 
               </p>
@@ -557,6 +557,11 @@ Docker Root Dir: /mnt/ssd/docker<span aria-hidden="true" class="line-numbers-row
  <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> tag <span class="token punctuation">&#123;</span>已有的镜像名称<span class="token punctuation">&#125;</span>:<span class="token punctuation">&#123;</span>版本号<span class="token punctuation">&#125;</span> <span class="token punctuation">&#123;</span>你的用户名<span class="token punctuation">&#125;</span>/<span class="token punctuation">&#123;</span>镜像名称<span class="token punctuation">&#125;</span>:<span class="token punctuation">&#123;</span>版本号<span class="token punctuation">&#125;</span>
 <span class="token function">docker</span> push <span class="token punctuation">&#123;</span>你的用户名<span class="token punctuation">&#125;</span>/<span class="token punctuation">&#123;</span>镜像名称<span class="token punctuation">&#125;</span>:<span class="token punctuation">&#123;</span>版本号<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
 </li>
+<li>
+<p><strong>保存镜像/打开镜像</strong>：想要把镜像保存为文件，拷贝到其他电脑上使用，使用 <a target="_blank" rel="noopener" href="https://docs.docker.com/reference/cli/docker/image/save/"><code>docker save</code></a> 将镜像导出为 tar 文件，再通过 <code>zstd</code> 进行压缩，使用 <a target="_blank" rel="noopener" href="https://docs.docker.com/reference/cli/docker/image/load/"><code>docker load</code></a> 来加载这个镜像</p>
+ <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> save <span class="token punctuation">&#123;</span>已有的镜像名称<span class="token punctuation">&#125;</span>:<span class="token punctuation">&#123;</span>版本号<span class="token punctuation">&#125;</span> <span class="token operator">|</span> zstd <span class="token parameter variable">-o</span> <span class="token punctuation">&#123;</span>保存的文件名<span class="token punctuation">&#125;</span>.tar.zst  <span class="token comment"># 保存并压缩</span>
+<span class="token function">docker</span> load <span class="token parameter variable">-i</span> <span class="token punctuation">&#123;</span>保存的文件名<span class="token punctuation">&#125;</span>.tar.zst  <span class="token comment"># 加载镜像</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
+</li>
 </ol>
 <h3 id="一个样例"><a class="markdownIt-Anchor" href="#一个样例"></a> 一个样例</h3>
 <p>我们就基于 <code>Ubuntu 18.04</code>，在其上面安装可视化 <code>xclock</code>（一个动态钟表）为例，将上述流程实践一波（我的 Docker Hub 用户名为 <a target="_blank" rel="noopener" href="https://hub.docker.com/repositories/wtyyy">wtyyy</a>）：</p>
@@ -588,7 +593,11 @@ xclock  <span class="token comment"># 启动可视化时钟（容器中）</span
 <span class="token function">docker</span> rmi ubuntu:18.04  <span class="token comment"># 删除镜像</span>
 <span class="token comment"># 6. 上传镜像</span>
 <span class="token function">docker</span> tag demo:v1 wtyyy/demo:v1  <span class="token comment"># 重命名下镜像名称，准备上传</span>
-<span class="token function">docker</span> push wtyyy/demo:v1  <span class="token comment"># 上传镜像到 Docker Hub</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token function">docker</span> push wtyyy/demo:v1  <span class="token comment"># 上传镜像到 Docker Hub</span>
+<span class="token comment"># 7. 保存镜像并压缩为zst</span>
+<span class="token function">docker</span> save wtyyy/demo:v1 <span class="token operator">|</span> zstd <span class="token parameter variable">-o</span> wtyyy_demo_v1.tar.zst
+<span class="token comment"># 8. 其他电脑上加载镜像（本机加载会将之前相同镜像名的设置为None）</span>
+<span class="token function">docker</span> load <span class="token parameter variable">-i</span> wtyyy_demo_v1.tar.zst  <span class="token comment"># 加载镜像</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>上图为钟表可视化效果，下图为在 Docker Hub 上我们刚上传的镜像：<br />
 <img src="/figures/tools/docker%E5%8F%AF%E8%A7%86%E5%8C%96%E9%92%9F%E8%A1%A8.png" srcset="/img/loading.gif" lazyload alt="可视化钟表" /><br />
 <img src="/figures/tools/dockerhub%E6%9F%A5%E7%9C%8B%E4%B8%8A%E4%BC%A0%E7%BB%93%E6%9E%9C.png" srcset="/img/loading.gif" lazyload alt="查看上传结果" /></p>
@@ -632,6 +641,145 @@ Default Runtime: runc<span aria-hidden="true" class="line-numbers-rows"><span></
 <p>启动完成后，验证当前是否使用Nvidia驱动：</p>
 <ul>
 <li>OpenGL: <code>apt install mesa-utils</code>执行<code>glxinfo | grep -i opengl</code>查看<code>OpenGL renderer string:</code>后面的内容是不是<code>Nvidia...</code></li>
+</ul>
+<h2 id="dockerfile使用方法"><a class="markdownIt-Anchor" href="#dockerfile使用方法"></a> Dockerfile使用方法</h2>
+<p>Dockerfile 是用于构建 Docker 镜像的文件，包含了构建镜像的全部流程，不仅如此，他还能指定在启动镜像时候的默认执行命令，下面给出一个例子，完整的代码以及说明在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/dotfiles/tree/master/docker/ubuntu">GitHub - dotfiles/docker/ubuntu</a>，这个例子主要做了这几件事：</p>
+<ul>
+<li>精简版 Ubuntu Docker 镜像，支持 24.04 和 22.04</li>
+<li>zsh，预装 powerlevel10k 和常用插件</li>
+<li>tmux，使用仓库里的 .tmux 配置</li>
+<li>vim，使用 gruvbox</li>
+<li>时区为 Asia/Shanghai</li>
+<li>支持通过 DEFAULT_UID 和 DEFAULT_GID 指定运行用户，尤其在挂载宿主机目录时，在容器中新建文件依旧保持宿主机用户权限</li>
+</ul>
+<p>具体包含如下这些指令：</p>
+<ul>
+<li><code>ARG</code>：声明仅在构建中使用的变量</li>
+<li><code>FROM</code>：指定基础镜像，后续的构建都基于这个镜像</li>
+<li><code>ENV</code>：设置环境变量，容器启动后也会保留这些环境变量</li>
+<li><code>RUN</code>：在构建镜像时执行的命令，通常用于安装软件包、配置环境等</li>
+<li><code>COPY</code>：将文件从宿主机复制到镜像中，可以使用 <code>--chown</code> 来指定文件的所有者和用户组，使用 <code>--chmod</code> 来定文件的权限</li>
+<li><code>USER</code>：指定容器运行时的用户</li>
+<li><code>ENTRYPOINT</code>：指定容器启动时执行的命令，通常用于设置容器的入口点</li>
+<li><code>WORKDIR</code>：指定容器内的工作目录，当执行 <code>ENTRYPOINT</code> 或 <code>CMD</code> 中的命令时，当前目录就是这个工作目录</li>
+<li><code>CMD</code>：指定容器启动时的默认命令，如果在运行容器时没有指定命令，则会执行这个默认命令</li>
+</ul>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        Dockerfile完整代码
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ARG <span class="token assign-left variable">UBUNTU_TAG</span><span class="token operator">=</span><span class="token number">24.04</span>  <span class="token comment"># ARG 声明临时变量</span>
+FROM ubuntu:<span class="token variable">$&#123;UBUNTU_TAG&#125;</span>  <span class="token comment"># FROM 从指定的基础镜像开始构建</span>
+
+ARG <span class="token assign-left variable">INITIAL_USER</span><span class="token operator">=</span>init-user
+ARG <span class="token assign-left variable">INITIAL_UID</span><span class="token operator">=</span><span class="token number">10000</span>
+ARG <span class="token assign-left variable">INITIAL_GID</span><span class="token operator">=</span><span class="token number">10000</span>
+ARG <span class="token assign-left variable">DEFAULT_USER</span><span class="token operator">=</span>user
+ARG <span class="token assign-left variable">DEFAULT_UID</span><span class="token operator">=</span><span class="token number">1000</span>
+ARG <span class="token assign-left variable">DEFAULT_GID</span><span class="token operator">=</span><span class="token number">1000</span>
+ARG <span class="token assign-left variable">DEFAULT_HOME</span><span class="token operator">=</span>/home/user
+
+ENV <span class="token assign-left variable">DEBIAN_FRONTEND</span><span class="token operator">=</span>noninteractive  <span class="token comment"># ENV 设置环境变量，容器启动后也会保留这些环境变量</span>
+ENV <span class="token assign-left variable">TZ</span><span class="token operator">=</span>Asia/Shanghai
+
+RUN <span class="token function">apt-get</span> update <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token parameter variable">-y</span> --no-install-recommends <span class="token punctuation">\</span>
+        ca-certificates <span class="token punctuation">\</span>
+        <span class="token function">curl</span> <span class="token punctuation">\</span>
+        <span class="token function">git</span> <span class="token punctuation">\</span>
+        gosu <span class="token punctuation">\</span>
+        locales <span class="token punctuation">\</span>
+        <span class="token function">sudo</span> <span class="token punctuation">\</span>
+        tmux <span class="token punctuation">\</span>
+        tzdata <span class="token punctuation">\</span>
+        <span class="token function">vim</span> <span class="token punctuation">\</span>
+        <span class="token function">zsh</span> <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> <span class="token function">ln</span> <span class="token parameter variable">-snf</span> <span class="token string">"/usr/share/zoneinfo/<span class="token variable">$&#123;TZ&#125;</span>"</span> /etc/localtime <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">echo</span> <span class="token string">"<span class="token variable">$&#123;TZ&#125;</span>"</span> <span class="token operator">></span> /etc/timezone <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> locale-gen en_US.UTF-8 <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> <span class="token function">apt-get</span> clean <span class="token punctuation">\</span>
+    <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> /var/lib/apt/lists/*
+
+ENV <span class="token assign-left variable"><span class="token environment constant">LANG</span></span><span class="token operator">=</span>en_US.UTF-8
+ENV <span class="token assign-left variable"><span class="token environment constant">LC_ALL</span></span><span class="token operator">=</span>en_US.UTF-8
+ENV <span class="token assign-left variable"><span class="token environment constant">SHELL</span></span><span class="token operator">=</span>/usr/bin/zsh
+
+RUN <span class="token builtin class-name">set</span> -eux<span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token comment"># Remove the default "ubuntu" user if it exists</span>
+    <span class="token keyword">if</span> <span class="token function">id</span> <span class="token parameter variable">-u</span> ubuntu <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span> <span class="token punctuation">\</span>
+        <span class="token function">userdel</span> <span class="token parameter variable">-r</span> ubuntu<span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token keyword">fi</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token punctuation">\</span>
+    <span class="token comment"># Check UID and GID availability</span>
+    <span class="token keyword">for</span> <span class="token for-or-select variable">uid</span> <span class="token keyword">in</span> <span class="token string">"<span class="token variable">$&#123;INITIAL_UID&#125;</span>"</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_UID&#125;</span>"</span><span class="token punctuation">;</span> <span class="token keyword">do</span> <span class="token punctuation">\</span>
+        <span class="token keyword">if</span> getent <span class="token function">passwd</span> <span class="token string">"<span class="token variable">$&#123;uid&#125;</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span> <span class="token punctuation">\</span>
+            <span class="token builtin class-name">echo</span> <span class="token string">"ERROR: UID <span class="token variable">$&#123;uid&#125;</span> is already in use by <span class="token variable"><span class="token variable">$(</span>getent <span class="token function">passwd</span> <span class="token string">"<span class="token variable">$&#123;uid&#125;</span>"</span> <span class="token operator">|</span> <span class="token function">cut</span> -d: <span class="token parameter variable">-f1</span><span class="token variable">)</span></span>. Aborting build."</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+            <span class="token builtin class-name">exit</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+        <span class="token keyword">fi</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token keyword">done</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token keyword">for</span> <span class="token for-or-select variable">gid</span> <span class="token keyword">in</span> <span class="token string">"<span class="token variable">$&#123;INITIAL_GID&#125;</span>"</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_GID&#125;</span>"</span><span class="token punctuation">;</span> <span class="token keyword">do</span> <span class="token punctuation">\</span>
+        <span class="token keyword">if</span> getent group <span class="token string">"<span class="token variable">$&#123;gid&#125;</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span> <span class="token punctuation">\</span>
+            <span class="token builtin class-name">echo</span> <span class="token string">"ERROR: GID <span class="token variable">$&#123;gid&#125;</span> is already in use by <span class="token variable"><span class="token variable">$(</span>getent group <span class="token string">"<span class="token variable">$&#123;gid&#125;</span>"</span> <span class="token operator">|</span> <span class="token function">cut</span> -d: <span class="token parameter variable">-f1</span><span class="token variable">)</span></span>. Aborting build."</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+            <span class="token builtin class-name">exit</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+        <span class="token keyword">fi</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token keyword">done</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token punctuation">\</span>
+    <span class="token comment"># Create the default and initial user and group</span>
+    <span class="token function">groupadd</span> <span class="token parameter variable">-g</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_GID&#125;</span>"</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">useradd</span> <span class="token parameter variable">-M</span> <span class="token parameter variable">-u</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_UID&#125;</span>"</span> <span class="token parameter variable">-g</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_GID&#125;</span>"</span> <span class="token parameter variable">-s</span> /usr/bin/zsh <span class="token string">"<span class="token variable">$&#123;DEFAULT_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">groupadd</span> <span class="token parameter variable">-g</span> <span class="token string">"<span class="token variable">$&#123;INITIAL_GID&#125;</span>"</span> <span class="token string">"<span class="token variable">$&#123;INITIAL_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">useradd</span> <span class="token parameter variable">-m</span> <span class="token parameter variable">-d</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_HOME&#125;</span>"</span> <span class="token parameter variable">-u</span> <span class="token string">"<span class="token variable">$&#123;INITIAL_UID&#125;</span>"</span> <span class="token parameter variable">-g</span> <span class="token string">"<span class="token variable">$&#123;INITIAL_GID&#125;</span>"</span> <span class="token parameter variable">-s</span> /usr/bin/zsh <span class="token string">"<span class="token variable">$&#123;INITIAL_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token punctuation">\</span>
+    <span class="token comment"># Set default user home to DEFAULT_HOME (DEFAULT_HOME own is INITIAL_USER, new files are DEFAULT_USER)</span>
+    <span class="token function">usermod</span> <span class="token parameter variable">-d</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_HOME&#125;</span>"</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">usermod</span> <span class="token parameter variable">-aG</span> <span class="token string">"<span class="token variable">$&#123;INITIAL_USER&#125;</span>"</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token punctuation">\</span>
+    <span class="token comment"># Set sudo permissions for DEFAULT_USER, with NOPASSWD</span>
+    <span class="token function">usermod</span> <span class="token parameter variable">-aG</span> <span class="token function">sudo</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token builtin class-name">printf</span> <span class="token string">'%s ALL=(ALL) NOPASSWD:ALL\n'</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_USER&#125;</span>"</span> <span class="token operator">></span> <span class="token string">"/etc/sudoers.d/90-<span class="token variable">$&#123;DEFAULT_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">chmod</span> 0440 <span class="token string">"/etc/sudoers.d/90-<span class="token variable">$&#123;DEFAULT_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token punctuation">\</span>
+    <span class="token comment"># Add groups permissions</span>
+    <span class="token keyword">for</span> <span class="token for-or-select variable">group</span> <span class="token keyword">in</span> adm dialout cdrom floppy audio dip video plugdev render input <span class="token function">tty</span><span class="token punctuation">;</span> <span class="token keyword">do</span> <span class="token punctuation">\</span>
+        <span class="token keyword">if</span> getent group <span class="token string">"<span class="token variable">$group</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span> <span class="token punctuation">\</span>
+            <span class="token function">usermod</span> <span class="token parameter variable">-aG</span> <span class="token string">"<span class="token variable">$group</span>"</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_USER&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+        <span class="token keyword">fi</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token keyword">done</span>
+
+<span class="token comment"># User configurations</span>
+COPY <span class="token parameter variable">--chown</span><span class="token operator">=</span><span class="token variable">$&#123;INITIAL_UID&#125;</span><span class="token builtin class-name">:</span><span class="token variable">$&#123;INITIAL_GID&#125;</span> overlay/.zshrc <span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.zshrc
+COPY <span class="token parameter variable">--chown</span><span class="token operator">=</span><span class="token variable">$&#123;INITIAL_UID&#125;</span><span class="token builtin class-name">:</span><span class="token variable">$&#123;INITIAL_GID&#125;</span> overlay/.p10k.zsh <span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.p10k.zsh
+COPY <span class="token parameter variable">--chown</span><span class="token operator">=</span><span class="token variable">$&#123;INITIAL_UID&#125;</span><span class="token builtin class-name">:</span><span class="token variable">$&#123;INITIAL_GID&#125;</span> overlay/.tmux.conf <span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.tmux.conf
+COPY <span class="token parameter variable">--chown</span><span class="token operator">=</span><span class="token variable">$&#123;INITIAL_UID&#125;</span><span class="token builtin class-name">:</span><span class="token variable">$&#123;INITIAL_GID&#125;</span> overlay/.tmux.conf.local <span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.tmux.conf.local
+COPY <span class="token parameter variable">--chown</span><span class="token operator">=</span><span class="token variable">$&#123;INITIAL_UID&#125;</span><span class="token builtin class-name">:</span><span class="token variable">$&#123;INITIAL_GID&#125;</span> overlay/.vimrc <span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.vimrc
+COPY <span class="token parameter variable">--chown</span><span class="token operator">=</span><span class="token variable">$&#123;INITIAL_UID&#125;</span><span class="token builtin class-name">:</span><span class="token variable">$&#123;INITIAL_GID&#125;</span> overlay/gruvbox.vim <span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.vim/colors/gruvbox.vim
+
+<span class="token comment"># Install and entrypoint script</span>
+COPY <span class="token parameter variable">--chmod</span><span class="token operator">=</span><span class="token number">755</span> overlay/setup-docker.sh /tmp/setup-docker.sh
+COPY <span class="token parameter variable">--chmod</span><span class="token operator">=</span><span class="token number">755</span> overlay/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN <span class="token builtin class-name">set</span> -eux<span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    /tmp/setup-docker.sh <span class="token string">"<span class="token variable">$&#123;DEFAULT_HOME&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">touch</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.sudo_as_admin_successful"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">rm</span> <span class="token parameter variable">-rf</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.cache"</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.zcompdump"</span>* <span class="token string">"<span class="token variable">$&#123;DEFAULT_HOME&#125;</span>/.zsh_history"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">chown</span> <span class="token parameter variable">-R</span> <span class="token string">"<span class="token variable">$&#123;INITIAL_UID&#125;</span>:<span class="token variable">$&#123;INITIAL_GID&#125;</span>"</span> <span class="token string">"<span class="token variable">$&#123;DEFAULT_HOME&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">chmod</span> <span class="token parameter variable">-R</span> g+rwX <span class="token string">"<span class="token variable">$&#123;DEFAULT_HOME&#125;</span>"</span><span class="token punctuation">;</span> <span class="token punctuation">\</span>
+    <span class="token function">rm</span> <span class="token parameter variable">-f</span> /tmp/setup-docker.sh
+
+<span class="token environment constant">USER</span> <span class="token variable">$&#123;DEFAULT_USER&#125;</span>
+ENTRYPOINT <span class="token punctuation">[</span><span class="token string">"/usr/local/bin/docker-entrypoint.sh"</span><span class="token punctuation">]</span>
+WORKDIR <span class="token variable">$&#123;DEFAULT_HOME&#125;</span>
+CMD <span class="token punctuation">[</span><span class="token string">"/usr/bin/zsh"</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p>做Dockerfile的好处是能配置一些自动启动的脚本，例如在启动时自动将用户mount的目录权限修改为指定的UID和GID，这样可以避免Docker默认使用的root权限导致本地和容器权限不一致问题，每次都需要手动<code>chown -R</code>的麻烦，并且我们还可以通过<code>github actions</code>工具来自动构建 Dockerfile 并上传到 Docker Hub 上，例子请见<a href="#dockerfile%E6%9E%84%E5%BB%BA">Dockerfile构建</a></p>
+<h2 id="我的-docker-hub-镜像"><a class="markdownIt-Anchor" href="#我的-docker-hub-镜像"></a> 我的 Docker Hub 镜像</h2>
+<p>这里记录一些我上传到 Docker Hub 的一些常用镜像</p>
+<h3 id="dockerfile构建"><a class="markdownIt-Anchor" href="#dockerfile构建"></a> Dockerfile构建</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/wty-yy/dotfiles/tree/master/docker/ubuntu">Dockerfile - ubuntu</a> 对应的 <a target="_blank" rel="noopener" href="https://hub.docker.com/repository/docker/wtyyy/ubuntu">Docker Hub - wtyyy/ubuntu</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/wty-yy/dotfiles/tree/master/docker/isaaclab">Dockerfile - isaaclab</a> 对应的 <a target="_blank" rel="noopener" href="https://hub.docker.com/repository/docker/wtyyy/isaaclab">Docker Hub - wtyyy/isaaclab</a></li>
 </ul>
 <link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
                 
