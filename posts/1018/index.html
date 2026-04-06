@@ -22,25 +22,25 @@
     <meta name="description" content="背景介绍 YOLOv1是Joseph Redmon于2015年提出的目标检测检测算法，YOLO系列（2023&#x2F;09&#x2F;20已经出到第8个版本）的特点在于其极高的识别速度，经典目标识别网络还有R-CNN和SSD，这些算法具有较高的准确率但是速度比YOLO慢至少一倍。 值得注意的是，作者Joseph Redmon在发布YOLOv3之后就退出CV界了，原因在于YOLO算法被用于商业中隐私窃取和军事武器当">
 <meta property="og:type" content="article">
 <meta property="og:title" content="YOLOv1笔记">
-<meta property="og:url" content="https://wty-yy.xyz/posts/1018/index.html">
+<meta property="og:url" content="https://wty-yy.github.io/posts/1018/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="背景介绍 YOLOv1是Joseph Redmon于2015年提出的目标检测检测算法，YOLO系列（2023&#x2F;09&#x2F;20已经出到第8个版本）的特点在于其极高的识别速度，经典目标识别网络还有R-CNN和SSD，这些算法具有较高的准确率但是速度比YOLO慢至少一倍。 值得注意的是，作者Joseph Redmon在发布YOLOv3之后就退出CV界了，原因在于YOLO算法被用于商业中隐私窃取和军事武器当">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/test_build_dataset1.jpg">
-<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/test_build_dataset2.jpg">
-<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/network.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/Darknet_pretrain.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/yolov1_val_loss.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/test_img0.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/test_img1.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/test_img2.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/test_img3.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/test_build_dataset1.jpg">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/test_build_dataset2.jpg">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/network.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/Darknet_pretrain.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/yolov1_val_loss.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/test_img0.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/test_img1.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/test_img2.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/test_img3.png">
 <meta property="article:published_time" content="2023-09-19T14:49:01.000Z">
 <meta property="article:modified_time" content="2024-05-24T03:17:58.043Z">
 <meta property="article:author" content="wty">
 <meta property="article:tag" content="YOLO">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.xyz/figures/CVPR/YOLOv1/test_build_dataset1.jpg">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/CVPR/YOLOv1/test_build_dataset1.jpg">
   
   
   
@@ -92,7 +92,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -573,7 +573,7 @@ average coco mAP: 0.279217751483262<span aria-hidden="true" class="line-numbers-
   <div class="license-box my-3">
     <div class="license-title">
       <div>YOLOv1笔记</div>
-      <div>https://wty-yy.xyz/posts/1018/</div>
+      <div>https://wty-yy.github.io/posts/1018/</div>
     </div>
     <div class="license-meta">
       

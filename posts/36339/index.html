@@ -22,15 +22,15 @@
     <meta name="description" content="ZeroTier内网穿透 - 搭建局域网配置教程 本文整理一份从零开始可直接操作的 ZeroTier 配置教程，包括：  Ubuntu 上安装 ZeroTier 加入已有网络 浏览器后台授权设备 检查是否已经真正连通 排查一个很容易误判的问题：ping 能通，但 ssh 连不上  如果只是想先把网络搭起来，按前半部分一步一步操作即可；如果已经加入网络，但远程登录异常，可以直接看后面的排障章节。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ZeroTier内网穿透 - 搭建局域网配置教程">
-<meta property="og:url" content="https://wty-yy.xyz/posts/36339/index.html">
+<meta property="og:url" content="https://wty-yy.github.io/posts/36339/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="ZeroTier内网穿透 - 搭建局域网配置教程 本文整理一份从零开始可直接操作的 ZeroTier 配置教程，包括：  Ubuntu 上安装 ZeroTier 加入已有网络 浏览器后台授权设备 检查是否已经真正连通 排查一个很容易误判的问题：ping 能通，但 ssh 连不上  如果只是想先把网络搭起来，按前半部分一步一步操作即可；如果已经加入网络，但远程登录异常，可以直接看后面的排障章节。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/zerotier/network_id.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/zerotier/ip_config.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/zerotier/member_config1.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/zerotier/member_config2.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/zerotier/xiaomi_wifi_config.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/zerotier/network_id.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/zerotier/ip_config.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/zerotier/member_config1.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/zerotier/member_config2.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/zerotier/xiaomi_wifi_config.png">
 <meta property="article:published_time" content="2026-03-10T12:05:56.000Z">
 <meta property="article:modified_time" content="2026-03-21T09:15:36.579Z">
 <meta property="article:author" content="wty">
@@ -38,7 +38,7 @@
 <meta property="article:tag" content="SSH">
 <meta property="article:tag" content="Ubuntu">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.xyz/figures/tools/zerotier/network_id.png">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/tools/zerotier/network_id.png">
   
   
   
@@ -90,7 +90,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -568,7 +568,7 @@ zerotier- <span class="token number">3053</span> zerotier-one   15u  IPv4  <span
   <div class="license-box my-3">
     <div class="license-title">
       <div>ZeroTier内网穿透 - 搭建局域网配置教程</div>
-      <div>https://wty-yy.xyz/posts/36339/</div>
+      <div>https://wty-yy.github.io/posts/36339/</div>
     </div>
     <div class="license-meta">
       

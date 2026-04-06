@@ -22,30 +22,30 @@
     <meta name="description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jetson AGX Orin 配置">
-<meta property="og:url" content="https://wty-yy.xyz/posts/25605/index.html">
+<meta property="og:url" content="https://wty-yy.github.io/posts/25605/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash_real1.jpg">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash_real2.jpg">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_GUI_flash1.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_GUI_flash2.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_GUI_flash3.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash1.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash2.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash3.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash4.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash5.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash6.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_docker_container_test.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_JetPack6.1_UVC_D435i_realsense-viewer.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_D435i_ROS2_view.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_rs_ros_node_python_cv_show.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash_real1.jpg">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash_real2.jpg">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_GUI_flash1.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_GUI_flash2.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_GUI_flash3.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash1.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash2.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash3.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash4.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash5.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash6.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_docker_container_test.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_JetPack6.1_UVC_D435i_realsense-viewer.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_D435i_ROS2_view.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_rs_ros_node_python_cv_show.png">
 <meta property="article:published_time" content="2024-12-29T06:47:35.000Z">
 <meta property="article:modified_time" content="2026-03-03T10:21:34.448Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.xyz/figures/robotics/Jetson/AGX_flash_real1.jpg">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash_real1.jpg">
   
   
   
@@ -97,7 +97,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -949,7 +949,7 @@ YOLOv11n: 25W, 24FPS
   main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
     </div>
 </div>
-<div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/AGX_rs_ros_node_python_yolov11.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer4" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer4"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/AGX_rs_ros_node_python_yolov11.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <table>
 <thead>
 <tr>
@@ -1015,7 +1015,7 @@ YOLOv11n: 25W, 24FPS
   <div class="license-box my-3">
     <div class="license-title">
       <div>Jetson AGX Orin 配置</div>
-      <div>https://wty-yy.xyz/posts/25605/</div>
+      <div>https://wty-yy.github.io/posts/25605/</div>
     </div>
     <div class="license-meta">
       

@@ -22,24 +22,24 @@
     <meta name="description" content="源代码直接clone我fork的SAM2仓库里面就有全部代码，修改视频和图像路径即可使用：wty-yy-mini&#x2F;SAM2 由于视频中的物体需要进行连续帧打码, 又不能打码过多导致视频展示性降低, 因此尝试通过SAM2框选prompt跟踪掩码的功能来对视频中的物体进行打码, 我的电脑配置如下  CPU: R7-5700X GPU: RTX 4080 内存: 50GB  只对原视频中三帧框选需要蒙版">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用SAM2获取视频物体连续帧蒙版">
-<meta property="og:url" content="https://wty-yy.xyz/posts/4856/index.html">
+<meta property="og:url" content="https://wty-yy.github.io/posts/4856/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="源代码直接clone我fork的SAM2仓库里面就有全部代码，修改视频和图像路径即可使用：wty-yy-mini&#x2F;SAM2 由于视频中的物体需要进行连续帧打码, 又不能打码过多导致视频展示性降低, 因此尝试通过SAM2框选prompt跟踪掩码的功能来对视频中的物体进行打码, 我的电脑配置如下  CPU: R7-5700X GPU: RTX 4080 内存: 50GB  只对原视频中三帧框选需要蒙版">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/trajector_image.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/sam2_mask/trajector_image.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wty-yy-mini/sam2/refs/heads/main/tools/VID_20251210_094125_frames_30fps/blue_result_image.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wty-yy-mini/sam2/refs/heads/main/tools/VID_20251210_094125_frames_30fps/color_result_image.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/sam2_mask_prompts_1.jpg">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/sam2_mask_prompts_2.jpg">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/sam2_mask_prompts_3.jpg">
-<meta property="og:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/trajector_image.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/sam2_mask/sam2_mask_prompts_1.jpg">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/sam2_mask/sam2_mask_prompts_2.jpg">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/sam2_mask/sam2_mask_prompts_3.jpg">
+<meta property="og:image" content="https://wty-yy.github.io/figures/tools/sam2_mask/trajector_image.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wty-yy-mini/sam2/refs/heads/main/tools/VID_20251210_094125_frames_30fps/blue_result_image.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/wty-yy-mini/sam2/refs/heads/main/tools/VID_20251210_094125_frames_30fps/color_result_image.png">
 <meta property="article:published_time" content="2025-11-08T09:26:40.000Z">
 <meta property="article:modified_time" content="2026-01-12T12:16:58.765Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.xyz/figures/tools/sam2_mask/trajector_image.png">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/tools/sam2_mask/trajector_image.png">
   
   
   
@@ -91,7 +91,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -395,14 +395,14 @@
 </style>
 <div class="layout-container">
   <div class="layout-left">
-<div id="dplayer3" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer3"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/g1_dance_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/g1_dance_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
   <div align="center">
     原视频
     <a href="/videos/g1_dance_demo.mp4" download>下载链接</a>
   </div>
   </div>
   <div class="layout-right">
-<div id="dplayer4" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer4"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/g1_dance_demo_masked.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer3" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer3"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/g1_dance_demo_masked.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
   <div align="center">
     SAM2分割打码后效果
     <a href="/videos/g1_dance_demo_masked.mp4" download>下载链接</a>
@@ -1019,7 +1019,7 @@ print<span class="token punctuation">(</span>f<span class="token string">"Result
   <div class="license-box my-3">
     <div class="license-title">
       <div>使用SAM2获取视频物体连续帧蒙版</div>
-      <div>https://wty-yy.xyz/posts/4856/</div>
+      <div>https://wty-yy.github.io/posts/4856/</div>
     </div>
     <div class="license-meta">
       
