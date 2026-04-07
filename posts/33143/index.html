@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://wty-yy.github.io/figures/competitions/kaiwu/kaiwu_workframe.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/competitions/kaiwu/tb1.png">
 <meta property="article:published_time" content="2024-09-03T03:36:19.000Z">
-<meta property="article:modified_time" content="2025-08-08T07:06:24.225Z">
+<meta property="article:modified_time" content="2026-04-07T10:45:43.485Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/competitions/kaiwu/result4.png">
@@ -358,7 +358,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2025年8月8日下午3点06分
+                    最新更新于: 2026年4月7日晚上6点45分
                   
                 
               </p>
@@ -366,13 +366,13 @@
             
               <div class="markdown-body">
                 
-                <p><strong>已结束的全部比赛代码</strong>：<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/tree/master/secret_realm/code">GitHub - 海选赛全部代码</a>，<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/tree/master/gorgewalk/code">GitHub - 学习期全部代码</a></p>
+                <p><strong>已结束的全部比赛代码</strong>：<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code">GitHub - 海选赛全部代码</a>，<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/gorgewalk/code">GitHub - 学习期全部代码</a></p>
 <p>下文主要介绍了本次比赛对源码的学习，由于是第一次参赛，对整个框架比较陌生，所以简单介绍下我通过学习源码对分布式框架逻辑的理解，以及如何在此基础上完成一个PPO算法。</p>
 <h2 id="重返秘境"><a class="markdownIt-Anchor" href="#重返秘境"></a> 重返秘境</h2>
 <blockquote>
 <p>该比赛排名第6（1380.17分，尽管在自己测试300局中平均得分为1383分），第一名1381.83分，失败的主要原因是30次评测中（总共9个随机宝箱），其中有一次评测中只捡了8个，否则可以超过第一名1分以上，只能说智能体还是不够稳定，测试方法不够好（总共也就715种宝箱分布情况，没有全部考虑到），奖励设计还是问题，宝箱遗漏的负惩罚仍然不够大。</p>
 </blockquote>
-<p>PPO算法可以在上述源码中<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/tree/master/secret_realm/code/diy">diy文件夹</a>下找到，v1.2的训练总时长为33+20+31.5+12.5=97小时（8~12进程）效果如下图所示，训练12.5小时已经能达到1350分了。</p>
+<p>PPO算法可以在上述源码中 <a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy">diy文件夹</a> 下找到，v1.2的训练总时长为33+20+31.5+12.5=97小时（8~12进程）效果如下图所示，训练12.5小时已经能达到1350分了。</p>
 <p><img src="/figures/competitions/kaiwu/result4.png" srcset="/img/loading.gif" lazyload alt="海选赛最终成绩" /><br />
 <img src="/figures/competitions/kaiwu/result1.png" srcset="/img/loading.gif" lazyload alt="自测v1.2.2部分结果（没用1.2.2因为出现了5次测试中出现了一次1381的均分）" /><br />
 <img src="/figures/competitions/kaiwu/result3.png" srcset="/img/loading.gif" lazyload alt="自测v1.2部分结果（5次测试均在1382和1383）" /><br />
@@ -412,7 +412,7 @@
 <h3 id="localremote训练逻辑"><a class="markdownIt-Anchor" href="#localremote训练逻辑"></a> local/remote训练逻辑</h3>
 <p>两种训练模式local/remote，这关系到进程的创建数目（海选赛和学习期的不同之处），也正如官方所说的，确实可以做到了两种模式下，代码都可以直接运行，最大区别在于local不存在buffer，而remote会创建一个buffer存储aisrv产生的样本。</p>
 <blockquote>
-<p>下面的逻辑分析都是通过查看源码获得，分析方法主要是基于Python中的traceback函数，自己写了一个打印回调信息的函数 <a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024/blob/master/secret_realm/code/diy/utils/__init__.py#L32"><code>show_debug</code></a>，对源码中的每个部分分别加入该函数进行调试。逻辑分析的过程请见<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/master/assets/code_logic.md#%E5%88%86%E5%B8%83%E5%BC%8F%E5%BC%80%E5%8F%91">code_logic.md</a>，里面有更详细的调用关系，以下内容为精简版。</p>
+<p>下面的逻辑分析都是通过查看源码获得，分析方法主要是基于Python中的traceback函数，自己写了一个打印回调信息的函数 <a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/utils/__init__.py#L32"><code>show_debug</code></a>，对源码中的每个部分分别加入该函数进行调试。逻辑分析的过程请见<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/blob/2024/assets/code_logic.md">code_logic.md</a>，里面有更详细的调用关系，以下内容为精简版。</p>
 </blockquote>
 <p>用drawio简单画了个示意图（画的挺烂的😟），对每个部分的详细介绍请见下文<br />
 <img src="/figures/competitions/kaiwu/kaiwu_workframe.png" srcset="/img/loading.gif" lazyload alt="开悟分布式架构（极简版）" /></p>
@@ -461,10 +461,10 @@
 </blockquote>
 <h3 id="ppo的具体实现细节"><a class="markdownIt-Anchor" href="#ppo的具体实现细节"></a> PPO的具体实现细节</h3>
 <blockquote>
-<p>在GitHub中也记录了当初<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/tree/master/secret_realm/code#distribution-ppo">实现PPO注意的细节</a></p>
+<p>在GitHub中也记录了当初<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code#distribution-ppo">实现PPO注意的细节</a></p>
 <p>这里大部分把之前<a target="_blank" rel="noopener" href="https://aiarena.tencent.com/community/d/505-you-mei-you-yong-ppode-lao-jiao-liu-yi-xia/28">论坛</a>回复的内容copy了一些😅</p>
 </blockquote>
-<p>主要就是把gae放到learner中算(得到return和adv), buffer中每个样本存的是一段轨迹, 而logprob使用的是actor采样时候的值, buffer的修改，请见 <a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/master/secret_realm/code/diy/feature/definition.py"><code>definition.py</code></a>：</p>
+<p>主要就是把gae放到learner中算(得到return和adv), buffer中每个样本存的是一段轨迹, 而logprob使用的是actor采样时候的值, buffer的修改，请见 <a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/feature/definition.py"><code>definition.py</code></a>：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">SampleData <span class="token operator">=</span> create_cls<span class="token punctuation">(</span><span class="token string">"SampleData"</span><span class="token punctuation">,</span> obs<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> actions<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>
   rewards<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> dones<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> next_obs<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> next_done<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>
   logprobs<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span>
@@ -482,7 +482,7 @@
     next_obs<span class="token operator">=</span>data<span class="token punctuation">[</span>n<span class="token operator">*</span><span class="token punctuation">(</span>obs_dim<span class="token operator">+</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
     next_done<span class="token operator">=</span>data<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
   <span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p><a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/master/secret_realm/code/conf/configure_app.toml"><code>configure_app.toml</code></a> 配置文件做的修改如下（大概率不是最优的，没有进行微调）：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/conf/configure_app.toml"><code>configure_app.toml</code></a> 配置文件做的修改如下（大概率不是最优的，没有进行微调）：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-toml" data-language="toml"><code class="language-toml"><span class="token comment"># 注: learner_train_by_while_true 在9.2.2最后一次更新后就只能设置为True才能使用（不清楚为什么，单机模式下没有测出问题），</span>
 <span class="token comment"># 也就是只能定时训练，那么只能自己手动计算一个样本产生所用的时间，</span>
 <span class="token comment"># 再调整learner_train_sleep_seconds为10个样本生成所需的时间（非常麻烦）</span>
@@ -494,7 +494,7 @@
 <span class="token key property">reverb_sampler</span> <span class="token punctuation">=</span> <span class="token string">"reverb.selectors.Uniform"</span>
 <span class="token key property">dump_model_freq</span> <span class="token punctuation">=</span> <span class="token number">2</span>  <span class="token comment"># PPO要求actor和learner模型差距不能太大, 提高同步模型的保存频率</span>
 <span class="token key property">model_file_sync_per_minutes</span> <span class="token punctuation">=</span> <span class="token number">1</span>  <span class="token comment"># 这个是模型同步到模型池的同步时间 (单位分钟, 最小1min)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p>最后为了避免存储的模型太多导致内存爆炸，我写了个自动删除旧模型的函数，在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/0e620a6d17a92daeb77ed27a2a30cd25672f3e13/secret_realm/code/diy/algorithm/agent.py#L222">learner</a>和<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/4714315cfd8202f38a38772e9e60f4d2b46ceb6b/secret_realm/code/diy/train_workflow.py#L87">aisrv</a>中周期性调用。</p>
+<p>最后为了避免存储的模型太多导致内存爆炸，我写了个自动删除旧模型的函数，在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/algorithm/agent.py#L222">learner</a>和<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/train_workflow.py#L87">aisrv</a>中周期性调用。</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
 <span class="token keyword">from</span> kaiwudrl<span class="token punctuation">.</span>common<span class="token punctuation">.</span>config<span class="token punctuation">.</span>config_control <span class="token keyword">import</span> CONFIG
 
@@ -513,11 +513,11 @@
   <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>files<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">2</span><span class="token punctuation">:</span> <span class="token keyword">return</span>
   <span class="token keyword">for</span> p <span class="token keyword">in</span> files<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">:</span>  <span class="token comment"># just keep latest checkpoint</span>
     p<span class="token punctuation">.</span>unlink<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p>详细代码请见<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/tree/master/secret_realm/code/diy">diy/</a>文件夹，PPO算法参考的是<a target="_blank" rel="noopener" href="https://docs.cleanrl.dev/rl-algorithms/ppo/">cleanrl - PPO</a>。</p>
+<p>详细代码请见<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy">diy/</a>文件夹，PPO算法参考的是<a target="_blank" rel="noopener" href="https://docs.cleanrl.dev/rl-algorithms/ppo/">cleanrl - PPO</a>。</p>
 <h3 id="tensorboard使用方法"><a class="markdownIt-Anchor" href="#tensorboard使用方法"></a> Tensorboard使用方法</h3>
 <p>由于实在不习惯官方给的记录软件，还是用了传统的Tensorboard，效果图如下<br />
 <img src="/figures/competitions/kaiwu/tb1.png" srcset="/img/loading.gif" lazyload alt="Tensorboard效果图（上面是12个环境每个环境结束时记录的信息，下面为learner训练记录的信息）" /></p>
-<p>在 <code>agent.py</code> 里面实现了一个下面这个初始化 <code>writer</code> 的<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/0e620a6d17a92daeb77ed27a2a30cd25672f3e13/secret_realm/code/diy/algorithm/agent.py#L28"><code>init_writer</code> 函数</a></p>
+<p>在 <code>agent.py</code> 里面实现了一个下面这个初始化 <code>writer</code> 的<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/algorithm/agent.py#L28"><code>init_writer</code> 函数</a></p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os<span class="token punctuation">,</span> time
 <span class="token keyword">from</span> pathlib <span class="token keyword">import</span> Path
 <span class="token keyword">from</span> torch<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>tensorboard <span class="token keyword">import</span> SummaryWriter
@@ -531,8 +531,8 @@ PATH_LOGS_DIR<span class="token punctuation">.</span>mkdir<span class="token pun
     run_name <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"secret_realm_</span><span class="token interpolation"><span class="token punctuation">&#123;</span>agent_type<span class="token punctuation">&#125;</span></span><span class="token string">_pid</span><span class="token interpolation"><span class="token punctuation">&#123;</span>os<span class="token punctuation">.</span>getpid<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">_</span><span class="token interpolation"><span class="token punctuation">&#123;</span>time<span class="token punctuation">.</span>strftime<span class="token punctuation">(</span><span class="token string">r'%Y%m%d_%H%M%S'</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">"</span></span>
     writer <span class="token operator">=</span> SummaryWriter<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>PATH_LOGS_DIR <span class="token operator">/</span> run_name<span class="token punctuation">)</span><span class="token punctuation">)</span>
     <span class="token keyword">return</span> writer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p>然后分别在learner和aisrv初始化时候创建它，learner也就是在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/0e620a6d17a92daeb77ed27a2a30cd25672f3e13/secret_realm/code/diy/algorithm/agent.py#L46">初始化 <code>Agent</code></a>时候，aisrv也就是在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/0e620a6d17a92daeb77ed27a2a30cd25672f3e13/secret_realm/code/diy/train_workflow.py#L22">刚进入<code>train_workflow.py</code>时候</a>（这里不要在Agent中初始化原因是, 所有的aisrv其实公用的同一个Agent实例化结果, 所以他只会被创建一次）</p>
-<p>然后就和正常使用tensorboard一样记录就好了, 比如在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/0e620a6d17a92daeb77ed27a2a30cd25672f3e13/secret_realm/code/diy/train_workflow.py#L49">环境结束</a>时：</p>
+<p>然后分别在learner和aisrv初始化时候创建它，learner也就是在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/algorithm/agent.py#L46">初始化 <code>Agent</code></a>时候，aisrv也就是在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/train_workflow.py#L22">刚进入<code>train_workflow.py</code>时候</a>（这里不要在Agent中初始化原因是, 所有的aisrv其实公用的同一个Agent实例化结果, 所以他只会被创建一次）</p>
+<p>然后就和正常使用tensorboard一样记录就好了, 比如在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/train_workflow.py#L49">环境结束</a>时：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">if</span> env<span class="token punctuation">.</span>done<span class="token punctuation">:</span>
   logger<span class="token punctuation">.</span>info<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"pid=</span><span class="token interpolation"><span class="token punctuation">&#123;</span>os<span class="token punctuation">.</span>getpid<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string"> End episode: gloabl_step=</span><span class="token interpolation"><span class="token punctuation">&#123;</span>global_step<span class="token punctuation">&#125;</span></span><span class="token string">, episodic_reward=</span><span class="token interpolation"><span class="token punctuation">&#123;</span>env<span class="token punctuation">.</span>total_reward<span class="token punctuation">:</span><span class="token format-spec">.2f</span><span class="token punctuation">&#125;</span></span><span class="token string">, "</span></span> <span class="token operator">+</span>
            <span class="token string-interpolation"><span class="token string">f"episodic_score=</span><span class="token interpolation"><span class="token punctuation">&#123;</span><span class="token builtin">int</span><span class="token punctuation">(</span>env<span class="token punctuation">.</span>total_score<span class="token punctuation">)</span><span class="token punctuation">&#125;</span></span><span class="token string">, "</span></span> <span class="token operator">+</span>
@@ -554,7 +554,7 @@ PATH_LOGS_DIR<span class="token punctuation">.</span>mkdir<span class="token pun
 <blockquote>
 <p>由于没有使用官方给的dqn，这部分也顺便全部重写了。</p>
 </blockquote>
-<p>我们设计的网络极为简单：纯CNN+拼接+MLP（不能在简单了吧😂），代码为<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/master/secret_realm/code/diy/algorithm/model.py">model.py</a></p>
+<p>我们设计的网络极为简单：纯CNN+拼接+MLP（不能在简单了吧😂），代码为<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/algorithm/model.py">model.py</a></p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Backbone</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
   <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -582,7 +582,7 @@ PATH_LOGS_DIR<span class="token punctuation">.</span>mkdir<span class="token pun
     img <span class="token operator">=</span> img<span class="token punctuation">.</span>view<span class="token punctuation">(</span>B<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">.</span>observation_img_shape<span class="token punctuation">)</span>
     x <span class="token operator">=</span> torch<span class="token punctuation">.</span>cat<span class="token punctuation">(</span><span class="token punctuation">[</span>self<span class="token punctuation">.</span>cnn<span class="token punctuation">(</span>img<span class="token punctuation">)</span><span class="token punctuation">,</span> vec<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
     <span class="token keyword">return</span> self<span class="token punctuation">.</span>fc<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p>输入的特征处理函数为<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/0e620a6d17a92daeb77ed27a2a30cd25672f3e13/secret_realm/code/diy/feature/definition.py#L286">definition.observation_process</a>：</p>
+<p>输入的特征处理函数为<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/feature/definition.py#L286">definition.observation_process</a>：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">feature <span class="token operator">=</span> np<span class="token punctuation">.</span>hstack<span class="token punctuation">(</span><span class="token punctuation">[</span>
   np<span class="token punctuation">.</span>stack<span class="token punctuation">(</span><span class="token punctuation">[</span>  <span class="token comment"># 图像特征: (4, 51, 51)</span>
     obs<span class="token punctuation">[</span><span class="token string">'obstacle_map'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
@@ -602,7 +602,7 @@ PATH_LOGS_DIR<span class="token punctuation">.</span>mkdir<span class="token pun
   obs<span class="token punctuation">[</span><span class="token string">'legal_act'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
 <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>astype<span class="token punctuation">(</span>np<span class="token punctuation">.</span>float32<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="奖励函数设计"><a class="markdownIt-Anchor" href="#奖励函数设计"></a> 奖励函数设计</h3>
-<p>这个奖励函数我们大部分是直接沿用了学习期的设计，从<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/0e620a6d17a92daeb77ed27a2a30cd25672f3e13/secret_realm/code/diy/feature/definition.py#L116"><code>definition.py</code></a>中就能看到我们设计的奖励函数，相应的配置文件位于<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/blob/master/secret_realm/code/diy/config.py">config.py的Args</a>中：</p>
+<p>这个奖励函数我们大部分是直接沿用了学习期的设计，从<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/feature/definition.py#L116"><code>definition.py</code></a>中就能看到我们设计的奖励函数，相应的配置文件位于<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code/diy/config.py">config.py的Args</a>中：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-python" data-language="python"><code class="language-python">r <span class="token operator">=</span> <span class="token number">0</span>
 <span class="token comment"># 1. 重复步骤惩罚，当一个位置重复走过2次以上</span>
 ratio <span class="token operator">=</span> self<span class="token punctuation">.</span>total_timestep <span class="token operator">*</span> args<span class="token punctuation">.</span>num_envs <span class="token operator">/</span> args<span class="token punctuation">.</span>total_timesteps
@@ -645,7 +645,7 @@ r <span class="token operator">+=</span> delta_end_distance <span class="token o
   r <span class="token operator">-=</span> args<span class="token punctuation">.</span>each_step_punish
 <span class="token comment"># 7. 全局奖励加权系数（由于奖励太大，全部缩小的0.1倍）</span>
 r <span class="token operator">*=</span> args<span class="token punctuation">.</span>reward_global_coef<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p>我们的版本迭代日志主要为 <code>v0.4.3 -&gt; v1.0 -&gt; v1.1 -&gt; v1.2 -&gt; v1.2.x</code>，最后提交的是v1.2，日志文件可以在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu2024_taichu/tree/master/secret_realm/code#2024813">code/readme.md</a>中找到。</p>
+<p>我们的版本迭代日志主要为 <code>v0.4.3 -&gt; v1.0 -&gt; v1.1 -&gt; v1.2 -&gt; v1.2.x</code>，最后提交的是v1.2，日志文件可以在<a target="_blank" rel="noopener" href="https://github.com/wty-yy/kaiwu_taichu/tree/2024/secret_realm/code#2024813">code/readme.md</a>中找到。</p>
 <h3 id="阶段总结"><a class="markdownIt-Anchor" href="#阶段总结"></a> 阶段总结</h3>
 <p>这次放太多注意力在理解分布式框架和实现PPO算法上了，中间PPO算法实现遇到了很多bug，最后也是没有对奖励再进行微调，没有在所有宝箱位置上对模型进行测试，才导致出现漏掉宝箱的问题，下次要将注意力更多集中在<strong>环境调试，网络设计，参数微调，奖励设计</strong>上。</p>
 <p>这次学习了开悟的分布式框架原理也是一大收获，后面估计我自己也可以照样子设计一个，用于之前毕设未完成的真正强化学习AI训练（当然现在硬件还是不够）。</p>
