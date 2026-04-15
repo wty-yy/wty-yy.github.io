@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://wty-yy.github.io/figures/Linux/mihomo-dashboard-setup.png">
 <meta property="og:image" content="https://wty-yy.github.io/figures/Linux/mihomo-dashboard.png">
 <meta property="article:published_time" content="2024-06-12T04:47:25.000Z">
-<meta property="article:modified_time" content="2026-04-08T17:33:05.541Z">
+<meta property="article:modified_time" content="2026-04-15T17:00:43.207Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.github.io/figures/Linux/mihomo-config.png">
@@ -354,7 +354,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2026年4月9日凌晨1点33分
+                    最新更新于: 2026年4月16日凌晨1点00分
                   
                 
               </p>
@@ -438,15 +438,14 @@ proxy_on  <span class="token comment"># 启动端口代理</span>
 <span class="token function">scp</span> compressed-dist.tgz <span class="token punctuation">[</span>你的服务器<span class="token punctuation">]</span>:/path/to/your/Clash  <span class="token comment"># 将面板上传到服务器的Clash文件夹中</span>
 <span class="token comment"># 服务器上</span>
 <span class="token function">mkdir</span> ui  <span class="token comment"># 创建 ui 文件夹</span>
-<span class="token function">tar</span> <span class="token parameter variable">-xzf</span> compressed-dist.tgz <span class="token parameter variable">-C</span> ui  <span class="token comment"># 解压到 ui 文件夹中</span>
-<span class="token function">mv</span> yacd-gh-pages ui  <span class="token comment"># 重命名文件夹为 ui</span>
-<span class="token function">vim</span> config.yaml  <span class="token comment"># 配置 config.yaml 文件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token function">tar</span> <span class="token parameter variable">-xvf</span> compressed-dist.tgz <span class="token parameter variable">-C</span> ui  <span class="token comment"># 解压到 ui 文件夹中</span>
+<span class="token function">vim</span> config.yaml  <span class="token comment"># 配置 config.yaml 文件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>在 <code>config.yaml</code> 文件中修改下述三个参数：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">external<span class="token operator">-</span>controller<span class="token punctuation">:</span> <span class="token string">'127.0.0.1:9090'</span>  # UI端口号为<span class="token number">9090</span>（如果占用随便换一个）
 secret<span class="token punctuation">:</span> <span class="token number">123456</span>  # 密码
 external<span class="token operator">-</span>ui<span class="token punctuation">:</span> ui  # 打开本地面板文件夹名称<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
 <p>再次启动 <code>./clash -d .</code>，使用vscode连接上服务器，在下方端口中点<code>转发端口</code>，输入你配置的网页端口，例如<code>9090</code>，然后在浏览器中访问</p>
-<p><code>http://localhost:9090/ui/#/setup</code>出现如下界面，输入<code>Endpoint URL</code>为<code>http://127.0.0.1:9090</code>，密码<code>123456</code>，点击<code>ADD</code><br />
+<p>打开<a target="_blank" rel="noopener" href="http://localhost:9090/ui/#/setup"><code>http://localhost:9090/ui/#/setup</code></a>出现如下界面，输入<code>Endpoint URL</code>为<code>http://127.0.0.1:9090</code>，密码<code>123456</code>，点击<code>ADD</code><br />
 <img src="/figures/Linux/mihomo-dashboard-setup.png" srcset="/img/loading.gif" lazyload alt="UI界面Setup" /></p>
 <p>自动跳转后点击左侧第二个按钮 <code>Proxies</code> 进入 <code>http://localhost:9090/ui/#/proxies</code> 就可以选择节点了，如下所示：<br />
 <img src="/figures/Linux/mihomo-dashboard.png" srcset="/img/loading.gif" lazyload alt="UI节点选择" /></p>
