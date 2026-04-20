@@ -19,20 +19,20 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）  局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToD">
+    <meta name="description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法） 一键跳转：  局域网安装 服务器安装 Nvidia Jetson安装   局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享">
 <meta property="og:type" content="article">
 <meta property="og:title" content="实现Linux无头模式下硬件加速的屏幕共享">
-<meta property="og:url" content="https://wty-yy.xyz/posts/47970/index.html">
+<meta property="og:url" content="https://wty-yy.github.io/posts/47970/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）  局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。 如果是从外网连接，直接用ToD">
+<meta property="og:description" content="本文章分为两个部分，第一部分为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，第二部分为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法） 一键跳转：  局域网安装 服务器安装 Nvidia Jetson安装   局域网屏幕共享 简单记录下局域网下，Linux的X11界面如何共享">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
-<meta property="og:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/novnc_startup_application.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/Linux/screen_sharing/x11vnc_startup_application.png">
+<meta property="og:image" content="https://wty-yy.github.io/figures/Linux/screen_sharing/novnc_startup_application.png">
 <meta property="article:published_time" content="2025-05-15T05:22:30.000Z">
-<meta property="article:modified_time" content="2025-11-08T09:23:56.287Z">
+<meta property="article:modified_time" content="2026-03-11T03:33:38.600Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.xyz/figures/Linux/screen_sharing/x11vnc_startup_application.png">
+<meta name="twitter:image" content="https://wty-yy.github.io/figures/Linux/screen_sharing/x11vnc_startup_application.png">
   
   
   
@@ -84,7 +84,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"wty-yy.xyz","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -123,7 +123,7 @@
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
-    <!-- Collapsible content -->
+    <!-- Collapsible content (desktop) -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto text-center">
         
@@ -214,14 +214,6 @@
                   
                   
                   
-                  <a class="dropdown-item" href="/posts/020109/" target="_self">
-                    
-                    <span>杂记</span>
-                  </a>
-                
-                  
-                  
-                  
                   <a class="dropdown-item" href="/posts/18857/" target="_self">
                     
                     <span>模板&dotfiles</span>
@@ -275,6 +267,183 @@
   </div>
 </nav>
 
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/links/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-link-fill"></i>
+                  <span>友链</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            
+            <div class="col-12 mobile-grid-group-header">
+              <i class="iconfont icon-books"></i>
+              <span>文档</span>
+            </div>
+            
+              
+              
+              
+              <div class="col-4 mobile-grid-cell">
+                <a href="/posts/18857/" target="_self">
+                  <div class="mobile-grid-item">
+                    <i class="iconfont icon-link-fill"></i>
+                    <span>模板&dotfiles</span>
+                  </div>
+                </a>
+              </div>
+            
+              
+              
+              
+              <div class="col-4 mobile-grid-cell">
+                <a href="/posts/64648/" target="_self">
+                  <div class="mobile-grid-item">
+                    <i class="iconfont icon-link-fill"></i>
+                    <span>常用命令及函数</span>
+                  </div>
+                </a>
+              </div>
+            
+              
+              
+              
+              <div class="col-4 mobile-grid-cell">
+                <a href="/posts/57899/" target="_self">
+                  <div class="mobile-grid-item">
+                    <i class="iconfont icon-link-fill"></i>
+                    <span>算法总结</span>
+                  </div>
+                </a>
+              </div>
+            
+              
+              
+              
+              <div class="col-4 mobile-grid-cell">
+                <a href="/posts/20023/" target="_self">
+                  <div class="mobile-grid-item">
+                    <i class="iconfont icon-link-fill"></i>
+                    <span>Linux杂记</span>
+                  </div>
+                </a>
+              </div>
+            
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
   
 
 <div id="banner" class="banner" parallax=true
@@ -307,7 +476,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.7k 字
+          14k 字
         
       </span>
     
@@ -318,7 +487,7 @@
         
         
         
-          39 分钟
+          120 分钟
         
       </span>
     
@@ -335,6 +504,8 @@
     </div>
   </div>
 </div>
+
+
 
 </div>
 
@@ -361,7 +532,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2025年11月8日下午5点23分
+                    最新更新于: 2026年3月11日中午11点33分
                   
                 
               </p>
@@ -369,7 +540,13 @@
             
               <div class="markdown-body">
                 
-                <p>本文章分为两个部分，<a href="./#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%B1%8F%E5%B9%95%E5%85%B1%E4%BA%AB">第一部分</a>为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，<a href="./#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%88%96nvidia-jetson%E5%8F%AF%E8%A7%86%E5%8C%96">第二部分</a>为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）</p>
+                <p>本文章分为两个部分，<a href="./#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%B1%8F%E5%B9%95%E5%85%B1%E4%BA%AB">第一部分</a>为有可视化界面的机载电脑（使用AMD, Intel集显参考此方法），如何在局域网下不连接显示屏来可视化界面，<a href="./#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%AF%E8%A7%86%E5%8C%96">第二部分</a>为服务器或Nvidia Jetson中，如何直接可视化界面（需要sudo权限，使用Nvidia显卡渲染参考此方法）</p>
+<p>一键跳转：</p>
+<ol>
+<li><a href="./#vnc%E6%9C%8D%E5%8A%A1%E7%AB%AF">局域网安装</a></li>
+<li><a href="./#%E6%8E%A8%E8%8D%90xorg%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%90%AF%E5%8A%A8%E4%BB%A5%E6%94%AF%E6%8C%81nvidia%E9%A9%B1%E5%8A%A8%E6%B8%B2%E6%9F%93">服务器安装</a></li>
+<li><a href="./#nvidia-jetson%E5%8F%AF%E8%A7%86%E5%8C%96%E9%85%8D%E7%BD%AE">Nvidia Jetson安装</a></li>
+</ol>
 <h1 id="局域网屏幕共享"><a class="markdownIt-Anchor" href="#局域网屏幕共享"></a> 局域网屏幕共享</h1>
 <p>简单记录下局域网下，Linux的X11界面如何共享到其他设备使用，并配置开机自动启动功能。</p>
 <p>如果是从外网连接，直接用<a target="_blank" rel="noopener" href="https://www.todesk.com/">ToDesk</a>或者<a target="_blank" rel="noopener" href="https://sunlogin.oray.com/">向日葵</a>即可（注意：向日葵不支持Ubuntu24.04），用本地局域网连接推荐用WIFI6，带宽更大</p>
@@ -590,38 +767,34 @@ OpenGL renderer string: NVIDIA GeForce RTX <span class="token number">4090</span
 <p>这一段启动需要sudo权限，以及至少4个终端，推荐用VsCode或者Tmux拆分终端，或者直接参考最后的一键启动脚本</p>
 </blockquote>
 <p>仅需安装x11vnc和noVNC，详细用法介绍请见上文<a href="./#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%B1%8F%E5%B9%95%E5%85%B1%E4%BA%AB">局域网屏幕共享</a>，这里给出直接使用方法</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装包含X服务, X窗口vnc转发, D-Bus的X支持</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc xserver-xorg dbus-x11
+<span class="token comment"># xfce4轻量级图形界面</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> xfce4
+<span class="token comment"># 或者选择gnome图形界面</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gnome-session gnome-terminal
 <span class="token comment"># 创建noVNC存储位置</span>
 <span class="token function">mkdir</span> ~/Programs
 <span class="token builtin class-name">cd</span> ~/Programs
-<span class="token function">git</span> clone https://github.com/novnc/noVNC.git<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token function">git</span> clone https://github.com/novnc/noVNC.git<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>查看下<code>xsessions</code>下有哪些可用的界面<code>ls /usr/share/xsessions/</code>。</p>
 <p>这个可能是服务器上最好用的窗口渲染方法，在尝试了各种VNC转发，只有这种方法可以渲染<code>IsaacGym, IsaacSim</code></p>
 <p><code>Xorg</code>和<code>Xvfb</code>都是启动X服务的方法（<code>startx</code>也是便捷方法，但是启动后权限总是有问题于是不用），但只有<code>Xorg</code>才会用到<code>/etc/X11/xorg.conf</code>配置文件，因此使用<code>Xorg</code></p>
 <p>我们要直接用Nvidia显卡渲染需要自定义一个X服务，再启动<code>x11vnc</code>用VNC协议转发图像界面，用<code>noVNC</code>使浏览器可以访问VNC界面，最后打开<code>xfce</code>会话就可以看到图形界面啦，从而也可以用Nvidia驱动渲染界面，打开<code>IsaacGym, IssaacSim</code>，流程如下：</p>
 <ol>
-<li>查看当前可用的显卡驱动Bus ID后面会用到（或者从现在已有的<code>/etc/X11/xorg.conf</code>查看<code>BusID</code>，如果<code>xorg.conf</code>为空就用<code>nvidia-xconfig</code>初始化一个即可）： <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 用nvidia-smi -q查询BusID（16进制）, 需手动转为10进制</span>
-nvidia-smi <span class="token parameter variable">-q</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Bus Id"</span>
+<li>查看当前可用的显卡驱动Bus ID后面会用到（或者从现在已有的<code>/etc/X11/xorg.conf</code>查看<code>BusID</code>，如果<code>xorg.conf</code>为空就用<code>nvidia-xconfig</code>初始化一个即可）： <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 用nvidia-xconfig查询BusID 10进制</span>
+nvidia-xconfig --query-gpu-info
 
-<span class="token comment"># 脚本将nvidia-smi -q查询到的BusID从16进制转为10进制（脚本可能失效）</span>
-nvidia-smi <span class="token parameter variable">-q</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Bus Id"</span> <span class="token operator">|</span> <span class="token keyword">while</span> <span class="token builtin class-name">read</span> <span class="token parameter variable">-r</span> _ _ _ busid<span class="token punctuation">;</span> <span class="token keyword">do</span>
-  <span class="token assign-left variable">bus</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f2</span><span class="token variable">)</span></span>
-  <span class="token assign-left variable">dev</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f3</span><span class="token variable">)</span></span>
-  <span class="token assign-left variable">func</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f4</span> <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">'.'</span> <span class="token parameter variable">-f2</span><span class="token variable">)</span></span>
-  <span class="token assign-left variable">dev_hex</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> $busid <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">':'</span> <span class="token parameter variable">-f4</span> <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">'.'</span> <span class="token parameter variable">-f1</span><span class="token variable">)</span></span>
-  <span class="token builtin class-name">printf</span> <span class="token string">"PCI:%d:%d:%d<span class="token entity" title="\n">\n</span>"</span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$bus<span class="token variable">))</span></span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$dev_hex<span class="token variable">))</span></span> <span class="token variable"><span class="token variable">$((</span><span class="token number">16</span>#$func<span class="token variable">))</span></span>
-<span class="token keyword">done</span>
+<span class="token comment"># PCI BusID: PCI:xxx:x:x, 记住这个PCI编号</span>
 
-<span class="token comment"># 我的输出为（8张显卡）</span>
-PCI:1:0:0
-PCI:36:0:0
-PCI:65:0:0
-PCI:97:0:0
-PCI:129:0:0
-PCI:161:0:0
-PCI:193:0:0
-PCI:225:0:0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token comment"># 或者用nvidia-smi -q查询BusID（16进制）, 需手动转为10进制</span>
+nvidia-smi <span class="token parameter variable">-q</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Bus Id"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
-<li>新建一个<code>sudo vim /etc/X11/xorg-nvidia-dummy-monitor.conf</code> X服务启动配置文件，<a href="/file/linux_screen_sharing/edid.bin">在这里下载edid.bin</a>是我自己显示屏的EDID文件，放到<code>/etc/X11/edid.bin</code>下，这样就可以得到和我显示屏一样的配置文件了 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"Device"</span>
+<li>新建一个<code>sudo vim /etc/X11/xorg-nvidia-dummy-monitor.conf</code> X服务启动配置文件，<a href="/file/linux_screen_sharing/edid.bin">在这里下载edid.bin</a>是我自己显示屏的EDID文件，放到<code>/etc/X11/edid.bin</code>下，这样就可以得到和我显示屏一样的配置文件了 <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"ServerFlags"</span>
+    Option <span class="token string">"AutoAddGPU"</span> <span class="token string">"false"</span>
+EndSection
+
+Section <span class="token string">"Device"</span>
     Identifier     <span class="token string">"NvidiaGPU"</span>
     Driver         <span class="token string">"nvidia"</span>
     VendorName     <span class="token string">"NVIDIA Corporation"</span>
@@ -656,8 +829,42 @@ EndSection
 Section <span class="token string">"ServerLayout"</span>
     Identifier     <span class="token string">"Layout0"</span>
     Screen         <span class="token string">"Screen0"</span>
-EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 </li>
+</ol>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        或者新建一个无需monitor的启动器, 能解决大部分的gpu渲染报错问题
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-vim" data-language="vim"><code class="language-vim">Section <span class="token string">"Device"</span>
+    Identifier     <span class="token string">"NvidiaGPU"</span>
+    Driver         <span class="token string">"nvidia"</span>
+    VendorName     <span class="token string">"NVIDIA Corporation"</span>
+    BoardName      <span class="token string">"GeForce RTX 4090"</span>
+    BusID          <span class="token string">"PCI:154:0:0"</span>  # 从上述输出的BusID中选一个用
+    Option         <span class="token string">"AllowEmptyInitialConfiguration"</span> <span class="token string">"true"</span>
+    Option         <span class="token string">"UseDisplayDevice"</span> <span class="token string">"None"</span>
+EndSection
+
+Section <span class="token string">"Screen"</span>
+    Identifier     <span class="token string">"Screen0"</span>
+    Device         <span class="token string">"NvidiaGPU"</span>
+    DefaultDepth   <span class="token number">24</span>
+    SubSection <span class="token string">"Display"</span>
+        Depth      <span class="token number">24</span>
+        Modes      <span class="token string">"1920x1080"</span>  # 修改为你想要的分辨率<span class="token punctuation">,</span> eg<span class="token operator">.</span> <span class="token string">"1280x720"</span>
+        Virtual    <span class="token number">1920</span> <span class="token number">1080</span>  # 修改为你想要的分辨率<span class="token punctuation">,</span> eg<span class="token operator">.</span> <span class="token number">1280</span> <span class="token number">720</span>
+    EndSubSection
+EndSection
+
+Section <span class="token string">"ServerLayout"</span>
+    Identifier     <span class="token string">"Layout0"</span>
+    Screen         <span class="token string">"Screen0"</span>
+EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<ol start="3">
 <li>启动X服务：<code>sudo X :1 -config /etc/X11/xorg-nvidia-dummy-monitor.conf</code>（设置界面编号为<code>DISPLAY=:1</code>，指定使用我们刚才配置的文件，不会影响到正常的连接显示屏，因为默认配置文件是<code>/etc/X11/xorg.conf</code>）
 <blockquote>
 <p>检查当前DISPLAY下的分辨率和Monitor连接状态：<code>DISPLAY=:1 xrandr</code>，<code>DISPLAY=:1 xrandr --listmonitors</code>输出显示有屏幕型号即正确</p>
@@ -707,23 +914,26 @@ OpenGL renderer string: llvmpipe <span class="token punctuation">(</span>LLVM <s
 $ <span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1
 $ vkcube<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="一键启动脚本"><a class="markdownIt-Anchor" href="#一键启动脚本"></a> 一键启动脚本</h3>
-<p>创建脚本位置放在<code>/usr/local/bin/start-gnome-vnc.sh</code>（其实放哪都行，因为启动需要 <code>sudo</code> 权限所以放在根目录下了），使用方法：</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 设置一次启动权限</span>
-<span class="token function">sudo</span> <span class="token function">chmod</span> +x /usr/local/bin/start-gnome-vnc.sh
+<p>创建脚本位置放在<code>/usr/local/bin/start-vnc.sh</code>（其实放哪都行，因为启动需要 <code>sudo</code> 权限所以放在根目录下了），使用方法：</p>
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 将下文脚本复制进去</span>
+<span class="token function">sudo</span> <span class="token function">vim</span> /usr/local/bin/start-vnc.sh
 
-<span class="token function">sudo</span> <span class="token function">bash</span> start-gnome-vnc.sh <span class="token environment constant">$USER</span>  <span class="token comment"># 启动全部脚本, 以用户权限启动gnome服务</span>
+<span class="token comment"># 设置一次启动权限</span>
+<span class="token function">sudo</span> <span class="token function">chmod</span> +x /usr/local/bin/start-vnc.sh
 
-<span class="token comment"># ctrl+c即可退出, 并自动kill掉所有启动的进程</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<span class="token function">sudo</span> <span class="token function">bash</span> start-vnc.sh <span class="token environment constant">$USER</span>  <span class="token comment"># 启动全部脚本, 以用户权限启动gnome服务</span>
+
+<span class="token comment"># ctrl+c即可退出, 并自动kill掉所有启动的进程</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p><strong>修改其中的39行，为你的noVNC路径位置；如果没有设置x11vnc密码，则分别注释33行和解注35行</strong></p>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
-        start-gnome-vnc.sh脚本
+        start-vnc.sh脚本
     </div>
     <div class='spoiler-content'>
         <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
 <span class="token comment"># 使用方法, 第一个参数为当前的用户名, 用于启动gnome会话</span>
-<span class="token comment"># sudo bash /usr/local/bin/start-gnome-vnc.sh $USER</span>
+<span class="token comment"># sudo bash /usr/local/bin/start-vnc.sh $USER</span>
 
 <span class="token comment"># 检查端口6080是否被占用</span>
 <span class="token keyword">if</span> <span class="token function">lsof</span> <span class="token parameter variable">-i:6080</span> <span class="token parameter variable">-sTCP:LISTEN</span> <span class="token operator">></span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
@@ -747,8 +957,8 @@ $ vkcube<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <span class="token builtin class-name">export</span> DBUS_SESSION_BUS_PID
 
 <span class="token comment"># 启动桌面环境（Gnome / Xfce）这里必须要用$1用户身份启动, 避免出现无法登陆的问题</span>
-<span class="token comment"># sudo -u $1 DISPLAY=:1 startxfce4 &amp;  # 或者启动xfce4</span>
-<span class="token function">sudo</span> <span class="token parameter variable">-u</span> <span class="token variable">$1</span> <span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1 gnome-session <span class="token operator">&amp;</span>
+<span class="token function">sudo</span> <span class="token parameter variable">-u</span> <span class="token variable">$1</span> <span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span>:1 startxfce4 <span class="token operator">&amp;</span>  <span class="token comment"># 或者启动xfce4</span>
+<span class="token comment"># sudo -u $1 DISPLAY=:1 gnome-session &amp;  # 或者启动gnome</span>
 <span class="token assign-left variable">gnome_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
 
 <span class="token comment"># 启动 x11vnc</span>
@@ -812,10 +1022,10 @@ x11vnc <span class="token parameter variable">-display</span> :1 <span class="to
 <p>脚本功能：按照上述流程依次启动X服务、DBus会话服务、gnome会话、x11vnc转发、noVNC网页可视化；并自动检查<code>6080</code>端口是否被占用，若占用则说明已启动，无需再次启动</p>
 <p>进一步可以在<code>~/.bashrc</code>中加入快捷启动命令：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># ~/.bashrc</span>
-<span class="token builtin class-name">alias</span> start-gnome-vnc<span class="token operator">=</span><span class="token string">"sudo bash /usr/local/bin/start-gnome-vnc.sh <span class="token environment constant">$USER</span>"</span>
+<span class="token builtin class-name">alias</span> start-vnc<span class="token operator">=</span><span class="token string">"sudo bash /usr/local/bin/start-vnc.sh <span class="token environment constant">$USER</span>"</span>
 
 <span class="token builtin class-name">source</span> ~/.bashrc
-start-gnome-vnc  <span class="token comment"># 即可一键启动了</span>
+start-vnc  <span class="token comment"># 即可一键启动了</span>
 <span class="token comment"># 退出使用Ctrl+C或者找到Xorg进程将其kill</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <h3 id="关闭已经启动的x服务"><a class="markdownIt-Anchor" href="#关闭已经启动的x服务"></a> 关闭已经启动的X服务</h3>
 <p>通过<code>ps aux | grep &quot;Xorg :1&quot;</code>命令可以查看当前启动的服务（例如我是在<code>DISPLAY=:1</code>上启动的），那么就要关掉<code>/usr/lib/xorg/Xorg</code>这个程序启动的PID，<code>sudo kill -9 3557223</code>即可</p>
@@ -914,7 +1124,7 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
   <div class="license-box my-3">
     <div class="license-title">
       <div>实现Linux无头模式下硬件加速的屏幕共享</div>
-      <div>https://wty-yy.xyz/posts/47970/</div>
+      <div>https://wty-yy.github.io/posts/47970/</div>
     </div>
     <div class="license-meta">
       
@@ -984,27 +1194,40 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
   
     <article id="comments" lazyload>
       
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.4.16/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"7JWUOvcOubbTCSI8jHpuVSJ0-gzGzoHsz","appKey":"98rYU3iGXuuKPVyUjNYHGpr9","path":"window.location.pathname","placeholder":"说点什么","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":true,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"wty-yy/wty-yy.github.io","repo-id":"MDEwOlJlcG9zaXRvcnkzODk4MDg2MzY=","category":"Announcements","category-id":"DIC_kwDOFzwB_M4C46GK","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"top","lang":"zh-CN","strict":0,"loading":"lazy"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
           }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
       });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
 
 
     </article>
@@ -1170,7 +1393,63 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
     var boardCtn = jQuery('#board-ctn');
     var boardTop = boardCtn.offset().top;
 
-    window.tocbot.init(Object.assign({
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
       tocSelector     : '#toc-body',
       contentSelector : '.markdown-body',
       linkClass       : 'tocbot-link',
@@ -1181,10 +1460,16 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
       scrollSmooth    : true,
       includeTitleTags: true,
       headingsOffset  : -boardTop,
-    }, CONFIG.toc));
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
     if (toc.find('.toc-list-item').length > 0) {
       toc.css('visibility', 'visible');
     }
+    expandAllToc();
+    bindTocToggle();
 
     Fluid.events.registerRefreshCallback(function() {
       if ('tocbot' in window) {
@@ -1196,6 +1481,8 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
         if (toc.find('.toc-list-item').length > 0) {
           toc.css('visibility', 'visible');
         }
+        expandAllToc();
+        bindTocToggle();
       }
     });
   });
