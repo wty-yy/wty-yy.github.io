@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://wty-yy.top/figures/Linux/screen_sharing/x11vnc_startup_application.png">
 <meta property="og:image" content="https://wty-yy.top/figures/Linux/screen_sharing/novnc_startup_application.png">
 <meta property="article:published_time" content="2025-05-15T05:22:30.000Z">
-<meta property="article:modified_time" content="2026-01-02T11:34:41.000Z">
+<meta property="article:modified_time" content="2026-06-11T03:23:31.479Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.top/figures/Linux/screen_sharing/x11vnc_startup_application.png">
@@ -476,7 +476,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          14k 字
+          25k 字
         
       </span>
     
@@ -487,7 +487,7 @@
         
         
         
-          120 分钟
+          212 分钟
         
       </span>
     
@@ -532,7 +532,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2026年1月2日晚上7点34分
+                    最新更新于: 2026年6月11日上午11点23分
                   
                 
               </p>
@@ -767,8 +767,8 @@ OpenGL renderer string: NVIDIA GeForce RTX <span class="token number">4090</span
 <p>这一段启动需要sudo权限，以及至少4个终端，推荐用VsCode或者Tmux拆分终端，或者直接参考最后的一键启动脚本</p>
 </blockquote>
 <p>仅需安装x11vnc和noVNC，详细用法介绍请见上文<a href="./#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%B1%8F%E5%B9%95%E5%85%B1%E4%BA%AB">局域网屏幕共享</a>，这里给出直接使用方法</p>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装包含X服务, X窗口vnc转发, D-Bus的X支持</span>
-<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc xserver-xorg dbus-x11
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装包含X服务, X窗口vnc转发, D-Bus的X支持, websockify端口转发</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc xserver-xorg dbus-x11 websockify
 <span class="token comment"># xfce4轻量级图形界面</span>
 <span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> xfce4
 <span class="token comment"># 或者选择gnome图形界面</span>
@@ -901,7 +901,7 @@ EndSection<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 <li>通过命令行打开可视化程序，只需要在终端执行一次<code>export DISPLAY=:1</code>，后续的所有可视化窗口都会在这个界面显示出来啦</li>
 </ol>
 <p>例如我们在Gnome下启动了<code>python -m mujoco.viewer</code>，<code>./isaac-sim.sh</code>, <code>python 1080_balls_of_solitude.py</code>效果如下，大功告成！（用工位的网络，非常流畅，和本机使用差不多效果，还只需要启动一个网页即可，非常方便，手机也可以）</p>
-<div id="dplayer5" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer5"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/server_vnc_mujoco_isaac_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/server_vnc_mujoco_isaac_demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <p>通过<code>glxinfo | grep renderer</code>可查看使用的渲染：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> mesa-utils
 $ glxinfo <span class="token operator">|</span> <span class="token function">grep</span> renderer
@@ -924,10 +924,10 @@ $ vkcube<span aria-hidden="true" class="line-numbers-rows"><span></span><span></
 <span class="token function">sudo</span> <span class="token function">bash</span> start-vnc.sh <span class="token environment constant">$USER</span>  <span class="token comment"># 启动全部脚本, 以用户权限启动gnome服务</span>
 
 <span class="token comment"># ctrl+c即可退出, 并自动kill掉所有启动的进程</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p><strong>修改其中的39行，为你的noVNC路径位置；如果没有设置x11vnc密码，则分别注释33行和解注35行</strong></p>
+<p><strong>老版：修改其中的39行，为你的noVNC路径位置；如果没有设置x11vnc密码，则分别注释33行和解注35行</strong></p>
 <div class='spoiler collapsed'>
     <div class='spoiler-title'>
-        start-vnc.sh脚本
+        start-vnc.sh老版脚本
     </div>
     <div class='spoiler-content'>
         <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
@@ -1019,6 +1019,407 @@ x11vnc <span class="token parameter variable">-display</span> :1 <span class="to
 <span class="token function">wait</span> <span class="token variable">$x_pid</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
     </div>
 </div>
+<p><strong>新版：修改开头的<code>MANUAL_NOVNC_DIR</code>为刚才git clone的nvVNC路径，<code>MANUAL_VNC_PASSWORD</code>可以选择是否需要密码登陆noVNC界面</strong></p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        start-vnc.sh新版脚本GPT重构
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/usr/bin/env bash</span>
+
+<span class="token comment"># Usage:</span>
+<span class="token comment">#   sudo bash /usr/local/bin/start-vnc.sh &lt;username></span>
+<span class="token comment">#</span>
+<span class="token comment"># This script starts a virtual X display, an XFCE desktop, x11vnc, and noVNC.</span>
+<span class="token comment"># It is intentionally verbose: every component gets a log file and every</span>
+<span class="token comment"># startup step is verified so the actual failure point is visible.</span>
+
+<span class="token builtin class-name">set</span> <span class="token parameter variable">-Eeuo</span> pipefail
+<span class="token builtin class-name">set</span> <span class="token parameter variable">-m</span>
+
+<span class="token comment"># ========================= 手动配置区域 =========================</span>
+<span class="token comment"># 换机器或换安装位置时，优先只改这里。</span>
+<span class="token comment">#</span>
+<span class="token comment"># noVNC 页面目录：</span>
+<span class="token comment">#   这里必须是 noVNC 的网页目录，目录下面需要有 vnc.html。</span>
+<span class="token comment">#   脚本会用 websockify 把这个目录发布到 NOVNC_PORT。</span>
+<span class="token assign-left variable">MANUAL_NOVNC_DIR</span><span class="token operator">=</span><span class="token string">"/home/unitree/Programs/noVNC"</span>
+<span class="token comment">#</span>
+<span class="token comment"># x11vnc 连接密码：</span>
+<span class="token comment">#   MANUAL_VNC_PASSWORD：非空则使用密码连接，若密码文件MANUAL_VNC_PASSWORD_FILE存在，</span>
+<span class="token comment">#   通过 MANUAL_VNC_PASSWORD_RESET 判断是否覆盖密码文件。空字符串则不使用密码连接。</span>
+<span class="token assign-left variable">MANUAL_VNC_PASSWORD</span><span class="token operator">=</span><span class="token string">"123"</span>
+<span class="token assign-left variable">MANUAL_VNC_PASSWORD_FILE</span><span class="token operator">=</span><span class="token string">"/root/.vnc/passwd"</span>
+<span class="token assign-left variable">MANUAL_VNC_PASSWORD_RESET</span><span class="token operator">=</span><span class="token number">0</span>
+<span class="token comment"># ==============================================================</span>
+
+<span class="token assign-left variable">DISPLAY_NUM</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;DISPLAY_NUM<span class="token operator">:-</span>1&#125;</span>"</span>
+<span class="token assign-left variable">DISPLAY_VALUE</span><span class="token operator">=</span><span class="token string">":<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>"</span>
+<span class="token assign-left variable">VNC_PORT</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;VNC_PORT<span class="token operator">:-</span>5900&#125;</span>"</span>
+<span class="token assign-left variable">NOVNC_PORT</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;NOVNC_PORT<span class="token operator">:-</span>6080&#125;</span>"</span>
+<span class="token assign-left variable">XORG_CONF</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;XORG_CONF<span class="token operator">:-</span><span class="token operator">/</span>etc<span class="token operator">/</span>X11<span class="token operator">/</span>xorg-nvidia-dummy-monitor.conf&#125;</span>"</span>
+<span class="token assign-left variable">NOVNC_DIR</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;NOVNC_DIR<span class="token operator">:-</span>$MANUAL_NOVNC_DIR&#125;</span>"</span>
+<span class="token assign-left variable">VNC_PASSWORD</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;VNC_PASSWORD<span class="token operator">:-</span>$MANUAL_VNC_PASSWORD&#125;</span>"</span>
+<span class="token assign-left variable">VNC_PASSWORD_FILE</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;VNC_PASSWORD_FILE<span class="token operator">:-</span>$MANUAL_VNC_PASSWORD_FILE&#125;</span>"</span>
+<span class="token assign-left variable">VNC_PASSWORD_RESET</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;VNC_PASSWORD_RESET<span class="token operator">:-</span>$MANUAL_VNC_PASSWORD_RESET&#125;</span>"</span>
+<span class="token assign-left variable">TARGET_USER</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;1<span class="token operator">:-</span>&#125;</span>"</span>
+<span class="token assign-left variable">LOG_DIR</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;LOG_DIR<span class="token operator">:-</span><span class="token operator">/</span>tmp<span class="token operator">/</span>start-vnc&#125;</span>"</span>
+
+<span class="token assign-left variable">x_pid</span><span class="token operator">=</span><span class="token string">""</span>
+<span class="token assign-left variable">dbus_pid</span><span class="token operator">=</span><span class="token string">""</span>
+<span class="token assign-left variable">desktop_pid</span><span class="token operator">=</span><span class="token string">""</span>
+<span class="token assign-left variable">vnc_pid</span><span class="token operator">=</span><span class="token string">""</span>
+<span class="token assign-left variable">novnc_pid</span><span class="token operator">=</span><span class="token string">""</span>
+<span class="token assign-left variable">vnc_auth_args</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-t</span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> <span class="token parameter variable">-z</span> <span class="token string">"<span class="token variable">$&#123;NO_COLOR<span class="token operator">:-</span>&#125;</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  <span class="token assign-left variable">COLOR_INFO</span><span class="token operator">=</span><span class="token string">$'<span class="token entity" title="\033">\033</span>[1;34m'</span>
+  <span class="token assign-left variable">COLOR_SUCCESS</span><span class="token operator">=</span><span class="token string">$'<span class="token entity" title="\033">\033</span>[1;32m'</span>
+  <span class="token assign-left variable">COLOR_WARNING</span><span class="token operator">=</span><span class="token string">$'<span class="token entity" title="\033">\033</span>[1;33m'</span>
+  <span class="token assign-left variable">COLOR_ERROR</span><span class="token operator">=</span><span class="token string">$'<span class="token entity" title="\033">\033</span>[1;31m'</span>
+  <span class="token assign-left variable">COLOR_HINT</span><span class="token operator">=</span><span class="token string">$'<span class="token entity" title="\033">\033</span>[1;36m'</span>
+  <span class="token assign-left variable">COLOR_RESET</span><span class="token operator">=</span><span class="token string">$'<span class="token entity" title="\033">\033</span>[0m'</span>
+<span class="token keyword">else</span>
+  <span class="token assign-left variable">COLOR_INFO</span><span class="token operator">=</span><span class="token string">""</span>
+  <span class="token assign-left variable">COLOR_SUCCESS</span><span class="token operator">=</span><span class="token string">""</span>
+  <span class="token assign-left variable">COLOR_WARNING</span><span class="token operator">=</span><span class="token string">""</span>
+  <span class="token assign-left variable">COLOR_ERROR</span><span class="token operator">=</span><span class="token string">""</span>
+  <span class="token assign-left variable">COLOR_HINT</span><span class="token operator">=</span><span class="token string">""</span>
+  <span class="token assign-left variable">COLOR_RESET</span><span class="token operator">=</span><span class="token string">""</span>
+<span class="token keyword">fi</span>
+
+<span class="token function-name function">log_msg</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">level</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">color</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$2</span>"</span>
+  <span class="token builtin class-name">shift</span> <span class="token number">2</span>
+  <span class="token builtin class-name">printf</span> <span class="token string">'%s[%(%F %T)T] [%s]%s %s\n'</span> <span class="token string">"<span class="token variable">$color</span>"</span> <span class="token parameter variable">-1</span> <span class="token string">"<span class="token variable">$level</span>"</span> <span class="token string">"<span class="token variable">$COLOR_RESET</span>"</span> <span class="token string">"<span class="token variable">$*</span>"</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">info</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  log_msg <span class="token string">"INFO"</span> <span class="token string">"<span class="token variable">$COLOR_INFO</span>"</span> <span class="token string">"<span class="token variable">$*</span>"</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">success</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  log_msg <span class="token string">"SUCCESS"</span> <span class="token string">"<span class="token variable">$COLOR_SUCCESS</span>"</span> <span class="token string">"<span class="token variable">$*</span>"</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">warning</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  log_msg <span class="token string">"WARNING"</span> <span class="token string">"<span class="token variable">$COLOR_WARNING</span>"</span> <span class="token string">"<span class="token variable">$*</span>"</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">error</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  log_msg <span class="token string">"ERROR"</span> <span class="token string">"<span class="token variable">$COLOR_ERROR</span>"</span> <span class="token string">"<span class="token variable">$*</span>"</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">hint</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  log_msg <span class="token string">"HINT"</span> <span class="token string">"<span class="token variable">$COLOR_HINT</span>"</span> <span class="token string">"<span class="token variable">$*</span>"</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">fail</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  error <span class="token string">"<span class="token variable">$*</span>"</span>
+  hint <span class="token string">"Logs are in: <span class="token variable">$&#123;LOG_DIR&#125;</span>"</span>
+  <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">show_tail</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">file</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-f</span> <span class="token string">"<span class="token variable">$file</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    warning <span class="token string">"Last lines of <span class="token variable">$&#123;file&#125;</span>:"</span>
+    <span class="token function">tail</span> <span class="token parameter variable">-n</span> <span class="token number">80</span> <span class="token string">"<span class="token variable">$file</span>"</span> <span class="token operator">||</span> <span class="token boolean">true</span>
+  <span class="token keyword">fi</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">need_cmd</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">cmd</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">hint</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$2</span>"</span>
+  <span class="token keyword">if</span> <span class="token operator">!</span> <span class="token builtin class-name">command</span> <span class="token parameter variable">-v</span> <span class="token string">"<span class="token variable">$cmd</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    fail <span class="token string">"Missing command '<span class="token variable">$&#123;cmd&#125;</span>'. <span class="token variable">$&#123;hint&#125;</span>"</span>
+  <span class="token keyword">fi</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">port_in_use</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">port</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+  ss <span class="token parameter variable">-ltnH</span> <span class="token string">"sport = :<span class="token variable">$&#123;port&#125;</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-q</span> <span class="token builtin class-name">.</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">show_port_owner</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">port</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+  warning <span class="token string">"Port <span class="token variable">$&#123;port&#125;</span> status:"</span>
+  ss <span class="token parameter variable">-ltnp</span> <span class="token string">"sport = :<span class="token variable">$&#123;port&#125;</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">||</span> <span class="token boolean">true</span>
+  <span class="token keyword">if</span> <span class="token builtin class-name">command</span> <span class="token parameter variable">-v</span> <span class="token function">lsof</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token function">lsof</span> <span class="token parameter variable">-nP</span> -iTCP:<span class="token string">"<span class="token variable">$&#123;port&#125;</span>"</span> <span class="token parameter variable">-sTCP:LISTEN</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">||</span> <span class="token boolean">true</span>
+  <span class="token keyword">fi</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">wait_for_process</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">pid</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">name</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$2</span>"</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">logfile</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$3</span>"</span>
+  <span class="token function">sleep</span> <span class="token number">0.5</span>
+  <span class="token keyword">if</span> <span class="token operator">!</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    show_tail <span class="token string">"<span class="token variable">$logfile</span>"</span>
+    fail <span class="token string">"<span class="token variable">$&#123;name&#125;</span> exited during startup."</span>
+  <span class="token keyword">fi</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">wait_for_socket</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">port</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">name</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$2</span>"</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">logfile</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$3</span>"</span>
+  <span class="token builtin class-name">local</span> i
+  <span class="token keyword">for</span> <span class="token for-or-select variable">i</span> <span class="token keyword">in</span> <span class="token punctuation">&#123;</span><span class="token number">1</span><span class="token punctuation">..</span><span class="token number">30</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token keyword">if</span> port_in_use <span class="token string">"<span class="token variable">$port</span>"</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+      success <span class="token string">"<span class="token variable">$&#123;name&#125;</span> is listening on TCP <span class="token variable">$&#123;port&#125;</span>."</span>
+      <span class="token builtin class-name">return</span> <span class="token number">0</span>
+    <span class="token keyword">fi</span>
+    <span class="token function">sleep</span> <span class="token number">0.3</span>
+  <span class="token keyword">done</span>
+  show_tail <span class="token string">"<span class="token variable">$logfile</span>"</span>
+  show_port_owner <span class="token string">"<span class="token variable">$port</span>"</span>
+  fail <span class="token string">"<span class="token variable">$&#123;name&#125;</span> did not start listening on TCP <span class="token variable">$&#123;port&#125;</span>."</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">wait_for_x_socket</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">sock</span><span class="token operator">=</span><span class="token string">"/tmp/.X11-unix/X<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>"</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">logfile</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$1</span>"</span>
+  <span class="token builtin class-name">local</span> i
+  <span class="token keyword">for</span> <span class="token for-or-select variable">i</span> <span class="token keyword">in</span> <span class="token punctuation">&#123;</span><span class="token number">1</span><span class="token punctuation">..</span><span class="token number">30</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-S</span> <span class="token string">"<span class="token variable">$sock</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+      success <span class="token string">"X server socket is ready: <span class="token variable">$&#123;sock&#125;</span>"</span>
+      <span class="token builtin class-name">return</span> <span class="token number">0</span>
+    <span class="token keyword">fi</span>
+    <span class="token function">sleep</span> <span class="token number">0.3</span>
+  <span class="token keyword">done</span>
+  show_tail <span class="token string">"<span class="token variable">$logfile</span>"</span>
+  fail <span class="token string">"X server did not create <span class="token variable">$&#123;sock&#125;</span>."</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">ensure_vnc_password</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token assign-left variable">vnc_auth_args</span><span class="token operator">=</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-z</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    warning <span class="token string">"MANUAL_VNC_PASSWORD is empty; native VNC will start without a password."</span>
+    <span class="token assign-left variable">vnc_auth_args</span><span class="token operator">=</span><span class="token punctuation">(</span>-nopw<span class="token punctuation">)</span>
+    <span class="token builtin class-name">return</span> <span class="token number">0</span>
+  <span class="token keyword">fi</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-z</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD_FILE</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    fail <span class="token string">"VNC_PASSWORD_FILE is empty. Set MANUAL_VNC_PASSWORD_FILE near the top of this script."</span>
+  <span class="token keyword">fi</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD_RESET</span>"</span> <span class="token operator">==</span> <span class="token string">"1"</span> <span class="token operator">&amp;&amp;</span> <span class="token parameter variable">-f</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD_FILE</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    warning <span class="token string">"Resetting x11vnc password file: <span class="token variable">$&#123;VNC_PASSWORD_FILE&#125;</span>"</span>
+    <span class="token function">rm</span> <span class="token parameter variable">-f</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD_FILE</span>"</span>
+  <span class="token keyword">fi</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token parameter variable">-f</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD_FILE</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-z</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+      fail <span class="token string">"VNC password file does not exist and VNC_PASSWORD is empty. Set MANUAL_VNC_PASSWORD near the top of this script."</span>
+    <span class="token keyword">fi</span>
+    info <span class="token string">"Creating x11vnc password file: <span class="token variable">$&#123;VNC_PASSWORD_FILE&#125;</span>"</span>
+    <span class="token function">install</span> <span class="token parameter variable">-d</span> <span class="token parameter variable">-m</span> <span class="token number">700</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">dirname</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD_FILE</span>"</span><span class="token variable">)</span></span>"</span>
+    x11vnc <span class="token parameter variable">-storepasswd</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD</span>"</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD_FILE</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span>
+    <span class="token function">chmod</span> <span class="token number">600</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD_FILE</span>"</span>
+    success <span class="token string">"Created x11vnc password file."</span>
+  <span class="token keyword">else</span>
+    success <span class="token string">"Using existing x11vnc password file: <span class="token variable">$&#123;VNC_PASSWORD_FILE&#125;</span>"</span>
+  <span class="token keyword">fi</span>
+
+  <span class="token assign-left variable">vnc_auth_args</span><span class="token operator">=</span><span class="token punctuation">(</span>-rfbauth <span class="token string">"<span class="token variable">$VNC_PASSWORD_FILE</span>"</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token function-name function">cleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token builtin class-name">local</span> <span class="token assign-left variable">code</span><span class="token operator">=</span><span class="token variable">$?</span>
+  <span class="token builtin class-name">trap</span> - EXIT INT <span class="token environment constant">TERM</span>
+  warning <span class="token string">"Cleaning up child processes..."</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">$&#123;novnc_pid&#125;</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$novnc_pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    warning <span class="token string">"Stopping noVNC proxy PID=<span class="token variable">$&#123;novnc_pid&#125;</span>"</span>
+    <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token string">"<span class="token variable">$novnc_pid</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">||</span> <span class="token boolean">true</span>
+  <span class="token keyword">fi</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">$&#123;vnc_pid&#125;</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$vnc_pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    warning <span class="token string">"Stopping x11vnc PID=<span class="token variable">$&#123;vnc_pid&#125;</span>"</span>
+    <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token string">"<span class="token variable">$vnc_pid</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">||</span> <span class="token boolean">true</span>
+  <span class="token keyword">fi</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">$&#123;desktop_pid&#125;</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$desktop_pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    warning <span class="token string">"Stopping XFCE PID=<span class="token variable">$&#123;desktop_pid&#125;</span>"</span>
+    <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token string">"<span class="token variable">$desktop_pid</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">||</span> <span class="token boolean">true</span>
+  <span class="token keyword">fi</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">$&#123;x_pid&#125;</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$x_pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    warning <span class="token string">"Stopping X server PID=<span class="token variable">$&#123;x_pid&#125;</span>"</span>
+    <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token string">"<span class="token variable">$x_pid</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">||</span> <span class="token boolean">true</span>
+  <span class="token keyword">fi</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-n</span> <span class="token string">"<span class="token variable">$&#123;dbus_pid&#125;</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$dbus_pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    warning <span class="token string">"Stopping dbus-daemon PID=<span class="token variable">$&#123;dbus_pid&#125;</span>"</span>
+    <span class="token function">kill</span> <span class="token parameter variable">-TERM</span> <span class="token string">"<span class="token variable">$dbus_pid</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">||</span> <span class="token boolean">true</span>
+  <span class="token keyword">fi</span>
+
+  success <span class="token string">"Cleanup complete."</span>
+  <span class="token builtin class-name">exit</span> <span class="token string">"<span class="token variable">$code</span>"</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token builtin class-name">trap</span> cleanup EXIT INT <span class="token environment constant">TERM</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token string">"<span class="token environment constant">$EUID</span>"</span> <span class="token parameter variable">-ne</span> <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  fail <span class="token string">"Please run with sudo: sudo bash /usr/local/bin/start-vnc.sh &lt;username>"</span>
+<span class="token keyword">fi</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-z</span> <span class="token string">"<span class="token variable">$TARGET_USER</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  fail <span class="token string">"Missing username. Example: sudo bash /usr/local/bin/start-vnc.sh unitree"</span>
+<span class="token keyword">fi</span>
+
+<span class="token keyword">if</span> <span class="token operator">!</span> <span class="token function">id</span> <span class="token string">"<span class="token variable">$TARGET_USER</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  fail <span class="token string">"User '<span class="token variable">$&#123;TARGET_USER&#125;</span>' does not exist."</span>
+<span class="token keyword">fi</span>
+
+<span class="token function">install</span> <span class="token parameter variable">-d</span> <span class="token parameter variable">-m</span> <span class="token number">1777</span> <span class="token string">"<span class="token variable">$LOG_DIR</span>"</span>
+
+<span class="token assign-left variable">X_LOG</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;LOG_DIR&#125;</span>/xorg-<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>.log"</span>
+<span class="token assign-left variable">DESKTOP_LOG</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;LOG_DIR&#125;</span>/xfce-<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>.log"</span>
+<span class="token assign-left variable">VNC_LOG</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;LOG_DIR&#125;</span>/x11vnc-<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>.log"</span>
+<span class="token assign-left variable">NOVNC_LOG</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;LOG_DIR&#125;</span>/novnc-<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>.log"</span>
+
+<span class="token builtin class-name">:</span> <span class="token operator">></span> <span class="token string">"<span class="token variable">$X_LOG</span>"</span>
+<span class="token builtin class-name">:</span> <span class="token operator">></span> <span class="token string">"<span class="token variable">$DESKTOP_LOG</span>"</span>
+<span class="token builtin class-name">:</span> <span class="token operator">></span> <span class="token string">"<span class="token variable">$VNC_LOG</span>"</span>
+<span class="token builtin class-name">:</span> <span class="token operator">></span> <span class="token string">"<span class="token variable">$NOVNC_LOG</span>"</span>
+<span class="token function">chmod</span> 0666 <span class="token string">"<span class="token variable">$X_LOG</span>"</span> <span class="token string">"<span class="token variable">$DESKTOP_LOG</span>"</span> <span class="token string">"<span class="token variable">$VNC_LOG</span>"</span> <span class="token string">"<span class="token variable">$NOVNC_LOG</span>"</span>
+
+info <span class="token string">"Starting VNC stack for user '<span class="token variable">$&#123;TARGET_USER&#125;</span>'"</span>
+info <span class="token string">"Ports: noVNC browser=<span class="token variable">$&#123;NOVNC_PORT&#125;</span>, native VNC=<span class="token variable">$&#123;VNC_PORT&#125;</span>, DISPLAY=<span class="token variable">$&#123;DISPLAY_VALUE&#125;</span>"</span>
+info <span class="token string">"Manual config: NOVNC_DIR=<span class="token variable">$&#123;NOVNC_DIR&#125;</span>"</span>
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-z</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  warning <span class="token string">"Manual config: VNC password disabled because MANUAL_VNC_PASSWORD is empty."</span>
+<span class="token keyword">else</span>
+  info <span class="token string">"Manual config: VNC_PASSWORD_FILE=<span class="token variable">$&#123;VNC_PASSWORD_FILE&#125;</span>"</span>
+<span class="token keyword">fi</span>
+info <span class="token string">"Logs:"</span>
+info <span class="token string">"  X server: <span class="token variable">$&#123;X_LOG&#125;</span>"</span>
+info <span class="token string">"  XFCE:     <span class="token variable">$&#123;DESKTOP_LOG&#125;</span>"</span>
+info <span class="token string">"  x11vnc:   <span class="token variable">$&#123;VNC_LOG&#125;</span>"</span>
+info <span class="token string">"  noVNC:    <span class="token variable">$&#123;NOVNC_LOG&#125;</span>"</span>
+
+need_cmd X <span class="token string">"Install xserver-xorg or check /usr/bin/X."</span>
+need_cmd dbus-launch <span class="token string">"Install dbus-x11."</span>
+need_cmd startxfce4 <span class="token string">"Install XFCE: sudo apt install xfce4 xfce4-session"</span>
+need_cmd x11vnc <span class="token string">"Install x11vnc: sudo apt install x11vnc"</span>
+need_cmd websockify <span class="token string">"Install websockify: sudo apt install websockify"</span>
+need_cmd ss <span class="token string">"Install iproute2."</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token parameter variable">-f</span> <span class="token string">"<span class="token variable">$XORG_CONF</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  fail <span class="token string">"Missing Xorg config: <span class="token variable">$&#123;XORG_CONF&#125;</span>"</span>
+<span class="token keyword">fi</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token parameter variable">-d</span> <span class="token string">"<span class="token variable">$NOVNC_DIR</span>"</span> <span class="token operator">||</span> <span class="token operator">!</span> <span class="token parameter variable">-f</span> <span class="token string">"<span class="token variable">$&#123;NOVNC_DIR&#125;</span>/vnc.html"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  fail <span class="token string">"Missing noVNC web directory or vnc.html: <span class="token variable">$&#123;NOVNC_DIR&#125;</span>"</span>
+<span class="token keyword">fi</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-d</span> <span class="token string">"<span class="token variable">$&#123;NOVNC_DIR&#125;</span>/utils/websockify"</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span> <span class="token parameter variable">-x</span> <span class="token string">"<span class="token variable">$&#123;NOVNC_DIR&#125;</span>/utils/websockify/run"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  fail <span class="token string">"Broken local websockify directory: <span class="token variable">$&#123;NOVNC_DIR&#125;</span>/utils/websockify. Remove it or install a valid checkout. System websockify is available at <span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">command</span> <span class="token parameter variable">-v</span> websockify<span class="token variable">)</span></span>."</span>
+<span class="token keyword">fi</span>
+
+<span class="token keyword">if</span> port_in_use <span class="token string">"<span class="token variable">$NOVNC_PORT</span>"</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  show_port_owner <span class="token string">"<span class="token variable">$NOVNC_PORT</span>"</span>
+  fail <span class="token string">"TCP <span class="token variable">$&#123;NOVNC_PORT&#125;</span> is already in use. If this is an old noVNC instance, stop it first."</span>
+<span class="token keyword">fi</span>
+
+<span class="token keyword">if</span> port_in_use <span class="token string">"<span class="token variable">$VNC_PORT</span>"</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  show_port_owner <span class="token string">"<span class="token variable">$VNC_PORT</span>"</span>
+  fail <span class="token string">"TCP <span class="token variable">$&#123;VNC_PORT&#125;</span> is already in use. If this is an old x11vnc instance, stop it first."</span>
+<span class="token keyword">fi</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-S</span> <span class="token string">"/tmp/.X11-unix/X<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-e</span> <span class="token string">"/tmp/.X<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>-lock"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  warning <span class="token string">"Display <span class="token variable">$&#123;DISPLAY_VALUE&#125;</span> seems to already exist:"</span>
+  <span class="token function">ls</span> <span class="token parameter variable">-l</span> <span class="token string">"/tmp/.X11-unix/X<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>"</span> <span class="token string">"/tmp/.X<span class="token variable">$&#123;DISPLAY_NUM&#125;</span>-lock"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">||</span> <span class="token boolean">true</span>
+  fail <span class="token string">"Display <span class="token variable">$&#123;DISPLAY_VALUE&#125;</span> is already in use. Stop the old VNC stack or choose DISPLAY_NUM=2."</span>
+<span class="token keyword">fi</span>
+
+ensure_vnc_password
+
+info <span class="token string">"Starting X server on <span class="token variable">$&#123;DISPLAY_VALUE&#125;</span>..."</span>
+/usr/bin/X <span class="token string">"<span class="token variable">$DISPLAY_VALUE</span>"</span> <span class="token parameter variable">-config</span> <span class="token string">"<span class="token variable">$XORG_CONF</span>"</span> <span class="token operator">></span><span class="token string">"<span class="token variable">$X_LOG</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">&amp;</span>
+<span class="token assign-left variable">x_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+wait_for_process <span class="token string">"<span class="token variable">$x_pid</span>"</span> <span class="token string">"X server"</span> <span class="token string">"<span class="token variable">$X_LOG</span>"</span>
+wait_for_x_socket <span class="token string">"<span class="token variable">$X_LOG</span>"</span>
+
+info <span class="token string">"Starting DBus session..."</span>
+<span class="token assign-left variable">dbus_env</span><span class="token operator">=</span><span class="token string">"<span class="token variable"><span class="token variable">$(</span>dbus-launch --sh-syntax<span class="token variable">)</span></span>"</span>
+<span class="token builtin class-name">eval</span> <span class="token string">"<span class="token variable">$dbus_env</span>"</span>
+<span class="token builtin class-name">export</span> <span class="token environment constant">DBUS_SESSION_BUS_ADDRESS</span>
+<span class="token builtin class-name">export</span> DBUS_SESSION_BUS_PID
+<span class="token assign-left variable">dbus_pid</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;DBUS_SESSION_BUS_PID<span class="token operator">:-</span>&#125;</span>"</span>
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-z</span> <span class="token string">"<span class="token variable">$dbus_pid</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token operator">!</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$dbus_pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  fail <span class="token string">"dbus-launch did not produce a running dbus-daemon."</span>
+<span class="token keyword">fi</span>
+success <span class="token string">"DBus session PID=<span class="token variable">$&#123;dbus_pid&#125;</span>"</span>
+
+info <span class="token string">"Starting XFCE on <span class="token variable">$&#123;DISPLAY_VALUE&#125;</span> as <span class="token variable">$&#123;TARGET_USER&#125;</span>..."</span>
+<span class="token comment"># Keep this in the same sudo environment-assignment style as the old working</span>
+<span class="token comment"># script. Wrapping startxfce4 with env/DBus overrides can make XFCE settings</span>
+<span class="token comment"># services crash or disconnect on this platform.</span>
+<span class="token function">sudo</span> <span class="token parameter variable">-u</span> <span class="token string">"<span class="token variable">$TARGET_USER</span>"</span> <span class="token assign-left variable"><span class="token environment constant">DISPLAY</span></span><span class="token operator">=</span><span class="token string">"<span class="token variable">$DISPLAY_VALUE</span>"</span> startxfce4 <span class="token operator">></span><span class="token string">"<span class="token variable">$DESKTOP_LOG</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">&amp;</span>
+<span class="token assign-left variable">desktop_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+wait_for_process <span class="token string">"<span class="token variable">$desktop_pid</span>"</span> <span class="token string">"XFCE"</span> <span class="token string">"<span class="token variable">$DESKTOP_LOG</span>"</span>
+success <span class="token string">"XFCE started on <span class="token variable">$&#123;DISPLAY_VALUE&#125;</span>."</span>
+
+info <span class="token string">"Starting x11vnc on display <span class="token variable">$&#123;DISPLAY_VALUE&#125;</span>, TCP <span class="token variable">$&#123;VNC_PORT&#125;</span>..."</span>
+x11vnc <span class="token parameter variable">-display</span> <span class="token string">"<span class="token variable">$DISPLAY_VALUE</span>"</span> <span class="token parameter variable">-rfbport</span> <span class="token string">"<span class="token variable">$VNC_PORT</span>"</span> <span class="token string">"<span class="token variable">$&#123;vnc_auth_args<span class="token punctuation">[</span>@<span class="token punctuation">]</span>&#125;</span>"</span> <span class="token parameter variable">-forever</span> <span class="token parameter variable">-shared</span> <span class="token parameter variable">-loop</span> <span class="token parameter variable">-nodpms</span> <span class="token operator">></span><span class="token string">"<span class="token variable">$VNC_LOG</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">&amp;</span>
+<span class="token assign-left variable">vnc_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+wait_for_process <span class="token string">"<span class="token variable">$vnc_pid</span>"</span> <span class="token string">"x11vnc"</span> <span class="token string">"<span class="token variable">$VNC_LOG</span>"</span>
+wait_for_socket <span class="token string">"<span class="token variable">$VNC_PORT</span>"</span> <span class="token string">"x11vnc"</span> <span class="token string">"<span class="token variable">$VNC_LOG</span>"</span>
+
+info <span class="token string">"Starting noVNC on TCP <span class="token variable">$&#123;NOVNC_PORT&#125;</span>, proxy target localhost:<span class="token variable">$&#123;VNC_PORT&#125;</span>..."</span>
+websockify <span class="token parameter variable">--web</span> <span class="token string">"<span class="token variable">$NOVNC_DIR</span>"</span> <span class="token string">"<span class="token variable">$NOVNC_PORT</span>"</span> <span class="token string">"localhost:<span class="token variable">$&#123;VNC_PORT&#125;</span>"</span> <span class="token operator">></span><span class="token string">"<span class="token variable">$NOVNC_LOG</span>"</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span> <span class="token operator">&amp;</span>
+<span class="token assign-left variable">novnc_pid</span><span class="token operator">=</span><span class="token variable">$!</span>
+wait_for_process <span class="token string">"<span class="token variable">$novnc_pid</span>"</span> <span class="token string">"noVNC/websockify"</span> <span class="token string">"<span class="token variable">$NOVNC_LOG</span>"</span>
+wait_for_socket <span class="token string">"<span class="token variable">$NOVNC_PORT</span>"</span> <span class="token string">"noVNC/websockify"</span> <span class="token string">"<span class="token variable">$NOVNC_LOG</span>"</span>
+
+<span class="token builtin class-name">mapfile</span> <span class="token parameter variable">-t</span> host_ip_lines <span class="token operator">&lt;</span> <span class="token operator">&lt;</span><span class="token punctuation">(</span><span class="token function">ip</span> <span class="token parameter variable">-br</span> <span class="token parameter variable">-4</span> addr show <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null <span class="token operator">|</span> <span class="token function">awk</span> <span class="token string">'$2 != "DOWN" &#123;split($3, a, "/"); print $1" "a[1]&#125;'</span><span class="token punctuation">)</span>
+
+success <span class="token string">"VNC stack started successfully."</span>
+success <span class="token string">"Connection ports:"</span>
+success <span class="token string">"  noVNC browser port : <span class="token variable">$&#123;NOVNC_PORT&#125;</span>"</span>
+success <span class="token string">"  Native VNC port    : <span class="token variable">$&#123;VNC_PORT&#125;</span>"</span>
+success <span class="token string">"  GUI DISPLAY        : <span class="token variable">$&#123;DISPLAY_VALUE&#125;</span>"</span>
+<span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token parameter variable">-z</span> <span class="token string">"<span class="token variable">$VNC_PASSWORD</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  success <span class="token string">"  VNC password       : disabled"</span>
+<span class="token keyword">else</span>
+  success <span class="token string">"  VNC password file  : <span class="token variable">$&#123;VNC_PASSWORD_FILE&#125;</span>"</span>
+<span class="token keyword">fi</span>
+hint <span class="token string">"Open one of these URLs from your browser:"</span>
+<span class="token keyword">if</span> <span class="token variable"><span class="token punctuation">((</span>$&#123;#host_ip_lines[@]&#125;<span class="token punctuation">))</span></span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+  <span class="token keyword">for</span> <span class="token for-or-select variable">entry</span> <span class="token keyword">in</span> <span class="token string">"<span class="token variable">$&#123;host_ip_lines<span class="token punctuation">[</span>@<span class="token punctuation">]</span>&#125;</span>"</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+    <span class="token assign-left variable">iface</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;entry<span class="token operator">%%</span> *&#125;</span>"</span>
+    <span class="token assign-left variable">ip</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;entry<span class="token operator">#</span>* &#125;</span>"</span>
+    hint <span class="token string">"  <span class="token variable">$&#123;iface&#125;</span>: http://<span class="token variable">$&#123;ip&#125;</span>:<span class="token variable">$&#123;NOVNC_PORT&#125;</span>/vnc.html"</span>
+  <span class="token keyword">done</span>
+<span class="token keyword">else</span>
+  warning <span class="token string">"No active IPv4 address found. Try: http://&lt;IP>:<span class="token variable">$&#123;NOVNC_PORT&#125;</span>/vnc.html"</span>
+<span class="token keyword">fi</span>
+hint <span class="token string">"For GUI apps in shell: export DISPLAY=<span class="token variable">$&#123;DISPLAY_VALUE&#125;</span>"</span>
+hint <span class="token string">"Press Ctrl-C to stop this VNC stack."</span>
+
+<span class="token keyword">while</span> <span class="token boolean">true</span><span class="token punctuation">;</span> <span class="token keyword">do</span>
+  <span class="token keyword">if</span> <span class="token operator">!</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$x_pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    show_tail <span class="token string">"<span class="token variable">$X_LOG</span>"</span>
+    fail <span class="token string">"X server exited."</span>
+  <span class="token keyword">fi</span>
+  <span class="token keyword">if</span> <span class="token operator">!</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$vnc_pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    show_tail <span class="token string">"<span class="token variable">$VNC_LOG</span>"</span>
+    fail <span class="token string">"x11vnc exited."</span>
+  <span class="token keyword">fi</span>
+  <span class="token keyword">if</span> <span class="token operator">!</span> <span class="token function">kill</span> <span class="token parameter variable">-0</span> <span class="token string">"<span class="token variable">$novnc_pid</span>"</span> <span class="token operator">></span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    show_tail <span class="token string">"<span class="token variable">$NOVNC_LOG</span>"</span>
+    fail <span class="token string">"noVNC/websockify exited."</span>
+  <span class="token keyword">fi</span>
+  <span class="token function">sleep</span> <span class="token number">2</span>
+<span class="token keyword">done</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
 <p>脚本功能：按照上述流程依次启动X服务、DBus会话服务、gnome会话、x11vnc转发、noVNC网页可视化；并自动检查<code>6080</code>端口是否被占用，若占用则说明已启动，无需再次启动</p>
 <p>进一步可以在<code>~/.bashrc</code>中加入快捷启动命令：</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># ~/.bashrc</span>
@@ -1035,7 +1436,7 @@ root     <span class="token number">3557223</span> <span class="token number">20
 <h1 id="nvidia-jetson可视化配置"><a class="markdownIt-Anchor" href="#nvidia-jetson可视化配置"></a> Nvidia Jetson可视化配置</h1>
 <p>仅需安装x11vnc和noVNC，详细用法介绍请见上文<a href="./#%E5%B1%80%E5%9F%9F%E7%BD%91%E5%B1%8F%E5%B9%95%E5%85%B1%E4%BA%AB">局域网屏幕共享</a>，这里给出直接使用方法</p>
 <h3 id="安装依赖包"><a class="markdownIt-Anchor" href="#安装依赖包"></a> 安装依赖包</h3>
-<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc
+<figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> x11vnc xfce4 websockify
 <span class="token comment"># 创建noVNC存储位置</span>
 <span class="token function">mkdir</span> ~/Programs
 <span class="token builtin class-name">cd</span> ~/Programs
