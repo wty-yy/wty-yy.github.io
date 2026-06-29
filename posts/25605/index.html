@@ -22,30 +22,30 @@
     <meta name="description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jetson AGX Orin 配置">
-<meta property="og:url" content="https://wty-yy.github.io/posts/25605/index.html">
+<meta property="og:url" content="https://wty-yy.top/posts/25605/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
 <meta property="og:description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash_real1.jpg">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash_real2.jpg">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_GUI_flash1.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_GUI_flash2.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_GUI_flash3.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash1.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash2.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash3.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash4.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash5.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash6.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_docker_container_test.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_JetPack6.1_UVC_D435i_realsense-viewer.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_D435i_ROS2_view.png">
-<meta property="og:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_rs_ros_node_python_cv_show.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash_real1.jpg">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash_real2.jpg">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_GUI_flash1.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_GUI_flash2.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_GUI_flash3.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash1.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash2.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash3.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash4.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash5.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash6.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_docker_container_test.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_JetPack6.1_UVC_D435i_realsense-viewer.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_D435i_ROS2_view.png">
+<meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_rs_ros_node_python_cv_show.png">
 <meta property="article:published_time" content="2024-12-29T06:47:35.000Z">
-<meta property="article:modified_time" content="2026-03-11T03:33:38.601Z">
+<meta property="article:modified_time" content="2026-06-29T12:21:00.406Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wty-yy.github.io/figures/robotics/Jetson/AGX_flash_real1.jpg">
+<meta name="twitter:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash_real1.jpg">
   
   
   
@@ -97,7 +97,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"wty-yy.github.io","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"wty-yy.top","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":"843a38ffdc8864dd30e250b723a1a8ca","google":null,"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"gtag":null,"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -500,7 +500,7 @@
         
         
         
-          174 分钟
+          175 分钟
         
       </span>
     
@@ -545,7 +545,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2026年3月11日中午11点33分
+                    最新更新于: 2026年6月29日晚上8点21分
                   
                 
               </p>
@@ -744,10 +744,11 @@ gnome-text-editor libuvc_installation.sh
 <span class="token comment"># 找到 sudo apt-get install git cmake libssl-dev freeglut3-dev libusb-1.0-0-dev pkg-config libgtk-3-dev unzip -y 修改为</span>
 <span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token function">git</span> cmake libssl-dev freeglut3-dev libusb-1.0-0-dev pkg-config libgtk-3-dev <span class="token function">unzip</span> python3-dev python3-pip <span class="token parameter variable">-y</span>
 <span class="token comment"># 找到 cmake ../ -DFORCE_LIBUVC=true -DCMAKE_BUILD_TYPE=release 修改为</span>
-cmake <span class="token punctuation">..</span>/ <span class="token parameter variable">-DFORCE_LIBUVC</span><span class="token operator">=</span>true <span class="token parameter variable">-DCMAKE_BUILD_TYPE</span><span class="token operator">=</span>release <span class="token parameter variable">-DBUILD_PYTHON_BINDINGS:BOOL</span><span class="token operator">=</span>true
+<span class="token comment"># 其中 /usr/bin/python3 为系统默认的python3路径</span>
+cmake <span class="token punctuation">..</span>/ <span class="token parameter variable">-DFORCE_LIBUVC</span><span class="token operator">=</span>true <span class="token parameter variable">-DCMAKE_BUILD_TYPE</span><span class="token operator">=</span>release <span class="token parameter variable">-DBUILD_PYTHON_BINDINGS:BOOL</span><span class="token operator">=</span>true <span class="token parameter variable">-DPYTHON_EXECUTABLE</span><span class="token operator">=</span>/usr/bin/python3
 <span class="token comment"># 保存退出</span>
 <span class="token comment"># 开始安装</span>
-./libuvc_installation.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+./libuvc_installation.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
 <p><strong>D435i</strong>的IMU读取方法，如果直接打开<code>realsense-viewer</code>还是无法读取IMU数据，一读取就会报错，解决方法就是将相机的Firmware降级到适配你相机的最低版本，参考<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/issues/13130#issuecomment-2225099648">D455 Errors when activating imu stream in rs-viewer中的一条回复</a>，方法很简单，先在<a target="_blank" rel="noopener" href="https://dev.intelrealsense.com/docs/firmware-releases-d400">Firmware releases D400</a>找到你相继对应的最低驱动版本，例如我的D435i就是<a target="_blank" rel="noopener" href="https://www.intelrealsense.com/wp-content/uploads/2020/08/D400_Series_Production_FW_5_12_7_100.zip?_ga=2.41355745.2140590151.1735553428-1109731474.1735553428">Version-5_12_7_100</a>，下载解压得到<code>*.bin</code>文件，通过<a target="_blank" rel="noopener" href="https://dev.intelrealsense.com/docs/firmware-update-tool">Firmware Update Tool</a>安装教程(安装librealsense时候就附带安装了)安装</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">rs-fw-update  <span class="token comment"># 查看当前连接的相机驱动版本</span>
 rs-fw-update <span class="token parameter variable">-f</span> Signed_Image_UVC_5_12_7_100.bin  <span class="token comment"># 安装驱动</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
@@ -1128,7 +1129,7 @@ YOLOv11n: 25W, 24FPS
   main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
     </div>
 </div>
-<div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/AGX_rs_ros_node_python_yolov11.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/AGX_rs_ros_node_python_yolov11.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <table>
 <thead>
 <tr>
@@ -1194,7 +1195,7 @@ YOLOv11n: 25W, 24FPS
   <div class="license-box my-3">
     <div class="license-title">
       <div>Jetson AGX Orin 配置</div>
-      <div>https://wty-yy.github.io/posts/25605/</div>
+      <div>https://wty-yy.top/posts/25605/</div>
     </div>
     <div class="license-meta">
       
