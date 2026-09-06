@@ -19,12 +19,12 @@
   <meta name="author" content="wty">
   <meta name="keywords" content="">
   
-    <meta name="description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供">
+    <meta name="description" content="2026.6.4: Jetson Orin NX上测试realsense安装，需指定SDK安装版本2.55.1  记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的B">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jetson AGX Orin 配置">
 <meta property="og:url" content="https://wty-yy.top/posts/25605/index.html">
 <meta property="og:site_name" content="wty&#39;s blog">
-<meta property="og:description" content="记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的Blog - Nvidia Jetson AGX Orin系统刷写  这里需要一条DC 12V的电源线，用来给AGX供">
+<meta property="og:description" content="2026.6.4: Jetson Orin NX上测试realsense安装，需指定SDK安装版本2.55.1  记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：  使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)   SDKManager刷机  参考闫金钢的B">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash_real1.jpg">
 <meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash_real2.jpg">
@@ -42,7 +42,7 @@
 <meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_D435i_ROS2_view.png">
 <meta property="og:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_rs_ros_node_python_cv_show.png">
 <meta property="article:published_time" content="2024-12-29T06:47:35.000Z">
-<meta property="article:modified_time" content="2026-03-03T14:22:10.000Z">
+<meta property="article:modified_time" content="2026-09-05T16:21:10.102Z">
 <meta property="article:author" content="wty">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wty-yy.top/figures/robotics/Jetson/AGX_flash_real1.jpg">
@@ -489,7 +489,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          21k 字
+          22k 字
         
       </span>
     
@@ -500,7 +500,7 @@
         
         
         
-          174 分钟
+          187 分钟
         
       </span>
     
@@ -545,7 +545,7 @@
                 
                   
                     <!-- compatible with older versions-->
-                    最新更新于: 2026年3月3日晚上10点22分
+                    最新更新于: 2026年9月6日凌晨12点21分
                   
                 
               </p>
@@ -553,7 +553,10 @@
             
               <div class="markdown-body">
                 
-                <p>记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：</p>
+                <blockquote>
+<p>2026.6.4: Jetson Orin NX上测试realsense安装，需指定SDK安装版本2.55.1</p>
+</blockquote>
+<p>记录下对Nvidia机载电脑Jetson AGX Orin的配置过程：</p>
 <ol>
 <li>使用SDKManager docker镜像刷JetPack高版本(5.x版本能直接识别带有IMU的设备, 而6.x版本需要使用uvc后端且无法识别带IMU的设备)</li>
 </ol>
@@ -736,19 +739,79 @@ nvidia-smi<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 <p>帖子下方给出了另一个<a target="_blank" rel="noopener" href="https://support.intelrealsense.com/hc/en-us/community/posts/31576776977427/comments/31683171974419">很好的方法</a>，基于<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/blob/master/doc/libuvc_installation.md">libuvc_installation.md</a>安装UVC后端的realsense即可，三行即可解决</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://github.com/IntelRealSense/librealsense/raw/master/scripts/libuvc_installation.sh
 <span class="token function">chmod</span> +x ./libuvc_installation.sh
+
 <span class="token comment"># 执行安装前推荐使用全cpu编译cmake效率更高</span>
-gnome-text-editor libuvc_installation.sh
+<span class="token function">vim</span> libuvc_installation.sh
 <span class="token comment"># 找到倒数第3行, make -j2 改为</span>
 <span class="token function">make</span> -j<span class="token variable"><span class="token variable">$(</span>nproc<span class="token variable">)</span></span>
 <span class="token comment"># 推荐一并安装上pyrealsense2 (安装到系统默认的python中, 如果是conda则无需这样安装, 用 pip install pyrealsense2 安装)</span>
 <span class="token comment"># 找到 sudo apt-get install git cmake libssl-dev freeglut3-dev libusb-1.0-0-dev pkg-config libgtk-3-dev unzip -y 修改为</span>
-<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token function">git</span> cmake libssl-dev freeglut3-dev libusb-1.0-0-dev pkg-config libgtk-3-dev <span class="token function">unzip</span> python3-dev python3-pip <span class="token parameter variable">-y</span>
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token function">git</span> cmake libssl-dev freeglut3-dev libusb-1.0-0-dev pkg-config libgtk-3-dev <span class="token function">unzip</span> python3-dev python3-pip libudev-dev <span class="token parameter variable">-y</span>
 <span class="token comment"># 找到 cmake ../ -DFORCE_LIBUVC=true -DCMAKE_BUILD_TYPE=release 修改为</span>
-cmake <span class="token punctuation">..</span>/ <span class="token parameter variable">-DFORCE_LIBUVC</span><span class="token operator">=</span>true <span class="token parameter variable">-DCMAKE_BUILD_TYPE</span><span class="token operator">=</span>release <span class="token parameter variable">-DBUILD_PYTHON_BINDINGS:BOOL</span><span class="token operator">=</span>true
+<span class="token comment"># 其中 /usr/bin/python3 为系统默认的python3路径，并添加上RSUSB_BACKEND后端，比libuvc更稳定</span>
+cmake <span class="token punctuation">..</span>/ <span class="token parameter variable">-DFORCE_RSUSB_BACKEND</span><span class="token operator">=</span>ON <span class="token parameter variable">-DCMAKE_BUILD_TYPE</span><span class="token operator">=</span>release <span class="token parameter variable">-DBUILD_PYTHON_BINDINGS:BOOL</span><span class="token operator">=</span>true <span class="token parameter variable">-DPYTHON_EXECUTABLE</span><span class="token operator">=</span>/usr/bin/python3
 <span class="token comment"># 保存退出</span>
 <span class="token comment"># 开始安装</span>
-./libuvc_installation.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
-<p><strong>D435i</strong>的IMU读取方法，如果直接打开<code>realsense-viewer</code>还是无法读取IMU数据，一读取就会报错，解决方法就是将相机的Firmware降级到适配你相机的最低版本，参考<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/issues/13130#issuecomment-2225099648">D455 Errors when activating imu stream in rs-viewer中的一条回复</a>，方法很简单，先在<a target="_blank" rel="noopener" href="https://dev.intelrealsense.com/docs/firmware-releases-d400">Firmware releases D400</a>找到你相继对应的最低驱动版本，例如我的D435i就是<a target="_blank" rel="noopener" href="https://www.intelrealsense.com/wp-content/uploads/2020/08/D400_Series_Production_FW_5_12_7_100.zip?_ga=2.41355745.2140590151.1735553428-1109731474.1735553428">Version-5_12_7_100</a>，下载解压得到<code>*.bin</code>文件，通过<a target="_blank" rel="noopener" href="https://dev.intelrealsense.com/docs/firmware-update-tool">Firmware Update Tool</a>安装教程(安装librealsense时候就附带安装了)安装</p>
+./libuvc_installation.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+<p>在Jetson Orin NX和x86主机上测试使用libuvc的后端在启动motion module时候都会报错，而换成rsusb后端就正常了，所以修改了编译指令<code>-DFORCE_RSUSB_BACKEND=ON</code></p>
+<div class='spoiler collapsed'>
+    <div class='spoiler-title'>
+        修改后的libuvc_installation.sh
+    </div>
+    <div class='spoiler-content'>
+        <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash -xe</span>
+
+<span class="token comment">#Locally suppress stderr to avoid raising not relevant messages</span>
+<span class="token builtin class-name">exec</span> <span class="token operator"><span class="token file-descriptor important">3</span>></span><span class="token file-descriptor important">&amp;2</span>
+<span class="token builtin class-name">exec</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span> /dev/null
+<span class="token assign-left variable">con_dev</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">ls</span> /dev/video* <span class="token operator">|</span> <span class="token function">wc</span> <span class="token parameter variable">-l</span><span class="token variable">)</span></span>
+<span class="token builtin class-name">exec</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;3</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$con_dev</span> <span class="token parameter variable">-ne</span> <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">then</span>
+	<span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token entity" title="\e">\e</span>[32m"</span>
+	<span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"Remove all RealSense cameras attached. Hit any key when ready"</span>
+	<span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token entity" title="\e">\e</span>[0m"</span>
+<span class="token keyword">fi</span>
+
+lsb_release <span class="token parameter variable">-a</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"Kernel version <span class="token variable"><span class="token variable">$(</span><span class="token function">uname</span> <span class="token parameter variable">-r</span><span class="token variable">)</span></span>"</span>
+<span class="token function">sudo</span> <span class="token function">apt-get</span> update
+<span class="token builtin class-name">cd</span> ~/
+<span class="token function">sudo</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> ./librealsense_build
+<span class="token function">mkdir</span> librealsense_build <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">cd</span> librealsense_build
+
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable"><span class="token variable">$(</span><span class="token function">sudo</span> <span class="token function">swapon</span> <span class="token parameter variable">--show</span> <span class="token operator">|</span> <span class="token function">wc</span> <span class="token parameter variable">-l</span><span class="token variable">)</span></span> <span class="token parameter variable">-eq</span> <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">then</span>
+	<span class="token builtin class-name">echo</span> <span class="token string">"No swapon - setting up 1Gb swap file"</span>
+	<span class="token function">sudo</span> fallocate <span class="token parameter variable">-l</span> 2G /swapfile
+	<span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">600</span> /swapfile
+	<span class="token function">sudo</span> <span class="token function">mkswap</span> /swapfile
+	<span class="token function">sudo</span> <span class="token function">swapon</span> /swapfile
+	<span class="token function">sudo</span> <span class="token function">swapon</span> <span class="token parameter variable">--show</span>
+<span class="token keyword">fi</span>
+
+<span class="token builtin class-name">echo</span> Installing Librealsense-required dev packages
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token function">git</span> cmake libssl-dev freeglut3-dev libusb-1.0-0-dev pkg-config libgtk-3-dev <span class="token function">unzip</span> python3-dev python3-pip libudev-dev <span class="token parameter variable">-y</span>
+<span class="token function">rm</span> <span class="token parameter variable">-f</span> ./master.zip
+
+<span class="token function">wget</span> https://github.com/realsenseai/librealsense/archive/master.zip
+<span class="token function">unzip</span> ./master.zip <span class="token parameter variable">-d</span> <span class="token builtin class-name">.</span>
+<span class="token builtin class-name">cd</span> ./librealsense-master
+
+<span class="token builtin class-name">echo</span> Install udev-rules
+<span class="token function">sudo</span> <span class="token function">cp</span> config/99-realsense-libusb.rules /etc/udev/rules.d/ 
+<span class="token function">sudo</span> <span class="token function">cp</span> config/99-realsense-d4xx-mipi-dfu.rules /etc/udev/rules.d/
+<span class="token function">sudo</span> udevadm control --reload-rules <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> udevadm trigger 
+<span class="token function">mkdir</span> build <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">cd</span> build
+cmake <span class="token punctuation">..</span>/ <span class="token parameter variable">-DFORCE_RSUSB_BACKEND</span><span class="token operator">=</span>ON <span class="token parameter variable">-DCMAKE_BUILD_TYPE</span><span class="token operator">=</span>release <span class="token parameter variable">-DBUILD_PYTHON_BINDINGS:BOOL</span><span class="token operator">=</span>true <span class="token parameter variable">-DPYTHON_EXECUTABLE</span><span class="token operator">=</span>/usr/bin/python3
+<span class="token function">make</span> -j<span class="token variable"><span class="token variable">$(</span>nproc<span class="token variable">)</span></span>
+<span class="token function">sudo</span> <span class="token function">make</span> <span class="token function">install</span>
+<span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token entity" title="\e">\e</span>[92m<span class="token entity" title="\n">\n</span><span class="token entity" title="\e">\e</span>[1mLibrealsense script completed.<span class="token entity" title="\n">\n</span><span class="token entity" title="\e">\e</span>[0m"</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
+    </div>
+</div>
+<p><strong>D435i</strong>的IMU读取方法，如果直接打开<code>realsense-viewer</code>还是无法读取IMU数据，一读取就会报错，解决方法就是将相机的Firmware降级到适配你相机的最低版本，参考<a target="_blank" rel="noopener" href="https://github.com/IntelRealSense/librealsense/issues/13130#issuecomment-2225099648">D455 Errors when activating imu stream in rs-viewer中的一条回复</a>，方法很简单，先在<a target="_blank" rel="noopener" href="https://dev.realsenseai.com/docs/firmware-releases-d400">Firmware releases D400</a>找到你相继对应的最低驱动版本，例如我的D435i就是<a target="_blank" rel="noopener" href="https://dev.realsenseai.com/wp-content/uploads/2020/08/D400_Series_Production_FW_5_12_7_100.zip?_ga=2.41355745.2140590151.1735553428-1109731474.1735553428">Version-5_12_7_100</a>，下载解压得到<code>*.bin</code>文件，通过<a target="_blank" rel="noopener" href="https://dev.realsenseai.com/docs/firmware-update-tool">Firmware Update Tool</a>安装教程(安装librealsense时候就附带安装了)安装</p>
 <figure><div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">rs-fw-update  <span class="token comment"># 查看当前连接的相机驱动版本</span>
 rs-fw-update <span class="token parameter variable">-f</span> Signed_Image_UVC_5_12_7_100.bin  <span class="token comment"># 安装驱动</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div></figure>
 <p>安装完成后执行<code>realsense-viewer</code>插上摄像头即可看到图像🥰(还可以看到IMU哦)<br />
@@ -1128,7 +1191,7 @@ YOLOv11n: 25W, 24FPS
   main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></figure>
     </div>
 </div>
-<div id="dplayer2" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer2"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/AGX_rs_ros_node_python_yolov11.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer4" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer4"),"autoplay":true,"theme":"#FADFA3","loop":true,"lang":"zh-cn//语言","screenshot":true,"hotkey":true,"preload":"auto","volume":0.9,"video":{"url":"/videos/AGX_rs_ros_node_python_yolov11.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 <table>
 <thead>
 <tr>

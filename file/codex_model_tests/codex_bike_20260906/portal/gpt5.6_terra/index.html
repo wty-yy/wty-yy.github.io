@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pelican Pedal</title>
+  <style>
+    :root {
+      --ink: #17252e;
+      --cream: #fff4d6;
+      --sky: #9bd8e5;
+      --teal: #2c8c91;
+      --orange: #f27d4a;
+      --yellow: #ffd166;
+      --road: #43505a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #f0e3c1;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Avenir Next", system-ui, sans-serif;
+    }
+
+    .scene-shell {
+      width: min(100%, 1180px);
+      padding: 18px;
+    }
+
+    .scene-card {
+      position: relative;
+      overflow: hidden;
+      border: 3px solid var(--ink);
+      border-radius: 14px;
+      background: var(--cream);
+      box-shadow: 9px 9px 0 var(--ink);
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 12 / 7;
+    }
+
+    .topbar {
+      position: absolute;
+      top: 18px;
+      left: 22px;
+      right: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .title-lockup {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .title-lockup strong {
+      font-size: clamp(15px, 2vw, 22px);
+      font-weight: 900;
+    }
+
+    .title-lockup span {
+      font-size: 11px;
+      font-weight: 800;
+      opacity: .65;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    button {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: var(--cream);
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    button:hover { transform: translateY(-2px); background: var(--yellow); }
+    button:active { transform: translateY(1px); }
+    button:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+    button svg { width: 17px; height: 17px; aspect-ratio: auto; }
+
+    .speed-readout {
+      min-width: 48px;
+      padding: 7px 9px;
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      background: var(--cream);
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .sky-object { transform-box: fill-box; transform-origin: center; }
+    .cloud-a { animation: drift 20s linear infinite; }
+    .cloud-b { animation: drift 27s linear -9s infinite; }
+    .cloud-c { animation: drift 24s linear -14s infinite; }
+    .sun { animation: sun-pulse 4s ease-in-out infinite; }
+
+    .ride-group { animation: ride-bob 650ms ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+    .wheel-spin { animation: wheel-spin 850ms linear infinite; transform-box: fill-box; transform-origin: center; }
+    .wing { animation: wing-flap 900ms ease-in-out infinite; transform-box: fill-box; transform-origin: 18% 65%; }
+    .beak { animation: beak-bob 650ms ease-in-out infinite; transform-box: fill-box; transform-origin: 96% 40%; }
+    .feather { animation: feather-twitch 1.3s ease-in-out infinite; transform-box: fill-box; transform-origin: bottom center; }
+
+    .paused * { animation-play-state: paused !important; }
+
+    @keyframes drift {
+      from { transform: translateX(-140px); }
+      to { transform: translateX(1240px); }
+    }
+
+    @keyframes sun-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    @keyframes ride-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    @keyframes wheel-spin { to { transform: rotate(360deg); } }
+    @keyframes wing-flap { 0%, 100% { transform: rotate(4deg); } 50% { transform: rotate(-14deg) translateY(-8px); } }
+    @keyframes beak-bob { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(2deg) translateY(2px); } }
+    @keyframes feather-twitch { 0%, 80%, 100% { transform: rotate(0); } 88% { transform: rotate(6deg); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; }
+    }
+
+    @media (max-width: 650px) {
+      .scene-shell { padding: 9px; }
+      .scene-card { border-width: 2px; border-radius: 10px; box-shadow: 5px 5px 0 var(--ink); }
+      .topbar { top: 12px; left: 13px; right: 13px; }
+      .title-lockup span { display: none; }
+      .cloud-a { display: none; }
+      button { width: 32px; height: 32px; }
+      .speed-readout { min-width: 43px; padding: 6px 7px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="scene-shell">
+    <section class="scene-card" aria-label="动画：鹈鹕骑自行车">
+      <div class="topbar">
+        <div class="title-lockup"><strong>Pelican Pedal</strong><span>coastal commute</span></div>
+        <div class="controls">
+          <button id="toggle" type="button" aria-label="暂停动画" title="暂停动画">
+            <svg class="pause-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M8 5v14M16 5v14"/></svg>
+            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="m8 5 11 7-11 7z"/></svg>
+          </button>
+          <button id="speed" type="button" aria-label="切换动画速度" title="切换动画速度"><span class="speed-readout">1×</span></button>
+        </div>
+      </div>
+
+      <svg id="art" viewBox="0 0 1200 700" role="img" aria-labelledby="svg-title svg-desc" xmlns="http://www.w3.org/2000/svg">
+        <title id="svg-title">鹈鹕骑自行车</title>
+        <desc id="svg-desc">一只戴着黄色头盔的鹈鹕在海边骑着红色自行车，云朵、海浪和车轮持续运动。</desc>
+        <rect width="1200" height="700" fill="#9bd8e5"/>
+        <rect y="420" width="1200" height="280" fill="#f7cc77"/>
+        <path d="M0 425 C130 387 220 462 340 426 S565 392 690 432 S930 462 1200 414 V520 H0Z" fill="#54b6b2"/>
+        <path d="M0 446 C180 414 254 475 400 444 S665 407 823 453 S1041 476 1200 440" fill="none" stroke="#d9f3df" stroke-width="10" stroke-linecap="round" opacity=".8"/>
+        <path d="M0 471 C176 440 283 500 442 468 S694 436 843 474 S1034 499 1200 464" fill="none" stroke="#237f89" stroke-width="5" stroke-linecap="round" opacity=".65"/>
+
+        <g class="sun sky-object">
+          <circle cx="1018" cy="143" r="55" fill="#ffd166" stroke="#17252e" stroke-width="4"/>
+          <g stroke="#ffd166" stroke-width="10" stroke-linecap="round">
+            <path d="M1018 61v-25M1018 250v-25M936 143h-25M1125 143h-25M960 85l-18-18M1076 201l-18-18M1076 85l18-18M960 201l-18 18"/>
+          </g>
+        </g>
+
+        <g class="cloud-a sky-object" fill="#fff4d6" stroke="#17252e" stroke-width="4">
+          <path d="M96 168h152a31 31 0 0 0 0-62 50 50 0 0 0-94-15 41 41 0 0 0-58 39 38 38 0 0 0 0 38Z"/>
+        </g>
+        <g class="cloud-b sky-object" fill="#fff4d6" stroke="#17252e" stroke-width="4">
+          <path d="M688 170h145a29 29 0 0 0 0-58 45 45 0 0 0-87-17 35 35 0 0 0-58 28 32 32 0 0 0 0 47Z"/>
+        </g>
+        <g class="cloud-c sky-object" fill="#fff4d6" stroke="#17252e" stroke-width="4" opacity=".85">
+          <path d="M334 278h116a25 25 0 0 0 0-50 38 38 0 0 0-73-13 30 30 0 0 0-43 28 30 30 0 0 0 0 35Z"/>
+        </g>
+
+        <path d="M0 576h1200v124H0z" fill="#43505a"/>
+        <path d="M0 605h1200" stroke="#f8e9b5" stroke-width="9" stroke-dasharray="74 44"/>
+        <path d="M0 676h1200" stroke="#17252e" stroke-width="4" opacity=".45"/>
+        <g fill="#237f89" stroke="#17252e" stroke-width="4">
+          <path d="M81 534v-83l-32 22 32-49 32 49-32-22v83Z"/>
+          <path d="M1117 532v-80l-30 21 30-48 30 48-30-21v80Z"/>
+        </g>
+        <g stroke="#237f89" stroke-width="7" stroke-linecap="round" opacity=".75">
+          <path d="M151 556q28-28 57 0M177 569q31-31 63 0M1006 557q22-23 45 0M1030 570q31-31 64 0"/>
+        </g>
+
+        <g class="ride-group">
+          <!-- bicycle shadow -->
+          <ellipse cx="614" cy="579" rx="232" ry="16" fill="#17252e" opacity=".22"/>
+          <!-- bicycle frame -->
+          <g fill="none" stroke="#e4553d" stroke-width="13" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M394 540 481 432l99 108-186 0 87-108 99 0 69 108 84-135"/>
+            <path d="M580 540h-99M580 540l69-135M649 405h43"/>
+          </g>
+          <g fill="none" stroke="#17252e" stroke-width="6" stroke-linecap="round">
+            <path d="M696 404l16-17M696 404l25 0"/>
+            <path d="M481 432l-11-24M470 408h-37"/>
+          </g>
+          <!-- wheels -->
+          <g class="wheel-spin" fill="none" stroke="#17252e" stroke-width="9">
+            <circle cx="394" cy="540" r="78" fill="#fff4d6"/>
+            <g stroke-width="3" opacity=".65"><path d="M394 462v156M316 540h156M339 485l110 110M339 595l110-110"/></g>
+          </g>
+          <g class="wheel-spin" fill="none" stroke="#17252e" stroke-width="9">
+            <circle cx="649" cy="540" r="78" fill="#fff4d6"/>
+            <g stroke-width="3" opacity=".65"><path d="M649 462v156M571 540h156M594 485l110 110M594 595l110-110"/></g>
+          </g>
+          <!-- rider body -->
+          <g stroke="#17252e" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M516 351c-6-51 23-95 75-102 57-7 87 34 92 95l-18 70-103 17Z" fill="#fff4d6"/>
+            <path d="M546 284c20-31 79-45 116-9l16 29-20 53-91-8Z" fill="#f27d4a"/>
+            <path d="M531 361c-3 26 14 57 46 67l44-8-4-70Z" fill="#f7b267"/>
+            <path class="beak" d="M662 305c42-22 78-13 119 8-37 25-76 34-117 22Z" fill="#f27d4a"/>
+            <path d="M779 313c20 1 34 7 45 18-17 6-31 7-45 4Z" fill="#d64f3c"/>
+            <circle cx="650" cy="290" r="8" fill="#17252e" stroke="none"/>
+            <path d="M620 267q33-29 69 0l-6 17-66-2Z" fill="#ffd166"/>
+            <path d="M625 270q25-23 54-4" fill="none" stroke="#e4553d" stroke-width="8"/>
+            <!-- wing -->
+            <path class="wing" d="M548 344c-54 15-62 67-27 105 30 31 67 28 93-1-29-30-36-62-66-104Z" fill="#dbecef"/>
+            <path d="M537 375q-12 45 35 65M552 368q-8 42 34 62" fill="none" stroke="#7bbdc0" stroke-width="5"/>
+          </g>
+          <!-- crank, pedals, and legs are updated together so feet stay attached -->
+          <g id="pedal-assembly" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <g stroke="#17252e" stroke-width="7">
+              <circle cx="580" cy="540" r="13" fill="#ffd166"/>
+              <path id="pedal-rod-back"/>
+              <path id="pedal-rod-front"/>
+              <path id="pedal-bar-back"/>
+              <path id="pedal-bar-front"/>
+            </g>
+            <path id="leg-back-path" stroke="#f27d4a" stroke-width="13"/>
+            <path id="leg-front-path" stroke="#f27d4a" stroke-width="13"/>
+            <g stroke="#17252e" stroke-width="8">
+              <path id="shoe-back-path"/>
+              <path id="shoe-front-path"/>
+            </g>
+          </g>
+          <!-- tail feathers -->
+          <g class="feather" fill="#fff4d6">
+            <path d="M532 386c-36 16-53 41-55 65 31-9 52-25 67-50Z"/>
+            <path d="M537 392c-21 28-24 51-14 71 19-18 28-40 30-65Z"/>
+          </g>
+        </g>
+
+        <g fill="#fff4d6" stroke="#17252e" stroke-width="4" opacity=".95">
+          <path d="M196 105q10-18 20 0 10-18 20 0" fill="none" stroke-linecap="round"/>
+          <path d="M893 242q10-18 20 0 10-18 20 0" fill="none" stroke-linecap="round"/>
+        </g>
+      </svg>
+    </section>
+  </main>
+
+  <script>
+    const card = document.querySelector('.scene-card');
+    const toggle = document.querySelector('#toggle');
+    const speed = document.querySelector('#speed');
+    const pauseIcon = toggle.querySelector('.pause-icon');
+    const playIcon = toggle.querySelector('.play-icon');
+    const speedReadout = speed.querySelector('.speed-readout');
+    let paused = false;
+    let speedIndex = 0;
+    const speeds = [1, 0.7, 1.35];
+    const crank = { x: 580, y: 540, radius: 36 };
+    const hipBack = { x: 582, y: 414 };
+    const hipFront = { x: 612, y: 412 };
+    const pedalNodes = {
+      backRod: document.querySelector('#pedal-rod-back'),
+      frontRod: document.querySelector('#pedal-rod-front'),
+      backBar: document.querySelector('#pedal-bar-back'),
+      frontBar: document.querySelector('#pedal-bar-front'),
+      backLeg: document.querySelector('#leg-back-path'),
+      frontLeg: document.querySelector('#leg-front-path'),
+      backShoe: document.querySelector('#shoe-back-path'),
+      frontShoe: document.querySelector('#shoe-front-path')
+    };
+    let pedalAngle = -0.65;
+    let lastPedalTick = 0;
+
+    const pedalPoint = (angle) => ({
+      x: crank.x + Math.cos(angle) * crank.radius,
+      y: crank.y + Math.sin(angle) * crank.radius
+    });
+
+    const setPedalFrame = () => {
+      const front = pedalPoint(pedalAngle);
+      const back = pedalPoint(pedalAngle + Math.PI);
+      const tangent = (p) => ({ x: -Math.sin(Math.atan2(p.y - crank.y, p.x - crank.x)), y: Math.cos(Math.atan2(p.y - crank.y, p.x - crank.x)) });
+      const frontTangent = tangent(front);
+      const backTangent = tangent(back);
+      const knee = (hip, foot, side) => ({
+        x: (hip.x + foot.x) / 2 + side * 24,
+        y: (hip.y + foot.y) / 2 - 10
+      });
+      const frontKnee = knee(hipFront, front, 1);
+      const backKnee = knee(hipBack, back, -1);
+      const line = (a, b) => `M${a.x.toFixed(1)} ${a.y.toFixed(1)}L${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
+      const bar = (p, t) => `M${(p.x - t.x * 11).toFixed(1)} ${(p.y - t.y * 11).toFixed(1)}L${(p.x + t.x * 11).toFixed(1)} ${(p.y + t.y * 11).toFixed(1)}`;
+      pedalNodes.frontRod.setAttribute('d', line(crank, front));
+      pedalNodes.backRod.setAttribute('d', line(crank, back));
+      pedalNodes.frontBar.setAttribute('d', bar(front, frontTangent));
+      pedalNodes.backBar.setAttribute('d', bar(back, backTangent));
+      pedalNodes.frontLeg.setAttribute('d', `M${hipFront.x} ${hipFront.y}L${frontKnee.x.toFixed(1)} ${frontKnee.y.toFixed(1)}L${front.x.toFixed(1)} ${front.y.toFixed(1)}`);
+      pedalNodes.backLeg.setAttribute('d', `M${hipBack.x} ${hipBack.y}L${backKnee.x.toFixed(1)} ${backKnee.y.toFixed(1)}L${back.x.toFixed(1)} ${back.y.toFixed(1)}`);
+      pedalNodes.frontShoe.setAttribute('d', line(front, { x: front.x + frontTangent.x * 23, y: front.y + frontTangent.y * 23 }));
+      pedalNodes.backShoe.setAttribute('d', line(back, { x: back.x + backTangent.x * 23, y: back.y + backTangent.y * 23 }));
+    };
+
+    const pedalLoop = (time) => {
+      if (!lastPedalTick) lastPedalTick = time;
+      const delta = Math.min(time - lastPedalTick, 80) / 1000;
+      lastPedalTick = time;
+      if (!paused) pedalAngle += delta * (Math.PI * 2 / 0.85) * speeds[speedIndex];
+      setPedalFrame();
+      requestAnimationFrame(pedalLoop);
+    };
+    setPedalFrame();
+    requestAnimationFrame(pedalLoop);
+
+    toggle.addEventListener('click', () => {
+      paused = !paused;
+      card.classList.toggle('paused', paused);
+      pauseIcon.style.display = paused ? 'none' : 'block';
+      playIcon.style.display = paused ? 'block' : 'none';
+      toggle.setAttribute('aria-label', paused ? '播放动画' : '暂停动画');
+      toggle.setAttribute('title', paused ? '播放动画' : '暂停动画');
+    });
+
+    speed.addEventListener('click', () => {
+      speedIndex = (speedIndex + 1) % speeds.length;
+      const value = speeds[speedIndex];
+      speedReadout.textContent = `${value}×`;
+      document.documentElement.style.setProperty('--motion-speed', value);
+      document.querySelectorAll('.scene-card *').forEach((el) => {
+        const duration = getComputedStyle(el).animationDuration;
+        if (duration && duration !== '0s' && duration !== 'auto') {
+          const base = el.dataset.baseDuration ? Number(el.dataset.baseDuration) : parseFloat(duration);
+          el.dataset.baseDuration = base;
+          el.style.animationDuration = `${base / value}s`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

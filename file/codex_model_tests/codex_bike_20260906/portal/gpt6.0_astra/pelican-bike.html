@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>鹈鹕骑自行车</title>
+  <style>
+    :root { color-scheme: light; --ink:#183f50; }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; background:#edf5f5; font-family:"Avenir Next","PingFang SC","Microsoft YaHei",sans-serif; color:var(--ink); }
+    .card { width:min(1100px,100%); overflow:hidden; border:1px solid #d8e4e5; border-radius:22px; background:#fff; box-shadow:0 24px 70px #2b586426; }
+    .head { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:20px 26px 17px; }
+    h1 { margin:0; font-size:clamp(21px,3vw,30px); letter-spacing:.02em; }
+    .sub { margin:5px 0 0; color:#66808b; font-size:13px; }
+    .buttons { display:flex; gap:8px; }
+    button { border:1px solid #c2d5d8; border-radius:99px; padding:9px 14px; background:white; color:var(--ink); font:inherit; font-size:13px; cursor:pointer; }
+    button:hover,button:focus-visible { border-color:#4eaaa0; background:#effaf6; outline:none; }
+    svg { display:block; width:100%; height:auto; background:#8bd0d6; }
+    .foot { display:flex; justify-content:space-between; padding:12px 26px 16px; color:#66808b; font-size:12px; }
+    .state { display:flex; gap:7px; align-items:center; }
+    .state:before { content:""; width:8px; height:8px; border-radius:50%; background:#48a996; box-shadow:0 0 0 4px #48a99622; }
+    .paused .state:before { background:#e7a04b; box-shadow:0 0 0 4px #e7a04b22; }
+    @media(max-width:620px) { body{padding:10px}.head{align-items:flex-start;flex-direction:column;padding:18px}.foot{padding:11px 18px 14px} }
+    .wheel-spin { transform-box:fill-box; transform-origin:center; animation:spin 1.8s linear infinite; animation-play-state:var(--play,running); }
+    .pedal-spin { transform-box:fill-box; transform-origin:center; animation:spin .75s linear infinite; animation-play-state:var(--play,running); }
+    .bike-bob { animation:bob 1.8s ease-in-out infinite; animation-play-state:var(--play,running); }
+    .cloud-group { animation:cloud 24s linear infinite; animation-play-state:var(--play,running); }
+    .wave-group { animation:wave 3s ease-in-out infinite alternate; animation-play-state:var(--play,running); }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes bob { 0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)} }
+    @keyframes cloud { from{transform:translateX(-20px)}to{transform:translateX(35px)} }
+    @keyframes wave { from{transform:translateX(-7px)}to{transform:translateX(9px)} }
+    @media(prefers-reduced-motion:reduce) { .wheel-spin,.pedal-spin,.bike-bob,.cloud-group,.wave-group{animation-play-state:paused} }
+  </style>
+</head>
+<body>
+  <main class="card" id="card">
+    <header class="head">
+      <div><h1>鹈鹕的海风单车</h1><p class="sub">沿着海岸线，稳稳地骑一圈</p></div>
+      <div class="buttons"><button id="toggle" type="button">暂停动画</button><button id="reset" type="button">重新开始</button></div>
+    </header>
+    <svg id="scene" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc" xmlns="http://www.w3.org/2000/svg">
+      <title id="title">戴黄色头盔的鹈鹕骑自行车</title>
+      <desc id="desc">鹈鹕坐在座椅上，双脚踩着脚踏，沿着海滩骑行。</desc>
+      <defs>
+        <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#78cbd4"/><stop offset="1" stop-color="#d9efdc"/></linearGradient>
+        <linearGradient id="sea" x2="1" y2="1"><stop stop-color="#328da2"/><stop offset="1" stop-color="#7bced0"/></linearGradient>
+        <linearGradient id="beach"><stop stop-color="#efc77e"/><stop offset="1" stop-color="#f7dfa7"/></linearGradient>
+        <filter id="blur"><feGaussianBlur stdDeviation="8"/></filter>
+        <g id="cloud"><path d="M0 25C0 11 11 0 25 0c8 0 15 4 19 10C48 4 57 0 67 0c17 0 31 13 31 30 3-2 7-3 11-3 11 0 20 9 20 20H0c0-10 0-14 0-22Z" fill="#f7ffff" opacity=".82"/></g>
+        <g id="wave"><path d="M0 0c22-13 44 13 66 0s44 13 66 0 44 13 66 0" fill="none" stroke="#b6e9e4" stroke-width="4" stroke-linecap="round"/></g>
+        <g id="wheel-art"><circle r="73" fill="#f7fbf8" stroke="#21495a" stroke-width="9"/><g fill="none" stroke="#7caab0" stroke-width="2.5"><path d="M0-8V-66M0 8v66M-8 0h-66M8 0h66M-6-6l-43-43M6 6l43 43M6-6l43-43M-6 6l-43 43"/></g><circle r="10" fill="#e5aa3f" stroke="#21495a" stroke-width="5"/></g>
+      </defs>
+      <rect width="1100" height="650" fill="url(#sky)"/>
+      <circle cx="895" cy="110" r="74" fill="#fff2b4" opacity=".28"/>
+      <g class="cloud-group"><use href="#cloud" x="80" y="110"/><use href="#cloud" x="690" y="70" transform="scale(.78)"/><use href="#cloud" x="445" y="170" transform="scale(.6)"/></g>
+      <path d="M0 316c160-46 281 7 408-23 130-30 232 10 353-15 123-25 218-5 339-33v150H0Z" fill="#8dc3aa" opacity=".7"/>
+      <path d="M0 401c148-44 252 21 394-16 132-34 258 20 385-10 131-31 206-7 321-27v165H0Z" fill="#5498a4" opacity=".75"/>
+      <path d="M0 416c153-37 273 28 397-9 136-40 267 30 398-6 114-31 206 4 305-20v189H0Z" fill="url(#sea)"/>
+      <g class="wave-group"><use href="#wave" x="45" y="470"/><use href="#wave" x="560" y="443"/><use href="#wave" x="800" y="522"/></g>
+      <path d="M0 543c143-15 257 19 383 1 143-20 268-15 393 15 118 28 216 13 324 2v89H0Z" fill="url(#beach)"/>
+      <path d="M0 554c145-17 258 18 385-1 140-20 268-12 394 18 118 28 217 11 321 1" fill="none" stroke="#fff2c2" stroke-width="10" opacity=".8"/>
+      <g fill="#cda867" opacity=".65"><circle cx="115" cy="606" r="3"/><circle cx="175" cy="571" r="2"/><circle cx="954" cy="599" r="3"/><circle cx="872" cy="622" r="2"/><circle cx="293" cy="618" r="2"/></g>
+      <g class="bike-bob">
+        <ellipse cx="556" cy="606" rx="280" ry="20" fill="#28546a" opacity=".22" filter="url(#blur)"/>
+        <g transform="translate(420 515)"><g class="wheel-spin"><use href="#wheel-art"/></g></g>
+        <g transform="translate(710 515)"><g class="wheel-spin"><use href="#wheel-art"/></g></g>
+        <g fill="none" stroke="#286679" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="M420 515 520 390 570 515 420 515 710 515"/><path d="M520 390h112l78 125"/><path d="M632 390l28-64M647 326h52"/></g>
+        <path d="M492 390h58" stroke="#21495a" stroke-width="10" stroke-linecap="round"/>
+        <g transform="translate(570 515)"><g class="pedal-spin"><circle r="11" fill="#e5aa3f" stroke="#21495a" stroke-width="5"/><path d="M0 0l-42-35M0 0l40 35" stroke="#21495a" stroke-width="5" stroke-linecap="round"/><path d="M-42-35h-24M40 35h24" stroke="#21495a" stroke-width="5" stroke-linecap="round"/></g></g>
+        <!-- 鹈鹕身体坐在座椅上，双腿明确连接到脚踏 -->
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M516 413c10 26 19 53 35 77" stroke="#f8f5eb" stroke-width="18"/><path d="M635 412c-14 31-31 61-58 78" stroke="#f8f5eb" stroke-width="18"/><path d="M550 490l20 25M577 490l-7 25" stroke="#e7a044" stroke-width="11"/></g>
+        <g><path d="M492 321c-2-54 25-94 76-101 55-8 94 26 87 72-5 35-32 53-75 50-29-2-50 10-58 36Z" fill="#f7f3e9" stroke="#21495a" stroke-width="7"/><path d="M516 337c-23 7-39 19-54 40" fill="none" stroke="#f7f3e9" stroke-width="33" stroke-linecap="round"/><path d="M520 340c-20 7-36 18-50 35" fill="none" stroke="#c6d8d3" stroke-width="6" stroke-linecap="round"/><path d="M560 242c17-30 43-39 72-33 28 6 45 26 43 52-2 24-19 39-45 42-32 4-55-15-70-61Z" fill="#fffdf7"/><path d="M601 262c34 9 68 12 98 2 12-4 21 4 15 15-25 45-79 50-113 10Z" fill="#f2a04d" stroke="#21495a" stroke-width="7"/><path d="M609 290c25 15 53 14 77 1" fill="none" stroke="#d47b43" stroke-width="4"/><circle cx="651" cy="247" r="9" fill="#21495a"/><path d="M557 208c8-37 38-54 70-49 30 4 51 23 57 48-21-13-42-15-60-8-22-12-44-8-67 9Z" fill="#f5c54e" stroke="#21495a" stroke-width="7"/><path d="M570 215c20-11 43-12 63-4" fill="none" stroke="#dc9a37" stroke-width="6" stroke-linecap="round"/><path d="M530 354c28 16 58 22 90 13" fill="none" stroke="#c6d8d3" stroke-width="7" stroke-linecap="round"/></g>
+      </g>
+    </svg>
+    <footer class="foot"><span class="state" id="state">动画播放中</span><span>SVG / 纯代码绘制</span></footer>
+  </main>
+  <script>
+    const card = document.querySelector('#card');
+    const scene = document.querySelector('#scene');
+    const toggle = document.querySelector('#toggle');
+    const state = document.querySelector('#state');
+    let paused = false;
+    function setPaused(value) { paused=value; scene.style.setProperty('--play', paused?'paused':'running'); card.classList.toggle('paused',paused); toggle.textContent=paused?'继续动画':'暂停动画'; state.textContent=paused?'动画已暂停':'动画播放中'; }
+    toggle.addEventListener('click', () => setPaused(!paused));
+    document.querySelector('#reset').addEventListener('click', () => { setPaused(false); document.querySelectorAll('.wheel-spin,.pedal-spin,.bike-bob,.cloud-group,.wave-group').forEach((node) => { node.style.animation='none'; void node.offsetHeight; node.style.animation=''; }); });
+  </script>
+</body>
+</html>
